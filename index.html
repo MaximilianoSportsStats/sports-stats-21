@@ -992,7 +992,7 @@ function fetchLeagueNews(leagueKey, panel) {
       var xml = parser.parseFromString(data.contents, 'text/xml');
       var items = Array.from(xml.querySelectorAll('item')).slice(0, 8);
 
-      if (\!items.length) {
+      if (!items.length) {
         panel.innerHTML = '<div style="padding:2rem;text-align:center;color:var(--muted)">No se encontraron noticias.</div>';
         return;
       }
@@ -1044,7 +1044,7 @@ function fetchSportNews(sport, panel) {
       var parser = new DOMParser();
       var xml = parser.parseFromString(data.contents, 'text/xml');
       var items = Array.from(xml.querySelectorAll('item')).slice(0, 8);
-      if (\!items.length) { panel.innerHTML = '<div style="padding:2rem;text-align:center;color:var(--muted)">No se encontraron noticias.</div>'; return; }
+      if (!items.length) { panel.innerHTML = '<div style="padding:2rem;text-align:center;color:var(--muted)">No se encontraron noticias.</div>'; return; }
       var html = '<div style="display:grid;gap:1rem;padding:.5rem 0">';
       items.forEach(function(item){
         var title = (item.querySelector('title')||{}).textContent||'';
@@ -1438,7 +1438,7 @@ function switchInner(tab) {
   // Noticias (RSS en vivo)
   if (tab === 'noticias') {
     const notPanel = document.getElementById('ip-noticias');
-    if (notPanel && \!notPanel.dataset.loaded) {
+    if (notPanel && !notPanel.dataset.loaded) {
       notPanel.dataset.loaded = '1';
       fetchLeagueNews(currentLeague, notPanel);
     }
@@ -1446,7 +1446,7 @@ function switchInner(tab) {
   // Blog
   if (tab === 'blog') {
     const blogPanel = document.getElementById('ip-blog');
-    if (blogPanel && \!blogPanel.dataset.loaded) {
+    if (blogPanel && !blogPanel.dataset.loaded) {
       blogPanel.innerHTML = buildBlog(currentLeague);
       blogPanel.dataset.loaded = '1';
     }
