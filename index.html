@@ -2745,7 +2745,7 @@ function buildTemporadas(d, teams, seasons, hist) {
   var currentSeasonHtml = currentSeason ? '<div style="background:linear-gradient(135deg,#c8102e11,#c8102e05);border:1.5px solid var(--primary);border-radius:12px;padding:1.2rem;margin-bottom:1.2rem"><div style="display:flex;align-items:center;gap:.6rem;margin-bottom:.8rem"><span style="background:#c8102e;color:white;border-radius:99px;padding:.2rem .8rem;font-size:.75rem;font-weight:700">⚡ TEMPORADA ACTUAL</span></div><div style="display:flex;gap:1.5rem;flex-wrap:wrap"><div><div style="font-size:.75rem;color:var(--muted)">Último campeón</div><div style="font-weight:700;font-size:1.1rem;color:var(--text)">' + currentSeason.campeon + '</div></div><div><div style="font-size:.75rem;color:var(--muted)">Temporada</div><div style="font-weight:700;font-size:1.1rem;color:var(--text)">' + currentSeason.año + '</div></div></div></div>' : '';
 
   // Now shows full historical champions list from footballHistorico
-  const hist = (window.SS21.footballHistorico || {})[currentLeague];
+  hist = (window.SS21.footballHistorico || {})[currentLeague];
   if (!hist || !hist.campeones || !hist.campeones.length) {
     return '<div class="card"><div class="card-title">📅 Historia Completa</div>'
       + '<div style="color:var(--muted);font-size:.85rem;text-align:center;padding:2rem">Sin datos disponibles</div></div>';
