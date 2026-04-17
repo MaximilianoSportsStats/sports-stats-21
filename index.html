@@ -910,25 +910,26 @@ function mkChart(id, cfg) {
 // INIT — Verificar que los datos cargaron
 // ════════════════════════════════════════════════════════════
 (function checkData() {
-  if (typeof window.SS21 === 'undefined') {
-    document.body.innerHTML = `
-      <div style="padding:3rem;text-align:center;font-family:sans-serif">
-        <div style="font-size:3rem;margin-bottom:1rem">⚠️</div>
-        <h2 style="color:#c8102e;margin-bottom:.5rem">Datos no encontrados</h2>
-        <p style="color:#475569;margin-bottom:1rem">
-          El archivo <code>data/compiled/all_data.js</code> no existe o no se pudo cargar.
-        </p>
-        <p style="color:#475569">Ejecuta:</p>
-        <code style="background:#f1f5f9;padding:.5rem 1rem;border-radius:6px;display:inline-block;margin-top:.5rem">
-          python update_data.py
-        </code>
-        <p style="color:#94a3b8;font-size:.8rem;margin-top:1rem">
-          Luego recarga esta página (F5)
-        </p>
-      </div>`;
-    return;
+  var dbg = function(msg) {
+    var el = document.getElementById('debug-bar');
+    if (!el) { el = document.createElement('div'); el.id = 'debug-bar'; el.style = 'position:fixed;bottom:0;left:0;right:0;background:#1e293b;color:#f8fafc;font-family:monospace;font-size:12px;padding:6px 12px;z-index:9999'; document.body.appendChild(el); }
+    el.textContent = msg;
+  };
+  try {
+    dbg('checkData: SS21=' + typeof window.SS21);
+    if (typeof window.SS21 === 'undefined') {
+      dbg('ERROR: window.SS21 undefined — all_data.js no cargó');
+      document.getElementById('football-main').innerHTML = '<div style="padding:2rem;color:#c8102e;font-weight:bold">⚠️ Error: all_data.js no se cargó correctamente.</div>';
+      return;
+    }
+    dbg('SS21 OK, meta=' + typeof window.SS21.meta + ', keys=' + Object.keys(window.SS21).join(','));
+    init();
+    dbg('init() completado ✓');
+  } catch(e) {
+    dbg('ERROR en checkData/init: ' + e.message);
+    var fm = document.getElementById('football-main');
+    if (fm) fm.innerHTML = '<div style="padding:2rem;color:#c8102e;font-weight:bold">⚠️ Error JS: ' + e.message + '</div>';
   }
-  init();
 })();
 
 // ════════════════════════════════════════════════════════════
@@ -8909,4 +8910,4 @@ function mdOpenSport(ci, di) {
     '<div class="md-modal-section"><div class="md-modal-section-title">🌍 Fuerte en</div>' +
     '<div class="md-modal-section-text">' + d.p + '</div></div>' +
     '</div></div>';
-  document.body.appendChild(o                                                                                                                                                                                                                                                                                               
+  do
