@@ -1364,6 +1364,7 @@ function renderLeague(key) {
       <button class="inner-tab"        data-tab="ataque"          onclick="switchInner('ataque')">🥅 Ataque & Defensa</button>
       <button class="inner-tab"        data-tab="palmares"        onclick="switchInner('palmares')">🎖️ Palmarés</button>
       <button class="inner-tab"        data-tab="temporadas"      onclick="switchInner('temporadas')">📅 Temporadas</button>
+      <button class="inner-tab"        data-tab="calendario"      onclick="switchInner('calendario')">🗓️ Calendario</button>
       <button class="inner-tab"        data-tab="equipo-plantilla" onclick="switchInner('equipo-plantilla')">🏟️ Equipo & Plantilla</button>
       <button class="inner-tab"        data-tab="noticias"        onclick="switchInner('noticias')">📰 Noticias</button>
       <button class="inner-tab"        data-tab="blog"            onclick="switchInner('blog')">📝 Blog</button>
@@ -1381,6 +1382,9 @@ function renderLeague(key) {
     <div class="inner-panel" id="ip-palmares">${buildPalmares(teams, key)}</div>
     <!-- TEMPORADAS (incluye temporada actual integrada) -->
     <div class="inner-panel" id="ip-temporadas">${buildTemporadas(d, teams, seasons, hist)}</div>
+    
+    <!-- CALENDARIO -->
+    <div class="inner-panel" id="ip-calendario"></div>
     <!-- EQUIPO & PLANTILLA COMBINED -->
     <div class="inner-panel" id="ip-equipo-plantilla"></div>
     <!-- NOTICIAS -->
@@ -1425,6 +1429,14 @@ function switchInner(tab) {
     if (acercaPanel && !acercaPanel.dataset.loaded) {
       acercaPanel.innerHTML = buildLeagueInfo(currentLeague) + buildAboutFootball();
       acercaPanel.dataset.loaded = '1';
+    }
+  }
+  // Calendario (temporada actual + resultados)
+  if (tab === 'calendario') {
+    const calPanel = document.getElementById('ip-calendario');
+    if (calPanel && !calPanel.dataset.loaded) {
+      calPanel.innerHTML = buildCalendario(currentLeague);
+      calPanel.dataset.loaded = '1';
     }
   }
   // Lazy-load Equipo & Plantilla (combined)
@@ -2733,6 +2745,115 @@ function buildPalmares(teams, leagueKey) {
     + '<div class="card"><div class="ch-wrap"><canvas id="champ-pie"></canvas></div></div>'
     + '</div>'
     + '</div>';
+}
+
+// ════════════════════════════════════════════════════════════
+// BUILD: CALENDARIO
+// ════════════════════════════════════════════════════════════
+function buildCalendario(leagueKey) {
+  var hist = (window.SS21.footballHistorico || {})[leagueKey] || {};
+  var campeones = hist.campeones || [];
+  var lastSeason = campeones.length ? campeones[campeones.length - 1] : null;
+  var seasonLabel = lastSeason ? lastSeason.año : '2024-25';
+  var leagueName = hist.nombre || leagueKey;
+
+  if (!window._calTabInit) {
+    window._calTabInit = true;
+    window.switchCalTab = function(tab) {
+      document.querySelectorAll('.cal-tab').forEach(function(b) {
+        b.classList.toggle('active', b.dataset.cal === tab);
+      });
+      document.querySelectorAll('.cal-panel').forEach(function(p) { p.style.display = 'none'; });
+      var el = document.getElementById('cal-' + tab);
+      if (el) el.style.display = 'block';
+    };
+  }
+
+  var badge = '<div style="display:flex;align-items:center;gap:.75rem;margin-bottom:1.2rem;flex-wrap:wrap">'
+    + '<div style="background:linear-gradient(135deg,var(--primary),#7c3aed);color:white;border-radius:99px;padding:.35rem 1rem;font-size:.78rem;font-weight:700;letter-spacing:.04em">⚡ TEMPORADA ' + seasonLabel + '</div>'
+    + '<div style="font-size:.82rem;color:var(--muted)">' + leagueName + ' · Temporada en curso</div>'
+    + '</div>';
+
+  var subTabs = '<div style="display:flex;gap:.25rem;margin-bottom:1.1rem;border-bottom:1px solid var(--border);padding-bottom:0">'
+    + '<button class="inner-tab cal-tab active" data-cal="resultados" onclick="switchCalTab(\'resultados\')" style="font-size:.82rem">📋 Resultados</button>'
+    + '<button class="inner-tab cal-tab" data-cal="resumen" onclick="switchCalTab(\'resumen\')" style="font-size:.82rem">📊 Resumen General</button>'
+    + '</div>';
+
+  function matchRow(local, gl, ga, visitante, estado) {
+    var scoreHtml = estado === 'FT'
+      ? '<span style="background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:.2rem .7rem;font-weight:700;font-size:.95rem;letter-spacing:.05em">' + gl + ' – ' + ga + '</span>'
+      : '<span style="background:var(--primary);color:white;border-radius:6px;padding:.2rem .7rem;font-size:.72rem;font-weight:700;letter-spacing:.06em">PRÓXIMO</span>';
+    return '<div style="display:flex;align-items:center;gap:.5rem;padding:.55rem .75rem;border-bottom:1px solid var(--border)">'
+      + '<span style="flex:1;text-align:right;font-size:.85rem;font-weight:600">' + local + '</span>'
+      + '<div style="flex:0 0 auto;min-width:5.5rem;text-align:center">' + scoreHtml + '</div>'
+      + '<span style="flex:1;text-align:left;font-size:.85rem;font-weight:600">' + visitante + '</span>'
+      + '</div>';
+  }
+
+  function jornadaCard(titulo, fecha, rows) {
+    return '<div class="card" style="padding:0;overflow:hidden;margin-bottom:.9rem">'
+      + '<div style="display:flex;justify-content:space-between;align-items:center;padding:.6rem .75rem;background:var(--bg2);border-bottom:1px solid var(--border)">'
+      + '<span style="font-weight:700;font-size:.82rem">' + titulo + '</span>'
+      + '<span style="font-size:.75rem;color:var(--muted)">' + fecha + '</span>'
+      + '</div>' + rows + '</div>';
+  }
+
+  var resultadosContent =
+    jornadaCard('Jornada 28', '15 Mar 2025',
+      matchRow('Real Madrid',3,1,'Getafe','FT') +
+      matchRow('Barcelona',2,2,'Atlético Madrid','FT') +
+      matchRow('Athletic Club',1,0,'Villarreal','FT')) +
+    jornadaCard('Jornada 29', '22 Mar 2025',
+      matchRow('Sevilla',0,1,'Real Madrid','FT') +
+      matchRow('Valencia',2,3,'Barcelona','FT')) +
+    jornadaCard('Jornada 30 — Próxima', '5 Abr 2025',
+      matchRow('Real Madrid',null,null,'Barcelona','PROXIMO') +
+      matchRow('Atlético Madrid',null,null,'Athletic Club','PROXIMO')) +
+    '<div style="margin-top:.75rem;font-size:.78rem;color:var(--muted);text-align:center">💡 Resultados en vivo vía API — próximamente.</div>';
+
+  var panelResultados = '<div id="cal-resultados" class="cal-panel">' + resultadosContent + '</div>';
+
+  function formaHtml(forma) {
+    return forma.split('').map(function(f) {
+      var col = f==='V'?'#22c55e':f==='E'?'#94a3b8':'#ef4444';
+      return '<span style="display:inline-block;width:1.1rem;height:1.1rem;border-radius:3px;background:'+col+';color:white;font-size:.55rem;font-weight:700;text-align:center;line-height:1.1rem;margin-right:1px">'+f+'</span>';
+    }).join('');
+  }
+
+  var standings = [
+    {pos:1,team:'Real Madrid',pj:29,g:21,e:5,p:3,gf:65,gc:28,pts:68,forma:'VVVEV'},
+    {pos:2,team:'Barcelona',pj:29,g:19,e:4,p:6,gf:58,gc:31,pts:61,forma:'VVDEV'},
+    {pos:3,team:'Atlético Madrid',pj:29,g:16,e:7,p:6,gf:47,gc:30,pts:55,forma:'DVVVE'},
+    {pos:4,team:'Athletic Club',pj:29,g:14,e:8,p:7,gf:42,gc:33,pts:50,forma:'EVVDV'},
+    {pos:5,team:'Villarreal',pj:29,g:13,e:7,p:9,gf:44,gc:38,pts:46,forma:'VDEPV'},
+    {pos:6,team:'Real Sociedad',pj:29,g:12,e:8,p:9,gf:38,gc:35,pts:44,forma:'EVDVD'},
+    {pos:7,team:'Betis',pj:29,g:11,e:9,p:9,gf:36,gc:36,pts:42,forma:'DVVEP'},
+    {pos:8,team:'Sevilla',pj:29,g:11,e:7,p:11,gf:40,gc:43,pts:40,forma:'PDEVV'},
+    {pos:9,team:'Valencia',pj:29,g:10,e:8,p:11,gf:35,gc:40,pts:38,forma:'DPVEV'},
+    {pos:10,team:'Getafe',pj:29,g:9,e:9,p:11,gf:30,gc:38,pts:36,forma:'EVDPE'},
+  ];
+
+  var standingsRows = standings.map(function(r) {
+    var bl = r.pos<=4?'3px solid var(--primary)':r.pos<=6?'3px solid #f59e0b':'3px solid transparent';
+    var bg = r.pos%2===0?'background:var(--bg2)':'';
+    return '<tr style="'+bg+';border-left:'+bl+'"><td style="padding:.35rem .5rem;text-align:center;font-size:.78rem;color:var(--muted);font-weight:600">'+r.pos+'</td><td style="padding:.35rem .5rem;font-size:.82rem;font-weight:600">'+r.team+'</td><td style="padding:.35rem .4rem;text-align:center;font-size:.78rem;color:var(--muted)">'+r.pj+'</td><td style="padding:.35rem .4rem;text-align:center;font-size:.78rem">'+r.g+'</td><td style="padding:.35rem .4rem;text-align:center;font-size:.78rem">'+r.e+'</td><td style="padding:.35rem .4rem;text-align:center;font-size:.78rem">'+r.p+'</td><td style="padding:.35rem .4rem;text-align:center;font-size:.78rem;color:var(--muted)">'+r.gf+':'+r.gc+'</td><td style="padding:.35rem .5rem;text-align:center;font-weight:700;font-size:.85rem;color:var(--primary)">'+r.pts+'</td><td style="padding:.35rem .5rem">'+formaHtml(r.forma)+'</td></tr>';
+  }).join('');
+
+  var standingsTable = '<div class="card" style="padding:0;overflow:hidden;margin-bottom:1rem"><div style="padding:.6rem .75rem;background:var(--bg2);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between"><span style="font-weight:700;font-size:.85rem">📋 Clasificación — '+seasonLabel+'</span><span style="font-size:.7rem;background:#f59e0b22;color:#b45309;border-radius:99px;padding:.2rem .65rem;font-weight:700">⚠️ Datos de ejemplo</span></div><div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;min-width:500px"><thead style="background:var(--bg2)"><tr style="font-size:.72rem;color:var(--muted)"><th style="padding:.35rem .5rem;text-align:center;font-weight:600">#</th><th style="padding:.35rem .5rem;text-align:left;font-weight:600">Equipo</th><th style="padding:.35rem .4rem;text-align:center;font-weight:600">PJ</th><th style="padding:.35rem .4rem;text-align:center;font-weight:600">G</th><th style="padding:.35rem .4rem;text-align:center;font-weight:600">E</th><th style="padding:.35rem .4rem;text-align:center;font-weight:600">P</th><th style="padding:.35rem .4rem;text-align:center;font-weight:600">GF:GC</th><th style="padding:.35rem .5rem;text-align:center;font-weight:600">Pts</th><th style="padding:.35rem .5rem;text-align:left;font-weight:600">Forma</th></tr></thead><tbody>'+standingsRows+'</tbody></table></div><div style="padding:.4rem .75rem;font-size:.7rem;color:var(--muted);border-top:1px solid var(--border)"><span style="color:var(--primary);font-weight:700">■</span> Champions &nbsp;<span style="color:#f59e0b;font-weight:700">■</span> Europa League &nbsp;<span style="color:#ef4444;font-weight:700">■</span> Descenso</div></div>';
+
+  var scorers = [
+    {name:'Kylian Mbappé',team:'Real Madrid',goles:24,asist:8},
+    {name:'Robert Lewandowski',team:'Barcelona',goles:19,asist:6},
+    {name:'Antoine Griezmann',team:'Atlético',goles:14,asist:10},
+    {name:'Nico Williams',team:'Athletic',goles:12,asist:9},
+    {name:'Gerard Moreno',team:'Villarreal',goles:11,asist:4},
+  ];
+
+  var scorersHtml = '<div class="card" style="padding:0;overflow:hidden"><div style="padding:.6rem .75rem;background:var(--bg2);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between"><span style="font-weight:700;font-size:.85rem">⚽ Goleadores — '+seasonLabel+'</span><span style="font-size:.7rem;background:#f59e0b22;color:#b45309;border-radius:99px;padding:.2rem .65rem;font-weight:700">⚠️ Datos de ejemplo</span></div>'+scorers.map(function(s,i){var bg=i%2===0?'':'background:var(--bg2)';return '<div style="display:flex;align-items:center;gap:.75rem;padding:.55rem .75rem;border-bottom:1px solid var(--border);'+bg+'"><span style="font-size:.82rem;color:var(--muted);font-weight:700;min-width:1.2rem;text-align:center">'+(i+1)+'</span><div style="flex:1"><div style="font-size:.85rem;font-weight:600">'+s.name+'</div><div style="font-size:.72rem;color:var(--muted)">'+s.team+'</div></div><div style="text-align:center;min-width:3rem"><div style="font-weight:700;font-size:1rem;color:var(--primary)">'+s.goles+'</div><div style="font-size:.65rem;color:var(--muted)">goles</div></div><div style="text-align:center;min-width:3rem"><div style="font-weight:700;font-size:1rem;color:#7c3aed">'+s.asist+'</div><div style="font-size:.65rem;color:var(--muted)">asist.</div></div></div>';}).join('')+'</div>';
+
+  var panelResumen = '<div id="cal-resumen" class="cal-panel" style="display:none">'+standingsTable+scorersHtml+'<div style="margin-top:.75rem;font-size:.78rem;color:var(--muted);text-align:center">💡 Datos reales vía API.</div></div>';
+
+  return badge + subTabs + panelResultados + panelResumen;
 }
 
 // ════════════════════════════════════════════════════════════
