@@ -1406,7 +1406,7 @@ function switchInner(tab) {
       var tc = {};
       if (hh.campeones) hh.campeones.forEach(function(c){ tc[c.campeon]=(tc[c.campeon]||0)+1; });
       var sc = Object.entries(tc).sort(function(a,b){return b[1]-a[1];}).slice(0,10).map(function(p){ return {name:p[0],champ:p[1]}; });
-      ovPanel.innerHTML = buildOverview({}, [], [], sc, tc, hh) + buildPalmares([], currentLeague);
+      ovPanel.innerHTML = buildOverview({}, [], [], sc, tc, hh);
       ovPanel.dataset.loaded = '1';
       setTimeout(function(){
         if (document.getElementById('champ-pie-ov')) buildPieChart(sc.length ? sc : [], 'champ-pie-ov');
