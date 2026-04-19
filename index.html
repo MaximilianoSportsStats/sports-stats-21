@@ -1146,37 +1146,29 @@ function buildSidebar() {
     html += '<div class="continent-leagues" id="cont-' + ci + '" style="max-height:600px">';
 
     var confIds = ['mundial','uefa','conmebol','concacaf','afc','ofc','caf','amistosos'];
-    // Confederation entries first, then countries
     var sorted = cont.countries.slice().sort(function(a,b){
-      var ac = confIds.indexOf(a.id)!==-1, bc = confIds.indexOf(b.id)!==-1;
-      return ac===bc ? 0 : ac ? -1 : 1;
+      var ac=confIds.indexOf(a.id)!==-1,bc=confIds.indexOf(b.id)!==-1;
+      return ac===bc?0:ac?-1:1;
     });
     sorted.forEach(function(country) {
       var hasLeagues = country.ligas.some(function(k){ return data[k]; });
       var isConf = confIds.indexOf(country.id) !== -1;
       if (!hasLeagues && !isConf) return;
-
       var ligasHtml = country.ligas.map(function(k,i){
         var meta = data[k];
-        if (!meta) return '<button class="sub-btn" style="opacity:.6" onclick="showCopaSoon(''+k.replace(/'/g,"\'")+'')">🏆 '+k+tag('Pronto','sub-tag-copa')+'</button>';
-        var lname = meta.name||k;
-        var tagLabel = i===0?'Liga':(i+1)+'ª', tagCls = i===0?'sub-tag-liga':'sub-tag-2a';
-        return '<button class="sub-btn" id="lbtn-'+k+'" data-key="'+k+'" onclick="sbLeagueClick(this)">'+meta.flag+' '+lname+tag(tagLabel,tagCls)+'</button>';
+        if (!meta) return '<button class="sub-btn" style="opacity:.6" onclick="showCopaSoon(\'' + k + '\')">🏆 ' + k + tag('Pronto','sub-tag-copa') + '</button>';
+        var lname=meta.name||k, tL=i===0?'Liga':(i+1)+'ª', tC=i===0?'sub-tag-liga':'sub-tag-2a';
+        return '<button class="sub-btn" id="lbtn-'+k+'" data-key="'+k+'" onclick="sbLeagueClick(this)">'+meta.flag+' '+lname+tag(tL,tC)+'</button>';
       }).join('');
-
-      var copasHtml = country.copas.map(function(copa){
+      var copasHtml=country.copas.map(function(copa){
         return '<button class="sub-btn" data-copa="'+copa+'" onclick="sbCopaClick(this)" style="opacity:.55">🏆 '+copa+tag('Copa','sub-tag-copa')+'</button>';
       }).join('');
-
       if (isConf) {
         html += ligasHtml + copasHtml;
       } else {
-        var llHtml = '<button class="sub-btn" id="llbtn-'+country.id+'" data-cid="'+country.id+'" data-cname="'+country.name+'" data-sport="Fútbol" onclick="sbLLClick(this)">🏟️ Liga Local'+tag('Local','sub-tag-ll')+'</button>';
-        html += '<div class="country-group">'
-              + '<div class="country-header" onclick="toggleCountry(this)">'
-              + (function(cid){var m={'eng':'gb-eng','esp':'es','ger':'de','ita':'it','fra':'fr','ned':'nl','por':'pt','sco':'gb-sct','tur':'tr','den':'dk','chi':'cl','arg':'ar','bra':'br','uru':'uy','col':'co','ecu':'ec','usa':'us','mex':'mx','jpn':'jp','kor':'kr','ksa':'sa','egy':'eg','rsa':'za','mar':'ma','nga':'ng'};var cc=m[cid];return cc?'<img src="https://flagcdn.com/16x12/'+cc+'.png" style="vertical-align:middle;margin-right:5px;border-radius:2px">':''})(country.id)+country.name
-              + '<span class="ch-caret">▾</span>'
-              + '</div><div class="country-sub">'+ligasHtml+copasHtml+llHtml+'</div></div>';
+        var llHtml='<button class="sub-btn" id="llbtn-'+country.id+'" data-cid="'+country.id+'" data-cname="'+country.name+'" data-sport="Fútbol" onclick="sbLLClick(this)">🏟️ Liga Local'+tag('Local','sub-tag-ll')+'</button>';
+        var flagImg=(function(cid){var m={'eng':'gb-eng','esp':'es','ger':'de','ita':'it','fra':'fr','ned':'nl','por':'pt','sco':'gb-sct','tur':'tr','den':'dk','chi':'cl','arg':'ar','bra':'br','uru':'uy','col':'co','ecu':'ec','usa':'us','mex':'mx','jpn':'jp','kor':'kr','ksa':'sa','egy':'eg','rsa':'za','mar':'ma','nga':'ng'};var cc=m[cid];return cc?'<img src="https://flagcdn.com/16x12/'+cc+'.png" style="vertical-align:middle;margin-right:5px;border-radius:2px">':'';})(country.id);
+        html+='<div class="country-group"><div class="country-header" onclick="toggleCountry(this)">'+flagImg+country.name+'<span class="ch-caret">▾</span></div><div class="country-sub">'+ligasHtml+copasHtml+llHtml+'</div></div>';
       }
     });
 
