@@ -716,6 +716,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Inter','Segoe UI
     <div class="sidebar-section">
       <div class="sidebar-label">Próximamente</div>
       <button class="league-btn soon"><span class="flag">🏆</span>Europa League</button>
+      <button class="league-btn soon"><span class="flag">🇲🇽</span>Liga MX</button>
     </div>
   </aside>
 
@@ -1138,14 +1139,21 @@ function buildSidebar() {
           + cont.icon + ' ' + cont.name + ' <span class="caret">▾</span></div>';
     html += '<div class="continent-leagues" id="cont-' + ci + '" style="max-height:600px">';
 
+    var confIds = ['mundial','uefa','conmebol','concacaf','afc','caf','amistosos'];
     cont.countries.forEach(function(country) {
       var hasLeagues = country.ligas.some(function(k) { return data[k]; });
-      if (!hasLeagues && country.id !== 'uefa') return;
+      var isConf = confIds.indexOf(country.id) !== -1;
+      if (!hasLeagues && !isConf) return;
 
-      var ligasHtml = country.ligas.filter(function(k) { return data[k]; }).map(function(k, i) {
+      var ligasHtml = country.ligas.map(function(k, i) {
         var meta = data[k];
+        if (!meta) {
+          return '<button class="sub-btn" style="opacity:.6" onclick="showCopaSoon(\'' + k.replace(/'/g,"\\'") + '\')">'
+               + '🏆 ' + k
+               + tag('Pronto', 'sub-tag-copa')
+               + '</button>';
+        }
         var lname = meta.name || k;
-        // First liga = "Liga", rest = "2ª", "3ª"...
         var tagLabel = i === 0 ? 'Liga' : (i + 1) + 'ª';
         var tagCls = i === 0 ? 'sub-tag-liga' : 'sub-tag-2a';
         return '<button class="sub-btn" id="lbtn-' + k + '" data-key="' + k + '" onclick="sbLeagueClick(this)">'
@@ -1162,8 +1170,8 @@ function buildSidebar() {
              + '</button>';
       }).join('');
 
-      // Liga Local button
-      var llHtml = '<button class="sub-btn" id="llbtn-' + country.id + '" '
+      // Liga Local button (hide for confederation entries)
+      var llHtml = isConf ? '' : '<button class="sub-btn" id="llbtn-' + country.id + '" '
                  + 'data-cid="' + country.id + '" data-cname="' + country.name + '" data-sport="Fútbol" onclick="sbLLClick(this)">'
                  + '🏟️ Liga Local'
                  + tag('Local', 'sub-tag-ll')
@@ -1184,6 +1192,22 @@ function buildSidebar() {
 
     html += '</div>';
   });
+
+  // ── SECCIÓN INTERNACIONAL ──────────────────────────────
+  if (window.SS21.internacional) {
+    const intKeys = Object.keys(window.SS21.internacional);
+    if (intKeys.length) {
+      html += '<div class="continent-header" onclick="toggleContinent(this)" data-cont="intl">🌍 Internacional <span class="caret">▾</span></div>';
+      html += '<div class="continent-leagues" id="cont-intl" style="max-height:400px">';
+      intKeys.forEach(function(key) {
+        const t = window.SS21.internacional[key];
+        html += '<button class="league-btn" id="lbtn-intl-' + key + '" data-key="' + key + '" onclick="sbTournClick(this)">'
+              + '<span class="flag">' + (t.flag||'🌍') + '</span>' + (t.name||key)
+              + '</button>';
+      });
+      html += '</div>';
+    }
+  }
 
   nav.innerHTML = html;
 }
