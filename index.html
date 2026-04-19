@@ -1260,7 +1260,8 @@ function buildSidebar() {
           + cont.icon + ' ' + cont.name + ' <span class="caret">▾</span></div>';
     html += '<div class="continent-leagues" id="cont-' + ci + '" style="max-height:600px">';
 
-    var confIds = ['mundial','uefa','conmebol','concacaf','afc','ofc','caf','amistosos-sel','amistosos-eq'];
+              function getFlagHtml(id,fb){var m={'eng':'gb-eng','esp':'es','ger':'de','ita':'it','fra':'fr','ned':'nl','por':'pt','bel':'be','sui':'ch','aut':'at','swe':'se','nor':'no','den':'dk','fin':'fi','sco':'gb-sct','wal':'gb-wls','irl':'ie','nir':'gb-nir','isl':'is','fro':'fo','rus':'ru','ukr':'ua','pol':'pl','cze':'cz','svk':'sk','hun':'hu','rou':'ro','bul':'bg','cro':'hr','srb':'rs','gre':'gr','svn':'si','bih':'ba','mne':'me','alb':'al','mkd':'mk','xkx':'xk','tur':'tr','geo':'ge','aze':'az','arm':'am','kaz':'kz','blr':'by','mda':'md','est':'ee','lva':'lv','ltu':'lt','cyp':'cy','lux':'lu','mlt':'mt','and':'ad','smr':'sm','arg':'ar','bra':'br','uru':'uy','chi':'cl','col':'co','ecu':'ec','per':'pe','par':'py','bol':'bo','ven':'ve','usa':'us','can':'ca','mex':'mx','crc':'cr','hon':'hn','gua':'gt','slv':'sv','pan':'pa','jam':'jm','tto':'tt','hai':'ht','cub':'cu','dom':'do','nic':'ni','blz':'bz','jpn':'jp','kor':'kr','chn':'cn','aus':'au','ksa':'sa','irn':'ir','irq':'iq','qat':'qa','uae':'ae','kuw':'kw','bhr':'bh','omn':'om','jor':'jo','uzb':'uz','tjk':'tj','kaz2':'kz','kgz':'kg','tha':'th','vie':'vn','idn':'id','mas':'my','phi':'ph','sgp':'sg','ind':'in','pal':'ps','syr':'sy','lib2':'lb','nzl':'nz','fij':'fj','png':'pg','sol':'sb','tah':'pf','ncl':'nc','van':'vu','nga':'ng','egy':'eg','mar':'ma','rsa':'za','sen':'sn','gha':'gh','cmr':'cm','civ':'ci','mli':'ml','bfa':'bf','alg':'dz','tun':'tn','lba':'ly','zim':'zw','zam':'zm','uga':'ug','ken':'ke','tan':'tz','ang':'ao','moz':'mz','cod':'cd','cog':'cg','gab':'ga','rwa':'rw','eth':'et','cpv':'cv','gui':'gn','gam':'gm','uefa':'eu'};var cc=m[id];if(!cc)return fb?fb+' ':'';return '<img src="https://flagcdn.com/20x15/'+cc+'.png" style="height:12px;vertical-align:middle;margin-right:3px;">';}
+          var confIds = ['mundial','uefa','conmebol','concacaf','afc','ofc','caf','amistosos-sel','amistosos-eq'];
     var sorted = cont.countries.slice().sort(function(a,b){
       var ac=confIds.indexOf(a.id)!==-1,bc=confIds.indexOf(b.id)!==-1;
       return ac===bc?0:ac?-1:1;
@@ -1283,15 +1284,14 @@ function buildSidebar() {
         // Conf entry: expandable group, copas (selecciones) first, ligas (equipos) second
         html += '<div class="country-group">'
               + '<div class="country-header" onclick="toggleCountry(this)">'
-              + country.flag + ' ' + country.name
+              + getFlagHtml(country.id,country.flag) + country.name
               + '<span class="ch-caret">▾</span>'
               + '</div><div class="country-sub">'
               + copasHtml + ligasHtml
               + '</div></div>';
       } else {
         var llHtml='<button class="sub-btn" id="llbtn-'+country.id+'" data-cid="'+country.id+'" data-cname="'+country.name+'" data-sport="Fútbol" onclick="sbLLClick(this)">🏟️ Liga Local'+tag('Local','sub-tag-ll')+'</button>';
-        var flagImg=(function(cid){var m={'eng':'gb-eng','esp':'es','ger':'de','ita':'it','fra':'fr','ned':'nl','por':'pt','sco':'gb-sct','tur':'tr','den':'dk','chi':'cl','arg':'ar','bra':'br','uru':'uy','col':'co','ecu':'ec','usa':'us','mex':'mx','jpn':'jp','kor':'kr','ksa':'sa','egy':'eg','rsa':'za','mar':'ma','nga':'ng'};var cc=m[cid];return cc?'<img src="https://flagcdn.com/16x12/'+cc+'.png" style="vertical-align:middle;margin-right:5px;border-radius:2px">':'';})(country.id);
-        html+='<div class="country-group"><div class="country-header" onclick="toggleCountry(this)">'+country.flag+' '+country.name+'<span class="ch-caret">▾</span></div><div class="country-sub">'+ligasHtml+copasHtml+llHtml+'</div></div>';
+        html+='<div class="country-group"><div class="country-header" onclick="toggleCountry(this)">'+getFlagHtml(country.id,country.flag)+country.name+'<span class="ch-caret">▾</span></div><div class="country-sub">'+ligasHtml+copasHtml+llHtml+'</div></div>';
       }
     });
 
