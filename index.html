@@ -854,7 +854,7 @@ let searchTerm = '';
 
 const CONTINENTS = [
   { name: "Mundial", icon: "🏆", countries: [
-    { name: "Mundial FIFA", flag: "🌍", id: "mundial", ligas: [], copas: ["Clasificatoria Mundial", "Mundial", "Mundial Femenino", "Mundial Sub-20"] },
+    { name: "Mundial FIFA", flag: "🌍", id: "mundial", ligas: [], copas: ["Mundial", "Mundial Femenino", "Mundial Sub-20"] },
   ]},
   { name: "Europa", icon: "🌍", countries: [
     { name: "UEFA", flag: "🇪🇺", id: "uefa", ligas: ["Champions", "Europa League", "Conference League"], copas: ["Clasificatoria UEFA", "Eurocopa", "Nations League"] },
@@ -1268,8 +1268,7 @@ function buildSidebar() {
     sorted.forEach(function(country) {
       var hasLeagues = country.ligas.some(function(k){ return data[k]; });
       var isConf = confIds.indexOf(country.id) !== -1;
-      if (!hasLeagues && !isConf) return;
-      var ligasHtml = country.ligas.map(function(k,i){
+            var ligasHtml = country.ligas.map(function(k,i){
         var meta = data[k];
         if (!meta) return '<button class="sub-btn" style="opacity:.6" onclick="showCopaSoon(\'' + k + '\')">🏆 ' + k + tag('Pronto','sub-tag-copa') + '</button>';
         var lname=meta.name||k, tL=i===0?'Liga':(i+1)+'ª', tC=i===0?'sub-tag-liga':'sub-tag-2a';
@@ -1278,7 +1277,9 @@ function buildSidebar() {
       var copasHtml=country.copas.map(function(copa){
         return '<button class="sub-btn" data-copa="'+copa+'" onclick="sbCopaClick(this)" style="opacity:.55">🏆 '+copa+tag('Copa','sub-tag-copa')+'</button>';
       }).join('');
-      if (isConf) {
+      if (country.id === 'mundial') {
+               html += copasHtml;
+             } else if (isConf) {
         // Conf entry: expandable group, copas (selecciones) first, ligas (equipos) second
         html += '<div class="country-group">'
               + '<div class="country-header" onclick="toggleCountry(this)">'
