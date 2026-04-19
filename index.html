@@ -858,6 +858,9 @@ let currentInnerTab = 'overview';
 let searchTerm = '';
 
 const CONTINENTS = [
+  { name: 'Mundial', icon: '🏆', countries: [
+    { name: 'FIFA', flag: '🌍', id: 'mundial', ligas: ['Mundial'], copas: ['Mundial Femenino','Mundial Sub-20'] },
+  ]},
   { name: 'Europa', icon: '🌍', countries: [
     { name: 'Inglaterra',    flag: '🏴󠁧󠁢󠁥󠁮󠁧󠁿', id: 'eng', ligas: ['Premier','Championship'],       copas: ['FA Cup','Carabao Cup'] },
     { name: 'España',        flag: '🇪🇸', id: 'esp', ligas: ['La Liga','Segunda'],              copas: ['Copa del Rey'] },
@@ -869,6 +872,7 @@ const CONTINENTS = [
     { name: 'Escocia',       flag: '🏴󠁧󠁢󠁳󠁣󠁴󠁿', id: 'sco', ligas: ['Escocia'],                        copas: ['Scottish Cup'] },
     { name: 'Turquía',       flag: '🇹🇷', id: 'tur', ligas: ['Süper Lig'],                       copas: ['Turkish Cup'] },
     { name: 'Dinamarca',     flag: '🇩🇰', id: 'den', ligas: ['Superliga'],                       copas: ['Danish Cup'] },
+    { name: 'UEFA',          flag: '🇪🇺', id: 'uefa', ligas: ['Champions','Europa League','Conference League'], copas: ['Eurocopa'] },
   ]},
   { name: 'América del Sur', icon: '🌎', countries: [
     { name: 'Chile',      flag: '🇨🇱', id: 'chi', ligas: ['Chile'],     copas: ['Copa Chile'] },
@@ -877,24 +881,31 @@ const CONTINENTS = [
     { name: 'Uruguay',    flag: '🇺🇾', id: 'uru', ligas: ['Uruguay'],   copas: ['Copa Uruguay'] },
     { name: 'Colombia',   flag: '🇨🇴', id: 'col', ligas: ['Colombia'],  copas: ['Copa Colombia'] },
     { name: 'Ecuador',    flag: '🇪🇨', id: 'ecu', ligas: ['Ecuador'],   copas: ['Copa Ecuador'] },
+    { name: 'CONMEBOL',   flag: '🏆', id: 'conmebol', ligas: ['Copa América','Libertadores'], copas: ['Copa Sudamericana','Recopa'] },
   ]},
   { name: 'América del Norte', icon: '🌎', countries: [
     { name: 'EE.UU./Canadá', flag: '🇺🇸', id: 'usa', ligas: ['MLS'],     copas: ['US Open Cup'] },
     { name: 'México',        flag: '🇲🇽', id: 'mex', ligas: ['Liga MX'], copas: ['Copa MX'] },
+    { name: 'CONCACAF',      flag: '🏆', id: 'concacaf', ligas: ['Gold Cup'], copas: ['CONCACAF Champions'] },
   ]},
-  { name: 'Asia & Oceanía', icon: '🌏', countries: [
+  { name: 'Asia', icon: '🌏', countries: [
     { name: 'Japón',          flag: '🇯🇵', id: 'jpn', ligas: ['J.League'], copas: ['Emperor Cup'] },
     { name: 'Corea del Sur',  flag: '🇰🇷', id: 'kor', ligas: ['K League'], copas: ['FA Cup Korea'] },
     { name: 'Arabia Saudita', flag: '🇸🇦', id: 'ksa', ligas: ['Saudi'],    copas: ['King Cup'] },
+    { name: 'AFC',            flag: '🏆', id: 'afc', ligas: ['Copa Asia'], copas: ['AFC Champions'] },
+  ]},
+  { name: 'Oceanía', icon: '🌏', countries: [
+    { name: 'OFC',            flag: '🏆', id: 'ofc', ligas: ['OFC Nations Cup'], copas: ['OFC Champions'] },
   ]},
   { name: 'África', icon: '🌍', countries: [
     { name: 'Egipto',     flag: '🇪🇬', id: 'egy', ligas: ['Egipto'],    copas: ['Egypt Cup'] },
     { name: 'Sudáfrica',  flag: '🇿🇦', id: 'rsa', ligas: ['Sudáfrica'], copas: ['Nedbank Cup'] },
     { name: 'Marruecos',  flag: '🇲🇦', id: 'mar', ligas: ['Marruecos'], copas: ['Coupe du Trône'] },
     { name: 'Nigeria',    flag: '🇳🇬', id: 'nga', ligas: ['Nigeria'],   copas: ['Federation Cup'] },
+    { name: 'CAF',        flag: '🏆', id: 'caf', ligas: ['Copa África (AFCON)'], copas: ['CAF Champions'] },
   ]},
-  { name: 'UEFA Copas', icon: '⭐', countries: [
-    { name: 'Europa', flag: '🇪🇺', id: 'uefa', ligas: ['Champions'], copas: [] },
+  { name: 'Amistosos', icon: '🤝', countries: [
+    { name: 'Amistosos Internacionales', flag: '🌍', id: 'amistosos', ligas: ['Amistosos'], copas: [] },
   ]},
 ];
 
@@ -1139,7 +1150,7 @@ function buildSidebar() {
           + cont.icon + ' ' + cont.name + ' <span class="caret">▾</span></div>';
     html += '<div class="continent-leagues" id="cont-' + ci + '" style="max-height:600px">';
 
-    var confIds = ['mundial','uefa','conmebol','concacaf','afc','caf','amistosos'];
+    var confIds = ['mundial','uefa','conmebol','concacaf','afc','ofc','caf','amistosos'];
     cont.countries.forEach(function(country) {
       var hasLeagues = country.ligas.some(function(k) { return data[k]; });
       var isConf = confIds.indexOf(country.id) !== -1;
