@@ -854,23 +854,28 @@ let searchTerm = '';
 
 const CONTINENTS = [
   { name: 'Mundial', icon: '🏆', countries: [
-    { name: 'Mundial FIFA', flag: '🌍', id: 'mundial', ligas: ['Mundial'], copas: ['Mundial Femenino','Mundial Sub-20','Clasificatoria Mundial'] },
+    { name: 'Mundial FIFA', flag: '🌍', id: 'mundial', ligas: [],
+      copas: ['Clasificatoria Mundial','Mundial','Mundial Femenino','Mundial Sub-20'] },
   ]},
   { name: 'Europa', icon: '🌍', countries: [
-    { name: 'UEFA', flag: '🇪🇺', id: 'uefa', ligas: ['Champions','Europa League','Conference League'], copas: ['Eurocopa','Nations League','Clasificatoria UEFA'] },
-    { name: 'Inglaterra',   flag: '🏴󠁧󠁢󠁥󠁮󠁧󠁿', id: 'eng', ligas: ['Premier','Championship'],      copas: ['FA Cup','Carabao Cup'] },
-    { name: 'España',       flag: '🇪🇸', id: 'esp', ligas: ['La Liga','Segunda'],             copas: ['Copa del Rey'] },
-    { name: 'Alemania',     flag: '🇩🇪', id: 'ger', ligas: ['Bundesliga','2. Bundesliga'],     copas: ['DFB-Pokal'] },
-    { name: 'Italia',       flag: '🇮🇹', id: 'ita', ligas: ['Serie A','Serie B'],              copas: ['Coppa Italia'] },
-    { name: 'Francia',      flag: '🇫🇷', id: 'fra', ligas: ['Ligue 1'],                        copas: ['Coupe de France'] },
-    { name: 'Países Bajos', flag: '🇳🇱', id: 'ned', ligas: ['Eredivisie'],                     copas: ['KNVB Cup'] },
-    { name: 'Portugal',     flag: '🇵🇹', id: 'por', ligas: ['Primeira Liga'],                  copas: ['Taça de Portugal'] },
-    { name: 'Escocia',      flag: '🏴󠁧󠁢󠁳󠁣󠁴󠁿', id: 'sco', ligas: ['Escocia'],                       copas: ['Scottish Cup'] },
-    { name: 'Turquía',      flag: '🇹🇷', id: 'tur', ligas: ['Süper Lig'],                      copas: ['Turkish Cup'] },
-    { name: 'Dinamarca',    flag: '🇩🇰', id: 'den', ligas: ['Superliga'],                      copas: ['Danish Cup'] },
+    { name: 'UEFA', flag: '🇪🇺', id: 'uefa',
+      ligas: ['Champions','Europa League','Conference League'],
+      copas: ['Clasificatoria UEFA','Eurocopa','Nations League'] },
+    { name: 'Inglaterra',   flag: '🏴󠁧󠁢󠁥󠁮󠁧󠁿', id: 'eng', ligas: ['Premier','Championship'],  copas: ['FA Cup','Carabao Cup'] },
+    { name: 'España',       flag: '🇪🇸', id: 'esp', ligas: ['La Liga','Segunda'],          copas: ['Copa del Rey'] },
+    { name: 'Alemania',     flag: '🇩🇪', id: 'ger', ligas: ['Bundesliga','2. Bundesliga'],  copas: ['DFB-Pokal'] },
+    { name: 'Italia',       flag: '🇮🇹', id: 'ita', ligas: ['Serie A','Serie B'],           copas: ['Coppa Italia'] },
+    { name: 'Francia',      flag: '🇫🇷', id: 'fra', ligas: ['Ligue 1'],                     copas: ['Coupe de France'] },
+    { name: 'Países Bajos', flag: '🇳🇱', id: 'ned', ligas: ['Eredivisie'],                  copas: ['KNVB Cup'] },
+    { name: 'Portugal',     flag: '🇵🇹', id: 'por', ligas: ['Primeira Liga'],               copas: ['Taça de Portugal'] },
+    { name: 'Escocia',      flag: '🏴󠁧󠁢󠁳󠁣󠁴󠁿', id: 'sco', ligas: ['Escocia'],                    copas: ['Scottish Cup'] },
+    { name: 'Turquía',      flag: '🇹🇷', id: 'tur', ligas: ['Süper Lig'],                   copas: ['Turkish Cup'] },
+    { name: 'Dinamarca',    flag: '🇩🇰', id: 'den', ligas: ['Superliga'],                   copas: ['Danish Cup'] },
   ]},
   { name: 'América del Sur', icon: '🌎', countries: [
-    { name: 'CONMEBOL',  flag: '🌎', id: 'conmebol', ligas: ['Copa América','Libertadores'], copas: ['Copa Sudamericana','Recopa','Clasificatoria CONMEBOL'] },
+    { name: 'CONMEBOL', flag: '🌎', id: 'conmebol',
+      ligas: ['Libertadores','Copa Sudamericana','Recopa'],
+      copas: ['Clasificatoria CONMEBOL','Copa América'] },
     { name: 'Chile',     flag: '🇨🇱', id: 'chi', ligas: ['Chile'],     copas: ['Copa Chile'] },
     { name: 'Argentina', flag: '🇦🇷', id: 'arg', ligas: ['Argentina'], copas: ['Copa Argentina'] },
     { name: 'Brasil',    flag: '🇧🇷', id: 'bra', ligas: ['Brasil'],    copas: ['Copa Brasil'] },
@@ -879,30 +884,34 @@ const CONTINENTS = [
     { name: 'Ecuador',   flag: '🇪🇨', id: 'ecu', ligas: ['Ecuador'],   copas: ['Copa Ecuador'] },
   ]},
   { name: 'América del Norte', icon: '🌎', countries: [
-    { name: 'CONCACAF',      flag: '🌎', id: 'concacaf', ligas: ['Gold Cup'], copas: ['CONCACAF Champions','Clasificatoria CONCACAF'] },
+    { name: 'CONCACAF',      flag: '🌎', id: 'concacaf',
+      ligas: ['CONCACAF Champions'], copas: ['Clasificatoria CONCACAF','Gold Cup'] },
     { name: 'EE.UU./Canadá', flag: '🇺🇸', id: 'usa', ligas: ['MLS'],     copas: ['US Open Cup'] },
     { name: 'México',        flag: '🇲🇽', id: 'mex', ligas: ['Liga MX'], copas: ['Copa MX'] },
   ]},
   { name: 'Asia', icon: '🌏', countries: [
-    { name: 'AFC',           flag: '🌏', id: 'afc',  ligas: ['Copa Asia'], copas: ['AFC Champions','Clasificatoria AFC'] },
-    { name: 'Japón',         flag: '🇯🇵', id: 'jpn', ligas: ['J.League'], copas: ['Emperor Cup'] },
-    { name: 'Corea del Sur', flag: '🇰🇷', id: 'kor', ligas: ['K League'], copas: ['FA Cup Korea'] },
-    { name: 'Arabia Saudita',flag: '🇸🇦', id: 'ksa', ligas: ['Saudi'],    copas: ['King Cup'] },
+    { name: 'AFC', flag: '🌏', id: 'afc',
+      ligas: ['AFC Champions'], copas: ['Clasificatoria AFC','Copa Asia'] },
+    { name: 'Japón',          flag: '🇯🇵', id: 'jpn', ligas: ['J.League'], copas: ['Emperor Cup'] },
+    { name: 'Corea del Sur',  flag: '🇰🇷', id: 'kor', ligas: ['K League'], copas: ['FA Cup Korea'] },
+    { name: 'Arabia Saudita', flag: '🇸🇦', id: 'ksa', ligas: ['Saudi'],    copas: ['King Cup'] },
   ]},
   { name: 'Oceanía', icon: '🌏', countries: [
-    { name: 'OFC',       flag: '🌏', id: 'ofc', ligas: ['OFC Nations Cup'], copas: ['OFC Champions','Clasificatoria OFC'] },
+    { name: 'OFC',       flag: '🌏', id: 'ofc',
+      ligas: ['OFC Champions'], copas: ['Clasificatoria OFC','OFC Nations Cup'] },
     { name: 'Australia', flag: '🇦🇺', id: 'aus', ligas: ['A-League'], copas: ['FFA Cup'] },
   ]},
   { name: 'África', icon: '🌍', countries: [
-    { name: 'CAF',        flag: '🌍', id: 'caf', ligas: ['Copa África (AFCON)'], copas: ['CAF Champions','Clasificatoria CAF'] },
-    { name: 'Egipto',     flag: '🇪🇬', id: 'egy', ligas: ['Egipto'],    copas: ['Egypt Cup'] },
-    { name: 'Sudáfrica',  flag: '🇿🇦', id: 'rsa', ligas: ['Sudáfrica'], copas: ['Nedbank Cup'] },
-    { name: 'Marruecos',  flag: '🇲🇦', id: 'mar', ligas: ['Marruecos'], copas: ['Coupe du Trône'] },
-    { name: 'Nigeria',    flag: '🇳🇬', id: 'nga', ligas: ['Nigeria'],   copas: ['Federation Cup'] },
+    { name: 'CAF', flag: '🌍', id: 'caf',
+      ligas: ['CAF Champions'], copas: ['Clasificatoria CAF','Copa África (AFCON)'] },
+    { name: 'Egipto',    flag: '🇪🇬', id: 'egy', ligas: ['Egipto'],    copas: ['Egypt Cup'] },
+    { name: 'Sudáfrica', flag: '🇿🇦', id: 'rsa', ligas: ['Sudáfrica'], copas: ['Nedbank Cup'] },
+    { name: 'Marruecos', flag: '🇲🇦', id: 'mar', ligas: ['Marruecos'], copas: ['Coupe du Trône'] },
+    { name: 'Nigeria',   flag: '🇳🇬', id: 'nga', ligas: ['Nigeria'],   copas: ['Federation Cup'] },
   ]},
   { name: 'Amistosos', icon: '🤝', countries: [
-    { name: 'Amistosos Selección', flag: '🌍', id: 'amistosos-sel', ligas: ['Amistosos Selección'], copas: [] },
-    { name: 'Amistosos Equipos',   flag: '🏟️', id: 'amistosos-eq',  ligas: ['Amistosos Equipos'],  copas: [] },
+    { name: 'Amistosos Selección', flag: '🌍',     id: 'amistosos-sel', ligas: [], copas: ['Amistosos Selección'] },
+    { name: 'Amistosos Equipos',   flag: '🏟️', id: 'amistosos-eq',  ligas: [], copas: ['Amistosos Equipos'] },
   ]},
 ];
 
@@ -1147,7 +1156,7 @@ function buildSidebar() {
           + cont.icon + ' ' + cont.name + ' <span class="caret">▾</span></div>';
     html += '<div class="continent-leagues" id="cont-' + ci + '" style="max-height:600px">';
 
-    var confIds = ['mundial','uefa','conmebol','concacaf','afc','ofc','caf','amistosos','amistosos-sel','amistosos-eq'];
+    var confIds = ['mundial','uefa','conmebol','concacaf','afc','ofc','caf','amistosos-sel','amistosos-eq'];
     var sorted = cont.countries.slice().sort(function(a,b){
       var ac=confIds.indexOf(a.id)!==-1,bc=confIds.indexOf(b.id)!==-1;
       return ac===bc?0:ac?-1:1;
@@ -1166,7 +1175,14 @@ function buildSidebar() {
         return '<button class="sub-btn" data-copa="'+copa+'" onclick="sbCopaClick(this)" style="opacity:.55">🏆 '+copa+tag('Copa','sub-tag-copa')+'</button>';
       }).join('');
       if (isConf) {
-        html += ligasHtml + copasHtml;
+        // Conf entry: expandable group, copas (selecciones) first, ligas (equipos) second
+        html += '<div class="country-group">'
+              + '<div class="country-header" onclick="toggleCountry(this)">'
+              + country.flag + ' ' + country.name
+              + '<span class="ch-caret">▾</span>'
+              + '</div><div class="country-sub">'
+              + copasHtml + ligasHtml
+              + '</div></div>';
       } else {
         var llHtml='<button class="sub-btn" id="llbtn-'+country.id+'" data-cid="'+country.id+'" data-cname="'+country.name+'" data-sport="Fútbol" onclick="sbLLClick(this)">🏟️ Liga Local'+tag('Local','sub-tag-ll')+'</button>';
         var flagImg=(function(cid){var m={'eng':'gb-eng','esp':'es','ger':'de','ita':'it','fra':'fr','ned':'nl','por':'pt','sco':'gb-sct','tur':'tr','den':'dk','chi':'cl','arg':'ar','bra':'br','uru':'uy','col':'co','ecu':'ec','usa':'us','mex':'mx','jpn':'jp','kor':'kr','ksa':'sa','egy':'eg','rsa':'za','mar':'ma','nga':'ng'};var cc=m[cid];return cc?'<img src="https://flagcdn.com/16x12/'+cc+'.png" style="vertical-align:middle;margin-right:5px;border-radius:2px">':'';})(country.id);
