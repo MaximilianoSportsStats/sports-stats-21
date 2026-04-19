@@ -1193,22 +1193,6 @@ function buildSidebar() {
     html += '</div>';
   });
 
-  // ── SECCIÓN INTERNACIONAL ──────────────────────────────
-  if (window.SS21.internacional) {
-    const intKeys = Object.keys(window.SS21.internacional);
-    if (intKeys.length) {
-      html += '<div class="continent-header" onclick="toggleContinent(this)" data-cont="intl">🌍 Internacional <span class="caret">▾</span></div>';
-      html += '<div class="continent-leagues" id="cont-intl" style="max-height:400px">';
-      intKeys.forEach(function(key) {
-        const t = window.SS21.internacional[key];
-        html += '<button class="league-btn" id="lbtn-intl-' + key + '" data-key="' + key + '" onclick="sbTournClick(this)">'
-              + '<span class="flag">' + (t.flag||'🌍') + '</span>' + (t.name||key)
-              + '</button>';
-      });
-      html += '</div>';
-    }
-  }
-
   nav.innerHTML = html;
 }
 
