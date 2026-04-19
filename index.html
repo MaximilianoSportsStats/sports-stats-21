@@ -1291,7 +1291,7 @@ function buildSidebar() {
       } else {
         var llHtml='<button class="sub-btn" id="llbtn-'+country.id+'" data-cid="'+country.id+'" data-cname="'+country.name+'" data-sport="Fútbol" onclick="sbLLClick(this)">🏟️ Liga Local'+tag('Local','sub-tag-ll')+'</button>';
         var flagImg=(function(cid){var m={'eng':'gb-eng','esp':'es','ger':'de','ita':'it','fra':'fr','ned':'nl','por':'pt','sco':'gb-sct','tur':'tr','den':'dk','chi':'cl','arg':'ar','bra':'br','uru':'uy','col':'co','ecu':'ec','usa':'us','mex':'mx','jpn':'jp','kor':'kr','ksa':'sa','egy':'eg','rsa':'za','mar':'ma','nga':'ng'};var cc=m[cid];return cc?'<img src="https://flagcdn.com/16x12/'+cc+'.png" style="vertical-align:middle;margin-right:5px;border-radius:2px">':'';})(country.id);
-        html+='<div class="country-group"><div class="country-header" onclick="toggleCountry(this)">'+flagImg+country.name+'<span class="ch-caret">▾</span></div><div class="country-sub">'+ligasHtml+copasHtml+llHtml+'</div></div>';
+        html+='<div class="country-group"><div class="country-header" onclick="toggleCountry(this)">'+country.flag+' '+country.name+'<span class="ch-caret">▾</span></div><div class="country-sub">'+ligasHtml+copasHtml+llHtml+'</div></div>';
       }
     });
 
