@@ -5079,7 +5079,6 @@ function switchRacingSeries(series, btn) {
   if (series === 'nascar' && !window._nascarInit)  { renderNASCAR(); window._nascarInit = true; }
   if (series === 'rally'  && !window._rallyInit)   { renderRally();  window._rallyInit = true; }
   if (series === 'motogp' && !window._motogpInit)  { renderMotoGP(); window._motogpInit = true; }
-}
 
 // ════════════════════════════════════════════════════════════
 // LUCHAS — Discipline switcher
@@ -5088,7 +5087,7 @@ function switchRacingSeries(series, btn) {
   if (series === 'fe'      && !window._feInit)      { renderFormulaE(); window._feInit      = true; }
   if (series === 'wec'     && !window._wecInit)     { renderWEC();      window._wecInit     = true; }
   if (series === 'sbk'     && !window._sbkInit)     { renderSBK();      window._sbkInit     = true; }
-
+   }
 function switchFightingDisc(disc, btn) {
   ['ufc','boxeo','wwe','judo','kick','mma','muay','bjj','lucha','wrestling'].forEach(function(d) {
     var el = document.getElementById(d+'-main');
