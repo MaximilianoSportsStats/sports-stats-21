@@ -5098,8 +5098,7 @@ function switchFightingDisc(disc, btn) {
   if (disc === 'boxeo' && !window._boxeoInit) { renderBoxeo(); window._boxeoInit = true; }
   if (disc === 'wwe'   && !window._wweInit)   { renderWWE();   window._wweInit   = true; }
   if (disc === 'judo'  && !window._judoInit)  { renderJudo();  window._judoInit  = true; }
-  if (disc === 'kick'  && !window._kickInit)  { renderKick();  window._kickInit  = true; }
-}
+  if (disc === 'kick'  && !whindow._kickInit)  { renderKick();  window._kickInit  = true; }
 
 // ════════════════════════════════════════════════════════════
 // F2 / F3
@@ -5109,6 +5108,7 @@ function switchFightingDisc(disc, btn) {
   if (disc === 'bjj'       && !window._bjjInit)      { renderBJJ();        window._bjjInit      = true; }
   if (disc === 'lucha'     && !window._luchaInit)    { renderLuchaLibre(); window._luchaInit    = true; }
   if (disc === 'wrestling' && !window._wrestInit)    { renderWrestling();  window._wrestInit    = true; }
+   }
 
 function renderF2() {
   var p = document.getElementById('f2-main');
