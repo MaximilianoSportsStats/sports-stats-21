@@ -868,7 +868,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Inter','Segoe UI
       <div id="mas-deportes-main"></div>
     </div>
     <!-- OTROS DEPORTES PANEL -->
-    <div class="tab-panel" id="panel-otros" style="display:none">
+    <div class="tab-panel" id="panel-otros">
       <div id="otros-main">
         <nav class="disc-nav" id="otros-nav" style="flex-wrap:wrap;gap:6px;padding:10px 0">
           <button class="disc-btn active" onclick="switchOtros('nhl',this)">🏒 NHL</button>
@@ -879,6 +879,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Inter','Segoe UI
           <button class="disc-btn" onclick="switchOtros('athletics',this)">🏃 Atletismo</button>
           <button class="disc-btn" onclick="switchOtros('chess',this)">♟️ Ajedrez</button>
           <button class="disc-btn" onclick="switchOtros('liga-local',this)">🏠 Liga Local</button>
+          <button class="disc-btn" onclick="switchOtros('masd',this)">🎮 Colectivos</button>
         </nav>
         <div id="otros-content"></div>
       </div>
@@ -5108,9 +5109,9 @@ function switchRacingSeries(series, btn) {
 function switchOtros(sport, btn) {
     var otrosContent = document.getElementById('otros-content');
     if (!otrosContent) return;
-    var mainDiv = document.getElementById(sport + '-main');
+    var mainId = sport === 'masd' ? 'mas-deportes-main' : sport + '-main';
+    var mainDiv = document.getElementById(mainId);
     if (!mainDiv) return;
-    // Move mainDiv into otros-content if not already there
     if (mainDiv.parentElement !== otrosContent) {
         Array.from(otrosContent.children).forEach(function(c) { c.style.display = 'none'; });
         otrosContent.appendChild(mainDiv);
@@ -5119,19 +5120,18 @@ function switchOtros(sport, btn) {
         Array.from(otrosContent.children).forEach(function(c) { c.style.display = 'none'; });
         mainDiv.style.display = '';
     }
-    // Update sub-nav active state
     document.querySelectorAll('#otros-nav .disc-btn').forEach(function(b) { b.classList.remove('active'); });
     if (btn) btn.classList.add('active');
-    // Lazy render
     var renderMap = {
-        'nhl':       { fn: 'renderNHL',       init: '_nhlInit' },
-        'mlb':       { fn: 'renderMLB',       init: '_mlbInit' },
-        'volley':    { fn: 'renderVolley',    init: '_volleyInit' },
-        'cycling':   { fn: 'renderCycling',   init: '_cyclingInit' },
-        'cricket':   { fn: 'renderCricket',   init: '_cricketInit' },
-        'athletics': { fn: 'renderAthletics', init: '_athleticsInit' },
-        'chess':     { fn: 'renderChess',     init: '_chessInit' },
-        'liga-local':{ fn: 'renderLigaLocal', init: '_ligaLocalInit' }
+        'nhl':        { fn: 'renderNHL',         init: '_nhlInit' },
+        'mlb':        { fn: 'renderMLB',         init: '_mlbInit' },
+        'volley':     { fn: 'renderVolley',      init: '_volleyInit' },
+        'cycling':    { fn: 'renderCycling',     init: '_cyclingInit' },
+        'cricket':    { fn: 'renderCricket',     init: '_cricketInit' },
+        'athletics':  { fn: 'renderAthletics',   init: '_athleticsInit' },
+        'chess':      { fn: 'renderChess',       init: '_chessInit' },
+        'liga-local': { fn: 'renderLigaLocal',   init: '_ligaLocalInit' },
+        'masd':       { fn: 'renderMasDeportes', init: '_masDeportesInit' }
     };
     var cfg = renderMap[sport];
     if (cfg && !window[cfg.init] && typeof window[cfg.fn] === 'function') {
