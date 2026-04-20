@@ -700,6 +700,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Inter','Segoe UI
       <button class="sport-btn" onclick="switchSport('padel',this)">🏸 Pádel</button>
       <button class="sport-btn" onclick="switchSport('olympics',this)">🏅 JJOO</button>
       <button class="sport-btn" onclick="switchSport('mas-deportes',this)">🎮 Colectivos</button>
+      <button class="sport-btn" onclick="switchSport('otros',this); setTimeout(function(){switchOtros('nhl',document.querySelector('#otros-nav .disc-btn'))},0)">🎽 Más Deportes</button>
     </nav>
   </div>
 
@@ -865,6 +866,22 @@ body { background: var(--bg); color: var(--text); font-family: 'Inter','Segoe UI
     <!-- MAS DEPORTES PANEL -->
     <div class="tab-panel" id="panel-mas-deportes">
       <div id="mas-deportes-main"></div>
+    </div>
+    <!-- OTROS DEPORTES PANEL -->
+    <div class="tab-panel" id="panel-otros" style="display:none">
+      <div id="otros-main">
+        <nav class="disc-nav" id="otros-nav" style="flex-wrap:wrap;gap:6px;padding:10px 0">
+          <button class="disc-btn active" onclick="switchOtros('nhl',this)">🏒 NHL</button>
+          <button class="disc-btn" onclick="switchOtros('mlb',this)">⚾ MLB</button>
+          <button class="disc-btn" onclick="switchOtros('volley',this)">🏐 Volleyball</button>
+          <button class="disc-btn" onclick="switchOtros('cycling',this)">🚴 Ciclismo</button>
+          <button class="disc-btn" onclick="switchOtros('cricket',this)">🏏 Cricket</button>
+          <button class="disc-btn" onclick="switchOtros('athletics',this)">🏃 Atletismo</button>
+          <button class="disc-btn" onclick="switchOtros('chess',this)">♟️ Ajedrez</button>
+          <button class="disc-btn" onclick="switchOtros('liga-local',this)">🏠 Liga Local</button>
+        </nav>
+        <div id="otros-content"></div>
+      </div>
     </div>
 </div>
 
@@ -5088,6 +5105,42 @@ function switchRacingSeries(series, btn) {
   if (series === 'wec'     && !window._wecInit)     { renderWEC();      window._wecInit     = true; }
   if (series === 'sbk'     && !window._sbkInit)     { renderSBK();      window._sbkInit     = true; }
    }
+function switchOtros(sport, btn) {
+    var otrosContent = document.getElementById('otros-content');
+    if (!otrosContent) return;
+    var mainDiv = document.getElementById(sport + '-main');
+    if (!mainDiv) return;
+    // Move mainDiv into otros-content if not already there
+    if (mainDiv.parentElement !== otrosContent) {
+        Array.from(otrosContent.children).forEach(function(c) { c.style.display = 'none'; });
+        otrosContent.appendChild(mainDiv);
+        mainDiv.style.display = '';
+    } else {
+        Array.from(otrosContent.children).forEach(function(c) { c.style.display = 'none'; });
+        mainDiv.style.display = '';
+    }
+    // Update sub-nav active state
+    document.querySelectorAll('#otros-nav .disc-btn').forEach(function(b) { b.classList.remove('active'); });
+    if (btn) btn.classList.add('active');
+    // Lazy render
+    var renderMap = {
+        'nhl':       { fn: 'renderNHL',       init: '_nhlInit' },
+        'mlb':       { fn: 'renderMLB',       init: '_mlbInit' },
+        'volley':    { fn: 'renderVolley',    init: '_volleyInit' },
+        'cycling':   { fn: 'renderCycling',   init: '_cyclingInit' },
+        'cricket':   { fn: 'renderCricket',   init: '_cricketInit' },
+        'athletics': { fn: 'renderAthletics', init: '_athleticsInit' },
+        'chess':     { fn: 'renderChess',     init: '_chessInit' },
+        'liga-local':{ fn: 'renderLigaLocal', init: '_ligaLocalInit' }
+    };
+    var cfg = renderMap[sport];
+    if (cfg && !window[cfg.init] && typeof window[cfg.fn] === 'function') {
+        window[cfg.fn]();
+        window[cfg.init] = true;
+    }
+}
+
+
 function switchFightingDisc(disc, btn) {
   ['ufc','boxeo','wwe','judo','kick','mma','muay','bjj','lucha','wrestling'].forEach(function(d) {
     var el = document.getElementById(d+'-main');
