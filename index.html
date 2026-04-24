@@ -150,7 +150,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Inter','Segoe UI
 
 /* ─── TAB PANELS ─── */
 .tab-panel { display: none; }
-.tab-panel.active { display: block; }
+.tab-panel.active { display: block; flex: 1; min-width: 0; overflow-x: hidden; }
 
 /* ─── LEAGUE HEADER ─── */
 .league-header {
@@ -1435,6 +1435,28 @@ function switchSport(sport, btn) {
   }
 }
 
+function switchOtros(sport, btn) {
+  document.querySelectorAll('#otros-nav .disc-btn').forEach(function(b){b.classList.remove('active');});
+  if (btn) btn.classList.add('active');
+  var content = document.getElementById('otros-content');
+  if (!content) return;
+  var mainId = sport==='liga-local' ? 'liga-local-main' : sport==='masd' ? 'mas-deportes-main' : sport+'-main';
+  var mainDiv = document.getElementById(mainId);
+  if (!mainDiv) { mainDiv = document.createElement('div'); mainDiv.id = mainId; }
+  content.innerHTML = '';
+  content.appendChild(mainDiv);
+  var flag = '_sw_otros_' + sport;
+  if (!window[flag]) {
+    window[flag] = true;
+    var fnsMap = {
+      'nhl':renderNHL, 'mlb':renderMLB, 'volley':renderVolley,
+      'cycling':renderCycling, 'cricket':renderCricket,
+      'athletics':renderAthletics, 'chess':renderChess,
+      'liga-local':renderLigaLocal, 'masd':renderMasDeportes
+    };
+    if (fnsMap[sport]) fnsMap[sport]();
+  }
+}
 // ════════════════════════════════════════════════════════════
 // LEAGUE SWITCH
 // ════════════════════════════════════════════════════════════
