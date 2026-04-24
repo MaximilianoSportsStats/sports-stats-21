@@ -884,7 +884,11 @@ body { background: var(--bg); color: var(--text); font-family: 'Inter','Segoe UI
           <button class="disc-btn" onclick="switchOtros('chess',this)">♟️ Ajedrez</button>
           <button class="disc-btn" onclick="switchOtros('liga-local',this)">🏠 Liga Local</button>
           <button class="disc-btn" onclick="switchOtros('masd',this)">🎮 Colectivos</button>
-        </nav>
+              <button class="disc-btn" onclick="switchOtros('kings-league',this)">👑 Kings League</button>
+          <button class="disc-btn" onclick="switchOtros('queens-league',this)">👸 Queens League</button>
+          <button class="disc-btn" onclick="switchOtros('handball',this)">🤾 Handball</button>
+          <button class="disc-btn" onclick="switchOtros('voley',this)">🏐 Voley</button>
+    </nav>
         <div id="otros-content"></div>
       </div>
     </div>
@@ -1484,9 +1488,28 @@ function switchOtros(sport, btn) {
       'cycling':renderCycling, 'cricket':renderCricket,
       'athletics':renderAthletics, 'chess':renderChess,
       'liga-local':renderLigaLocal, 'masd':renderMasDeportes
+    ,
+      'kings-league':renderKingsLeague, 'queens-league':renderQueensLeague,
+      'handball':renderHandball, 'voley':renderVoleyCol
     };
     if (fnsMap[sport]) fnsMap[sport]();
   }
+}
+function renderKingsLeague(){
+  var d=document.getElementById('kings-league-main');if(!d)return;
+  d.innerHTML='<div style="padding:1.5rem 0"><div class="league-header" style="background:linear-gradient(135deg,#7c3aed,#4c1d95)"><div class="league-logo">👑</div><div><div class="league-name">Kings League</div><div class="league-country">🇪🇸 España · Fundada 2022</div></div></div><div style="margin-top:1.2rem;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:.9rem"><div style="background:#f5f0ff;border-radius:8px;padding:.9rem"><strong>Formato</strong><p style="margin:.3rem 0 0;color:#555">7 jugadores por equipo, 12 equipos, partidos de 40 min con reglas especiales creadas por Gerard Piqué.</p></div><div style="background:#f5f0ff;border-radius:8px;padding:.9rem"><strong>Campeones</strong><p style="margin:.3rem 0 0;color:#555">2023: Porcinos FC &middot; 2024: Aniquiladores FC</p></div><div style="background:#f5f0ff;border-radius:8px;padding:.9rem"><strong>Expansión</strong><p style="margin:.3rem 0 0;color:#555">Ahora con ligas en América Latina y femenina (Queens League).</p></div></div><p style="color:#888;font-size:.82rem;margin-top:1rem">🔗 <a href="https://kingsleague.pro" target="_blank" style="color:#7c3aed">kingsleague.pro</a></p></div>';
+}
+function renderQueensLeague(){
+  var d=document.getElementById('queens-league-main');if(!d)return;
+  d.innerHTML='<div style="padding:1.5rem 0"><div class="league-header" style="background:linear-gradient(135deg,#db2777,#831843)"><div class="league-logo">👸</div><div><div class="league-name">Queens League</div><div class="league-country">🇪🇸 España · Fundada 2023</div></div></div><div style="margin-top:1.2rem;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:.9rem"><div style="background:#fff0f7;border-radius:8px;padding:.9rem"><strong>Formato</strong><p style="margin:.3rem 0 0;color:#555">Versión femenina de la Kings League. 7 jugadoras, 12 equipos, mismas reglas especiales.</p></div><div style="background:#fff0f7;border-radius:8px;padding:.9rem"><strong>Campeonas</strong><p style="margin:.3rem 0 0;color:#555">2023: 1K FC &middot; 2024: Kunisport</p></div><div style="background:#fff0f7;border-radius:8px;padding:.9rem"><strong>Impacto</strong><p style="margin:.3rem 0 0;color:#555">Una de las competiciones femeninas de mayor crecimiento en redes sociales.</p></div></div><p style="color:#888;font-size:.82rem;margin-top:1rem">🔗 <a href="https://queensleague.pro" target="_blank" style="color:#db2777">queensleague.pro</a></p></div>';
+}
+function renderHandball(){
+  var d=document.getElementById('handball-main');if(!d)return;
+  d.innerHTML='<div style="padding:1.5rem 0"><div class="league-header" style="background:linear-gradient(135deg,#1d4ed8,#1e3a8a)"><div class="league-logo">🤾</div><div><div class="league-name">Balonmano</div><div class="league-country">Deporte Olímpico · IHF</div></div></div><div style="margin-top:1.2rem;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:.9rem"><div style="background:#eff6ff;border-radius:8px;padding:.9rem"><strong>Formato</strong><p style="margin:.3rem 0 0;color:#555">7 jugadores, 2 tiempos de 30 min. Combina velocidad, táctica y potencia.</p></div><div style="background:#eff6ff;border-radius:8px;padding:.9rem"><strong>España</strong><p style="margin:.3rem 0 0;color:#555">🏆 Campeona del Mundo: 2005, 2013, 2021, 2023. Liga ASOBAL liderada por FC Barcelona.</p></div><div style="background:#eff6ff;border-radius:8px;padding:.9rem"><strong>Competiciones</strong><p style="margin:.3rem 0 0;color:#555">EHF Champions League, Liga ASOBAL, Campeonato del Mundo IHF.</p></div></div><p style="color:#888;font-size:.82rem;margin-top:1rem">🔗 <a href="https://www.ihf.info" target="_blank" style="color:#1d4ed8">IHF.info</a></p></div>';
+}
+function renderVoleyCol(){
+  var d=document.getElementById('voley-main');if(!d)return;
+  d.innerHTML='<div style="padding:1.5rem 0"><div class="league-header" style="background:linear-gradient(135deg,#d97706,#92400e)"><div class="league-logo">🏐</div><div><div class="league-name">Voleibol</div><div class="league-country">Deporte Olímpico · FIVB</div></div></div><div style="margin-top:1.2rem;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:.9rem"><div style="background:#fffbeb;border-radius:8px;padding:.9rem"><strong>Modalidades</strong><p style="margin:.3rem 0 0;color:#555">Voleibol de sala (6v6) y playa (2v2). Ambas en los Juegos Olímpicos.</p></div><div style="background:#fffbeb;border-radius:8px;padding:.9rem"><strong>Superliga Española</strong><p style="margin:.3rem 0 0;color:#555">Primera competición masc. y fem. de España. CV Guaguas referente en masculino.</p></div><div style="background:#fffbeb;border-radius:8px;padding:.9rem"><strong>Potencias</strong><p style="margin:.3rem 0 0;color:#555">🌍 Brasil, Polonia, EE.UU., Italia, Francia — dominan el voleibol mundial.</p></div></div><p style="color:#888;font-size:.82rem;margin-top:1rem">🔗 <a href="https://www.fivb.com" target="_blank" style="color:#d97706">FIVB.com</a></p></div>';
 }
 // ════════════════════════════════════════════════════════════
 // LEAGUE SWITCH
