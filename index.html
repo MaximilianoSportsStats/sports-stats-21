@@ -8239,6 +8239,10 @@ function renderAthletics() {
         <div class="league-country">🌍 214 federaciones</div>
       </div>
     </div>
+    <div class="inner-tabs" style="margin-bottom:1.2rem">
+      <button class="inner-tab active" onclick="switchAthTab('overview',this)">📊 General</button>
+      <button class="inner-tab" onclick="switchAthTab('mundial',this)">🏆 Mundial Atletismo</button>
+    </div>
 
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.2rem;margin-top:1.5rem">
 
@@ -8327,7 +8331,67 @@ function renderAthletics() {
         </div>
       </div>
 
+    <div id="ath-mundial" style="display:none">
+      <div style="background:linear-gradient(135deg,#1a1a2e,#16213e);padding:2rem;border-radius:12px;margin-bottom:1.5rem">
+        <h2 style="color:#fff;margin:0 0 0.5rem">🏆 Mundial de Atletismo</h2>
+        <p style="color:rgba(255,255,255,0.75);margin:0">World Athletics Championships — desde 1983</p>
+      </div>
+      <h3 style="color:#f0c040;margin-bottom:1rem">📅 Historial de ediciones</h3>
+      <div style="overflow-x:auto">
+        <table style="width:100%;border-collapse:collapse;background:#1a1a2e;border-radius:12px;overflow:hidden">
+          <thead><tr style="background:#16213e"><th style="padding:12px;color:#f0c040;text-align:left">Año</th><th style="padding:12px;color:#f0c040;text-align:left">Sede</th><th style="padding:12px;color:#f0c040;text-align:left">País</th></tr></thead>
+          <tbody>
+            <tr style="border-bottom:1px solid #2a2a4e;"><td style="padding:10px;color:#ccc">2025</td><td style="padding:10px;color:#fff;font-weight:600">Tokio</td><td style="padding:10px;color:#ccc">🇯🇵 Japón</td></tr>
+            <tr style="border-bottom:1px solid #2a2a4e;"><td style="padding:10px;color:#ccc">2023</td><td style="padding:10px;color:#fff;font-weight:600">Budapest</td><td style="padding:10px;color:#ccc">🇭🇺 Hungría</td></tr>
+            <tr style="border-bottom:1px solid #2a2a4e;"><td style="padding:10px;color:#ccc">2022</td><td style="padding:10px;color:#fff;font-weight:600">Oregón</td><td style="padding:10px;color:#ccc">🇺🇸 EE.UU.</td></tr>
+            <tr style="border-bottom:1px solid #2a2a4e;"><td style="padding:10px;color:#ccc">2019</td><td style="padding:10px;color:#fff;font-weight:600">Doha</td><td style="padding:10px;color:#ccc">🇶🇦 Catar</td></tr>
+            <tr style="border-bottom:1px solid #2a2a4e;"><td style="padding:10px;color:#ccc">2017</td><td style="padding:10px;color:#fff;font-weight:600">Londres</td><td style="padding:10px;color:#ccc">🇬🇧 R.Unido</td></tr>
+            <tr style="border-bottom:1px solid #2a2a4e;"><td style="padding:10px;color:#ccc">2015</td><td style="padding:10px;color:#fff;font-weight:600">Beijing</td><td style="padding:10px;color:#ccc">🇨🇳 China</td></tr>
+            <tr style="border-bottom:1px solid #2a2a4e;"><td style="padding:10px;color:#ccc">2013</td><td style="padding:10px;color:#fff;font-weight:600">Moscú</td><td style="padding:10px;color:#ccc">🇷🇺 Rusia</td></tr>
+            <tr style="border-bottom:1px solid #2a2a4e;"><td style="padding:10px;color:#ccc">2011</td><td style="padding:10px;color:#fff;font-weight:600">Daegu</td><td style="padding:10px;color:#ccc">🇰🇷 Corea del Sur</td></tr>
+            <tr style="border-bottom:1px solid #2a2a4e;"><td style="padding:10px;color:#ccc">2009</td><td style="padding:10px;color:#fff;font-weight:600">Berlín</td><td style="padding:10px;color:#ccc">🇩🇪 Alemania</td></tr>
+            <tr style="border-bottom:1px solid #2a2a4e;"><td style="padding:10px;color:#ccc">2007</td><td style="padding:10px;color:#fff;font-weight:600">Osaka</td><td style="padding:10px;color:#ccc">🇯🇵 Japón</td></tr>
+            <tr style="border-bottom:1px solid #2a2a4e;"><td style="padding:10px;color:#ccc">2005</td><td style="padding:10px;color:#fff;font-weight:600">Helsinki</td><td style="padding:10px;color:#ccc">🇫🇮 Finlandia</td></tr>
+            <tr style="border-bottom:1px solid #2a2a4e;"><td style="padding:10px;color:#ccc">2003</td><td style="padding:10px;color:#fff;font-weight:600">París</td><td style="padding:10px;color:#ccc">🇫🇷 Francia</td></tr>
+            <tr style="border-bottom:1px solid #2a2a4e;"><td style="padding:10px;color:#ccc">2001</td><td style="padding:10px;color:#fff;font-weight:600">Edmonton</td><td style="padding:10px;color:#ccc">🇨🇦 Canadá</td></tr>
+            <tr style="border-bottom:1px solid #2a2a4e;"><td style="padding:10px;color:#ccc">1999</td><td style="padding:10px;color:#fff;font-weight:600">Sevilla</td><td style="padding:10px;color:#ccc">🇪🇸 España</td></tr>
+            <tr style="border-bottom:1px solid #2a2a4e;"><td style="padding:10px;color:#ccc">1997</td><td style="padding:10px;color:#fff;font-weight:600">Atenas</td><td style="padding:10px;color:#ccc">🇬🇷 Grecia</td></tr>
+            <tr style="border-bottom:1px solid #2a2a4e;"><td style="padding:10px;color:#ccc">1995</td><td style="padding:10px;color:#fff;font-weight:600">Gotemburgo</td><td style="padding:10px;color:#ccc">🇸🇪 Suecia</td></tr>
+            <tr style="border-bottom:1px solid #2a2a4e;"><td style="padding:10px;color:#ccc">1993</td><td style="padding:10px;color:#fff;font-weight:600">Stuttgart</td><td style="padding:10px;color:#ccc">🇩🇪 Alemania</td></tr>
+            <tr style="border-bottom:1px solid #2a2a4e;"><td style="padding:10px;color:#ccc">1991</td><td style="padding:10px;color:#fff;font-weight:600">Tokio</td><td style="padding:10px;color:#ccc">🇯🇵 Japón</td></tr>
+            <tr style="border-bottom:1px solid #2a2a4e;"><td style="padding:10px;color:#ccc">1987</td><td style="padding:10px;color:#fff;font-weight:600">Roma</td><td style="padding:10px;color:#ccc">🇮🇹 Italia</td></tr>
+            <tr style=""><td style="padding:10px;color:#ccc">1983</td><td style="padding:10px;color:#fff;font-weight:600">Helsinki</td><td style="padding:10px;color:#ccc">🇫🇮 Finlandia</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div style="margin-top:2rem">
+        <h3 style="color:#f0c040;margin-bottom:1rem">🥇 Medallero histórico (Top 10)</h3>
+        <div style="overflow-x:auto">
+          <table style="width:100%;border-collapse:collapse;background:#1a1a2e;border-radius:12px;overflow:hidden">
+            <thead><tr style="background:#16213e"><th style="padding:12px;color:#f0c040;text-align:left">País</th><th style="padding:12px;color:#FFD700;text-align:center">🥇</th><th style="padding:12px;color:#C0C0C0;text-align:center">🥈</th><th style="padding:12px;color:#CD7F32;text-align:center">🥉</th><th style="padding:12px;color:#aaa;text-align:center">Total</th></tr></thead>
+            <tbody>
+              <tr style="border-bottom:1px solid #2a2a4e;"><td style="padding:10px;color:#fff">🇺🇸 EE.UU.</td><td style="padding:10px;color:#FFD700;text-align:center;font-weight:700">196</td><td style="padding:10px;color:#C0C0C0;text-align:center;font-weight:700">138</td><td style="padding:10px;color:#CD7F32;text-align:center;font-weight:700">113</td><td style="padding:10px;color:#aaa;text-align:center">447</td></tr>
+              <tr style="border-bottom:1px solid #2a2a4e;"><td style="padding:10px;color:#fff">🇷🇺 Rusia/URSS</td><td style="padding:10px;color:#FFD700;text-align:center;font-weight:700">78</td><td style="padding:10px;color:#C0C0C0;text-align:center;font-weight:700">78</td><td style="padding:10px;color:#CD7F32;text-align:center;font-weight:700">71</td><td style="padding:10px;color:#aaa;text-align:center">227</td></tr>
+              <tr style="border-bottom:1px solid #2a2a4e;"><td style="padding:10px;color:#fff">🇰🇪 Kenia</td><td style="padding:10px;color:#FFD700;text-align:center;font-weight:700">73</td><td style="padding:10px;color:#C0C0C0;text-align:center;font-weight:700">61</td><td style="padding:10px;color:#CD7F32;text-align:center;font-weight:700">56</td><td style="padding:10px;color:#aaa;text-align:center">190</td></tr>
+              <tr style="border-bottom:1px solid #2a2a4e;"><td style="padding:10px;color:#fff">🇩🇪 Alemania</td><td style="padding:10px;color:#FFD700;text-align:center;font-weight:700">56</td><td style="padding:10px;color:#C0C0C0;text-align:center;font-weight:700">57</td><td style="padding:10px;color:#CD7F32;text-align:center;font-weight:700">60</td><td style="padding:10px;color:#aaa;text-align:center">173</td></tr>
+              <tr style="border-bottom:1px solid #2a2a4e;"><td style="padding:10px;color:#fff">🇯🇲 Jamaica</td><td style="padding:10px;color:#FFD700;text-align:center;font-weight:700">54</td><td style="padding:10px;color:#C0C0C0;text-align:center;font-weight:700">42</td><td style="padding:10px;color:#CD7F32;text-align:center;font-weight:700">39</td><td style="padding:10px;color:#aaa;text-align:center">135</td></tr>
+              <tr style="border-bottom:1px solid #2a2a4e;"><td style="padding:10px;color:#fff">🇬🇧 Gran Bretaña</td><td style="padding:10px;color:#FFD700;text-align:center;font-weight:700">53</td><td style="padding:10px;color:#C0C0C0;text-align:center;font-weight:700">52</td><td style="padding:10px;color:#CD7F32;text-align:center;font-weight:700">56</td><td style="padding:10px;color:#aaa;text-align:center">161</td></tr>
+              <tr style="border-bottom:1px solid #2a2a4e;"><td style="padding:10px;color:#fff">🇨🇳 China</td><td style="padding:10px;color:#FFD700;text-align:center;font-weight:700">44</td><td style="padding:10px;color:#C0C0C0;text-align:center;font-weight:700">51</td><td style="padding:10px;color:#CD7F32;text-align:center;font-weight:700">55</td><td style="padding:10px;color:#aaa;text-align:center">150</td></tr>
+              <tr style="border-bottom:1px solid #2a2a4e;"><td style="padding:10px;color:#fff">🇪🇹 Etiopía</td><td style="padding:10px;color:#FFD700;text-align:center;font-weight:700">41</td><td style="padding:10px;color:#C0C0C0;text-align:center;font-weight:700">38</td><td style="padding:10px;color:#CD7F32;text-align:center;font-weight:700">30</td><td style="padding:10px;color:#aaa;text-align:center">109</td></tr>
+              <tr style="border-bottom:1px solid #2a2a4e;"><td style="padding:10px;color:#fff">🇦🇺 Australia</td><td style="padding:10px;color:#FFD700;text-align:center;font-weight:700">27</td><td style="padding:10px;color:#C0C0C0;text-align:center;font-weight:700">30</td><td style="padding:10px;color:#CD7F32;text-align:center;font-weight:700">31</td><td style="padding:10px;color:#aaa;text-align:center">88</td></tr>
+              <tr style=""><td style="padding:10px;color:#fff">🇨🇦 Canadá</td><td style="padding:10px;color:#FFD700;text-align:center;font-weight:700">21</td><td style="padding:10px;color:#C0C0C0;text-align:center;font-weight:700">29</td><td style="padding:10px;color:#CD7F32;text-align:center;font-weight:700">29</td><td style="padding:10px;color:#aaa;text-align:center">79</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
     </div>`;
+}
+
+function switchAthTab(tab, btn) {
+  var el = document.getElementById('ath-mundial');
+  if (el) el.style.display = tab === 'mundial' ? '' : 'none';
+  if (btn) btn.closest('.inner-tabs').querySelectorAll('.inner-tab').forEach(function(b) { b.classList.toggle('active', b === btn); });
 }
 function renderChess() {
   const data = window.SS21.chess;
@@ -8641,15 +8705,22 @@ function renderOlympics() {
     </div>
 
     <div class="inner-tabs" style="margin-bottom:1.2rem">
-      <button class="inner-tab active" onclick="switchOlympicsTab(this,'ol-paris')">🥇 París 2024</button>
+      <button class="inner-tab active" onclick="switchOlympicsTab(this,'ol-verano')">☀️ Verano</button>
+      <button class="inner-tab" onclick="switchOlympicsTab(this,'ol-invierno')">❄️ Invierno</button>
       <button class="inner-tab" onclick="switchOlympicsTab(this,'ol-atletas')">⭐ Atletas</button>
       <button class="inner-tab" onclick="switchOlympicsTab(this,'ol-historia')">📜 Historia</button>
-      <button class="inner-tab" onclick="switchOlympicsTab(this,'ol-invierno')">❄️ Invierno</button>
-      <button class="inner-tab" onclick="switchOlympicsTab(this,'ol-proximos')">🔜 Próximos</button>
     </div>
 
     <!-- PARIS 2024 -->
-    <div id="ol-paris">
+    <div id="ol-verano">
+      <div class="inner-tabs" style="margin-bottom:1.5rem;flex-wrap:wrap">
+        <button class="inner-tab active" id="olyr-paris" onclick="switchOlYear('paris',this)">🏅 París 2024</button>
+        <button class="inner-tab" id="olyr-tokyo" onclick="switchOlYear('tokyo',this)">🏅 Tokio 2020</button>
+        <button class="inner-tab" id="olyr-rio" onclick="switchOlYear('rio',this)">🏅 Río 2016</button>
+        <button class="inner-tab" id="olyr-london" onclick="switchOlYear('london',this)">🏅 Londres 2012</button>
+        <button class="inner-tab" id="olyr-beijing08" onclick="switchOlYear('beijing08',this)">🏅 Beijing 2008</button>
+      </div>
+      <div id="ol-yr-paris">
       <div style="background:linear-gradient(135deg,#1a1a2e,#16213e,#0f3460);border-radius:.75rem;padding:1.25rem 1.5rem;margin-bottom:1.2rem;display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap">
         <div style="font-size:3.5rem">🗼</div>
         <div style="flex:1">
@@ -8688,6 +8759,55 @@ function renderOlympics() {
               ${(p.deportes||[]).map(d=>`<span style="background:var(--surface2);border:1px solid var(--border2);border-radius:99px;padding:.2rem .65rem;font-size:.78rem">${d}</span>`).join('')}
             </div>
           </div>
+        </div>
+      </div>
+          </div>
+      <div id="ol-yr-tokyo" style="display:none">
+        <div style="background:linear-gradient(135deg,#1a1a2e,#16213e);padding:2rem;border-radius:12px;margin-bottom:1rem">
+          <h2 style="color:#fff">🏅 Tokio 2020</h2>
+          <p style="color:rgba(255,255,255,0.75)">Japón · 23 jul — 8 ago 2021</p>
+          <p style="color:#aaa">206 países · 339 eventos · 11 091 atletas</p>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem">
+          <div style="background:#16213e;padding:1.2rem;border-radius:10px;text-align:center"><div style="font-size:2rem">🇺🇸</div><div style="color:#FFD700;font-weight:700">39 oros</div><div style="color:#aaa">EE.UU.</div></div>
+          <div style="background:#16213e;padding:1.2rem;border-radius:10px;text-align:center"><div style="font-size:2rem">🇨🇳</div><div style="color:#FFD700;font-weight:700">38 oros</div><div style="color:#aaa">China</div></div>
+          <div style="background:#16213e;padding:1.2rem;border-radius:10px;text-align:center"><div style="font-size:2rem">🇯🇵</div><div style="color:#FFD700;font-weight:700">27 oros</div><div style="color:#aaa">Japón anfitrión</div></div>
+        </div>
+      </div>
+      <div id="ol-yr-rio" style="display:none">
+        <div style="background:linear-gradient(135deg,#1a1a2e,#16213e);padding:2rem;border-radius:12px;margin-bottom:1rem">
+          <h2 style="color:#fff">🏅 Río 2016</h2>
+          <p style="color:rgba(255,255,255,0.75)">Brasil · 5 — 21 ago 2016</p>
+          <p style="color:#aaa">207 países · 306 eventos · 11 544 atletas</p>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem">
+          <div style="background:#16213e;padding:1.2rem;border-radius:10px;text-align:center"><div style="font-size:2rem">🇺🇸</div><div style="color:#FFD700;font-weight:700">46 oros</div><div style="color:#aaa">EE.UU.</div></div>
+          <div style="background:#16213e;padding:1.2rem;border-radius:10px;text-align:center"><div style="font-size:2rem">🇬🇧</div><div style="color:#FFD700;font-weight:700">27 oros</div><div style="color:#aaa">Gran Bretaña</div></div>
+          <div style="background:#16213e;padding:1.2rem;border-radius:10px;text-align:center"><div style="font-size:2rem">🇨🇳</div><div style="color:#FFD700;font-weight:700">26 oros</div><div style="color:#aaa">China</div></div>
+        </div>
+      </div>
+      <div id="ol-yr-london" style="display:none">
+        <div style="background:linear-gradient(135deg,#1a1a2e,#16213e);padding:2rem;border-radius:12px;margin-bottom:1rem">
+          <h2 style="color:#fff">🏅 Londres 2012</h2>
+          <p style="color:rgba(255,255,255,0.75)">Reino Unido · 27 jul — 12 ago 2012</p>
+          <p style="color:#aaa">205 países · 302 eventos · 10 568 atletas</p>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem">
+          <div style="background:#16213e;padding:1.2rem;border-radius:10px;text-align:center"><div style="font-size:2rem">🇺🇸</div><div style="color:#FFD700;font-weight:700">46 oros</div><div style="color:#aaa">EE.UU.</div></div>
+          <div style="background:#16213e;padding:1.2rem;border-radius:10px;text-align:center"><div style="font-size:2rem">🇨🇳</div><div style="color:#FFD700;font-weight:700">38 oros</div><div style="color:#aaa">China</div></div>
+          <div style="background:#16213e;padding:1.2rem;border-radius:10px;text-align:center"><div style="font-size:2rem">🇬🇧</div><div style="color:#FFD700;font-weight:700">29 oros</div><div style="color:#aaa">G.Bretaña anfitrión</div></div>
+        </div>
+      </div>
+      <div id="ol-yr-beijing08" style="display:none">
+        <div style="background:linear-gradient(135deg,#1a1a2e,#16213e);padding:2rem;border-radius:12px;margin-bottom:1rem">
+          <h2 style="color:#fff">🏅 Beijing 2008</h2>
+          <p style="color:rgba(255,255,255,0.75)">China · 8 — 24 ago 2008</p>
+          <p style="color:#aaa">204 países · 302 eventos · 10 942 atletas</p>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem">
+          <div style="background:#16213e;padding:1.2rem;border-radius:10px;text-align:center"><div style="font-size:2rem">🇨🇳</div><div style="color:#FFD700;font-weight:700">51 oros</div><div style="color:#aaa">China anfitrión</div></div>
+          <div style="background:#16213e;padding:1.2rem;border-radius:10px;text-align:center"><div style="font-size:2rem">🇺🇸</div><div style="color:#FFD700;font-weight:700">36 oros</div><div style="color:#aaa">EE.UU.</div></div>
+          <div style="background:#16213e;padding:1.2rem;border-radius:10px;text-align:center"><div style="font-size:2rem">🇷🇺</div><div style="color:#FFD700;font-weight:700">23 oros</div><div style="color:#aaa">Rusia</div></div>
         </div>
       </div>
     </div>
@@ -8838,12 +8958,21 @@ function renderOlympics() {
 function switchOlympicsTab(btn, panelId) {
   document.querySelectorAll('#olympics-panel .inner-tab').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
-  ['ol-paris','ol-atletas','ol-historia','ol-invierno','ol-proximos'].forEach(id => {
+  ['ol-verano','ol-atletas','ol-historia','ol-invierno'].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.style.display = id===panelId ? '' : 'none';
   });
 }
 
+function switchOlYear(yr, btn) {
+  ['paris','tokyo','rio','london','beijing08'].forEach(function(y) {
+    var el = document.getElementById('ol-yr-' + y);
+    if (el) el.style.display = y===yr ? '' : 'none';
+  });
+  if (btn) btn.closest('.inner-tabs').querySelectorAll('.inner-tab').forEach(function(b) {
+    b.classList.toggle('active', b===btn);
+  });
+}
 // ════════════════════════════════════════════════════════════
 // MODAL
 // ════════════════════════════════════════════════════════════
