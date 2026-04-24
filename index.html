@@ -693,7 +693,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Inter','Segoe UI
       <button class="sport-btn" onclick="switchSport('tennis',this)">🎾 Tenis</button>
       <button class="sport-btn" onclick="switchSport('f1',this)">🏎️ Carreras</button>
       <button class="sport-btn" onclick="switchSport('nba',this)">🏀 Basketball</button>
-      <button class="sport-btn" onclick="switchSport('nfl',this)">🏈 NFL</button>
+      <button class="sport-btn" onclick="switchSport('nfl',this)">🏈 Fútbol Americano</button>
       <button class="sport-btn" onclick="switchSport('rugby',this)">🏉 Rugby</button>
       <button class="sport-btn" onclick="switchSport('golf',this)">&#x26f3; Golf</button>
       <button class="sport-btn" onclick="switchSport('ufc',this)">🥊 Luchas</button>
@@ -746,28 +746,32 @@ body { background: var(--bg); color: var(--text); font-family: 'Inter','Segoe UI
     </div>
 
     <!-- ── CARRERAS ── -->
+        <!-- ── CARRERAS ── -->
     <div class="tab-panel" id="panel-f1">
-      <!-- Racing series selector -->
       <div id="racing-series-tabs" style="display:none;gap:.5rem;margin-bottom:1.2rem;flex-wrap:wrap;border-bottom:2px solid var(--border);padding-bottom:.75rem">
-        <button class="inner-tab active" id="rsbtn-f1" onclick="switchRacingSeries('f1',this)">🏎️ F1</button>
-        <button class="inner-tab" id="rsbtn-f2" onclick="switchRacingSeries('f2',this)">🏁 F2 / F3</button>
-        <button class="inner-tab" id="rsbtn-nascar" onclick="switchRacingSeries('nascar',this)">🚗 NASCAR</button>
-        <button class="inner-tab" id="rsbtn-rally" onclick="switchRacingSeries('rally',this)">🚙 Rally / WRC</button>
-        <button class="inner-tab" id="rsbtn-motogp" onclick="switchRacingSeries('motogp',this)">🏍️ MotoGP</button>
-        <button class="inner-tab" id="rsbtn-indycar" onclick="switchRacingSeries('indycar',this)">🏁 IndyCar</button>
-        <button class="inner-tab" id="rsbtn-fe" onclick="switchRacingSeries('fe',this)">⚡ Formula E</button>
-        <button class="inner-tab" id="rsbtn-wec" onclick="switchRacingSeries('wec',this)">🏆 WEC</button>
-        <button class="inner-tab" id="rsbtn-sbk" onclick="switchRacingSeries('sbk',this)">🏍️ Superbike</button>
+        <button class="inner-tab active" id="rsbtn-f1"      onclick="switchRacingSeries('f1',this)">🏎️ F1</button>
+        <button class="inner-tab"        id="rsbtn-f2"      onclick="switchRacingSeries('f2',this)">🏁 F2</button>
+        <button class="inner-tab"        id="rsbtn-f3"      onclick="switchRacingSeries('f3',this)">🏁 F3</button>
+        <button class="inner-tab"        id="rsbtn-f4"      onclick="switchRacingSeries('f4',this)">🏁 F4</button>
+        <button class="inner-tab"        id="rsbtn-fe"      onclick="switchRacingSeries('fe',this)">⚡ Formula E</button>
+        <button class="inner-tab"        id="rsbtn-wec"     onclick="switchRacingSeries('wec',this)">🏆 WEC</button>
+        <button class="inner-tab"        id="rsbtn-sbk"     onclick="switchRacingSeries('sbk',this)">🏍️ Superbike</button>
+        <button class="inner-tab"        id="rsbtn-motogp"  onclick="switchRacingSeries('motogp',this)">🏍️ MotoGP</button>
+        <button class="inner-tab"        id="rsbtn-nascar"  onclick="switchRacingSeries('nascar',this)">🚗 NASCAR</button>
+        <button class="inner-tab"        id="rsbtn-rally"   onclick="switchRacingSeries('rally',this)">🚙 Rally / WRC</button>
+        <button class="inner-tab"        id="rsbtn-indycar" onclick="switchRacingSeries('indycar',this)">🏁 IndyCar</button>
       </div>
       <div id="f1-main"></div>
-      <div id="f2-main" style="display:none"></div>
-      <div id="nascar-main" style="display:none"></div>
-      <div id="rally-main" style="display:none"></div>
-      <div id="motogp-main" style="display:none"></div>
+      <div id="f2-main"      style="display:none"></div>
+      <div id="f3-main"      style="display:none"></div>
+      <div id="f4-main"      style="display:none"></div>
+      <div id="fe-main"      style="display:none"></div>
+      <div id="wec-main"     style="display:none"></div>
+      <div id="sbk-main"     style="display:none"></div>
+      <div id="motogp-main"  style="display:none"></div>
+      <div id="nascar-main"  style="display:none"></div>
+      <div id="rally-main"   style="display:none"></div>
       <div id="indycar-main" style="display:none"></div>
-      <div id="fe-main" style="display:none"></div>
-      <div id="wec-main" style="display:none"></div>
-      <div id="sbk-main" style="display:none"></div>
     </div>
 
     <!-- ── TENNIS ── -->
@@ -5087,59 +5091,22 @@ function switchPadelTab(btn, panelId) {
 }
 
 function switchRacingSeries(series, btn) {
-  ['f1','f2','nascar','rally','motogp','indycar','fe','wec','sbk'].forEach(function(s) {
-    var el = document.getElementById(s+'-main');
-    if (el) el.style.display = s === series ? '' : 'none';
-    var b = document.getElementById('rsbtn-'+s);
-    if (b) b.classList.toggle('active', s === series);
-  });
-  if (series === 'f2'     && !window._f2Init)     { renderF2();     window._f2Init = true; }
-  if (series === 'nascar' && !window._nascarInit)  { renderNASCAR(); window._nascarInit = true; }
-  if (series === 'rally'  && !window._rallyInit)   { renderRally();  window._rallyInit = true; }
-  if (series === 'motogp' && !window._motogpInit)  { renderMotoGP(); window._motogpInit = true; }
-
-// ════════════════════════════════════════════════════════════
-// LUCHAS — Discipline switcher
-// ════════════════════════════════════════════════════════════
-  if (series === 'indycar' && !window._indycarInit) { renderIndyCar();  window._indycarInit = true; }
-  if (series === 'fe'      && !window._feInit)      { renderFormulaE(); window._feInit      = true; }
-  if (series === 'wec'     && !window._wecInit)     { renderWEC();      window._wecInit     = true; }
-  if (series === 'sbk'     && !window._sbkInit)     { renderSBK();      window._sbkInit     = true; }
-   }
-function switchOtros(sport, btn) {
-    var otrosContent = document.getElementById('otros-content');
-    if (!otrosContent) return;
-    var mainId = sport === 'masd' ? 'mas-deportes-main' : sport + '-main';
-    var mainDiv = document.getElementById(mainId);
-    if (!mainDiv) return;
-    if (mainDiv.parentElement !== otrosContent) {
-        Array.from(otrosContent.children).forEach(function(c) { c.style.display = 'none'; });
-        otrosContent.appendChild(mainDiv);
-        mainDiv.style.display = '';
-    } else {
-        Array.from(otrosContent.children).forEach(function(c) { c.style.display = 'none'; });
-        mainDiv.style.display = '';
-    }
-    document.querySelectorAll('#otros-nav .disc-btn').forEach(function(b) { b.classList.remove('active'); });
-    if (btn) btn.classList.add('active');
-    var renderMap = {
-        'nhl':        { fn: 'renderNHL',         init: '_nhlInit' },
-        'mlb':        { fn: 'renderMLB',         init: '_mlbInit' },
-        'volley':     { fn: 'renderVolley',      init: '_volleyInit' },
-        'cycling':    { fn: 'renderCycling',     init: '_cyclingInit' },
-        'cricket':    { fn: 'renderCricket',     init: '_cricketInit' },
-        'athletics':  { fn: 'renderAthletics',   init: '_athleticsInit' },
-        'chess':      { fn: 'renderChess',       init: '_chessInit' },
-        'liga-local': { fn: 'renderLigaLocal',   init: '_ligaLocalInit' },
-        'masd':       { fn: 'renderMasDeportes', init: '_masDeportesInit' }
-    };
-    var cfg = renderMap[sport];
-    if (cfg && !window[cfg.init] && typeof window[cfg.fn] === 'function') {
-        window[cfg.fn]();
-        window[cfg.init] = true;
-    }
+    ['f1','f2','f3','f4','fe','wec','sbk','motogp','nascar','rally','indycar'].forEach(function(s) {
+        var el = document.getElementById(s + '-main');
+        if (el) el.style.display = s === series ? '' : 'none';
+        var b = document.getElementById('rsbtn-' + s);
+        if (b) b.classList.toggle('active', s === series);
+    });
+    if (series === 'f2'      && !window._f2Init)      { renderF2();       window._f2Init      = true; }
+    if (series === 'f3'      && !window._f3Init)      { renderF3();       window._f3Init      = true; }
+    if (series === 'fe'      && !window._feInit)      { renderFormulaE(); window._feInit      = true; }
+    if (series === 'wec'     && !window._wecInit)     { renderWEC();      window._wecInit     = true; }
+    if (series === 'sbk'     && !window._sbkInit)     { renderSBK();      window._sbkInit     = true; }
+    if (series === 'motogp'  && !window._motogpInit)  { renderMotoGP();   window._motogpInit  = true; }
+    if (series === 'nascar'  && !window._nascarInit)  { renderNASCAR();   window._nascarInit  = true; }
+    if (series === 'rally'   && !window._rallyInit)   { renderRally();    window._rallyInit   = true; }
+    if (series === 'indycar' && !window._indycarInit) { renderIndyCar();  window._indycarInit = true; }
 }
-
 
 function switchFightingDisc(disc, btn) {
   ['ufc','boxeo','wwe','judo','kick','mma','muay','bjj','lucha','wrestling'].forEach(function(d) {
@@ -5223,7 +5190,29 @@ function renderF2() {
 
 // ════════════════════════════════════════════════════════════
 // NASCAR
-// ════════════════════════════════════════════════════════════
+// ════════════════════════════════════════════════════════════function renderF3() {
+  var p = document.getElementById('f3-main');
+  if (!p) return;
+  p.innerHTML = '<div style="padding:1.5rem 0"><div class="league-header" style="background:linear-gradient(135deg,#1e3a5f,#2563eb)"><div class="league-logo">🏁</div><div><div class="league-name">Fórmula 3 — FIA F3</div><div class="league-sub">Cantera directa de la F2 · Talento joven mundial</div></div></div>'
+    + '<div class="g2" style="margin-top:1.5rem"><div class="card"><div class="card-title">📋 Acerca de la F3</div><p style="font-size:.85rem;color:var(--text2);line-height:1.65">La Fórmula 3 es el tercer escalón de la pirámide FIA. Los pilotos compiten en monoplazas idénticos. Ex campeones: Charles Leclerc, George Russell, Lando Norris, Oscar Piastri.</p></div>'
+    + '<div class="card"><div class="card-title">🏆 Campeones Recientes FIA F3</div><div style="font-size:.85rem">'
+    + [["2024","🇧🇷 Gabriel Bortoleto","ART GP"],["2023","🇧🇧 Zane Maloney","Carlin"],["2022","🇦🇷 Franco Colapinto","VAR"],["2021","🇦🇺 Jack Doohan","Virtuosi"],["2020","🇦🇺 Oscar Piastri","Prema"]]
+      .map(function(r){return '<div style="display:flex;justify-content:space-between;padding:.35rem 0;border-bottom:1px solid var(--border)"><span>'+r[0]+'</span><strong>'+r[1]+'</strong><span style="color:var(--muted)">'+r[2]+'</span></div>';}).join('')
+    + '</div></div></div></div>';
+}
+
+function renderF4() {
+  var p = document.getElementById('f4-main');
+  if (!p) return;
+  p.innerHTML = '<div style="padding:1.5rem 0"><div class="league-header" style="background:linear-gradient(135deg,#064e3b,#059669)"><div class="league-logo">🏁</div><div><div class="league-name">Fórmula 4 — FIA F4</div><div class="league-sub">Primer paso oficial en monoplazas · Pilotos desde 15 años</div></div></div>'
+    + '<div class="g2" style="margin-top:1.5rem"><div class="card"><div class="card-title">📋 Acerca de la F4</div><p style="font-size:.85rem;color:var(--text2);line-height:1.65">La Fórmula 4 es el punto de entrada oficial al automovilismo de monoplazas según la FIA. Jóvenes pilotos desde 15 años compiten en coches idénticos. Hay campeonatos en Alemania, Italia, España, Arabia Saudita, EE.UU. y más.</p></div>'
+    + '<div class="card"><div class="card-title">🌍 Campeonatos F4 Activos</div><div style="font-size:.85rem">'
+    + [["🇩🇪 ADAC F4 (Alemania)","Hockenheim, Nürburgring, Red Bull Ring"],["🇮🇹 F4 Italia","Monza, Mugello, Imola, Misano"],["🇪🇸 F4 España","Jeréz, Montmeló, Valencia"],["🇸🇦 F4 Arabia Saudita","Jeddah, Riyadh"],["🇺🇸 F4 EE.UU.","Road America, VIR, Indianapolis"]]
+      .map(function(r){return '<div style="padding:.45rem 0;border-bottom:1px solid var(--border)"><strong>'+r[0]+'</strong><br><span style="color:var(--muted);font-size:.8rem">'+r[1]+'</span></div>';}).join('')
+    + '</div></div></div></div>';
+}
+
+
 function renderNASCAR() {
   var p = document.getElementById('nascar-main');
   if (!p) return;
