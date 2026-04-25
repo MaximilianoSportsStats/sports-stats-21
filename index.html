@@ -1484,6 +1484,7 @@ function switchSport(sport, btn) {
 
   const sidebar = document.getElementById('sidebar');
   sidebar.style.display = sport === 'soccer' ? '' : 'none';
+  var _lm=document.querySelector('.layout .main');if(_lm)_lm.style.display=(sport==='otros')?'none':'';
 
   if (sport === 'nfl'    && !window._nflInit)    { renderNFL();    window._nflInit    = true; }
   if(sport==='baseball'&&!window._mlbInit){window._mlbInit=true;switchBaseballLeague('mlb',document.getElementById('bstab-mlb'));}
@@ -5209,7 +5210,14 @@ function switchNFLLeague(league, btn) {
   if (league==='cfl') renderCFLFootball();
   if (league==='xfl') renderXFLFootball();
 }
-function switchHockeyLeague(league,btn){['nhl','ahl','cesped','khl'].forEach(function(s){var el=document.getElementById('hk-'+s+'-main');var tb=document.getElementById('hktab-'+s);if(el)el.style.display=(s===league)?'':'none';if(tb)tb.classList.toggle('active',s===league);});if(league==='nhl')renderHockeyNHL();if(league==='ahl')renderHockeyAHL();if(league==='cesped')renderHockeyCesped();if(league==='khl')renderHockeyKHL();}
+function switchHockeyLeague(league,btn){['nhl','ahl','cesped','khl'].forEach(function(s){var el=document.getElementById('hk-'+s+'-main');var tb=document.getElementById('hktab-'+s);if(el)el.style.display=(s===league)?'':'none';if(tb)tb.classList.toggle('active',s===league);});if(league==='nhl')function renderHockeyNHL(){
+  var d=document.getElementById('hk-nhl-main');
+  if(!d||d._r)return;
+  d._r=true;
+  renderNHL();
+  var src=document.getElementById('nhl-main');
+  if(src&&src.innerHTML.length>10)d.innerHTML=src.innerHTML;
+}
 function renderHockeyNHL(){var d=document.getElementById('hk-nhl-main');if(!d||d._r)return;d._r=true;d.innerHTML='<div style="padding:1rem"><h3 style="margin:0 0 .5rem">🏒 National Hockey League</h3><p style="margin:.3rem 0;font-size:.9rem">La liga de hockey sobre hielo más importante del mundo, fundada en 1917. 32 equipos en EE.UU. y Canadá.</p><p style="margin:.3rem 0;font-size:.9rem">🏆 Stanley Cup: Montreal Canadiens (24 títulos), Toronto Maple Leafs (13), Detroit Red Wings (11)</p><p style="margin:.3rem 0;font-size:.9rem">⭐ El más grande: Wayne Gretzky (894 goles, 2,857 pts) | Actual: Connor McDavid</p><p style="margin:.3rem 0;font-size:.9rem">🇨🇦 Temporada 2024-25 | Playoffs en abril-junio</p></div>';}
 function renderHockeyAHL(){var d=document.getElementById('hk-ahl-main');if(!d||d._r)return;d._r=true;d.innerHTML='<div style="padding:1rem"><h3 style="margin:0 0 .5rem">🇺🇸 American Hockey League</h3><p style="margin:.3rem 0;font-size:.9rem">Liga de desarrollo directa de la NHL. 32 equipos afiliados a franquicias de la NHL en EE.UU. y Canadá.</p><p style="margin:.3rem 0;font-size:.9rem">🏆 Calder Cup: principal título de la AHL</p><p style="margin:.3rem 0;font-size:.9rem">⭐ Paso obligado para prospectos antes de debutar en la NHL</p></div>';}
 function renderHockeyCesped(){var d=document.getElementById('hk-cesped-main');if(!d||d._r)return;d._r=true;d.innerHTML='<div style="padding:1rem"><h3 style="margin:0 0 .5rem">🏑 Hockey sobre Césped</h3><p style="margin:.3rem 0;font-size:.9rem">Deporte olímpico desde 1908. Se juega en césped artificial a alta velocidad. 11 jugadores por equipo.</p><p style="margin:.3rem 0;font-size:.9rem">🏆 Países dominantes: Países Bajos (femenino), Australia (masculino), India (8 oros olímpicos)</p><p style="margin:.3rem 0;font-size:.9rem">🌍 FIH Hockey Pro League: principal competición internacional</p></div>';}
