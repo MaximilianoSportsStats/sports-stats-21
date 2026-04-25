@@ -694,13 +694,13 @@ body { background: var(--bg); color: var(--text); font-family: 'Inter','Segoe UI
       <button class="sport-btn" onclick="switchSport('f1',this)">🏎️ Carreras</button>
       <button class="sport-btn" onclick="switchSport('nba',this)">🏀 Basketball</button>
       <button class="sport-btn" onclick="switchSport('baseball',this)">⚾ Béisbol</button>
+      <button class="sport-btn" onclick="switchSport('hockey',this)">🏒 Hockey</button>
       <button class="sport-btn" onclick="switchSport('nfl',this)">🏈 Fútbol Americano</button>
       <button class="sport-btn" onclick="switchSport('rugby',this)">🏉 Rugby</button>
       <button class="sport-btn" onclick="switchSport('golf',this)">&#x26f3; Golf</button>
       <button class="sport-btn" onclick="switchSport('ufc',this)">🥊 Luchas</button>
       <button class="sport-btn" onclick="switchSport('padel',this)">🏸 Pádel</button>
       <button class="sport-btn" onclick="switchSport('olympics',this)">🏅 JJOO</button>
-      <button class="sport-btn" onclick="switchSport('mas-deportes',this)">🎮 Colectivos</button>
       <button class="sport-btn" onclick="switchSport('otros',this); setTimeout(function(){switchOtros('nhl',document.querySelector('#otros-nav .disc-btn'))},0)">🎽 Más Deportes</button>
     </nav>
   </div>
@@ -769,6 +769,20 @@ body { background: var(--bg); color: var(--text); font-family: 'Inter','Segoe UI
       <div id="kbo-main" style="display:none"></div>
       <div id="lidom-main" style="display:none"></div>
       <div id="lmb-main" style="display:none"></div>
+    </div>
+
+   <!-- ── HOCKEY ── -->
+    <div class="tab-panel" id="panel-hockey">
+      <div class="inner-tabs" style="margin-bottom:0">
+        <button class="inner-tab active" id="hktab-nhl" onclick="switchHockeyLeague('nhl',this)">🏒 NHL</button>
+        <button class="inner-tab" id="hktab-ahl" onclick="switchHockeyLeague('ahl',this)">🇺🇸 AHL</button>
+        <button class="inner-tab" id="hktab-cesped" onclick="switchHockeyLeague('cesped',this)">🏑 Césped</button>
+        <button class="inner-tab" id="hktab-khl" onclick="switchHockeyLeague('khl',this)">🇷🇺 KHL</button>
+      </div>
+      <div id="hk-nhl-main"></div>
+      <div id="hk-ahl-main" style="display:none"></div>
+      <div id="hk-cesped-main" style="display:none"></div>
+      <div id="hk-khl-main" style="display:none"></div>
     </div>
 
    <!-- ── CARRERAS ── -->
@@ -901,15 +915,12 @@ body { background: var(--bg); color: var(--text); font-family: 'Inter','Segoe UI
     <div class="tab-panel" id="panel-otros">
       <div id="otros-main">
         <nav class="disc-nav" id="otros-nav" style="flex-wrap:wrap;gap:6px;padding:10px 0">
-          <button class="disc-btn active" onclick="switchOtros('nhl',this)">🏒 NHL</button>
-          <button class="disc-btn" onclick="switchOtros('mlb',this)">⚾ MLB</button>
           <button class="disc-btn" onclick="switchOtros('volley',this)">🏐 Volleyball</button>
           <button class="disc-btn" onclick="switchOtros('cycling',this)">🚴 Ciclismo</button>
           <button class="disc-btn" onclick="switchOtros('cricket',this)">🏏 Cricket</button>
           <button class="disc-btn" onclick="switchOtros('athletics',this)">🏃 Atletismo</button>
           <button class="disc-btn" onclick="switchOtros('chess',this)">♟️ Ajedrez</button>
           <button class="disc-btn" onclick="switchOtros('liga-local',this)">🏠 Liga Local</button>
-          <button class="disc-btn" onclick="switchOtros('masd',this)">🎮 Colectivos</button>
               <button class="disc-btn" onclick="switchOtros('kings-league',this)">👑 Kings League</button>
           <button class="disc-btn" onclick="switchOtros('queens-league',this)">👸 Queens League</button>
           <button class="disc-btn" onclick="switchOtros('handball',this)">🤾 Handball</button>
@@ -1476,6 +1487,7 @@ function switchSport(sport, btn) {
 
   if (sport === 'nfl'    && !window._nflInit)    { renderNFL();    window._nflInit    = true; }
   if(sport==='baseball'&&!window._mlbInit){window._mlbInit=true;switchBaseballLeague('mlb',document.getElementById('bstab-mlb'));}
+  if(sport==='hockey'&&!window._hockeyInit){window._hockeyInit=true;switchHockeyLeague('nhl',document.getElementById('hktab-nhl'));}
   if (sport === 'nba'    && !window._nbaInit)    { renderNBA();    window._nbaInit    = true; var bt=document.getElementById('bball-league-tabs');if(bt)bt.style.display='flex';  var bt=document.getElementById('bball-league-tabs');if(bt)bt.style.display='flex';}
   if (sport === 'f1'     && !window._f1Init)     { renderF1();     window._f1Init     = true; var rt=document.getElementById('racing-series-tabs');if(rt)rt.style.display='flex'; }
   if (sport === 'tennis' && !window._tennisInit) { renderTennis(); window._tennisInit = true; }
@@ -5197,6 +5209,11 @@ function switchNFLLeague(league, btn) {
   if (league==='cfl') renderCFLFootball();
   if (league==='xfl') renderXFLFootball();
 }
+function switchHockeyLeague(league,btn){['nhl','ahl','cesped','khl'].forEach(function(s){var el=document.getElementById('hk-'+s+'-main');var tb=document.getElementById('hktab-'+s);if(el)el.style.display=(s===league)?'':'none';if(tb)tb.classList.toggle('active',s===league);});if(league==='nhl')renderHockeyNHL();if(league==='ahl')renderHockeyAHL();if(league==='cesped')renderHockeyCesped();if(league==='khl')renderHockeyKHL();}
+function renderHockeyNHL(){var d=document.getElementById('hk-nhl-main');if(!d||d._r)return;d._r=true;d.innerHTML='<div style="padding:1rem"><h3 style="margin:0 0 .5rem">🏒 National Hockey League</h3><p style="margin:.3rem 0;font-size:.9rem">La liga de hockey sobre hielo más importante del mundo, fundada en 1917. 32 equipos en EE.UU. y Canadá.</p><p style="margin:.3rem 0;font-size:.9rem">🏆 Stanley Cup: Montreal Canadiens (24 títulos), Toronto Maple Leafs (13), Detroit Red Wings (11)</p><p style="margin:.3rem 0;font-size:.9rem">⭐ El más grande: Wayne Gretzky (894 goles, 2,857 pts) | Actual: Connor McDavid</p><p style="margin:.3rem 0;font-size:.9rem">🇨🇦 Temporada 2024-25 | Playoffs en abril-junio</p></div>';}
+function renderHockeyAHL(){var d=document.getElementById('hk-ahl-main');if(!d||d._r)return;d._r=true;d.innerHTML='<div style="padding:1rem"><h3 style="margin:0 0 .5rem">🇺🇸 American Hockey League</h3><p style="margin:.3rem 0;font-size:.9rem">Liga de desarrollo directa de la NHL. 32 equipos afiliados a franquicias de la NHL en EE.UU. y Canadá.</p><p style="margin:.3rem 0;font-size:.9rem">🏆 Calder Cup: principal título de la AHL</p><p style="margin:.3rem 0;font-size:.9rem">⭐ Paso obligado para prospectos antes de debutar en la NHL</p></div>';}
+function renderHockeyCesped(){var d=document.getElementById('hk-cesped-main');if(!d||d._r)return;d._r=true;d.innerHTML='<div style="padding:1rem"><h3 style="margin:0 0 .5rem">🏑 Hockey sobre Césped</h3><p style="margin:.3rem 0;font-size:.9rem">Deporte olímpico desde 1908. Se juega en césped artificial a alta velocidad. 11 jugadores por equipo.</p><p style="margin:.3rem 0;font-size:.9rem">🏆 Países dominantes: Países Bajos (femenino), Australia (masculino), India (8 oros olímpicos)</p><p style="margin:.3rem 0;font-size:.9rem">🌍 FIH Hockey Pro League: principal competición internacional</p></div>';}
+function renderHockeyKHL(){var d=document.getElementById('hk-khl-main');if(!d||d._r)return;d._r=true;d.innerHTML='<div style="padding:1rem"><h3 style="margin:0 0 .5rem">🇷🇺 Kontinental Hockey League</h3><p style="margin:.3rem 0;font-size:.9rem">La principal liga de hockey de Europa y Asia. Fundada en 2008. 23 equipos de Rusia, Finlandia, Kazajistán, Bielorrusia.</p><p style="margin:.3rem 0;font-size:.9rem">🏆 Copa Gagarin: título principal de la KHL. CSKA Moscú (7 títulos)</p><p style="margin:.3rem 0;font-size:.9rem">⭐ Muchos jugadores europeos y ex-NHL compiten aquí</p></div>';}
 function switchBaseballLeague(league,btn){['mlb','npb','kbo','lidom','lmb'].forEach(function(s){var el=document.getElementById(s+'-main');var tb=document.getElementById('bstab-'+s);if(el)el.style.display=(s===league)?'':'none';if(tb)tb.classList.toggle('active',s===league);});if(league==='mlb')renderMLB();if(league==='npb')renderNPB();if(league==='kbo')renderKBO();if(league==='lidom')renderLIDOM();if(league==='lmb')renderLMB();}
 function renderMLB(){var d=document.getElementById('mlb-main');if(!d||d._r)return;d._r=true;d.innerHTML='<div style="padding:1rem"><h3 style="margin:0 0 .5rem">⚾ Major League Baseball</h3><p style="margin:.3rem 0;font-size:.9rem">La liga de béisbol más importante del mundo, fundada en 1903. 30 equipos en Liga Americana y Liga Nacional.</p><p style="margin:.3rem 0;font-size:.9rem">🏆 World Series: New York Yankees (27 títulos), Cardinals (11), Athletics (9)</p><p style="margin:.3rem 0;font-size:.9rem">⭐ Récord HR: Barry Bonds (762) | Hits: Pete Rose (4,256)</p><p style="margin:.3rem 0;font-size:.9rem">💰 Shohei Ohtani – $700M (Dodgers, 2023)</p></div>';}
 function renderNPB(){var d=document.getElementById('npb-main');if(!d||d._r)return;d._r=true;d.innerHTML='<div style="padding:1rem"><h3 style="margin:0 0 .5rem">🇯🇵 Nippon Professional Baseball</h3><p style="margin:.3rem 0;font-size:.9rem">Liga profesional de Japón, fundada en 1950. 12 equipos en dos ligas: Central y Pacífico.</p><p style="margin:.3rem 0;font-size:.9rem">🏆 Japan Series: Yomiuri Giants (22 títulos), Seibu Lions (13)</p><p style="margin:.3rem 0;font-size:.9rem">⭐ Shohei Ohtani, Ichiro Suzuki, Hideo Nomo</p></div>';}
