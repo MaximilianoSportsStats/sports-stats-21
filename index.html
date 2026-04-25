@@ -693,6 +693,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Inter','Segoe UI
       <button class="sport-btn" onclick="switchSport('tennis',this)">🎾 Tenis</button>
       <button class="sport-btn" onclick="switchSport('f1',this)">🏎️ Carreras</button>
       <button class="sport-btn" onclick="switchSport('nba',this)">🏀 Basketball</button>
+      <button class="sport-btn" onclick="switchSport('baseball',this)">⚾ Béisbol</button>
       <button class="sport-btn" onclick="switchSport('nfl',this)">🏈 Fútbol Americano</button>
       <button class="sport-btn" onclick="switchSport('rugby',this)">🏉 Rugby</button>
       <button class="sport-btn" onclick="switchSport('golf',this)">&#x26f3; Golf</button>
@@ -754,7 +755,23 @@ body { background: var(--bg); color: var(--text); font-family: 'Inter','Segoe UI
       <div id="intl-bball-main" style="display:none"></div>
     </div>
 
-    <!-- ── CARRERAS ── -->
+    <!-- ── BÉISBOL ── -->
+    <div class="tab-panel" id="panel-baseball">
+      <div class="inner-tabs" style="margin-bottom:0">
+        <button class="inner-tab active" id="bstab-mlb" onclick="switchBaseballLeague('mlb',this)">⚾ MLB</button>
+        <button class="inner-tab" id="bstab-npb" onclick="switchBaseballLeague('npb',this)">🇯🇵 NPB</button>
+        <button class="inner-tab" id="bstab-kbo" onclick="switchBaseballLeague('kbo',this)">🇰🇷 KBO</button>
+        <button class="inner-tab" id="bstab-lidom" onclick="switchBaseballLeague('lidom',this)">🇩🇴 LIDOM</button>
+        <button class="inner-tab" id="bstab-lmb" onclick="switchBaseballLeague('lmb',this)">🇲🇽 LMB</button>
+      </div>
+      <div id="mlb-main"></div>
+      <div id="npb-main" style="display:none"></div>
+      <div id="kbo-main" style="display:none"></div>
+      <div id="lidom-main" style="display:none"></div>
+      <div id="lmb-main" style="display:none"></div>
+    </div>
+
+   <!-- ── CARRERAS ── -->
         <!-- ── CARRERAS ── -->
     <div class="tab-panel" id="panel-f1">
       <div id="racing-series-tabs" style="display:none;gap:.5rem;margin-bottom:1.2rem;flex-wrap:wrap;border-bottom:2px solid var(--border);padding-bottom:.75rem">
@@ -1363,9 +1380,10 @@ function buildSidebar() {
   });
 
   var sl=document.querySelector('#sidebar .sidebar-label');if(sl)sl.textContent='Fútbol';
-  html='<div style="margin-bottom:.6rem"><button class="league-btn" style="width:100%;margin-bottom:.3rem;font-size:.85rem;padding:.4rem .6rem;text-align:left" onclick="showFIFARanking(this)">📊 FIFA Ranking</button><button class="league-btn" style="width:100%;font-size:.85rem;padding:.4rem .6rem;text-align:left" onclick="showFutbolInfo(this)">❓ ¿Qué es el Fútbol?</button></div><div style="font-size:.72rem;color:rgba(255,255,255,.45);margin:.5rem 0 .2rem;text-transform:uppercase;letter-spacing:.06em">Ligas</div>'+html;
+  html='<div style="margin-bottom:.6rem"><button class="league-btn" style="width:100%;font-size:.85rem;padding:.4rem .6rem;text-align:left" onclick="showFutbolInfo(this)">❓ ¿Qué es el Fútbol?</button></div><div style="font-size:.72rem;color:rgba(255,255,255,.45);margin:.5rem 0 .2rem;text-transform:uppercase;letter-spacing:.06em">Ligas</div>'+html;
   nav.innerHTML = html;
-}
+
+var _ml=nav.querySelector('.continent-leagues');if(_ml){var _fb=document.createElement('button');_fb.className='sub-btn';_fb.style='font-weight:600';_fb.textContent='📊 FIFA Ranking';_fb.onclick=function(){showFIFARanking(this);};_ml.appendChild(_fb);}}
 
 function showFIFARanking(btn){
   document.querySelectorAll('.league-btn').forEach(function(b){b.classList.remove('active');});
@@ -1457,6 +1475,7 @@ function switchSport(sport, btn) {
   sidebar.style.display = sport === 'soccer' ? '' : 'none';
 
   if (sport === 'nfl'    && !window._nflInit)    { renderNFL();    window._nflInit    = true; }
+  if(sport==='baseball'&&!window._mlbInit){window._mlbInit=true;switchBaseballLeague('mlb',document.getElementById('bstab-mlb'));}
   if (sport === 'nba'    && !window._nbaInit)    { renderNBA();    window._nbaInit    = true; var bt=document.getElementById('bball-league-tabs');if(bt)bt.style.display='flex';  var bt=document.getElementById('bball-league-tabs');if(bt)bt.style.display='flex';}
   if (sport === 'f1'     && !window._f1Init)     { renderF1();     window._f1Init     = true; var rt=document.getElementById('racing-series-tabs');if(rt)rt.style.display='flex'; }
   if (sport === 'tennis' && !window._tennisInit) { renderTennis(); window._tennisInit = true; }
@@ -5178,6 +5197,12 @@ function switchNFLLeague(league, btn) {
   if (league==='cfl') renderCFLFootball();
   if (league==='xfl') renderXFLFootball();
 }
+function switchBaseballLeague(league,btn){['mlb','npb','kbo','lidom','lmb'].forEach(function(s){var el=document.getElementById(s+'-main');var tb=document.getElementById('bstab-'+s);if(el)el.style.display=(s===league)?'':'none';if(tb)tb.classList.toggle('active',s===league);});if(league==='mlb')renderMLB();if(league==='npb')renderNPB();if(league==='kbo')renderKBO();if(league==='lidom')renderLIDOM();if(league==='lmb')renderLMB();}
+function renderMLB(){var d=document.getElementById('mlb-main');if(!d||d._r)return;d._r=true;d.innerHTML='<div style="padding:1rem"><h3 style="margin:0 0 .5rem">⚾ Major League Baseball</h3><p style="margin:.3rem 0;font-size:.9rem">La liga de béisbol más importante del mundo, fundada en 1903. 30 equipos en Liga Americana y Liga Nacional.</p><p style="margin:.3rem 0;font-size:.9rem">🏆 World Series: New York Yankees (27 títulos), Cardinals (11), Athletics (9)</p><p style="margin:.3rem 0;font-size:.9rem">⭐ Récord HR: Barry Bonds (762) | Hits: Pete Rose (4,256)</p><p style="margin:.3rem 0;font-size:.9rem">💰 Shohei Ohtani – $700M (Dodgers, 2023)</p></div>';}
+function renderNPB(){var d=document.getElementById('npb-main');if(!d||d._r)return;d._r=true;d.innerHTML='<div style="padding:1rem"><h3 style="margin:0 0 .5rem">🇯🇵 Nippon Professional Baseball</h3><p style="margin:.3rem 0;font-size:.9rem">Liga profesional de Japón, fundada en 1950. 12 equipos en dos ligas: Central y Pacífico.</p><p style="margin:.3rem 0;font-size:.9rem">🏆 Japan Series: Yomiuri Giants (22 títulos), Seibu Lions (13)</p><p style="margin:.3rem 0;font-size:.9rem">⭐ Shohei Ohtani, Ichiro Suzuki, Hideo Nomo</p></div>';}
+function renderKBO(){var d=document.getElementById('kbo-main');if(!d||d._r)return;d._r=true;d.innerHTML='<div style="padding:1rem"><h3 style="margin:0 0 .5rem">🇰🇷 Korea Baseball Organization</h3><p style="margin:.3rem 0;font-size:.9rem">Liga profesional de Corea del Sur, fundada en 1982. 10 equipos.</p><p style="margin:.3rem 0;font-size:.9rem">🏆 Korean Series: KIA Tigers (11 títulos), Samsung Lions (8)</p><p style="margin:.3rem 0;font-size:.9rem">⭐ Liga puente entre MLB y Asia para muchos prospectos</p></div>';}
+function renderLIDOM(){var d=document.getElementById('lidom-main');if(!d||d._r)return;d._r=true;d.innerHTML='<div style="padding:1rem"><h3 style="margin:0 0 .5rem">🇩🇴 Liga de Béisbol Dominicana (LIDOM)</h3><p style="margin:.3rem 0;font-size:.9rem">Liga de invierno del Caribe. 6 equipos compiten de octubre a enero.</p><p style="margin:.3rem 0;font-size:.9rem">🏆 Tigres del Licey (24 títulos), Águilas Cibaeñas (22)</p><p style="margin:.3rem 0;font-size:.9rem">⭐ Albert Pujols, David Ortiz, Pedro Martínez</p></div>';}
+function renderLMB(){var d=document.getElementById('lmb-main');if(!d||d._r)return;d._r=true;d.innerHTML='<div style="padding:1rem"><h3 style="margin:0 0 .5rem">🇲🇽 Liga Mexicana de Béisbol</h3><p style="margin:.3rem 0;font-size:.9rem">Fundada en 1925, una de las ligas más antiguas del continente. 16 equipos.</p><p style="margin:.3rem 0;font-size:.9rem">🏆 Serie del Rey: Diablos Rojos del México (16 títulos)</p><p style="margin:.3rem 0;font-size:.9rem">⭐ Fernando Valenzuela, Julio Urías</p></div>';}
 
 function renderNCAAFootball() {
   var d=document.getElementById('ncaa-fb-main'); if(!d||d._r)return; d._r=true;
