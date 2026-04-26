@@ -695,12 +695,12 @@ body { background: var(--bg); color: var(--text); font-family: 'Inter','Segoe UI
       <button class="sport-btn" onclick="switchSport('nba',this)">🏀 Basketball</button>
       <button class="sport-btn" onclick="switchSport('baseball',this)">⚾ Béisbol</button>
       <button class="sport-btn" onclick="switchSport('hockey',this)">🏒 Hockey</button>
-      <button class="sport-btn" style="padding:.45rem .5rem" onclick="switchSport('nfl',this)">🏈 Fútbol Americano</button>
+      <button class="sport-btn" style="padding:.45rem .25rem" onclick="switchSport('nfl',this)">🏈 Fútbol Americano</button>
       <button class="sport-btn" onclick="switchSport('rugby',this)">🏉 Rugby</button>
       <button class="sport-btn" onclick="switchSport('golf',this)">&#x26f3; Golf</button>
       <button class="sport-btn" onclick="switchSport('ufc',this)">🥊 Luchas</button>
       <button class="sport-btn" onclick="switchSport('padel',this)">🏸 Pádel</button>
-      <button class="sport-btn" onclick="switchSport('acuaticos',this)">🏊 Deportes Acuáticos</button>
+      <button class="sport-btn" onclick="switchSport('acuaticos',this)">🏊 Acuáticos</button>
       <button class="sport-btn" onclick="switchSport('olympics',this)">🏅 JJOO</button>
       <button class="sport-btn" onclick="switchSport('otros',this); setTimeout(function(){switchOtros('nhl',document.querySelector('#otros-nav .disc-btn'))},0)">🎽 Más Deportes</button>
     </nav>
@@ -1396,7 +1396,7 @@ function buildSidebar() {
   var sl=document.querySelector('#sidebar .sidebar-label');if(sl)sl.textContent='Fútbol';
   html='<div style="margin-bottom:.6rem"><button class="league-btn" style="width:100%;font-size:.85rem;padding:.4rem .6rem;text-align:left" onclick="showFutbolInfo(this)">❓ ¿Qué es el Fútbol?</button></div><div style="font-size:.72rem;color:rgba(255,255,255,.45);margin:.5rem 0 .2rem;text-transform:uppercase;letter-spacing:.06em">Ligas</div>'+html;
   nav.innerHTML = html;
-(function(){var _hC=nav.querySelector('.continent-header');if(!_hC)return;var _host=_hC.parentNode;var _h=document.createElement('div');_h.className='continent-header';_h.setAttribute('data-cont','99');_h.onclick=function(){toggleContinent(this);};_h.innerHTML='\ud83c\udf10 Internacional <span class="caret">\u25be</span>';var _l=document.createElement('div');_l.className='continent-leagues';_l.id='cont-99';_l.style.maxHeight='0';_l.innerHTML='<button class="sub-btn" data-kx="kings">\ud83d\udc51 Kings League<span class="sub-tag sub-tag-copa">Liga</span></button><button class="sub-btn" data-kx="queens">\ud83d\udc78 Queens League<span class="sub-tag sub-tag-copa">Liga</span></button><div class="country-group"><div class="country-header" onclick="toggleCountry(this)">\u2728 M\u00e1s <span class="caret">\u25be</span></div><div class="country-leagues"><button class="sub-btn" data-kx="f7">\u26bd F\u00fatbol 7</button><button class="sub-btn" data-kx="futbolito">\u26bd Futbolito</button><button class="sub-btn" data-kx="fp">\ud83c\udfd6\ufe0f F\u00fatbol Playa</button><button class="sub-btn" data-kx="futsal">\u26bd Futsal</button><button class="sub-btn" data-kx="ffem">\ud83c\udf1f F\u00fatbol Femenino Amateur</button><button class="sub-btn" data-kx="f5">\u26bd F\u00fatbol 5</button><button class="sub-btn" data-kx="f9">\u26bd F\u00fatbol 9</button></div></div>';_l.querySelectorAll('button[data-kx]').forEach(function(b){b.onclick=function(){renderAltSoccer(b.getAttribute('data-kx'),b.textContent.trim());};});_host.appendChild(_h);_host.appendChild(_l);})();
+(function(){var _hC=nav.querySelector('.continent-header');if(!_hC)return;var _host=_hC.parentNode;var _h=document.createElement('div');_h.className='continent-header';_h.setAttribute('data-cont','99');_h.onclick=function(){toggleContinent(this);};_h.innerHTML='\u2728 Otros <span class="caret">\u25be</span>';var _l=document.createElement('div');_l.className='continent-leagues';_l.id='cont-99';_l.style.maxHeight='0';_l.innerHTML='<button class="sub-btn" data-kx="kings">\ud83d\udc51 Kings League<span class="sub-tag sub-tag-copa">Liga</span></button><button class="sub-btn" data-kx="queens">\ud83d\udc78 Queens League<span class="sub-tag sub-tag-copa">Liga</span></button><div class="country-group"><div class="country-header" onclick="toggleCountry(this)">\u2728 M\u00e1s <span class="caret">\u25be</span></div><div class="country-leagues"><button class="sub-btn" data-kx="f7">\u26bd F\u00fatbol 7</button><button class="sub-btn" data-kx="futbolito">\u26bd Futbolito</button><button class="sub-btn" data-kx="fp">\ud83c\udfd6\ufe0f F\u00fatbol Playa</button><button class="sub-btn" data-kx="futsal">\u26bd Futsal</button><button class="sub-btn" data-kx="ffem">\ud83c\udf1f F\u00fatbol Femenino Amateur</button><button class="sub-btn" data-kx="f5">\u26bd F\u00fatbol 5</button><button class="sub-btn" data-kx="f9">\u26bd F\u00fatbol 9</button></div></div>';_l.querySelectorAll('button[data-kx]').forEach(function(b){b.onclick=function(){renderAltSoccer(b.getAttribute('data-kx'),b.textContent.trim());};});_host.appendChild(_h);_host.appendChild(_l);})();
 
 
 var _ml=nav.querySelector('.continent-leagues');if(_ml){var _fb=document.createElement('button');_fb.className='sub-btn';_fb.style='font-weight:600';_fb.textContent='📊 FIFA Ranking';_fb.onclick=function(){showFIFARanking(this);};_ml.appendChild(_fb);}}
@@ -5219,8 +5219,7 @@ function switchNFLLeague(league, btn) {
 function switchHockeyLeague(league,btn){['nhl','ahl','cesped','khl'].forEach(function(s){var el=document.getElementById('hk-'+s+'-main');var tb=document.getElementById('hktab-'+s);if(el)el.style.display=(s===league)?'':'none';if(tb)tb.classList.toggle('active',s===league);});if(league==='nhl')renderHockeyNHL();if(league==='ahl')renderHockeyAHL();if(league==='cesped')renderHockeyCesped();if(league==='khl')renderHockeyKHL();}
 function renderHockeyNHL(){
   var d=document.getElementById('hk-nhl-main');
-  if(!d||d._r)return;
-  d._r=true;
+  if(!d)return;
   renderNHL();
   var src=document.getElementById('nhl-main');
   var nhlHtml=(src&&src.innerHTML.length>10)?src.innerHTML:'';
