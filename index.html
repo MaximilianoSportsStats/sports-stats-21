@@ -5348,64 +5348,8 @@ function switchFightingDisc(disc, btn) {
 function renderF2() {
   var p = document.getElementById('f2-main');
   if (!p) return;
-  p.innerHTML = '<div style="padding:1.5rem 0">'
-    + '<div class="league-header" style="background:linear-gradient(135deg,#003087 0%,#0050b3 100%)">'
-    + '<div class="league-title">🏁 Fórmula 2</div>'
-    + '<div class="league-sub">El camino al campeonato mundial de F1 · Cantera de los mejores pilotos</div>'
-    + '</div>'
-    + '<div class="g2" style="margin-top:1.5rem">'
-    + '<div>'
-    + '<div style="font-weight:700;margin-bottom:.8rem">🏆 Campeones F2 (Últimas temporadas)</div>'
-    + '<div class="card">'
-    + [
-        {año:'2024',camp:'Isack Hadjar',pais:'🇫🇷',destino:'Racing Bulls F1'},
-        {año:'2023',camp:'Théo Pourchaire',pais:'🇫🇷',destino:'Alfa Romeo F1'},
-        {año:'2022',camp:'Felipe Drugovich',pais:'🇧🇷',destino:'Piloto de reserva Aston Martin'},
-        {año:'2021',camp:'Oscar Piastri',pais:'🇦🇺',destino:'McLaren F1 (campeón 2024 GP)'},
-        {año:'2020',camp:'Mick Schumacher',pais:'🇩🇪',destino:'Haas F1'},
-        {año:'2019',camp:'Nyck de Vries',pais:'🇳🇱',destino:'AlphaTauri F1'},
-        {año:'2018',camp:'George Russell',pais:'🇬🇧',destino:'Williams / Mercedes F1'},
-        {año:'2017',camp:'Charles Leclerc',pais:'🇲🇨',destino:'Ferrari F1'},
-      ].map(function(r,i){
-        return '<div class="champ-card">'
-          +'<div class="champ-trophy">'+(i===0?'🥇':i===1?'🥈':i===2?'🥉':'🏅')+'</div>'
-          +'<div style="flex:1"><div class="champ-name">'+r.pais+' '+r.camp+'</div>'
-          +'<div style="font-size:.75rem;color:var(--muted)">'+r.año+' · '+r.destino+'</div></div>'
-          +'</div>';
-      }).join('')
-    + '</div>'
-    + '</div>'
-    + '<div>'
-    + '<div style="font-weight:700;margin-bottom:.8rem">🏆 Campeones F3 (Últimas temporadas)</div>'
-    + '<div class="card">'
-    + [
-        {año:'2024',camp:'Gabriele Minì',pais:'🇮🇹'},
-        {año:'2023',camp:'Zane Maloney',pais:'🇧🇧'},
-        {año:'2022',camp:'Victor Martins',pais:'🇫🇷'},
-        {año:'2021',camp:'Dennis Hauger',pais:'🇳🇴'},
-        {año:'2020',camp:'Oscar Piastri',pais:'🇦🇺'},
-        {año:'2019',camp:'Marcus Armstrong',pais:'🇳🇿'},
-      ].map(function(r,i){
-        return '<div class="champ-card">'
-          +'<div class="champ-trophy">'+(i===0?'🥇':i===1?'🥈':i===2?'🥉':'🏅')+'</div>'
-          +'<div style="flex:1"><div class="champ-name">'+r.pais+' '+r.camp+'</div>'
-          +'<div style="font-size:.75rem;color:var(--muted)">'+r.año+'</div></div>'
-          +'</div>';
-      }).join('')
-    + '</div>'
-    + '<div class="card" style="margin-top:1rem">'
-    + '<div class="card-title">⭐ Pilotos actuales F2 a seguir (2025)</div>'
-    + ['🇺🇦 Danylo Okhotnikov','🇫🇷 Paul Aron','🇩🇪 Tim Tramnitz','🇮🇩 Sean Gelael','🇦🇺 Joseph Mawson','🇧🇷 Pepe Martí']
-      .map(function(p){return '<div style="padding:.3rem 0;border-bottom:1px solid var(--border);font-size:.85rem">'+p+'</div>';}).join('')
-    + '</div>'
-    + '</div>'
-    + '</div>'
-    + '</div>';
+  p.innerHTML='<div style="padding:1.5rem 0"><div class="league-header" style="background:linear-gradient(135deg,#003087,#0050b3);color:#fff"><div class="league-logo">\ud83c\udfc1</div><div><h2 style="margin:0">F\u00f3rmula 2</h2><div style="opacity:.9">FIA Formula 2 Championship \u00b7 Antesala directa de la F1</div></div></div>'+'<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-top:1rem"><div style="padding:1rem;background:var(--card);border-radius:8px;text-align:center"><div style="font-size:1.8rem;font-weight:900;color:var(--primary)">11</div><div style="font-size:.78rem;color:var(--text2);text-transform:uppercase;font-weight:600">Equipos</div></div><div style="padding:1rem;background:var(--card);border-radius:8px;text-align:center"><div style="font-size:1.8rem;font-weight:900;color:var(--primary)">22</div><div style="font-size:.78rem;color:var(--text2);text-transform:uppercase;font-weight:600">Pilotos</div></div><div style="padding:1rem;background:var(--card);border-radius:8px;text-align:center"><div style="font-size:1.8rem;font-weight:900;color:var(--primary)">14</div><div style="font-size:.78rem;color:var(--text2);text-transform:uppercase;font-weight:600">Rondas</div></div></div>'+'<div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:1rem"><div style="padding:1rem;background:var(--card);border-radius:8px"><h4 style="margin:0 0 .5rem">\ud83c\udfc6 Campeones recientes</h4><div style="font-size:.88rem;line-height:1.7">2025 \u2014 Leonardo Fornaroli (\ud83c\uddee\ud83c\uddf9 Invicta Racing)<br>2024 \u2014 Gabriel Bortoleto (\ud83c\udde7\ud83c\uddf7 Invicta Racing)<br>2023 \u2014 Th\u00e9o Pourchaire (\ud83c\uddeb\ud83c\uddf7 ART)<br>2022 \u2014 Felipe Drugovich (\ud83c\udde7\ud83c\uddf7 MP)<br>2021 \u2014 Oscar Piastri (\ud83c\udde6\ud83c\uddfa Prema)</div></div><div style="padding:1rem;background:var(--card);border-radius:8px"><h4 style="margin:0 0 .5rem">\u2b50 Equipos top</h4><div style="font-size:.88rem;line-height:1.7">Prema Racing (\ud83c\uddee\ud83c\uddf9) - hist\u00f3ricamente dominante<br>ART Grand Prix (\ud83c\uddeb\ud83c\uddf7)<br>Invicta Racing (\ud83c\uddec\ud83c\udde7) - 2x consecutivo<br>Hitech Pulse-Eight (\ud83c\uddec\ud83c\udde7)<br>MP Motorsport (\ud83c\uddf3\ud83c\uddf1)<br>Carlin / Rodin (\ud83c\uddec\ud83c\udde7)</div></div></div>'+'<div style="margin-top:1rem;padding:1rem;background:var(--card);border-radius:8px"><h4 style="margin:0 0 .5rem">\ud83d\udccc Acerca de la F2</h4><p style="margin:.3rem 0;font-size:.9rem;line-height:1.6">La FIA F2 es la categor\u00eda inmediatamente anterior a la F1. Disputa los fines de semana junto a la F1 con dos carreras (Sprint y Feature) por ronda. Coches monomarca Dallara F2 con motor Mecachrome de \u2248620 hp. Ganar la F2 es casi un boleto a la parrilla de F1: Russell, Leclerc, Norris, Albon, Mick Schumacher, Piastri y Bortoleto pasaron por aqu\u00ed.</p></div>'+'<div style="margin-top:1rem;padding:1rem;background:var(--card);border-radius:8px"><h4 style="margin:0 0 .5rem">\u23f1\ufe0f Calendario 2026 (14 rondas)</h4><div style="font-size:.88rem;line-height:1.7">R1 Sakhir (Bahr\u00e1in) \u00b7 R2 Jeddah \u00b7 R3 Imola \u00b7 R4 M\u00f3naco \u00b7 R5 Barcelona \u00b7 R6 Spielberg \u00b7 R7 Silverstone \u00b7 R8 Hungaroring \u00b7 R9 Spa \u00b7 R10 Monza \u00b7 R11 Bak\u00fa \u00b7 R12 Lusail \u00b7 R13 Yas Marina (Final 1) \u00b7 R14 Yas Marina (Final 2)</div></div>'+'<div style="margin-top:1rem;padding:1rem;background:var(--card);border-radius:8px"><h4 style="margin:0 0 .5rem">\ud83c\udfce\ufe0f De F2 a F1 (recientes)</h4><div style="font-size:.88rem;line-height:1.7">Bortoleto \u2192 Sauber/Audi 2025<br>Doohan \u2192 Alpine 2025<br>Hadjar \u2192 Racing Bulls 2025<br>Antonelli \u2192 Mercedes 2025<br>Piastri \u2192 McLaren 2024<br>Sargeant \u2192 Williams 2023</div></div></div>';
 }
-
-// ════════════════════════════════════════════════════════════
-// NASCAR
-// ════════════════════════════════════════════════════════════
 function renderF3() {
   var p = document.getElementById('f3-main');
   if (!p) return;
