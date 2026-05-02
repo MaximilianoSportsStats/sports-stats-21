@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Sports Stats 21</title>
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+CiAgPHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiByeD0iMTIiIGZpbGw9IiMxYTFhMWEiLz4KICA8cmVjdCB4PSIwIiB5PSIzNiIgd2lkdGg9IjY0IiBoZWlnaHQ9IjI4IiByeD0iMCIgZmlsbD0iI2M4MTAyZSIvPgogIDxyZWN0IHg9IjAiIHk9IjQ4IiB3aWR0aD0iNjQiIGhlaWdodD0iMTYiIHJ4PSIwIiByeT0iMCIgZmlsbD0iI2M4MTAyZSIvPgogIDxwYXRoIGQ9Ik0gMCAzNCBRIDIwIDI4IDQwIDM2IEwgNjQgMzAgTCA2NCA2NCBMIDAgNjQgWiIgZmlsbD0iI2M4MTAyZSIgb3BhY2l0eT0iMC44NSIvPgogIDx0ZXh0IHg9IjM0IiB5PSI0MiIgZm9udC1mYW1pbHk9IkFyaWFsIEJsYWNrLHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMjYiIGZvbnQtd2VpZ2h0PSI5MDAiIGZpbGw9IiNjY2NjY2MiIHRleHQtYW5jaG9yPSJtaWRkbGUiIG9wYWNpdHk9IjAuNiI+U1M8L3RleHQ+CiAgPGVsbGlwc2UgY3g9IjM4IiBjeT0iMTQiIHJ4PSI1IiByeT0iNSIgZmlsbD0iI2ZmNDQ0NCIvPgogIDxwYXRoIGQ9Ik0gMzAgMjAgTCAzNiAxOCBMIDQyIDIyIEwgMzggMzAgTCA0NCAzOCIgc3Ryb2tlPSIjZmY0NDQ0IiBzdHJva2Utd2lkdGg9IjMiIGZpbGw9Im5vbmUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPgogIDxwYXRoIGQ9Ik0gMzYgMTggTCAyOCAyNiBMIDIyIDMwIiBzdHJva2U9IiNmZjQ0NDQiIHN0cm9rZS13aWR0aD0iMyIgZmlsbD0ibm9uZSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+CiAgPHBhdGggZD0iTSAzOCAzMCBMIDMyIDM2IEwgMjggNDIiIHN0cm9rZT0iI2ZmNDQ0NCIgc3Ryb2tlLXdpZHRoPSIzIiBmaWxsPSJub25lIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz4KICA8cGF0aCBkPSJNIDM4IDMwIEwgNDYgMzQgTCA1MCA0MCIgc3Ryb2tlPSIjZmY0NDQ0IiBzdHJva2Utd2lkdGg9IjMiIGZpbGw9Im5vbmUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPgo8L3N2Zz4=">
+<link rel="icon" type="image/png" href="data/logo.png">
 <script src="https://cdnjs.cloudflare.com/ajax/lihhbs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script src="data/compiled/all_data.js"></script>
 <script src="data/compiled/clubs_data.js"></scripht>
@@ -708,7 +708,8 @@ body { background: var(--bg); color: var(--text); font-family: 'Inter','Segoe UI
 </header>
   <div class="sport-nav-bar">
     <nav class="sport-nav">
-      <button class="sport-btn active" onclick="switchSport('soccer',this)"><span style="filter:hue-rotate(135deg) saturate(1.8)">⚽</span> Fútbol</button>
+      <button class="sport-btn active" onclick="goInicio(this)" title="Inicio"><img src="data/logo.png" alt="" style="width:18px;height:18px;vertical-align:middle;border-radius:3px;margin-right:4px;display:inline-block;">Inicio</button>
+      <button class="sport-btn" onclick="switchSport('soccer',this)"><span style="filter:hue-rotate(135deg) saturate(1.8)">⚽</span> Fútbol</button>
       <button class="sport-btn" onclick="switchSport('tennis',this)">🎾 Tenis</button>
       <button class="sport-btn" onclick="switchSport('f1',this)">🏎️ Carreras</button>
       <button class="sport-btn" onclick="switchSport('nba',this)">🏀 Basketball</button>
@@ -740,8 +741,93 @@ body { background: var(--bg); color: var(--text); font-family: 'Inter','Segoe UI
   <!-- CONTENT -->
   <main class="main">
 
+    <!-- ══ INICIO ══ -->
+    <style>
+.inicio-hero{background:linear-gradient(135deg,#a01515 0%,#ee2a2a 100%);padding:48px 32px;border-radius:16px;color:#fff;text-align:center;margin-bottom:24px;box-shadow:0 8px 32px rgba(238,42,42,0.2)}
+.inicio-hero-content{max-width:780px;margin:0 auto}
+.inicio-hero-logo{width:88px;height:88px;border-radius:16px;box-shadow:0 4px 16px rgba(0,0,0,0.3);margin-bottom:18px;background:rgba(255,255,255,0.1);padding:6px}
+.inicio-hero h1{font-size:clamp(28px,4.2vw,46px);margin:0 0 14px;font-weight:800;letter-spacing:-1px;color:#fff;line-height:1.1}
+.inicio-hero h1 em{color:#1a1a1a;font-style:normal}
+.inicio-hero p.tagline{font-size:clamp(15px,1.8vw,20px);margin:0 0 28px;opacity:0.95;line-height:1.5}
+.inicio-cta-row{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+.inicio-btn{padding:13px 26px;font-size:15px;font-weight:700;border-radius:10px;border:0;cursor:pointer;transition:transform 0.15s,box-shadow 0.15s;font-family:inherit}
+.inicio-btn-primary{background:#fff;color:#a01515}
+.inicio-btn-primary:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(0,0,0,0.18)}
+.inicio-btn-secondary{background:rgba(255,255,255,0.15);color:#fff;border:2px solid rgba(255,255,255,0.55)}
+.inicio-btn-secondary:hover{background:rgba(255,255,255,0.28)}
+.inicio-panels{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px;margin-bottom:24px}
+.inicio-panel{background:var(--surface,#fff);border:1px solid var(--border,#eaeaea);border-radius:14px;padding:24px;transition:transform 0.15s,box-shadow 0.15s,border-color 0.15s}
+.inicio-panel:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,0.08);border-color:#ee2a2a}
+.inicio-panel-icon{font-size:32px;margin-bottom:10px}
+.inicio-panel h3{margin:0 0 10px;font-size:19px;color:var(--text,#1a1a1a)}
+.inicio-panel p{margin:0;color:var(--muted,#555);line-height:1.6;font-size:14.5px}
+.inicio-panel ul{margin:0;padding-left:18px;color:var(--muted,#555);line-height:1.7;font-size:14.5px}
+.inicio-panel ul li{margin-bottom:4px}
+.inicio-panel-btn{margin-top:14px;background:#ee2a2a;color:#fff;border:0;padding:9px 18px;border-radius:8px;font-weight:600;cursor:pointer;font-family:inherit;font-size:14px;transition:background 0.15s}
+.inicio-panel-btn:hover{background:#a01515}
+.inicio-features{display:flex;justify-content:space-around;flex-wrap:wrap;gap:16px;background:var(--surface,#fff);border:1px solid var(--border,#eaeaea);border-radius:14px;padding:22px;margin-bottom:24px}
+.inicio-feature{text-align:center;flex:1 1 140px}
+.inicio-feature .num{font-size:30px;font-weight:800;color:#ee2a2a;display:block;line-height:1}
+.inicio-feature .label{color:var(--muted,#666);font-size:13px;margin-top:4px;display:block}
+</style>
+    <div class="tab-panel active" id="panel-inicio">
+      <section class="inicio-hero">
+        <div class="inicio-hero-content">
+          <img src="data/logo.png" alt="Sports Stats 21" class="inicio-hero-logo">
+          <h1>Bienvenido a Sports<em>Stats</em> 21</h1>
+          <p class="tagline">Navega sobre la data de todos los deportes.<br>Crea tu propia Liga y ve los resultados en vivo.</p>
+          <div class="inicio-cta-row">
+            <button class="inicio-btn inicio-btn-primary" onclick="var b=document.querySelectorAll('.sport-btn')[1];if(b)b.click()">Empezar a explorar &rarr;</button>
+            <button class="inicio-btn inicio-btn-secondary" onclick="if(typeof openLoginModal==='function')openLoginModal();else{var l=document.querySelector('.login-btn');if(l)l.click()}">Crear cuenta</button>
+          </div>
+        </div>
+      </section>
+      <div class="inicio-features">
+        <div class="inicio-feature"><span class="num">13</span><span class="label">Deportes principales</span></div>
+        <div class="inicio-feature"><span class="num">16+</span><span class="label">Disciplinas extra</span></div>
+        <div class="inicio-feature"><span class="num">130+</span><span class="label">A&ntilde;os de historia</span></div>
+        <div class="inicio-feature"><span class="num">M / F</span><span class="label">Toggle por liga</span></div>
+      </div>
+      <section class="inicio-panels">
+        <article class="inicio-panel">
+          <div class="inicio-panel-icon">&#128202;</div>
+          <h3>&iquest;Qu&eacute; es Sports Stats 21?</h3>
+          <p>La plataforma definitiva con estad&iacute;sticas de 13 deportes: f&uacute;tbol, tenis, F1, NBA, NFL, MLB, NHL, JJOO y m&aacute;s. Datos hist&oacute;ricos desde 1888 hasta hoy, con toggle masculino/femenino en cada liga.</p>
+        </article>
+        <article class="inicio-panel">
+          <div class="inicio-panel-icon">&#127381;</div>
+          <h3>Novedades</h3>
+          <ul>
+            <li>Logo nuevo + favicon actualizado</li>
+            <li>Toggle M / F en cada liga</li>
+            <li>Mundial con data real (campeones, goleadores)</li>
+            <li>16 disciplinas extra (volley, ciclismo, ajedrez, etc.)</li>
+            <li>Modo Liga Local (NFL, Acu&aacute;ticos y m&aacute;s)</li>
+          </ul>
+        </article>
+        <article class="inicio-panel">
+          <div class="inicio-panel-icon">&#127942;</div>
+          <h3>Crea tu Liga</h3>
+          <p>Arma una liga p&uacute;blica o privada con tus deportes favoritos. Invita amigos, sigue resultados, y compite con tu propio sistema de puntos.</p>
+          <button class="inicio-panel-btn" onclick="if(typeof openCreateLeague==='function')openCreateLeague();else alert('Sistema de Ligas Locales: prox. release')">Crear mi liga &rarr;</button>
+        </article>
+      </section>
+    </div>
+    <script>
+function goInicio(btn){
+  document.querySelectorAll('.sport-btn').forEach(function(b){b.classList.remove('active')});
+  if(btn)btn.classList.add('active');
+  document.querySelectorAll('.tab-panel').forEach(function(p){p.classList.remove('active')});
+  var panel=document.getElementById('panel-inicio');
+  if(panel)panel.classList.add('active');
+  var sb=document.getElementById('sidebar');
+  if(sb)sb.style.display='none';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+document.addEventListener('DOMContentLoaded',function(){setTimeout(function(){var b=document.querySelectorAll('.sport-btn')[0];if(b)goInicio(b);},80);});
+</script>
     <!-- ── SOCCER ── -->
-    <div class="tab-panel active" id="panel-soccer">
+    <div class="tab-panel" id="panel-soccer">
       <div id="football-main"></div>
     </div>
 
