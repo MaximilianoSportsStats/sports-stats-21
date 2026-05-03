@@ -743,6 +743,16 @@ body { background: var(--bg); color: var(--text); font-family: 'Inter','Segoe UI
 
     <!-- ══ INICIO ══ -->
     <style>
+.inicio-hero.hero-carousel{background:transparent;padding:84px 32px;position:relative;overflow:hidden;min-height:460px;display:flex;align-items:center;justify-content:center}
+.hero-bg{position:absolute;inset:0;z-index:0;background:linear-gradient(135deg,#a01515 0%,#ee2a2a 100%)}
+.hero-slide{position:absolute;inset:0;background-size:cover;background-position:center;background-repeat:no-repeat;opacity:0;transition:opacity 1.4s ease-in-out}
+.hero-slide.active{opacity:1}
+.hero-overlay{position:absolute;inset:0;background:linear-gradient(135deg,rgba(160,21,21,0.78) 0%,rgba(50,10,10,0.7) 60%,rgba(0,0,0,0.55) 100%);z-index:1}
+.inicio-hero.hero-carousel .inicio-hero-content{position:relative;z-index:2;width:100%;max-width:780px;text-align:center}
+.hero-dots{position:absolute;bottom:18px;left:50%;transform:translateX(-50%);display:flex;gap:9px;z-index:3}
+.hero-dot{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,0.45);border:0;cursor:pointer;padding:0;transition:all 0.25s ease}
+.hero-dot:hover{background:rgba(255,255,255,0.78);transform:scale(1.2)}
+.hero-dot.active{background:#fff;width:28px;border-radius:5px}
 .inicio-hero{background:linear-gradient(135deg,#a01515 0%,#ee2a2a 100%);padding:48px 32px;border-radius:16px;color:#fff;text-align:center;margin-bottom:24px;box-shadow:0 8px 32px rgba(238,42,42,0.2)}
 .inicio-hero-content{max-width:780px;margin:0 auto}
 .inicio-hero-logo{width:88px;height:88px;border-radius:16px;box-shadow:0 4px 16px rgba(0,0,0,0.3);margin-bottom:18px;background:rgba(255,255,255,0.1);padding:6px}
@@ -771,17 +781,38 @@ body { background: var(--bg); color: var(--text); font-family: 'Inter','Segoe UI
 .inicio-feature .label{color:var(--muted,#666);font-size:13px;margin-top:4px;display:block}
 </style>
     <div class="tab-panel active" id="panel-inicio">
-      <section class="inicio-hero">
-        <div class="inicio-hero-content">
-          <img src="data/logo.png" alt="Sports Stats 21" class="inicio-hero-logo">
-          <h1>Bienvenido a Sports<em>Stats</em> 21</h1>
-          <p class="tagline">Navega sobre la data de todos los deportes.<br>Crea tu propia Liga y ve los resultados en vivo.</p>
-          <div class="inicio-cta-row">
-            <button class="inicio-btn inicio-btn-primary" onclick="var b=document.querySelectorAll('.sport-btn')[1];if(b)b.click()">Empezar a explorar &rarr;</button>
-            <button class="inicio-btn inicio-btn-secondary" onclick="if(typeof openLoginModal==='function')openLoginModal();else{var l=document.querySelector('.login-btn');if(l)l.click()}">Crear cuenta</button>
-          </div>
-        </div>
-      </section>
+      <section class="inicio-hero hero-carousel" id="heroCarousel">
+  <div class="hero-bg">
+      <div class="hero-slide active" data-src="https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=1600&q=80&auto=format&fit=crop"></div>
+      <div class="hero-slide" data-src="https://images.unsplash.com/photo-1546519638-68e109498ffc?w=1600&q=80&auto=format&fit=crop"></div>
+      <div class="hero-slide" data-src="https://images.unsplash.com/photo-1542144582-1ba00456b5e3?w=1600&q=80&auto=format&fit=crop"></div>
+      <div class="hero-slide" data-src="https://images.unsplash.com/photo-1530907487-3fe7b8c8a6d8?w=1600&q=80&auto=format&fit=crop"></div>
+      <div class="hero-slide" data-src="https://images.unsplash.com/photo-1471295253337-3ceaaedca402?w=1600&q=80&auto=format&fit=crop"></div>
+      <div class="hero-slide" data-src="https://images.unsplash.com/photo-1551698618-1dfe5d97d256?w=1600&q=80&auto=format&fit=crop"></div>
+      <div class="hero-slide" data-src="https://images.unsplash.com/photo-1566577739112-5180d4bf9390?w=1600&q=80&auto=format&fit=crop"></div>
+      <div class="hero-slide" data-src="https://images.unsplash.com/photo-1535131749006-b7f58c99034b?w=1600&q=80&auto=format&fit=crop"></div>
+  </div>
+  <div class="hero-overlay"></div>
+  <div class="inicio-hero-content">
+      <img src="data/logo.png" alt="Sports Stats 21" class="inicio-hero-logo">
+      <h1>Bienvenido a Sports<em>Stats</em> 21</h1>
+      <p class="tagline">Navega sobre la data de todos los deportes.<br>Crea tu propia Liga y ve los resultados en vivo.</p>
+      <div class="inicio-cta-row">
+        <button class="inicio-btn inicio-btn-primary" onclick="var b=document.querySelectorAll('.sport-btn')[1];if(b)b.click()">Empezar a explorar &rarr;</button>
+        <button class="inicio-btn inicio-btn-secondary" onclick="if(typeof openLoginModal==='function')openLoginModal();else{var l=document.querySelector('.login-btn');if(l)l.click()}">Crear cuenta</button>
+      </div>
+  </div>
+  <div class="hero-dots">
+      <button class="hero-dot active" onclick="heroGo(0)" aria-label="1"></button>
+      <button class="hero-dot" onclick="heroGo(1)" aria-label="2"></button>
+      <button class="hero-dot" onclick="heroGo(2)" aria-label="3"></button>
+      <button class="hero-dot" onclick="heroGo(3)" aria-label="4"></button>
+      <button class="hero-dot" onclick="heroGo(4)" aria-label="5"></button>
+      <button class="hero-dot" onclick="heroGo(5)" aria-label="6"></button>
+      <button class="hero-dot" onclick="heroGo(6)" aria-label="7"></button>
+      <button class="hero-dot" onclick="heroGo(7)" aria-label="8"></button>
+  </div>
+</section>
       <div class="inicio-features">
         <div class="inicio-feature"><span class="num">13</span><span class="label">Deportes principales</span></div>
         <div class="inicio-feature"><span class="num">16+</span><span class="label">Disciplinas extra</span></div>
@@ -825,6 +856,25 @@ function goInicio(btn){
   window.scrollTo({top:0,behavior:'smooth'});
 }
 document.addEventListener('DOMContentLoaded',function(){setTimeout(function(){var b=document.querySelectorAll('.sport-btn')[0];if(b)goInicio(b);},80);});
+
+  // Hero carousel
+  (function(){
+    var idx=0,timer=null,slides,dots;
+    function show(i){
+      if(!slides||!slides.length)return;
+      idx=(i+slides.length)%slides.length;
+      slides.forEach(function(s,j){s.classList.toggle('active',j===idx)});
+      if(dots)dots.forEach(function(d,j){d.classList.toggle('active',j===idx)});
+    }
+    window.heroGo=function(i){show(i);if(timer)clearInterval(timer);timer=setInterval(function(){show(idx+1)},7000)};
+    function carInit(){
+      slides=document.querySelectorAll('#heroCarousel .hero-slide');
+      dots=document.querySelectorAll('#heroCarousel .hero-dot');
+      slides.forEach(function(s){var v=s.getAttribute('data-src');if(v)s.style.backgroundImage='url("'+v+'")'});
+      if(slides.length){timer=setInterval(function(){show(idx+1)},7000)}
+    }
+    if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',function(){setTimeout(carInit,150)})}else{setTimeout(carInit,150)}
+  })();
 </script>
     <!-- ── SOCCER ── -->
     <div class="tab-panel" id="panel-soccer">
