@@ -747,7 +747,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Inter','Segoe UI
 .hero-bg{position:absolute;inset:0;z-index:0;background:linear-gradient(135deg,#a01515 0%,#ee2a2a 100%)}
 .hero-slide{position:absolute;inset:0;background-size:cover;background-position:center;background-repeat:no-repeat;opacity:0;transition:opacity 1.4s ease-in-out}
 .hero-slide.active{opacity:1}
-.hero-overlay{position:absolute;inset:0;background:linear-gradient(135deg,rgba(160,21,21,0.78) 0%,rgba(50,10,10,0.7) 60%,rgba(0,0,0,0.55) 100%);z-index:1}
+.hero-overlay{position:absolute;inset:0;background:linear-gradient(135deg,rgba(160,21,21,0.45) 0%,rgba(20,10,10,0.55) 60%,rgba(0,0,0,0.65) 100%);z-index:1;pointer-events:none}
 .inicio-hero.hero-carousel .inicio-hero-content{position:relative;z-index:2;width:100%;max-width:780px;text-align:center}
 .hero-dots{position:absolute;bottom:18px;left:50%;transform:translateX(-50%);display:flex;gap:9px;z-index:3}
 .hero-dot{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,0.45);border:0;cursor:pointer;padding:0;transition:all 0.25s ease}
@@ -786,7 +786,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Inter','Segoe UI
       <div class="hero-slide active" data-src="https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=1600&q=80&auto=format&fit=crop"></div>
       <div class="hero-slide" data-src="https://images.unsplash.com/photo-1546519638-68e109498ffc?w=1600&q=80&auto=format&fit=crop"></div>
       <div class="hero-slide" data-src="https://images.unsplash.com/photo-1542144582-1ba00456b5e3?w=1600&q=80&auto=format&fit=crop"></div>
-      <div class="hero-slide" data-src="https://images.unsplash.com/photo-1530907487-3fe7b8c8a6d8?w=1600&q=80&auto=format&fit=crop"></div>
+      <div class="hero-slide" data-src="https://images.unsplash.com/photo-1517649763962-0c623066013b?w=1600&q=80&auto=format&fit=crop"></div>
       <div class="hero-slide" data-src="https://images.unsplash.com/photo-1471295253337-3ceaaedca402?w=1600&q=80&auto=format&fit=crop"></div>
       <div class="hero-slide" data-src="https://images.unsplash.com/photo-1551698618-1dfe5d97d256?w=1600&q=80&auto=format&fit=crop"></div>
       <div class="hero-slide" data-src="https://images.unsplash.com/photo-1566577739112-5180d4bf9390?w=1600&q=80&auto=format&fit=crop"></div>
@@ -868,10 +868,27 @@ document.addEventListener('DOMContentLoaded',function(){setTimeout(function(){va
     }
     window.heroGo=function(i){show(i);if(timer)clearInterval(timer);timer=setInterval(function(){show(idx+1)},7000)};
     function carInit(){
-      slides=document.querySelectorAll('#heroCarousel .hero-slide');
-      dots=document.querySelectorAll('#heroCarousel .hero-dot');
-      slides.forEach(function(s){var v=s.getAttribute('data-src');if(v)s.style.backgroundImage='url("'+v+'")'});
-      if(slides.length){timer=setInterval(function(){show(idx+1)},7000)}
+      slides=Array.from(document.querySelectorAll('#heroCarousel .hero-slide'));
+      dots=Array.from(document.querySelectorAll('#heroCarousel .hero-dot'));
+      // Test each image; remove broken slides + corresponding dots
+      var loaded=0,checked=0;
+      slides.forEach(function(s,i){
+        var v=s.getAttribute('data-src');
+        if(!v){checked++;return}
+        var im=new Image();
+        im.onload=function(){s.style.backgroundImage='url("'+v+'")';loaded++;checked++;if(checked===slides.length)startTimer()};
+        im.onerror=function(){s.dataset.broken='1';if(dots[i])dots[i].dataset.broken='1';checked++;if(checked===slides.length)startTimer()};
+        im.src=v;
+      });
+      function startTimer(){
+        slides=slides.filter(function(s){if(s.dataset.broken){s.remove();return false}return true});
+        dots=dots.filter(function(d){if(d.dataset.broken){d.remove();return false}return true});
+        // Reset active to first available
+        slides.forEach(function(s,i){s.classList.toggle('active',i===0)});
+        dots.forEach(function(d,i){d.classList.toggle('active',i===0);d.setAttribute('onclick','heroGo('+i+')')});
+        idx=0;
+        if(slides.length>1){timer=setInterval(function(){show(idx+1)},7000)}
+      }
     }
     if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',function(){setTimeout(carInit,150)})}else{setTimeout(carInit,150)}
   })();
