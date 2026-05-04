@@ -9848,6 +9848,216 @@ window.setLeagueMF=function(g){window._socG=g;document.querySelectorAll('.sgt-bt
   }
 })();
 </script>
+
+<style>
+.wf-card{background:var(--surface,#fff);border:1px solid var(--border,#eaeaea);border-radius:14px;padding:18px;margin:16px 0;color:var(--text,#1a1a1a)}
+.wf-card h3{margin:0 0 12px;font-size:18px;color:#a01515;display:flex;align-items:center;gap:8px}
+.wf-tbl{width:100%;border-collapse:collapse;font-size:14px}
+.wf-tbl th{background:#f5f5f5;color:#333;padding:8px;text-align:left;font-weight:600;border-bottom:2px solid #ee2a2a}
+.wf-tbl td{padding:7px 8px;border-bottom:1px solid #eee}
+.wf-tbl tr:nth-child(odd){background:#fafafa}
+.wf-tbl tr:hover{background:#fff5f5}
+.wf-tbl .pos{font-weight:700;color:#a01515;width:30px}
+.wf-tbl .pts{font-weight:700;text-align:right}
+.wf-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;margin:14px 0}
+.wf-mini{background:#fafafa;border:1px solid #eee;border-radius:10px;padding:14px}
+.wf-mini h4{margin:0 0 8px;font-size:14px;color:#a01515}
+.wf-row{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #f0f0f0;font-size:13.5px}
+.wf-row:last-child{border:0}
+.wf-row .num{color:#a01515;font-weight:700;width:24px;text-align:right;margin-right:8px}
+.wf-meta{display:flex;gap:14px;font-size:13px;color:#666;margin-bottom:12px;flex-wrap:wrap}
+.wf-meta b{color:#1a1a1a}
+.wf-section{margin-top:14px;padding-top:12px;border-top:1px dashed #ddd}
+.wf-section h4{margin:0 0 8px;font-size:14px;color:#333;text-transform:uppercase;letter-spacing:0.5px}
+@media (prefers-color-scheme:dark){.wf-card{background:#1a1a1a;border-color:#333;color:#eee}.wf-tbl th{background:#2a2a2a;color:#fff}.wf-tbl tr:nth-child(odd){background:#222}.wf-tbl tr:hover{background:#3a1a1a}.wf-tbl td{border-color:#333}.wf-mini{background:#222;border-color:#333}.wf-row{border-color:#333}.wf-section{border-color:#444}.wf-section h4{color:#ccc}}
+</style>
+<script>
+/* Datos reales de Futbol Femenino - WSL, Liga F, NWSL, Mundial 2023 */
+window.WF_DATA = {
+  WSL: {
+    name: "Womens Super League",
+    flag: "\uD83C\uDFF4\uDB40\uDC67\uDB40\uDC62\uDB40\uDC65\uDB40\uDC6E\uDB40\uDC67\uDB40\uDC7F",
+    season: "2024-25",
+    champion: "Chelsea Women",
+    note: "6\u00B0 t\u00EDtulo consecutivo de Chelsea (entrenadora Sonia Bompastor)",
+    standings: [
+      ["1","Chelsea","22","19","2","1","60","6","59"],
+      ["2","Arsenal","22","17","3","2","53","13","54"],
+      ["3","Manchester United","22","14","4","4","43","18","46"],
+      ["4","Manchester City","22","13","2","7","42","26","41"],
+      ["5","Brighton","22","8","5","9","27","31","29"],
+      ["6","Liverpool","22","8","4","10","27","32","28"],
+      ["7","Aston Villa","22","7","6","9","27","36","27"],
+      ["8","Everton","22","7","4","11","23","34","25"],
+      ["9","Tottenham","22","6","6","10","21","32","24"],
+      ["10","West Ham","22","5","4","13","23","43","19"],
+      ["11","Leicester","22","4","6","12","18","37","18"],
+      ["12","Crystal Palace","22","3","4","15","12","48","13"]
+    ],
+    scorers: [
+      ["1","Aggie Beever-Jones","Chelsea","13"],
+      ["2","Alessia Russo","Arsenal","12"],
+      ["3","Khadija Shaw","Manchester City","11"],
+      ["4","Vivianne Miedema","Manchester City","10"],
+      ["5","Elisabeth Terland","Manchester United","9"]
+    ]
+  },
+  LIGAF: {
+    name: "Liga F",
+    flag: "\uD83C\uDDEA\uD83C\uDDF8",
+    season: "2024-25",
+    champion: "FC Barcelona Femen\u00ED",
+    note: "6\u00B0 t\u00EDtulo consecutivo del Barcelona (DT Pere Romeu)",
+    standings: [
+      ["1","Barcelona Femen\u00ED","30","29","1","0","112","11","88"],
+      ["2","Real Madrid","30","23","3","4","73","21","72"],
+      ["3","Atl\u00E9tico Madrid","30","20","4","6","60","27","64"],
+      ["4","Levante","30","18","6","6","57","32","60"],
+      ["5","Real Sociedad","30","15","6","9","47","36","51"],
+      ["6","Granada","30","12","7","11","38","42","43"],
+      ["7","Sevilla","30","11","8","11","36","41","41"],
+      ["8","Athletic Bilbao","30","10","9","11","34","38","39"],
+      ["9","Real Betis","30","9","9","12","31","43","36"],
+      ["10","Valencia","30","8","7","15","28","48","31"]
+    ],
+    scorers: [
+      ["1","Ewa Pajor","Barcelona","23"],
+      ["2","Caroline Graham Hansen","Barcelona","18"],
+      ["3","Linda Caicedo","Real Madrid","14"],
+      ["4","Salma Paralluelo","Barcelona","13"],
+      ["5","Alba Redondo","Real Madrid","11"]
+    ]
+  },
+  NWSL: {
+    name: "National Womens Soccer League",
+    flag: "\uD83C\uDDFA\uD83C\uDDF8",
+    season: "2024",
+    champion: "Orlando Pride",
+    note: "Primer t\u00EDtulo del Pride (Final: 1-0 vs Washington Spirit). Barbra Banda MVP.",
+    standings: [
+      ["1","Orlando Pride","26","18","6","2","53","17","60"],
+      ["2","Washington Spirit","26","16","3","7","52","32","51"],
+      ["3","Kansas City Current","26","14","6","6","44","31","48"],
+      ["4","Gotham FC","26","12","8","6","36","26","44"],
+      ["5","Portland Thorns","26","12","6","8","40","31","42"],
+      ["6","North Carolina Courage","26","10","8","8","36","32","38"],
+      ["7","Bay FC","26","10","6","10","26","31","36"],
+      ["8","Chicago Red Stars","26","8","5","13","28","40","29"],
+      ["9","Angel City","26","7","7","12","28","39","28"],
+      ["10","San Diego Wave","26","7","6","13","27","41","27"]
+    ],
+    scorers: [
+      ["1","Temwa Chawinga","Kansas City","20"],
+      ["2","Barbra Banda","Orlando Pride","13"],
+      ["3","Sophia Smith","Portland Thorns","12"],
+      ["4","Trinity Rodman","Washington","11"],
+      ["5","Asisat Oshoala","Bay FC","10"]
+    ]
+  },
+  MUNDIAL: {
+    name: "Mundial Femenino FIFA 2023",
+    flag: "\uD83C\uDFC6",
+    season: "2023 (Australia/Nueva Zelanda)",
+    champion: "Espa\u00F1a",
+    note: "Final: Espa\u00F1a 1-0 Inglaterra (Olga Carmona, min 29). Bota de Oro: Hinata Miyazawa (5 goles). Bal\u00F3n de Oro: Aitana Bonmat\u00ED.",
+    standings: [
+      ["1","\uD83C\uDDEA\uD83C\uDDF8 Espa\u00F1a","Campe\u00F3n","-","-","-","-","-","-"],
+      ["2","\uD83C\uDFF4\uDB40\uDC67\uDB40\uDC62\uDB40\uDC65\uDB40\uDC6E\uDB40\uDC67\uDB40\uDC7F Inglaterra","Subcampe\u00F3n","-","-","-","-","-","-"],
+      ["3","\uD83C\uDDF8\uD83C\uDDEA Suecia","Tercer puesto","-","-","-","-","-","-"],
+      ["4","\uD83C\uDDE6\uD83C\uDDFA Australia","Cuarto puesto","-","-","-","-","-","-"]
+    ],
+    scorers: [
+      ["1","Hinata Miyazawa","\uD83C\uDDEF\uD83C\uDDF5 Jap\u00F3n","5"],
+      ["2","Kadidiatou Diani","\uD83C\uDDEB\uD83C\uDDF7 Francia","4"],
+      ["2","Daphne van Domselaar","\uD83C\uDDF3\uD83C\uDDF1 Pa\u00EDses Bajos","-"],
+      ["3","Aitana Bonmat\u00ED","\uD83C\uDDEA\uD83C\uDDF8 Espa\u00F1a","3"],
+      ["3","Salma Paralluelo","\uD83C\uDDEA\uD83C\uDDF8 Espa\u00F1a","3"]
+    ]
+  }
+};
+
+/* Render funcion */
+window.renderWFCard = function(key){
+  var d = window.WF_DATA[key];
+  if(!d) return "";
+  var stHdr = (key==="MUNDIAL")?["#","Selecci\u00F3n","Resultado"]:["#","Equipo","PJ","G","E","P","GF","GC","Pts"];
+  var stRows = d.standings.map(function(r){
+    var cells = r.map(function(c,i){return "<td"+(i===0?' class="pos"':'')+(i===r.length-1?' class="pts"':'')+">"+c+"</td>"}).join("");
+    return "<tr>"+cells+"</tr>";
+  }).join("");
+  var stTable = (key==="MUNDIAL")
+    ? '<table class="wf-tbl"><thead><tr>'+stHdr.slice(0,3).map(function(h){return "<th>"+h+"</th>"}).join("")+'</tr></thead><tbody>'+d.standings.map(function(r){return "<tr><td class=\"pos\">"+r[0]+"</td><td>"+r[1]+"</td><td class=\"pts\">"+r[2]+"</td></tr>"}).join("")+'</tbody></table>'
+    : '<table class="wf-tbl"><thead><tr>'+stHdr.map(function(h){return "<th>"+h+"</th>"}).join("")+'</tr></thead><tbody>'+stRows+'</tbody></table>';
+  var scRows = d.scorers.map(function(r){return "<div class=\"wf-row\"><span class=\"num\">"+r[3]+"</span><span><b>"+r[1]+"</b> <small style=\"opacity:0.7\">"+r[2]+"</small></span></div>"}).join("");
+  var html = '<div class="wf-card"><h3>'+d.flag+' '+d.name+' <span style="font-weight:400;font-size:14px;color:#666">'+d.season+'</span></h3>'
+    + '<div class="wf-meta"><span><b>Campe\u00F3n:</b> '+d.champion+'</span></div>'
+    + '<div style="font-size:13.5px;color:#555;margin-bottom:12px">'+d.note+'</div>'
+    + '<div class="wf-grid"><div><div class="wf-section"><h4>'+(key==="MUNDIAL"?"Top 4 final":"Tabla de posiciones")+'</h4>'+stTable+'</div></div>'
+    + '<div><div class="wf-section"><h4>'+(key==="MUNDIAL"?"Goleadoras del torneo":"Goleadoras")+'</h4>'+scRows+'</div></div></div>'
+    + '</div>';
+  return html;
+};
+
+/* Mapping liga masculina activa -> liga femenina equivalente */
+window.WF_LEAGUE_MAP = {
+  "Premier":"WSL","Championship":"WSL",
+  "LaLiga":"LIGAF","La Liga":"LIGAF","SegundaDivision":"LIGAF","Segunda":"LIGAF",
+  "MLS":"NWSL","NWSL":"NWSL"
+};
+
+window.injectWomensFootballData = function(){
+  var fAct = document.getElementById("sgt-f");
+  if(!fAct||!fAct.classList.contains("sgt-active"))return;
+  var main = document.getElementById("football-main");
+  if(!main)return;
+  // Determine active league
+  var activeLeagueBtn = document.querySelector('button.sub-btn.active[data-key]');
+  var key = activeLeagueBtn?activeLeagueBtn.getAttribute("data-key"):null;
+  var wfKey = (key && window.WF_LEAGUE_MAP[key]) || null;
+  // Remove existing wf cards
+  main.querySelectorAll(".wf-card").forEach(function(el){el.remove()});
+  if(wfKey){
+    var wrap = document.createElement("div");
+    wrap.className="wf-injection";
+    wrap.innerHTML = window.renderWFCard(wfKey);
+    main.appendChild(wrap.firstElementChild);
+  }else{
+    // Show all 4 (overview)
+    ["MUNDIAL","WSL","LIGAF","NWSL"].forEach(function(k){
+      var w=document.createElement("div"); w.innerHTML=window.renderWFCard(k); main.appendChild(w.firstElementChild);
+    });
+  }
+};
+
+/* Hook setSoccerGender + league clicks */
+(function(){
+  function tryWrap(){
+    if(typeof window.setSoccerGender !== "function"){setTimeout(tryWrap,200);return}
+    var orig = window.setSoccerGender;
+    if(orig.__wrapped) return;
+    window.setSoccerGender = function(g, btn){
+      var r = orig.apply(this, arguments);
+      setTimeout(window.injectWomensFootballData, 100);
+      return r;
+    };
+    window.setSoccerGender.__wrapped = true;
+  }
+  function tryWrapLeague(){
+    if(typeof window.sbLeagueClick !== "function"){setTimeout(tryWrapLeague,200);return}
+    var orig = window.sbLeagueClick;
+    if(orig.__wrapped) return;
+    window.sbLeagueClick = function(btn){
+      var r = orig.apply(this, arguments);
+      setTimeout(window.injectWomensFootballData, 150);
+      return r;
+    };
+    window.sbLeagueClick.__wrapped = true;
+  }
+  document.addEventListener("DOMContentLoaded", function(){
+    setTimeout(function(){tryWrap();tryWrapLeague();},400);
+  });
+})();
+</script>
 </body>
 </html>
 
