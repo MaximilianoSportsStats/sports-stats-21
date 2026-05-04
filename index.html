@@ -708,7 +708,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Inter','Segoe UI
 </header>
   <div class="sport-nav-bar">
     <nav class="sport-nav">
-      <button class="sport-btn active" onclick="goInicio(this)" title="Inicio"><img src="data/logo.png" alt="" style="width:18px;height:18px;vertical-align:middle;border-radius:3px;margin-right:4px;display:inline-block;">Inicio</button>
+      <button class="sport-btn active" onclick="goInicio(this)" title="Inicio"><span style="font-size:18px;margin-right:4px">&#127968;</span>Inicio</button>
       <button class="sport-btn" onclick="switchSport('soccer',this)"><span style="filter:hue-rotate(135deg) saturate(1.8)">⚽</span> Fútbol</button>
       <button class="sport-btn" onclick="switchSport('tennis',this)">🎾 Tenis</button>
       <button class="sport-btn" onclick="switchSport('f1',this)">🏎️ Carreras</button>
@@ -9805,6 +9805,48 @@ window._mfLeagueMap={'Premier League':{f:'WSL (Women\u00b4s Super League)',champ
 window.injectLeagueMFToggle=function(){var fm=document.getElementById('football-main');if(!fm)return;var hdr=fm.querySelector('.league-header, .league-title');if(!hdr)return;var existing=document.getElementById('lg-mf-toggle');if(existing)existing.remove();var existingBn=document.getElementById('lg-mf-fbanner');if(existingBn)existingBn.remove();var hdrTitle=fm.querySelector('.league-title')||fm.querySelector('h2');var leagueName=hdrTitle?hdrTitle.textContent.trim():'';var mapped=null;Object.keys(window._mfLeagueMap).forEach(function(k){if(leagueName.indexOf(k)>=0)mapped=window._mfLeagueMap[k];});if(!mapped)return;var isF=window._socG==='F';var tg=document.createElement('div');tg.id='lg-mf-toggle';tg.style.cssText='display:flex;justify-content:flex-end;align-items:center;gap:.5rem;margin:0 0 .8rem;';var mClass=isF?'sgt-btn':'sgt-btn sgt-active';var fClass=isF?'sgt-btn sgt-active':'sgt-btn';tg.innerHTML='<span style="font-size:.78rem;color:var(--text2);font-weight:600">Versi\u00f3n:</span><div class="sgt-mini" style="background:var(--bg);border:1px solid var(--border);border-radius:999px;padding:.18rem;display:inline-flex"><button class="'+mClass+'" id="lg-mf-m" onclick="window.setLeagueMF(\'M\')">♂ M</button><button class="'+fClass+'" id="lg-mf-f" onclick="window.setLeagueMF(\'F\')">♀ F</button></div>';if(isF){var bn=document.createElement('div');bn.id='lg-mf-fbanner';bn.style.cssText='background:linear-gradient(135deg,#ec4899,#be185d);color:#fff;padding:1rem 1.25rem;border-radius:10px;margin:0 0 1rem;';bn.innerHTML='<div style="display:flex;align-items:center;gap:.7rem;margin-bottom:.5rem"><div style="font-size:1.4rem">♀</div><div><b style="font-size:1.05rem">Equivalente femenina: '+mapped.f+'</b><div style="font-size:.82rem;opacity:.95;margin-top:.15rem">Liga femenina ligada a esta competici\u00f3n masculina</div></div></div><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:.5rem;margin-top:.6rem;font-size:.85rem"><div style="background:rgba(255,255,255,.18);padding:.6rem;border-radius:6px"><b>\ud83c\udfc6 Campe\u00f3n actual</b><br>'+mapped.champ+'</div><div style="background:rgba(255,255,255,.18);padding:.6rem;border-radius:6px"><b>\u2b50 Figuras</b><br>'+mapped.top+'</div><div style="background:rgba(255,255,255,.18);padding:.6rem;border-radius:6px"><b>\ud83d\udcc5 Liga desde</b><br>'+mapped.since+' \u00b7 datos completos pr\u00f3ximamente</div></div>';fm.insertBefore(bn,hdr);}fm.insertBefore(tg,hdr);};
 window.setLeagueMF=function(g){window._socG=g;document.querySelectorAll('.sgt-btn').forEach(function(b){b.classList.remove('sgt-active');});var lab=document.getElementById('sgt-label');if(lab)lab.textContent=(g==='F'?'Femenino':'Masculino');var sm=document.getElementById('sgt-m');var sf=document.getElementById('sgt-f');if(g==='F'&&sf)sf.classList.add('sgt-active');if(g==='M'&&sm)sm.classList.add('sgt-active');var lm=document.getElementById('lg-mf-m');var lf=document.getElementById('lg-mf-f');if(g==='F'&&lf)lf.classList.add('sgt-active');if(g==='M'&&lm)lm.classList.add('sgt-active');var active=document.querySelector('.sub-btn.active');if(g==='F'&&active){var leagueName=active.textContent.replace(/[^A-Za-z0-9 \u00e1\u00e9\u00ed\u00f3\u00fa\u00f1\u00d1]/g,'').trim();var mapped=null;Object.keys(window._mfLeagueMap).forEach(function(k){if(leagueName.indexOf(k)>=0)mapped=window._mfLeagueMap[k];});if(!mapped)return;var fm=document.getElementById('football-main');fm.innerHTML='<div style="padding:1.5rem 0"><div style="background:linear-gradient(135deg,#ec4899,#be185d);color:#fff;padding:2rem 1.5rem;border-radius:12px;margin-bottom:1.5rem"><div style="display:flex;align-items:center;gap:1rem"><div style="font-size:2.5rem">♀</div><div><h2 style="margin:0;font-size:1.6rem">'+mapped.f+'</h2><div style="opacity:.95;margin-top:.3rem">Versi\u00f3n femenina de '+leagueName+' \u00b7 desde '+mapped.since+'</div></div></div></div><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;margin-bottom:1rem"><div style="padding:1.2rem;background:var(--card);border-radius:10px"><h3 style="margin:0 0 .5rem">\ud83c\udfc6 Campe\u00f3n actual</h3><div style="font-size:.95rem">'+mapped.champ+'</div></div><div style="padding:1.2rem;background:var(--card);border-radius:10px"><h3 style="margin:0 0 .5rem">\u2b50 Figuras</h3><div style="font-size:.95rem">'+mapped.top+'</div></div><div style="padding:1.2rem;background:var(--card);border-radius:10px"><h3 style="margin:0 0 .5rem">\ud83d\udcc5 Liga desde</h3><div style="font-size:.95rem">'+mapped.since+'</div></div></div><div style="padding:1.2rem;background:var(--card);border-radius:10px;display:flex;align-items:center;gap:1rem"><div style="font-size:2rem">\ud83d\udea7</div><div><b>Datos completos pr\u00f3ximamente</b><div style="color:var(--text2);font-size:.85rem;margin-top:.2rem">Estamos integrando standings, calendario, estad\u00edsticas y goleadoras de '+mapped.f+'</div></div></div></div>';setTimeout(function(){if(window.injectLeagueMFToggle)window.injectLeagueMFToggle();},80);}else if(active){active.click();}};
 ['sbCopaClick','sbLeagueClick'].forEach(function(fn){if(window[fn]){var orig=window[fn];window[fn]=function(el){orig.call(this,el);setTimeout(window.injectLeagueMFToggle,80);};}});
+</script>
+
+<style>
+.sub-tag.sub-tag-le{background:#5b8def;color:#fff}
+</style>
+<script>
+/* Liga Escolar - runtime injector: agrega un boton Liga Escolar al lado de cada Liga Local */
+(function(){
+  function escolarLabel(){return '\uD83C\uDFEB Liga Escolar<span class="sub-tag sub-tag-le">Escolar</span>'}
+  function injectEscolarFor(llBtn){
+    if(!llBtn||llBtn.dataset.escAdded==="1")return;
+    var nxt=llBtn.nextElementSibling;
+    if(nxt&&nxt.dataset&&nxt.dataset.escolar==="1"){llBtn.dataset.escAdded="1";return}
+    var b=document.createElement("button");
+    b.className="sub-btn";
+    b.dataset.escolar="1";
+    b.dataset.cid=(llBtn.dataset.cid||"")+"_school";
+    b.dataset.cname=llBtn.dataset.cname||"";
+    b.dataset.sport=llBtn.dataset.sport||"";
+    b.setAttribute("onclick","sbLEClick(this)");
+    b.innerHTML=escolarLabel();
+    llBtn.insertAdjacentElement("afterend",b);
+    llBtn.dataset.escAdded="1";
+  }
+  function scanAll(){
+    var all=document.querySelectorAll('button[onclick="sbLLClick(this)"]');
+    all.forEach(injectEscolarFor);
+  }
+  window.sbLEClick=function(btn){
+    var cname=btn.dataset.cname||"-";
+    var sport=btn.dataset.sport||"-";
+    alert("\uD83C\uDFEB Liga Escolar - "+cname+" ("+sport+")\n\nProximamente vas a poder:\n\n\u2022 Crear liga publica o privada por colegio\n\u2022 Inscribir colegios y cursos\n\u2022 Categorias por edad (Sub-12, Sub-15, Sub-17)\n\u2022 Tablas de posiciones por categoria\n\u2022 Estadisticas individuales\n\u2022 Calendario y resultados\n\nMantenete atento al lanzamiento!");
+  };
+  if(window.MutationObserver){
+    var obs=new MutationObserver(function(){scanAll()});
+    document.addEventListener("DOMContentLoaded",function(){
+      setTimeout(function(){scanAll();obs.observe(document.body,{childList:true,subtree:true})},500);
+    });
+  }else{
+    document.addEventListener("DOMContentLoaded",function(){setTimeout(scanAll,500);setInterval(scanAll,2000)});
+  }
+})();
 </script>
 </body>
 </html>
