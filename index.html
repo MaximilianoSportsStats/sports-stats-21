@@ -10058,6 +10058,138 @@ window.injectWomensFootballData = function(){
   });
 })();
 </script>
+
+<style>
+/* Hide pink Futbol Femenino banner globally - replaced by Que es el Futbol M/F-aware view */
+#sgt-fbanner, .sgt-fbanner{display:none !important}
+/* Container for our QF override */
+.qf-wrap{padding:8px 0}
+.qf-hero{background:linear-gradient(135deg,#a01515 0%,#ee2a2a 100%);color:#fff;border-radius:14px;padding:24px 28px;margin-bottom:18px;box-shadow:0 6px 20px rgba(238,42,42,0.18)}
+.qf-hero h1{margin:0 0 6px;font-size:28px;font-weight:800;letter-spacing:-0.5px}
+.qf-hero .sub{opacity:0.93;font-size:15px;margin-bottom:14px}
+.qf-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:10px;margin-top:8px}
+.qf-stat{background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.25);border-radius:10px;padding:10px 12px;text-align:center}
+.qf-stat .n{font-size:22px;font-weight:800;display:block;line-height:1}
+.qf-stat .l{font-size:11px;opacity:0.9;margin-top:3px;display:block;text-transform:uppercase;letter-spacing:0.4px}
+.qf-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
+.qf-card{background:var(--surface,#fff);border:1px solid var(--border,#eaeaea);border-radius:12px;padding:18px;color:var(--text,#1a1a1a)}
+.qf-card h3{margin:0 0 10px;font-size:16px;color:#a01515;display:flex;align-items:center;gap:7px;border-bottom:1px solid #eee;padding-bottom:8px}
+.qf-card p{margin:0;font-size:14px;line-height:1.55;color:var(--muted,#444)}
+.qf-card ul{margin:0;padding-left:18px;font-size:14px;line-height:1.7;color:var(--muted,#444)}
+.qf-card ul li{margin-bottom:3px}
+.qf-card .row{display:flex;justify-content:space-between;font-size:14px;padding:5px 0;border-bottom:1px dashed #eee}
+.qf-card .row:last-child{border:0}
+.qf-card .row b{color:#a01515}
+@media (prefers-color-scheme:dark){.qf-card{background:#1a1a1a;border-color:#333;color:#eee}.qf-card h3{border-color:#333}.qf-card p,.qf-card ul{color:#bbb}.qf-card .row{border-color:#333}}
+</style>
+<script>
+/* Override Que es el Futbol view with M/F-aware content */
+window.QF_DATA = {
+  M: {
+    title: "Futbol Masculino",
+    icon: "\u26BD",
+    sub: "El deporte rey \u00B7 4 mil millones de seguidores \u00B7 211 federaciones FIFA",
+    stats: [["1863","Reglas FA"],["1904","FIFA fundada"],["211","Federaciones"],["4B+","Seguidores"]],
+    historia: "El f\u00FAtbol moderno naci\u00F3 en Inglaterra en 1863 con la fundaci\u00F3n de la Football Association (FA) y la codificaci\u00F3n de las reglas. La FA Cup (1871) es la competici\u00F3n m\u00E1s antigua del mundo. La FIFA se fund\u00F3 en Par\u00EDs en 1904 con 7 pa\u00EDses. El primer Mundial masculino fue en Uruguay 1930, ganado por el local 4-2 a Argentina.",
+    reglas: ["Cancha: 100-110 m \u00D7 64-75 m, c\u00E9sped natural o sint\u00E9tico","Jugadores: 11 vs 11 (10 + 1 portero), 5 cambios","Tiempo: 2 \u00D7 45 min + descuentos","Pr\u00F3rroga 2\u00D715 si empate en eliminatorias","Bal\u00F3n: 68-70 cm, 410-450 g","Offside: jugador m\u00E1s adelantado que el pen\u00FAltimo defensor","VAR: revisi\u00F3n por video desde 2018"],
+    mundiales: [["Brasil","5","1958, 1962, 1970, 1994, 2002"],["Alemania","4","1954, 1974, 1990, 2014"],["Italia","4","1934, 1938, 1982, 2006"],["Argentina","3","1978, 1986, 2022"],["Francia","2","1998, 2018"],["Uruguay","2","1930, 1950"],["Inglaterra","1","1966"],["Espa\u00F1a","1","2010"]],
+    leyendas: [["\uD83C\uDDE7\uD83C\uDDF7 Pel\u00E9","3 Mundiales (1958, 62, 70)"],["\uD83C\uDDE6\uD83C\uDDF7 Maradona","Mundial 86 + Genio del siglo"],["\uD83C\uDDE6\uD83C\uDDF7 Messi","8 Balones de Oro + Mundial 2022"],["\uD83C\uDDF5\uD83C\uDDF9 Cristiano Ronaldo","5 Champions + 5 Balones de Oro"],["\uD83C\uDDEB\uD83C\uDDF7 Zidane","Mundial 98 + 3 Champions DT"],["\uD83C\uDDF3\uD83C\uDDF1 Cruyff","F\u00FAtbol total + 3 Balones de Oro"],["\uD83C\uDDE9\uD83C\uDDEA Beckenbauer","\u00FAnico campe\u00F3n mundial como jugador y DT"]],
+    topLigas: [["\uD83C\uDDEC\uD83C\uDDE7 Premier League","Inglaterra"],["\uD83C\uDDEA\uD83C\uDDF8 La Liga","Espa\u00F1a"],["\uD83C\uDDEE\uD83C\uDDF9 Serie A","Italia"],["\uD83C\uDDE9\uD83C\uDDEA Bundesliga","Alemania"],["\uD83C\uDDEB\uD83C\uDDF7 Ligue 1","Francia"],["\uD83C\uDDFA\uD83C\uDDF8 MLS","Estados Unidos"]],
+    champions: [["Real Madrid","15"],["AC Milan","7"],["Bayern Munich","6"],["Liverpool","6"],["Barcelona","5"],["Ajax","4"]]
+  },
+  F: {
+    title: "Futbol Femenino",
+    icon: "\u26BD",
+    sub: "Crecimiento explosivo \u00B7 1,1 millones de jugadoras profesionales \u00B7 200+ federaciones FIFA",
+    stats: [["1894","Primer club F"],["1991","Primer Mundial"],["200+","Federaciones"],["2B","Audiencia Mundial 2023"]],
+    historia: "El primer club femenino oficial fue el British Ladies FC en 1894 (Inglaterra). En los a\u00F1os 20 el Dick Kerrs Ladies (UK) reunia 53.000 personas. La FA prohibi\u00F3 el f\u00FAtbol femenino en 1921 hasta 1971. El primer Mundial Femenino oficial fue en China 1991, ganado por Estados Unidos. La final del Mundial 2023 (Espa\u00F1a vs Inglaterra) fue vista por m\u00E1s de 2.000 millones de personas.",
+    reglas: ["Cancha: 100-110 m \u00D7 64-75 m (igual que masculino)","Jugadoras: 11 vs 11 (10 + 1 arquera), 5 cambios","Tiempo: 2 \u00D7 45 min + descuentos","Pr\u00F3rroga 2\u00D715 si empate en eliminatorias","Bal\u00F3n: 68-70 cm, 410-450 g (mismo que masculino)","Offside: igual que masculino","VAR: implementado en Mundial 2023"],
+    mundiales: [["Estados Unidos","4","1991, 1999, 2015, 2019"],["Alemania","2","2003, 2007"],["Noruega","1","1995"],["Jap\u00F3n","1","2011"],["Espa\u00F1a","1","2023"]],
+    leyendas: [["\uD83C\uDDE7\uD83C\uDDF7 Marta","6 veces Mejor del Mundo"],["\uD83C\uDDFA\uD83C\uDDF8 Mia Hamm","2 Mundiales + 158 goles internacionales"],["\uD83C\uDDEA\uD83C\uDDF8 Aitana Bonmat\u00ED","2 Balones de Oro + Mundial 2023"],["\uD83C\uDDEA\uD83C\uDDF8 Alexia Putellas","2 Balones de Oro consecutivos"],["\uD83C\uDDFA\uD83C\uDDF8 Abby Wambach","184 goles internacionales (r\u00E9cord)"],["\uD83C\uDDE8\uD83C\uDDE6 Christine Sinclair","190 goles internacionales (r\u00E9cord absoluto)"],["\uD83C\uDDE9\uD83C\uDDEA Birgit Prinz","3 veces Mejor del Mundo"]],
+    topLigas: [["\uD83C\uDDEC\uD83C\uDDE7 WSL","Inglaterra"],["\uD83C\uDDEA\uD83C\uDDF8 Liga F","Espa\u00F1a"],["\uD83C\uDDFA\uD83C\uDDF8 NWSL","Estados Unidos"],["\uD83C\uDDE9\uD83C\uDDEA Frauen-Bundesliga","Alemania"],["\uD83C\uDDEB\uD83C\uDDF7 Premi\u00E8re Ligue","Francia"],["\uD83C\uDDEE\uD83C\uDDF9 Serie A Femminile","Italia"]],
+    champions: [["Olympique Lyon","8"],["Frankfurt","4"],["FC Barcelona","3"],["Wolfsburg","2"],["Umea IK","2"],["Potsdam","2"]]
+  }
+};
+
+window.renderQueEsContent = function(g){
+  var d = window.QF_DATA[g];
+  if(!d) return "";
+  var statsHTML = d.stats.map(function(s){return "<div class=\"qf-stat\"><span class=\"n\">"+s[0]+"</span><span class=\"l\">"+s[1]+"</span></div>"}).join("");
+  var reglasHTML = d.reglas.map(function(r){return "<li>"+r+"</li>"}).join("");
+  var mundialesHTML = d.mundiales.map(function(m){return "<div class=\"row\"><span><b>"+m[1]+"</b> "+m[0]+"</span><span style=\"opacity:0.65;font-size:12.5px\">"+m[2]+"</span></div>"}).join("");
+  var leyendasHTML = d.leyendas.map(function(l){return "<div class=\"row\"><span>"+l[0]+"</span><span style=\"opacity:0.7;font-size:13px\">"+l[1]+"</span></div>"}).join("");
+  var ligasHTML = d.topLigas.map(function(t){return "<div class=\"row\"><span>"+t[0]+"</span><span style=\"opacity:0.7\">"+t[1]+"</span></div>"}).join("");
+  var champHTML = d.champions.map(function(c){return "<div class=\"row\"><span>"+c[0]+"</span><b>"+c[1]+" t\u00EDtulos</b></div>"}).join("");
+  return '<div class="qf-wrap">'
+    + '<div class="qf-hero"><h1>'+d.icon+' '+d.title+'</h1><div class="sub">'+d.sub+'</div><div class="qf-stats">'+statsHTML+'</div></div>'
+    + '<div class="qf-grid">'
+    + '<div class="qf-card"><h3>\uD83D\uDCDC Historia</h3><p>'+d.historia+'</p></div>'
+    + '<div class="qf-card"><h3>\u26BD Reglas b\u00E1sicas</h3><ul>'+reglasHTML+'</ul></div>'
+    + '<div class="qf-card"><h3>\uD83C\uDFC6 Mundiales '+(g==="F"?"Femeninos":"Masculinos")+' (campeones)</h3>'+mundialesHTML+'</div>'
+    + '<div class="qf-card"><h3>\u2B50 Leyendas</h3>'+leyendasHTML+'</div>'
+    + '<div class="qf-card"><h3>\uD83C\uDF0E Top ligas '+(g==="F"?"femeninas":"masculinas")+'</h3>'+ligasHTML+'</div>'
+    + '<div class="qf-card"><h3>\uD83C\uDFC6 Champions '+(g==="F"?"League F":"League")+' (m\u00E1ximos ganadores)</h3>'+champHTML+'</div>'
+    + '</div></div>';
+};
+
+window.applyQueEsOverride = function(){
+  var main = document.getElementById("football-main");
+  if(!main) return;
+  var queEsBtn = Array.from(document.querySelectorAll('button.league-btn,button[class*="league"]')).find(function(b){return b.textContent.indexOf("Qu\u00E9 es el F")>=0});
+  if(!queEsBtn || !queEsBtn.classList.contains("active")) return;
+  var isF = document.getElementById("sgt-f")?.classList.contains("sgt-active");
+  var g = isF ? "F" : "M";
+  if(main.dataset.qfRendered === g) return;
+  main.innerHTML = window.renderQueEsContent(g);
+  main.dataset.qfRendered = g;
+  // Hide pink banner if it exists
+  var pb = document.getElementById("sgt-fbanner");
+  if(pb) pb.style.display = "none";
+};
+
+/* Restrict wf-card injection to NOT run on Que es el Futbol view */
+(function(){
+  if(typeof window.injectWomensFootballData === "function"){
+    var origInject = window.injectWomensFootballData;
+    window.injectWomensFootballData = function(){
+      var queEsBtn = Array.from(document.querySelectorAll('button.league-btn,button[class*="league"]')).find(function(b){return b.textContent.indexOf("Qu\u00E9 es el F")>=0});
+      if(queEsBtn && queEsBtn.classList.contains("active")) return; // skip on Que es el Futbol view
+      return origInject.apply(this, arguments);
+    };
+  }
+})();
+
+/* Hooks: setSoccerGender + league button clicks + initial load */
+(function(){
+  function clearAndApply(){
+    var main = document.getElementById("football-main");
+    if(main) main.dataset.qfRendered = "";
+    setTimeout(window.applyQueEsOverride, 80);
+  }
+  function tryHookGender(){
+    if(typeof window.setSoccerGender !== "function"){setTimeout(tryHookGender, 200); return;}
+    if(window.setSoccerGender.__qfWrapped) return;
+    var orig = window.setSoccerGender;
+    window.setSoccerGender = function(){
+      var r = orig.apply(this, arguments);
+      clearAndApply();
+      return r;
+    };
+    window.setSoccerGender.__qfWrapped = true;
+  }
+  function hookLeagueBtns(){
+    document.querySelectorAll('button.league-btn').forEach(function(b){
+      if(b.dataset.qfHooked) return;
+      b.dataset.qfHooked = "1";
+      b.addEventListener("click", function(){setTimeout(clearAndApply, 50)});
+    });
+  }
+  document.addEventListener("DOMContentLoaded", function(){
+    setTimeout(function(){tryHookGender(); hookLeagueBtns(); clearAndApply();}, 500);
+    setInterval(hookLeagueBtns, 2000); // re-hook in case of dynamic re-render
+  });
+})();
+</script>
 </body>
 </html>
 
