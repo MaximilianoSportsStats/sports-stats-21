@@ -10190,6 +10190,121 @@ window.applyQueEsOverride = function(){
   });
 })();
 </script>
+
+<style>
+.md-hero{background:linear-gradient(135deg,#a01515 0%,#ee2a2a 100%);color:#fff;border-radius:14px;padding:28px;margin-bottom:18px;box-shadow:0 6px 20px rgba(238,42,42,0.18)}
+.md-hero h1{margin:0 0 6px;font-size:26px;font-weight:800}
+.md-hero .sub{opacity:0.93;font-size:15px}
+.md-cat{margin:18px 0}
+.md-cat h2{margin:0 0 10px;font-size:18px;color:#a01515;display:flex;align-items:center;gap:8px;border-bottom:2px solid #ee2a2a;padding-bottom:6px}
+.md-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px}
+.md-card{background:var(--surface,#fff);border:1px solid var(--border,#eaeaea);border-radius:10px;padding:14px 12px;text-align:center;cursor:pointer;transition:transform 0.15s,box-shadow 0.15s,border-color 0.15s;color:var(--text,#1a1a1a);text-decoration:none;display:block}
+.md-card:hover{transform:translateY(-2px);box-shadow:0 6px 16px rgba(238,42,42,0.12);border-color:#ee2a2a}
+.md-card .ico{font-size:32px;display:block;margin-bottom:6px;line-height:1}
+.md-card .name{font-weight:700;font-size:14px;line-height:1.2}
+.md-card .meta{font-size:11px;color:var(--muted,#888);margin-top:3px;display:block}
+.md-card.new{position:relative}
+.md-card.new::after{content:"NUEVO";position:absolute;top:6px;right:6px;background:#ee2a2a;color:#fff;font-size:9px;font-weight:800;padding:2px 5px;border-radius:4px;letter-spacing:0.5px}
+@media (prefers-color-scheme:dark){.md-card{background:#1a1a1a;border-color:#333;color:#eee}.md-card:hover{border-color:#ee2a2a}}
+</style>
+<script>
+/* Mas Deportes - categorized override */
+window.MD_CATS = [
+  {key:"equipo", name:"Deportes de equipo", icon:"\uD83E\uDD1D", sports:[
+    {n:"Volleyball",i:"\uD83C\uDFD0",m:"Olimpico"},
+    {n:"Cricket",i:"\uD83C\uDFCF",m:"Mundial 2025"},
+    {n:"Handball",i:"\uD83E\uDD3E",m:"Liga ASOBAL"},
+    {n:"Polo",i:"\uD83D\uDC0E",m:"Argentina lider",isNew:true}
+  ]},
+  {key:"raqueta", name:"Deportes de raqueta", icon:"\uD83C\uDFF8", sports:[
+    {n:"Pickleball",i:"\uD83C\uDFD3",m:"Crecimiento explosivo USA",isNew:true},
+    {n:"Bádminton",i:"\uD83C\uDFF8",m:"Asia dominante"},
+    {n:"Squash",i:"\uD83C\uDFC6",m:"Egipto top mundial"},
+    {n:"Tenis Mesa",i:"\uD83C\uDFD3",m:"China histórico"}
+  ]},
+  {key:"individual", name:"Atletismo y resistencia", icon:"\uD83C\uDFC3", sports:[
+    {n:"Atletismo",i:"\uD83C\uDFC3",m:"Mundial / Diamond League"},
+    {n:"Maratón",i:"\uD83C\uDFC5",m:"6 majors mundiales"},
+    {n:"Triatlón",i:"\uD83D\uDEB4",m:"Ironman series"},
+    {n:"Ultramaratón",i:"\u26F0",m:"UTMB / Western States"},
+    {n:"Ciclismo",i:"\uD83D\uDEB2",m:"Tour de France"}
+  ]},
+  {key:"outdoor", name:"Outdoor y aventura", icon:"\uD83C\uDFD4", sports:[
+    {n:"Escalada",i:"\uD83E\uDDD7",m:"Olímpica desde 2020"},
+    {n:"Bouldering",i:"\uD83D\uDDFB",m:"Sin cuerda, V grades",isNew:true},
+    {n:"Surf",i:"\uD83C\uDFC4",m:"WSL Championship Tour",isNew:true},
+    {n:"Skate",i:"\uD83D\uDEF9",m:"Olímpico Tokio 2020"},
+    {n:"Snowboard",i:"\uD83C\uDFC2",m:"X Games + Olimpico"}
+  ]},
+  {key:"combate", name:"Deportes de combate", icon:"\uD83E\uDD4A", sports:[
+    {n:"Esgrima",i:"\uD83E\uDD3A",m:"Olímpico desde 1896",isNew:true}
+  ]},
+  {key:"fuerza", name:"Fuerza y fitness", icon:"\uD83D\uDCAA", sports:[
+    {n:"CrossFit",i:"\uD83C\uDFCB",m:"CrossFit Games",isNew:true},
+    {n:"Halterofilia",i:"\uD83C\uDFCB",m:"Olímpico desde 1896",isNew:true}
+  ]},
+  {key:"ecuestre", name:"Deportes ecuestres", icon:"\uD83C\uDFC7", sports:[
+    {n:"Hípica",i:"\uD83C\uDFC7",m:"FEI World Cup",isNew:true}
+  ]},
+  {key:"mente", name:"Deportes mentales", icon:"\uD83E\uDDE0", sports:[
+    {n:"Ajedrez",i:"\u265E",m:"Carlsen / Ding / Gukesh"}
+  ]},
+  {key:"esports", name:"eSports y digital", icon:"\uD83C\uDFAE", sports:[
+    {n:"League of Legends",i:"\u2694",m:"Worlds anual"},
+    {n:"Counter-Strike",i:"\uD83D\uDCA5",m:"Majors PGL/IEM"},
+    {n:"Dota 2",i:"\u2694",m:"The International"},
+    {n:"FIFA / EA FC",i:"\u26BD",m:"eWorld Cup FIFAe"}
+  ]}
+];
+
+window.renderMasDeportesV2 = function(){
+  var html = '<div class="md-hero"><h1>\uD83D\uDCDA M\u00E1s Deportes</h1><div class="sub">M\u00E1s de 25 disciplinas organizadas por tipo. Click en cualquiera para explorar.</div></div>';
+  window.MD_CATS.forEach(function(cat){
+    html += '<section class="md-cat"><h2>'+cat.icon+' '+cat.name+'</h2><div class="md-grid">';
+    cat.sports.forEach(function(s){
+      html += '<a class="md-card'+(s.isNew?' new':'')+'" onclick="mdSportClick(this);return false" data-sport="'+s.n+'"><span class="ico">'+s.i+'</span><span class="name">'+s.n+'</span><span class="meta">'+(s.m||'')+'</span></a>';
+    });
+    html += '</div></section>';
+  });
+  return html;
+};
+
+window.mdSportClick = function(el){
+  var sport = el.dataset.sport;
+  alert("\uD83C\uDFC6 "+sport+"\n\nEsta disciplina tiene perfil completo proximamente:\n\n\u2022 Calendario y resultados\n\u2022 Top atletas / equipos\n\u2022 Records historicos\n\u2022 Cobertura por liga\n\nPor ahora cliqueala desde el menu principal o navega por las otras secciones.");
+};
+
+window.applyMasDeportesV2 = function(){
+  var activeBtn = document.querySelector('.sport-btn.active');
+  if(!activeBtn) return;
+  var txt = activeBtn.textContent || '';
+  if(!/M.s.{0,3}Deport/i.test(txt)) return;
+  // Find active panel
+  var active = document.querySelector('.tab-panel.active');
+  if(!active) return;
+  if(active.dataset.mdV2) return;
+  active.innerHTML = window.renderMasDeportesV2();
+  active.dataset.mdV2 = "1";
+};
+
+(function(){
+  function hookMasBtn(){
+    var masBtn = Array.from(document.querySelectorAll('.sport-btn')).find(function(b){return /M.s.{0,3}Deport/i.test(b.textContent)});
+    if(!masBtn || masBtn.dataset.mdHooked) return;
+    masBtn.dataset.mdHooked = "1";
+    masBtn.addEventListener("click", function(){
+      var activePanel = document.querySelector('.tab-panel.active');
+      if(activePanel) activePanel.dataset.mdV2 = "";
+      setTimeout(window.applyMasDeportesV2, 80);
+      setTimeout(window.applyMasDeportesV2, 300);
+    });
+  }
+  document.addEventListener("DOMContentLoaded", function(){
+    setTimeout(hookMasBtn, 500);
+    setInterval(hookMasBtn, 3000);
+  });
+})();
+</script>
 </body>
 </html>
 
