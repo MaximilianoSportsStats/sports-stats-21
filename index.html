@@ -10525,6 +10525,75 @@ document.addEventListener("DOMContentLoaded", function(){
   setInterval(window.applyArchitectureV3, 4000); // re-apply if anything overwrites
 });
 </script>
+
+<style>
+/* v4 patches */
+.inicio-hero h1 em, .inicio-hero.hero-carousel h1 em{color:#fff !important;text-shadow:0 2px 12px rgba(0,0,0,0.4)}
+.md-cat{margin:14px 0}
+.md-cat h2{cursor:pointer;user-select:none;transition:opacity 0.15s;display:flex;align-items:center;gap:8px}
+.md-cat h2:hover{opacity:0.78}
+.md-cat h2::after{content:"\25BC";font-size:13px;opacity:0.55;margin-left:auto;transition:transform 0.2s}
+.md-cat.collapsed h2::after{content:"\25B6"}
+.md-cat.collapsed .md-grid{display:none}
+.md-cat .md-count{font-size:12px;opacity:0.55;font-weight:400}
+.md-cat .md-grid{padding-top:10px}
+</style>
+<script>
+/* === SS21 v4 patches === */
+(function(){
+  function updateBtn(btn, emoji, name){
+    var span = btn.querySelector("span");
+    if(!span){span = document.createElement("span");btn.insertBefore(span, btn.firstChild)}
+    span.textContent = emoji;
+    span.removeAttribute("style");
+    Array.from(btn.childNodes).forEach(function(n){if(n.nodeType===3)n.remove()});
+    btn.appendChild(document.createTextNode(" " + name));
+  }
+  function fixNav(){
+    var btns = Array.from(document.querySelectorAll(".sport-btn"));
+    function find(rx){return btns.find(function(b){return rx.test(b.textContent)})}
+    var car = find(/Automovilismo|Carreras/i);
+    if(car && car.dataset.v4 !== "1"){updateBtn(car, "\uD83C\uDFCE", "Carreras");car.dataset.v4 = "1"}
+    var com = find(/Combate|Luchas/i);
+    if(com && com.dataset.v4 !== "1"){updateBtn(com, "\uD83E\uDD4A", "Combate");com.dataset.v4 = "1"}
+    var nat = find(/Natacion|Nataci.n|Acu.ticos/i);
+    if(nat && nat.dataset.v4 !== "1"){updateBtn(nat, "\uD83C\uDFCA", "Nataci\u00F3n");nat.dataset.v4 = "1"}
+    var mas = find(/M.s.{0,3}Deport|Otros.{0,3}Deport/i);
+    if(mas && mas.dataset.v4 !== "1"){updateBtn(mas, "\uD83C\uDFD3", "Otros Deportes");mas.dataset.v4 = "1"}
+  }
+
+  /* Override renderMasDeportesV2 with collapsible categories */
+  function wrapMD(){
+    if(!window.renderMasDeportesV2 || window.renderMasDeportesV2.__v4) return;
+    window.renderMasDeportesV2 = function(){
+      var html = '<div class="md-hero"><h1>\uD83C\uDFD3 Otros Deportes</h1><div class="sub">M\u00E1s de 250 disciplinas organizadas en 16 categor\u00EDas. Click en cada categor\u00EDa para expandir.</div></div>';
+      window.MD_CATS.forEach(function(cat, idx){
+        var count = cat.sports.length;
+        var collapsed = idx > 0 ? " collapsed" : "";
+        html += '<section class="md-cat'+collapsed+'" data-cat="'+cat.key+'"><h2 onclick="window.toggleMdCat(this.parentElement)">'+cat.icon+' '+cat.name+' <span class="md-count">('+count+' deportes)</span></h2><div class="md-grid">';
+        cat.sports.forEach(function(s){
+          html += '<a class="md-card'+(s.isNew?' new':'')+'" onclick="mdSportClick(this);return false" data-sport="'+s.n+'"><span class="ico">'+s.i+'</span><span class="name">'+s.n+'</span></a>';
+        });
+        html += '</div></section>';
+      });
+      return html;
+    };
+    window.renderMasDeportesV2.__v4 = true;
+    /* Reset cache + re-render if currently visible */
+    var active = document.querySelector(".tab-panel.active");
+    if(active && active.dataset.mdV2 === "1"){
+      active.dataset.mdV2 = "";
+      if(typeof window.applyMasDeportesV2 === "function") window.applyMasDeportesV2();
+    }
+  }
+
+  window.toggleMdCat = function(el){el.classList.toggle("collapsed")};
+
+  function tick(){fixNav();wrapMD()}
+  if(document.readyState === "loading"){document.addEventListener("DOMContentLoaded", function(){setTimeout(tick, 700);setInterval(tick, 3000)})}
+  else{setTimeout(tick, 100);setInterval(tick, 3000)}
+})();
+</script>
 </body>
 </html>
 
