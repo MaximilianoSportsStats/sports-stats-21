@@ -10373,7 +10373,7 @@ window.renderEventosGlobales = function(){
   window.EG_DATA.forEach(function(cat){
     html += '<section class="eg-cat"><h2>'+cat.icon+' '+cat.name+'</h2><div class="eg-grid">';
     cat.events.forEach(function(e){
-      html += '<div class="eg-item" onclick="alert(\''+e.replace(/\'/g,\'\\\\\'\')+\' - Pagina del evento proximamente\')"><span class="ico">'+cat.icon+'</span><span>'+e+'</span></div>';
+      html += '<div class="eg-item" data-evt="' + e + '"><span class="ico">' + cat.icon + '</span><span>' + e + '</span></div>';
     });
     html += '</div></section>';
   });
