@@ -10305,6 +10305,226 @@ window.applyMasDeportesV2 = function(){
   });
 })();
 </script>
+
+<style>
+/* Eventos Globales section */
+.eg-hero{background:linear-gradient(135deg,#a01515 0%,#ee2a2a 100%);color:#fff;border-radius:14px;padding:28px;margin-bottom:18px;box-shadow:0 6px 20px rgba(238,42,42,0.18)}
+.eg-hero h1{margin:0 0 6px;font-size:26px;font-weight:800}
+.eg-hero .sub{opacity:0.93;font-size:15px}
+.eg-cat{margin:18px 0}
+.eg-cat h2{margin:0 0 10px;font-size:18px;color:#a01515;display:flex;align-items:center;gap:8px;border-bottom:2px solid #ee2a2a;padding-bottom:6px}
+.eg-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px}
+.eg-item{background:var(--surface,#fff);border:1px solid var(--border,#eaeaea);border-radius:8px;padding:10px 12px;cursor:pointer;transition:all 0.15s;font-size:13.5px;color:var(--text,#1a1a1a);display:flex;align-items:center;gap:6px}
+.eg-item:hover{border-color:#ee2a2a;background:rgba(238,42,42,0.05);transform:translateX(2px)}
+.eg-item .ico{font-size:16px}
+@media (prefers-color-scheme:dark){.eg-item{background:#1a1a1a;border-color:#333;color:#eee}}
+/* Stub principal sport pages */
+.stub-hero{background:linear-gradient(135deg,#a01515,#ee2a2a);color:#fff;border-radius:14px;padding:30px;margin-bottom:18px;text-align:center}
+.stub-hero h1{margin:0 0 8px;font-size:32px}
+.stub-hero p{margin:0;opacity:0.9}
+.stub-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-top:16px}
+.stub-card{background:var(--surface,#fff);border:1px solid var(--border,#eaeaea);border-radius:12px;padding:18px;color:var(--text,#1a1a1a)}
+.stub-card h3{margin:0 0 8px;color:#a01515}
+.stub-card p{margin:0;font-size:14px;color:var(--muted,#555);line-height:1.5}
+@media (prefers-color-scheme:dark){.stub-card{background:#1a1a1a;border-color:#333;color:#eee}.stub-card p{color:#bbb}}
+</style>
+<script>
+/* === SS21 ARCHITECTURE V3 — top nav restructure + Eventos Globales === */
+
+/* 1. New principal sports stub data */
+window.NEW_PRINCIPAL = {
+  cricket: {emoji:"\uD83C\uDFCF", name:"Cricket", desc:"Deporte de bate y bola con ~2.500 millones de seguidores. India, Australia, Inglaterra dominan.", variants:["Test Cricket","ODI (One Day International)","T20","Indoor Cricket"], events:["ICC Cricket World Cup","T20 World Cup","IPL (Indian Premier League)","The Ashes"]},
+  volleyball: {emoji:"\uD83C\uDFD0", name:"Volleyball", desc:"Deporte olimpico desde 1964. Brasil, Italia, Polonia y EE.UU. son potencias historicas.", variants:["Voleibol sala 6v6","Beach Volleyball 2v2","Snow Volleyball","Sitting Volleyball"], events:["Mundial FIVB","Volleyball Nations League","Olympic Volleyball Tournament","Champions League CEV"]},
+  atletismo: {emoji:"\uD83C\uDFC3", name:"Atletismo", desc:"La madre de todos los deportes. ~80 disciplinas entre pista, campo, ruta y cross country.", variants:["Pista y campo","Ruta (maraton, 10K)","Cross country","Marcha atletica","Trail running"], events:["Mundial de Atletismo","Diamond League","World Marathon Majors","Olympic Track & Field"]}
+};
+
+window.renderStubSport = function(key){
+  var d = window.NEW_PRINCIPAL[key];
+  if(!d) return "";
+  var variants = d.variants.map(function(v){return "<li>"+v+"</li>"}).join("");
+  var events = d.events.map(function(e){return "<li>"+e+"</li>"}).join("");
+  return '<div class="stub-hero"><h1>'+d.emoji+' '+d.name+'</h1><p>'+d.desc+'</p></div>'
+    + '<div class="stub-grid">'
+    + '<div class="stub-card"><h3>\uD83C\uDFAF Variantes principales</h3><ul>'+variants+'</ul></div>'
+    + '<div class="stub-card"><h3>\uD83C\uDFC6 Eventos top</h3><ul>'+events+'</ul></div>'
+    + '<div class="stub-card"><h3>\uD83D\uDCCA Proximamente</h3><p>Tablas de posiciones, records historicos, calendario en vivo, top atletas, estadisticas detalladas. Estamos cargando data oficial.</p></div>'
+    + '</div>';
+};
+
+/* 2. Eventos Globales data */
+window.EG_DATA = [
+  {key:"multi", icon:"\uD83C\uDF1F", name:"Multideportivos", events:["Juegos Olimpicos Verano","Juegos Olimpicos Invierno","Juegos Paralimpicos","Juegos Panamericanos","Juegos Europeos","Juegos Asiaticos","Juegos Africanos","Juegos Commonwealth","Universiada FISU","World Games","X Games"]},
+  {key:"futbol", icon:"\u26BD", name:"Futbol", events:["Mundial FIFA","Mundial Femenino FIFA","Champions League","Europa League","Copa Libertadores","Copa Sudamericana","Eurocopa","Copa America","Copa Oro","Nations League","Mundial de Clubes"]},
+  {key:"atletismo", icon:"\uD83C\uDFC3", name:"Atletismo y running", events:["Mundial de Atletismo","Diamond League","World Athletics Indoor","World Marathon Majors","Boston Marathon","London Marathon","Berlin Marathon","Chicago Marathon","NYC Marathon","Tokyo Marathon"]},
+  {key:"ciclismo", icon:"\uD83D\uDEB4", name:"Ciclismo", events:["Tour de France","Giro d'Italia","Vuelta a Espana","Tour de France Femmes","Mundial UCI","Paris-Roubaix","Milan-San Remo","Liege-Bastogne-Liege","Tour de Suisse"]},
+  {key:"tenis", icon:"\uD83C\uDFBE", name:"Tenis", events:["Australian Open","Roland Garros","Wimbledon","US Open","ATP Finals","WTA Finals","Davis Cup","Billie Jean King Cup","Laver Cup","Masters 1000"]},
+  {key:"motor", icon:"\uD83C\uDFCE", name:"Motor", events:["Formula 1 World Championship","Monaco GP","Indy 500","Daytona 500","24 Hours of Le Mans","World Rally Championship","Dakar Rally","MotoGP World Championship","Formula E"]},
+  {key:"basket", icon:"\uD83C\uDFC0", name:"Basketball", events:["NBA Finals","FIBA Basketball World Cup","EuroLeague Final Four","March Madness","Olympic Basketball","Basketball Champions League"]},
+  {key:"beis", icon:"\u26BE", name:"Beisbol", events:["World Series","World Baseball Classic","Serie del Caribe","College World Series","Premier12"]},
+  {key:"hockey", icon:"\uD83C\uDFD2", name:"Hockey", events:["Stanley Cup","Mundial IIHF","Olympic Ice Hockey","Hockey World Cup","Champions Trophy"]},
+  {key:"golf", icon:"\u26F3", name:"Golf", events:["The Masters","PGA Championship","US Open","The Open Championship","Ryder Cup","Presidents Cup","Solheim Cup"]},
+  {key:"rugbycricket", icon:"\uD83C\uDFC9", name:"Rugby y Cricket", events:["Rugby World Cup","Six Nations","The Rugby Championship","British and Irish Lions Tour","Cricket World Cup","T20 World Cup","IPL","The Ashes"]},
+  {key:"combate", icon:"\uD83E\uDD4A", name:"Combate", events:["UFC numbered events","Carteleras de boxeo","Mundiales WBC/WBA/IBF/WBO","ONE Championship","Bellator/PFL","Mundial de Judo","Mundial de Taekwondo","Mundial de Karate"]},
+  {key:"invierno", icon:"\u26C4", name:"Invierno y extremos", events:["Winter X Games","FIS Alpine Ski World Cup","Four Hills Tournament","Biathlon World Cup","Snowboard World Championships","Red Bull Rampage","WSL Championship Tour"]}
+];
+
+window.renderEventosGlobales = function(){
+  var html = '<div class="eg-hero"><h1>\uD83C\uDFC6 Eventos Globales</h1><div class="sub">Las competiciones, torneos y campeonatos mas importantes del mundo. Conectados con sus deportes correspondientes.</div></div>';
+  window.EG_DATA.forEach(function(cat){
+    html += '<section class="eg-cat"><h2>'+cat.icon+' '+cat.name+'</h2><div class="eg-grid">';
+    cat.events.forEach(function(e){
+      html += '<div class="eg-item" onclick="alert(\''+e.replace(/\'/g,\'\\\\\'\')+\' - Pagina del evento proximamente\')"><span class="ico">'+cat.icon+'</span><span>'+e+'</span></div>';
+    });
+    html += '</div></section>';
+  });
+  return html;
+};
+
+/* 3. New Mas Deportes taxonomy (16 categories from PDF, no duplicates with principal) */
+window.MD_CATS = [
+  {key:"equipo2", name:"Equipo y balon (no principales)", icon:"\uD83E\uDD1D", sports:[
+    {n:"Balonmano",i:"\uD83E\uDD3E"},{n:"Beach Handball",i:"\uD83C\uDFD6"},{n:"Waterpolo",i:"\uD83E\uDD3D"},{n:"Lacrosse",i:"\uD83E\uDD4D"},{n:"Netball",i:"\uD83C\uDFC0"},{n:"Korfball",i:"\uD83C\uDFC0"},{n:"Ultimate Frisbee",i:"\uD83E\uDD4F"},{n:"Dodgeball",i:"\u26BD"},{n:"Floorball",i:"\uD83C\uDFD2"},{n:"Bandy",i:"\uD83C\uDFD2"},{n:"Polo",i:"\uD83D\uDC0E"},{n:"Horseball",i:"\uD83D\uDC0E"},{n:"Tchoukball",i:"\uD83C\uDFD0"},{n:"Bossaball",i:"\uD83C\uDFD0"},{n:"Footvolley",i:"\uD83C\uDFD0"},{n:"Teqball",i:"\u26BD"},{n:"Sepak Takraw",i:"\uD83E\uDD4B"},{n:"Kabaddi",i:"\uD83E\uDD3C"},{n:"Hurling",i:"\u2618"},{n:"Shinty",i:"\u2618"},{n:"Futbol Gaelico",i:"\u26BD"},{n:"Australian Rules Football",i:"\uD83C\uDFC8"},{n:"Pesapallo",i:"\u26BE"},{n:"Quidditch/Quadball",i:"\uD83E\uDDD9"}
+  ]},
+  {key:"raqueta2", name:"Raqueta, pala, pared y mesa (no principales)", icon:"\uD83C\uDFF8", sports:[
+    {n:"Pickleball",i:"\uD83C\uDFD3",isNew:true},{n:"Squash",i:"\uD83C\uDFC6"},{n:"Racquetball",i:"\uD83C\uDFF8"},{n:"Badminton",i:"\uD83C\uDFF8"},{n:"Air Badminton",i:"\uD83C\uDFF8"},{n:"Tenis de Mesa",i:"\uD83C\uDFD3"},{n:"Fronton",i:"\uD83C\uDFC6"},{n:"Pelota Vasca",i:"\uD83C\uDFC6"},{n:"Jai Alai",i:"\uD83C\uDFC6"},{n:"Pelota Valenciana",i:"\uD83C\uDFC6"},{n:"Pelota Mixteca",i:"\uD83C\uDFC6"},{n:"Paleta",i:"\uD83C\uDFD3"},{n:"Frescobol",i:"\uD83C\uDFD6"},{n:"Crossminton/Speedminton",i:"\uD83C\uDFF8"},{n:"American Handball",i:"\uD83E\uDD3E"},{n:"Australian Handball",i:"\uD83E\uDD3E"},{n:"Ball Badminton",i:"\uD83C\uDFF8"}
+  ]},
+  {key:"combate2", name:"Artes marciales y combate (no MMA/boxeo)", icon:"\uD83E\uDD4B", sports:[
+    {n:"Judo",i:"\uD83E\uDD4B"},{n:"Karate",i:"\uD83E\uDD4B"},{n:"Taekwondo",i:"\uD83E\uDD4B"},{n:"Muay Thai",i:"\uD83E\uDD4A"},{n:"Kickboxing",i:"\uD83E\uDD4A"},{n:"Jiu-Jitsu Brasileno",i:"\uD83E\uDD4B"},{n:"Lucha Olimpica",i:"\uD83E\uDD3C"},{n:"Lucha Grecorromana",i:"\uD83E\uDD3C"},{n:"Freestyle Wrestling",i:"\uD83E\uDD3C"},{n:"Sambo",i:"\uD83E\uDD4B"},{n:"Sumo",i:"\uD83E\uDD3C"},{n:"Esgrima",i:"\uD83E\uDD3A"},{n:"Kendo",i:"\uD83E\uDD3A"},{n:"Aikido",i:"\uD83E\uDD4B"},{n:"Wushu/Kung Fu",i:"\uD83E\uDD4B"},{n:"Capoeira",i:"\uD83E\uDD7A"},{n:"Sanda",i:"\uD83E\uDD4B"},{n:"Arnis",i:"\uD83E\uDD4B"},{n:"Grappling",i:"\uD83E\uDD3C"},{n:"Krav Maga",i:"\uD83E\uDD4A"},{n:"Lucha Canaria",i:"\uD83E\uDD3C"},{n:"Lucha Leonesa",i:"\uD83E\uDD3C"}
+  ]},
+  {key:"motor2", name:"Motor y velocidad (no F1/MotoGP)", icon:"\uD83C\uDFCD", sports:[
+    {n:"Motociclismo",i:"\uD83C\uDFCD"},{n:"MotoGP",i:"\uD83C\uDFCD"},{n:"Superbike",i:"\uD83C\uDFCD"},{n:"Motocross",i:"\uD83C\uDFCD"},{n:"Supercross",i:"\uD83C\uDFCD"},{n:"Enduro",i:"\uD83C\uDFCD"},{n:"Trial",i:"\uD83C\uDFCD"},{n:"Speedway",i:"\uD83C\uDFCD"},{n:"Supermoto",i:"\uD83C\uDFCD"},{n:"Jet Ski",i:"\uD83D\uDEA4"},{n:"Powerboat",i:"\uD83D\uDEE5"},{n:"Motonautica",i:"\uD83D\uDEE5"},{n:"Air Racing",i:"\u2708"},{n:"Aerobatics",i:"\u2708"},{n:"Drone Racing",i:"\uD83D\uDEF8"},{n:"Lawn Mower Racing",i:"\uD83C\uDFCE"},{n:"Banger Racing",i:"\uD83D\uDE97"},{n:"Autospeedway",i:"\uD83C\uDFCE"}
+  ]},
+  {key:"fitness", name:"Running, fuerza y fitness", icon:"\uD83D\uDCAA", sports:[
+    {n:"Trail Running",i:"\u26F0",isNew:true},{n:"Ultramaraton",i:"\uD83C\uDFC5"},{n:"OCR/Spartan Race",i:"\uD83D\uDCAA"},{n:"CrossFit",i:"\uD83C\uDFCB",isNew:true},{n:"Powerlifting",i:"\uD83C\uDFCB"},{n:"Halterofilia",i:"\uD83C\uDFCB",isNew:true},{n:"Strongman",i:"\uD83D\uDCAA"},{n:"Arm Wrestling",i:"\uD83D\uDCAA"},{n:"Bodybuilding",i:"\uD83D\uDCAA"},{n:"Functional Fitness",i:"\uD83C\uDFCB"},{n:"Stair Climbing",i:"\uD83C\uDFC3"},{n:"Skyrunning",i:"\u26F0"}
+  ]},
+  {key:"acuat2", name:"Acuaticos (no natacion)", icon:"\uD83C\uDF0A", sports:[
+    {n:"Clavados/Saltos",i:"\uD83C\uDFCA"},{n:"Natacion Artistica",i:"\uD83C\uDFCA"},{n:"Surf",i:"\uD83C\uDFC4",isNew:true},{n:"Bodyboard",i:"\uD83C\uDFC4"},{n:"Kitesurf",i:"\uD83C\uDFC4"},{n:"Windsurf",i:"\uD83C\uDFC4"},{n:"Wakeboard",i:"\uD83C\uDFC4"},{n:"Wakesurf",i:"\uD83C\uDFC4"},{n:"Esqui Acuatico",i:"\uD83C\uDFC4"},{n:"Remo",i:"\uD83D\uDEA3"},{n:"Canotaje/Piraguismo",i:"\uD83D\uDEA3"},{n:"Kayak",i:"\uD83D\uDEF6"},{n:"Kayak Polo",i:"\uD83D\uDEF6"},{n:"Rafting",i:"\uD83D\uDEA3"},{n:"Vela",i:"\u26F5"},{n:"Buceo Deportivo",i:"\uD83E\uDD3F"},{n:"Apnea/Freediving",i:"\uD83E\uDD3F"},{n:"Pesca Deportiva",i:"\uD83C\uDFA3"},{n:"Hockey Subacuatico",i:"\uD83E\uDD3F"},{n:"Rugby Subacuatico",i:"\uD83E\uDD3F"},{n:"Finswimming",i:"\uD83C\uDFCA"}
+  ]},
+  {key:"invierno", name:"Invierno y hielo", icon:"\u26C4", sports:[
+    {n:"Esqui Alpino",i:"\u26F7"},{n:"Esqui Fondo",i:"\u26F7"},{n:"Esqui Freestyle",i:"\u26F7"},{n:"Salto de Esqui",i:"\u26F7"},{n:"Combinada Nordica",i:"\u26F7"},{n:"Biatlon",i:"\uD83C\uDFC2"},{n:"Snowboard",i:"\uD83C\uDFC2"},{n:"Curling",i:"\uD83E\uDD4C"},{n:"Patinaje Artistico",i:"\u26F8"},{n:"Patinaje Velocidad",i:"\u26F8"},{n:"Short Track",i:"\u26F8"},{n:"Luge",i:"\uD83D\uDEF7"},{n:"Skeleton",i:"\uD83D\uDEF7"},{n:"Bobsleigh",i:"\uD83D\uDEF7"},{n:"Bandy",i:"\uD83C\uDFD2"},{n:"Broomball",i:"\uD83C\uDFD2"},{n:"Ski Mountaineering",i:"\u26F0"},{n:"Snowkiting",i:"\uD83C\uDFC2"},{n:"Ice Climbing",i:"\uD83E\uDDD7"},{n:"Ringette",i:"\u26F8"}
+  ]},
+  {key:"ciclismo2", name:"Ciclismo, ruedas y tabla", icon:"\uD83D\uDEB2", sports:[
+    {n:"Ciclismo Ruta",i:"\uD83D\uDEB4"},{n:"Ciclismo Pista",i:"\uD83D\uDEB4"},{n:"MTB",i:"\uD83D\uDEB5"},{n:"BMX Racing",i:"\uD83D\uDEB2"},{n:"BMX Freestyle",i:"\uD83D\uDEB2"},{n:"Gravel",i:"\uD83D\uDEB4"},{n:"Ciclocross",i:"\uD83D\uDEB4"},{n:"Downhill",i:"\uD83D\uDEB5"},{n:"Trial Bike",i:"\uD83D\uDEB4"},{n:"Cycle Ball",i:"\uD83D\uDEB2"},{n:"Inline Skating",i:"\u26F8"},{n:"Aggressive Inline",i:"\u26F8"},{n:"Roller Derby",i:"\u26F8"},{n:"Skateboarding",i:"\uD83D\uDEF9"},{n:"Longboard",i:"\uD83D\uDEF9"},{n:"Mountainboarding",i:"\uD83D\uDEF9"},{n:"Scooter Freestyle",i:"\uD83D\uDEF4"},{n:"Waveboard",i:"\uD83D\uDEF9"}
+  ]},
+  {key:"gim", name:"Gimnasia, acrobacia y danza", icon:"\uD83E\uDD38", sports:[
+    {n:"Gimnasia Artistica",i:"\uD83E\uDD38"},{n:"Gimnasia Ritmica",i:"\uD83E\uDD38"},{n:"Trampolin",i:"\uD83E\uDD38"},{n:"Acrobatica",i:"\uD83E\uDD38"},{n:"Aerobica",i:"\uD83E\uDD38"},{n:"Acroski",i:"\u26F7"},{n:"Aesthetic Group Gymnastics",i:"\uD83E\uDD38"},{n:"Parkour",i:"\uD83C\uDFC3"},{n:"Freerunning",i:"\uD83C\uDFC3"},{n:"Cheerleading",i:"\uD83D\uDCE3"},{n:"Breaking",i:"\uD83D\uDD7A"},{n:"Danza Deportiva",i:"\uD83D\uDC83"},{n:"Pole Sport",i:"\uD83E\uDD38"},{n:"Rope Skipping",i:"\uD83E\uDEA2"},{n:"Acroyoga",i:"\uD83E\uDDD8"}
+  ]},
+  {key:"prec", name:"Precision, punteria y salon", icon:"\uD83C\uDFAF", sports:[
+    {n:"Tiro con Arco",i:"\uD83C\uDFF9"},{n:"3D Archery",i:"\uD83C\uDFF9"},{n:"Field Archery",i:"\uD83C\uDFF9"},{n:"Tiro Deportivo",i:"\uD83D\uDD2B"},{n:"Tiro al Plato",i:"\uD83D\uDD2B"},{n:"Dardos",i:"\uD83C\uDFAF"},{n:"Bowling",i:"\uD83C\uDFB3"},{n:"Bolos",i:"\uD83C\uDFB3"},{n:"Billar",i:"\uD83C\uDFB1"},{n:"Snooker",i:"\uD83C\uDFB1"},{n:"Pool",i:"\uD83C\uDFB1"},{n:"Carom Billiards",i:"\uD83C\uDFB1"},{n:"Petanca",i:"\uD83E\uDD4E"},{n:"Bochas",i:"\uD83E\uDD4E"},{n:"Boccia",i:"\uD83E\uDD4E"},{n:"Croquet",i:"\uD83E\uDD4E"},{n:"Axe Throwing",i:"\uD83E\uDE93"},{n:"Herradura",i:"\uD83C\uDFAF"},{n:"Shuffleboard",i:"\uD83C\uDFAF"},{n:"Laser Tag",i:"\uD83D\uDD2B"},{n:"Paintball",i:"\uD83C\uDFA8"},{n:"Airsoft",i:"\uD83D\uDD2B"}
+  ]},
+  {key:"aventura", name:"Aventura, aire y montana", icon:"\u26F0", sports:[
+    {n:"Escalada Deportiva",i:"\uD83E\uDDD7"},{n:"Bouldering",i:"\uD83D\uDDFB",isNew:true},{n:"Speed Climbing",i:"\uD83E\uDDD7"},{n:"Montanismo",i:"\u26F0"},{n:"Alpinismo",i:"\u26F0"},{n:"Orientacion",i:"\uD83E\uDDED"},{n:"Carreras de Aventura",i:"\u26F0"},{n:"Canyoning",i:"\uD83C\uDF0A"},{n:"Abseiling/Rappel",i:"\u26F0"},{n:"Paracaidismo",i:"\uD83E\uDE82"},{n:"BASE Jumping",i:"\uD83E\uDE82"},{n:"Parapente",i:"\uD83E\uDE82"},{n:"Ala Delta",i:"\u2708"},{n:"Ballooning",i:"\uD83C\uDF88"},{n:"High Diving",i:"\uD83C\uDFCA"},{n:"Cliff Diving",i:"\uD83C\uDFCA"},{n:"Slackline/Highline",i:"\uD83C\uDFAA"}
+  ]},
+  {key:"ecu", name:"Ecuestres y con animales", icon:"\uD83C\uDFC7", sports:[
+    {n:"Equitacion",i:"\uD83C\uDFC7",isNew:true},{n:"Salto Ecuestre",i:"\uD83C\uDFC7"},{n:"Doma Clasica",i:"\uD83D\uDC0E"},{n:"Concurso Completo",i:"\uD83C\uDFC7"},{n:"Carreras de Caballos",i:"\uD83C\uDFC7"},{n:"Rodeo",i:"\uD83E\uDD20"},{n:"Barrel Racing",i:"\uD83D\uDC0E"},{n:"Charreria",i:"\uD83E\uDD20"},{n:"Endurance Ecuestre",i:"\uD83D\uDC0E"},{n:"Arena Polo",i:"\uD83D\uDC0E"},{n:"Canicross",i:"\uD83D\uDC15"},{n:"Agility Canino",i:"\uD83D\uDC15"},{n:"Trineo con Perros",i:"\uD83D\uDC15"},{n:"Carreras de Camellos",i:"\uD83D\uDC2A"},{n:"Colombofilia",i:"\uD83D\uDD4A"}
+  ]},
+  {key:"multi", name:"Multideportes y combinados", icon:"\uD83C\uDFC5", sports:[
+    {n:"Triatlon",i:"\uD83D\uDEB4"},{n:"Duatlon",i:"\uD83C\uDFC3"},{n:"Acuatlon",i:"\uD83C\uDFCA"},{n:"Aquabike",i:"\uD83D\uDEB4"},{n:"Biathle",i:"\uD83C\uDFC3"},{n:"Pentatlon Moderno",i:"\uD83C\uDFC5"},{n:"Aeronautical Pentathlon",i:"\u2708"},{n:"Swimrun",i:"\uD83C\uDFCA"},{n:"Adventure Racing",i:"\u26F0"},{n:"Tetrathlon",i:"\uD83C\uDFC5"},{n:"Heptatlon/Decatlon",i:"\uD83C\uDFC3"}
+  ]},
+  {key:"mente", name:"Mentales, electronicos y phygital", icon:"\uD83E\uDDE0", sports:[
+    {n:"Ajedrez",i:"\u265E"},{n:"Go",i:"\u26AB"},{n:"Damas",i:"\u26AB"},{n:"Bridge",i:"\uD83C\uDCCF"},{n:"Poker Deportivo",i:"\uD83C\uDCCF"},{n:"League of Legends",i:"\u2694"},{n:"Counter-Strike",i:"\uD83D\uDCA5"},{n:"Dota 2",i:"\u2694"},{n:"FIFA/EA FC",i:"\u26BD"},{n:"Sim Racing",i:"\uD83C\uDFCE"},{n:"Speedcubing",i:"\uD83E\uDDE9"},{n:"RoboCup",i:"\uD83E\uDD16"},{n:"Ajedrez-Boxeo",i:"\u265E"},{n:"Phygital Sports",i:"\uD83C\uDFAE"},{n:"Fantasy Sports",i:"\uD83D\uDCCA"}
+  ]},
+  {key:"para", name:"Paralimpicos y adaptados", icon:"\u267F", sports:[
+    {n:"Atletismo Paralimpico",i:"\uD83C\uDFC3"},{n:"Natacion Paralimpica",i:"\uD83C\uDFCA"},{n:"Basketball en Silla",i:"\u267F"},{n:"Rugby en Silla",i:"\u267F"},{n:"Tenis en Silla",i:"\u267F"},{n:"Futbol para Ciegos",i:"\u26BD"},{n:"Goalball",i:"\u26BD"},{n:"Boccia",i:"\u267F"},{n:"Para Taekwondo",i:"\uD83E\uDD4B"},{n:"Para Judo",i:"\uD83E\uDD4B"},{n:"Para Ciclismo",i:"\u267F"},{n:"Para Remo",i:"\u267F"},{n:"Para Tiro con Arco",i:"\uD83C\uDFF9"},{n:"Para Powerlifting",i:"\uD83C\uDFCB"},{n:"Para Snowboard",i:"\uD83C\uDFC2"},{n:"Para Esqui Alpino",i:"\u26F7"},{n:"Para Hockey Hielo",i:"\uD83C\uDFD2"},{n:"Amputee Football",i:"\u26BD"},{n:"AFL Wheelchair",i:"\u267F"}
+  ]},
+  {key:"reg", name:"Regionales, tradicionales y emergentes", icon:"\uD83C\uDF0D", sports:[
+    {n:"Calva",i:"\uD83C\uDFAF"},{n:"Rana/Sapo",i:"\uD83D\uDC38"},{n:"Wood Chopping",i:"\uD83E\uDE93"},{n:"Caber Toss",i:"\uD83E\uDDF1"},{n:"Buzkashi",i:"\uD83D\uDC0E"},{n:"Kok-Boru",i:"\uD83D\uDC0E"},{n:"Pato Argentino",i:"\uD83D\uDC0E"},{n:"Chinlone",i:"\uD83E\uDD4B"},{n:"Sepak Bola Api",i:"\uD83D\uDD25"},{n:"Yukigassen",i:"\u2744"}
+  ]}
+];
+
+/* 4. Top nav restructure - rename + hide + add new buttons */
+window.applyArchitectureV3 = function(){
+  var navContainer = document.querySelector(".sport-nav,.sports-nav,nav");
+  if(!navContainer) return;
+  // Find all sport-btn buttons
+  var btns = Array.from(document.querySelectorAll(".sport-btn"));
+  if(btns.length === 0) return;
+  if(navContainer.dataset.v3Applied === "1") return;
+
+  // Helper: rename a button (find by current text contains)
+  function rename(matcher, newText, newEmoji){
+    var btn = btns.find(function(b){return matcher.test(b.textContent)});
+    if(!btn) return;
+    var emojiSpan = btn.querySelector("span");
+    if(emojiSpan && newEmoji) emojiSpan.textContent = newEmoji;
+    // Replace text content keeping span
+    var nodes = Array.from(btn.childNodes);
+    nodes.forEach(function(n){if(n.nodeType===3) n.textContent = " " + newText});
+  }
+  rename(/Carreras/i, "Automovilismo", "\uD83C\uDFCE");
+  rename(/Luchas/i, "Combate", "\uD83E\uDD4A");
+  rename(/Acu.ticos/i, "Natacion", "\uD83C\uDFCA");
+  // Hide JJOO
+  var jjBtn = btns.find(function(b){return /JJOO|Olympic/i.test(b.textContent)});
+  if(jjBtn) jjBtn.style.display = "none";
+
+  // Add new principal buttons before "Mas Deportes"
+  var masBtn = btns.find(function(b){return /M.s.{0,3}Deport/i.test(b.textContent)});
+  if(!masBtn) return;
+
+  function makeNewBtn(emoji, name, key){
+    var b = document.createElement("button");
+    b.className = "sport-btn";
+    b.dataset.v3 = key;
+    b.innerHTML = '<span>'+emoji+'</span> '+name;
+    b.onclick = function(){window.showStubSport(key, b)};
+    return b;
+  }
+
+  if(!document.querySelector('[data-v3="cricket"]')){
+    masBtn.parentNode.insertBefore(makeNewBtn("\uD83C\uDFCF","Cricket","cricket"), masBtn);
+  }
+  if(!document.querySelector('[data-v3="volleyball"]')){
+    masBtn.parentNode.insertBefore(makeNewBtn("\uD83C\uDFD0","Volleyball","volleyball"), masBtn);
+  }
+  if(!document.querySelector('[data-v3="atletismo"]')){
+    masBtn.parentNode.insertBefore(makeNewBtn("\uD83C\uDFC3","Atletismo","atletismo"), masBtn);
+  }
+  // Eventos Globales button - after Mas Deportes
+  if(!document.querySelector('[data-v3="eventos"]')){
+    var eg = document.createElement("button");
+    eg.className = "sport-btn";
+    eg.dataset.v3 = "eventos";
+    eg.innerHTML = '<span>\uD83C\uDFC6</span> Eventos Globales';
+    eg.onclick = function(){window.showEventosGlobales(eg)};
+    masBtn.parentNode.insertBefore(eg, masBtn.nextSibling);
+  }
+  navContainer.dataset.v3Applied = "1";
+};
+
+/* 5. Stub sport handler - hides all panels, creates a temporary panel */
+function v3ShowCustomPanel(html, btn){
+  document.querySelectorAll(".sport-btn").forEach(function(b){b.classList.remove("active")});
+  if(btn) btn.classList.add("active");
+  document.querySelectorAll(".tab-panel").forEach(function(p){p.classList.remove("active")});
+  var sb = document.getElementById("sidebar");
+  if(sb) sb.style.display = "none";
+  // Create or reuse v3-panel
+  var p = document.getElementById("v3-panel");
+  if(!p){
+    p = document.createElement("div");
+    p.id = "v3-panel";
+    p.className = "tab-panel";
+    var main = document.querySelector("main.main");
+    if(main) main.appendChild(p);
+  }
+  p.innerHTML = html;
+  p.classList.add("active");
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+window.showStubSport = function(key, btn){
+  v3ShowCustomPanel(window.renderStubSport(key), btn);
+};
+window.showEventosGlobales = function(btn){
+  v3ShowCustomPanel(window.renderEventosGlobales(), btn);
+};
+
+/* Init */
+document.addEventListener("DOMContentLoaded", function(){
+  setTimeout(window.applyArchitectureV3, 600);
+  setInterval(window.applyArchitectureV3, 4000); // re-apply if anything overwrites
+});
+</script>
 </body>
 </html>
 
