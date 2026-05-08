@@ -814,35 +814,53 @@ body { background: var(--bg); color: var(--text); font-family: 'Inter','Segoe UI
   </div>
 </section>
       <div class="inicio-features">
-        <div class="inicio-feature"><span class="num">13</span><span class="label">Deportes principales</span></div>
-        <div class="inicio-feature"><span class="num">16+</span><span class="label">Disciplinas extra</span></div>
-        <div class="inicio-feature"><span class="num">130+</span><span class="label">A&ntilde;os de historia</span></div>
-        <div class="inicio-feature"><span class="num">M / F</span><span class="label">Toggle por liga</span></div>
-      </div>
+    <div class="inicio-feature"><span class="num">15</span><span class="label">Deportes principales</span></div>
+    <div class="inicio-feature"><span class="num">250+</span><span class="label">Otros deportes</span></div>
+    <div class="inicio-feature"><span class="num">130+</span><span class="label">A&ntilde;os de historia</span></div>
+    <div class="inicio-feature"><span class="num">M / F</span><span class="label">Toggle por liga</span></div>
+  </div>
       <section class="inicio-panels">
-        <article class="inicio-panel">
-          <div class="inicio-panel-icon">&#128202;</div>
-          <h3>&iquest;Qu&eacute; es Sports Stats 21?</h3>
-          <p>La plataforma definitiva con estad&iacute;sticas de 13 deportes: f&uacute;tbol, tenis, F1, NBA, NFL, MLB, NHL, JJOO y m&aacute;s. Datos hist&oacute;ricos desde 1888 hasta hoy, con toggle masculino/femenino en cada liga.</p>
-        </article>
-        <article class="inicio-panel">
-          <div class="inicio-panel-icon">&#127381;</div>
-          <h3>Novedades</h3>
-          <ul>
-            <li>Logo nuevo + favicon actualizado</li>
-            <li>Toggle M / F en cada liga</li>
-            <li>Mundial con data real (campeones, goleadores)</li>
-            <li>16 disciplinas extra (volley, ciclismo, ajedrez, etc.)</li>
-            <li>Modo Liga Local (NFL, Acu&aacute;ticos y m&aacute;s)</li>
-          </ul>
-        </article>
-        <article class="inicio-panel">
-          <div class="inicio-panel-icon">&#127942;</div>
-          <h3>Crea tu Liga</h3>
-          <p>Arma una liga p&uacute;blica o privada con tus deportes favoritos. Invita amigos, sigue resultados, y compite con tu propio sistema de puntos.</p>
-          <button class="inicio-panel-btn" onclick="if(typeof openCreateLeague==='function')openCreateLeague();else alert('Sistema de Ligas Locales: prox. release')">Crear mi liga &rarr;</button>
-        </article>
-      </section>
+    <article class="inicio-panel">
+      <div class="inicio-panel-icon">&#128202;</div>
+      <h3>&iquest;Qu&eacute; es Sports Stats 21?</h3>
+      <p>La plataforma definitiva con estad&iacute;sticas de 15 deportes principales y m&aacute;s de 250 disciplinas adicionales. Desde f&uacute;tbol y NBA hasta deportes regionales y emergentes. Datos hist&oacute;ricos desde 1888 hasta hoy.</p>
+    </article>
+    <article class="inicio-panel">
+      <div class="inicio-panel-icon">&#9917;</div>
+      <h3>Explora deportes profesionales</h3>
+      <p>Sum&eacute;rgete en NBA, NFL, MLB, NHL, F1, Champions League, La Liga, Premier y todas las grandes ligas del mundo. Tablas de posiciones, r&eacute;cords, leyendas, campeones hist&oacute;ricos y data en vivo.</p>
+      <button class="inicio-panel-btn" onclick="var b=document.querySelectorAll('.sport-btn')[1];if(b)b.click()">Empezar a explorar &rarr;</button>
+    </article>
+    <article class="inicio-panel">
+      <div class="inicio-panel-icon">&#127971;</div>
+      <h3>Crea o explora Ligas Locales</h3>
+      <p>Inicia tu propia liga amateur con amigos del barrio o explora las ligas locales activas en tu zona. Sistema completo: equipos, calendarios, resultados y rankings personalizados.</p>
+      <button class="inicio-panel-btn" onclick="alert('Liga Local: anda a cualquier deporte y elige tu pa\u00EDs para crear o ver ligas locales')">Ver Ligas Locales &rarr;</button>
+    </article>
+    <article class="inicio-panel">
+      <div class="inicio-panel-icon">&#127919;</div>
+      <h3>Recluta y descubre talento</h3>
+      <p>Si reclutas para un club, academia o federaci&oacute;n, accede a la base completa de jugadores en ligas locales, juveniles y escolares de todo el mundo. Filtros por edad, posici&oacute;n, pa&iacute;s y nivel. Data al alcance de scouts profesionales.</p>
+      <button class="inicio-panel-btn" onclick="alert('Modo Reclutador: pr\u00F3ximamente. Recibir\u00E1s acceso a perfiles verificados de jugadores con stats hist\u00F3ricos.')">Modo Reclutador &rarr;</button>
+    </article>
+    <article class="inicio-panel">
+      <div class="inicio-panel-icon">&#128100;</div>
+      <h3>Crea tu perfil de Jugador</h3>
+      <p>Amateur, semi-pro o profesional &mdash; arma tu perfil deportivo con todas las ligas en las que has participado, estad&iacute;sticas hist&oacute;ricas, fotos y videos. Tu CV deportivo en un solo lugar, visible para reclutadores y clubes.</p>
+      <button class="inicio-panel-btn" onclick="if(typeof openLoginModal==='function')openLoginModal();else{var l=document.querySelector('.login-btn');if(l)l.click()}">Crear mi perfil &rarr;</button>
+    </article>
+    <article class="inicio-panel">
+      <div class="inicio-panel-icon">&#127381;</div>
+      <h3>Novedades</h3>
+      <ul>
+        <li>15 deportes principales + Otros Deportes (250+ disciplinas)</li>
+        <li>Eventos Globales (Olympics, Mundiales, Grand Slams, Tour de France)</li>
+        <li>Toggle M / F en cada liga (WSL, Liga F, NWSL, Mundial 2023)</li>
+        <li>Liga Escolar al lado de Liga Local</li>
+        <li>Carrusel de fotos en Inicio + logo nuevo</li>
+      </ul>
+    </article>
+  </section>
     </div>
     <script>
 function goInicio(btn){
