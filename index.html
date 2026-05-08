@@ -10594,6 +10594,117 @@ document.addEventListener("DOMContentLoaded", function(){
   else{setTimeout(tick, 100);setInterval(tick, 3000)}
 })();
 </script>
+
+<script>
+/* === SS21 v5: fix Otros Deportes emoji + force render collapsible === */
+(function(){
+  function fixEmojiAndForceMD(){
+    var btns = Array.from(document.querySelectorAll(".sport-btn"));
+    var otros = btns.find(function(b){return /Otros.{0,3}Deport|M.s.{0,3}Deport/i.test(b.textContent)});
+    if(otros){
+      // Force correct emoji \uD83C\uDFC5 (medal trophy)
+      var span = otros.querySelector("span");
+      if(span){span.textContent = "\uD83C\uDFC5"}
+      Array.from(otros.childNodes).forEach(function(n){if(n.nodeType===3)n.remove()});
+      otros.appendChild(document.createTextNode(" Otros Deportes"));
+      // Replace click handler with our direct render
+      if(!otros.dataset.v5Hooked){
+        otros.dataset.v5Hooked = "1";
+        otros.addEventListener("click", function(){
+          setTimeout(forceRenderMD, 50);
+          setTimeout(forceRenderMD, 200);
+          setTimeout(forceRenderMD, 600);
+        }, true);
+      }
+    }
+  }
+  function forceRenderMD(){
+    if(typeof window.renderMasDeportesV2 !== "function") return;
+    // Find active panel (could be panel-otros or panel-mas-deportes)
+    var active = document.querySelector(".tab-panel.active");
+    if(!active) return;
+    // Only render if it looks like our target panel (id matches otros, mas-deportes, or v3-panel)
+    if(!/panel-(otros|mas-deportes)|v3-panel/.test(active.id)) return;
+    // Hide sidebar
+    var sb = document.getElementById("sidebar");
+    if(sb) sb.style.display = "none";
+    active.innerHTML = window.renderMasDeportesV2();
+    active.dataset.mdRendered = "v2-collapsible";
+  }
+  document.addEventListener("DOMContentLoaded", function(){
+    setTimeout(fixEmojiAndForceMD, 800);
+    setInterval(fixEmojiAndForceMD, 3000);
+  });
+})();
+</script>
+
+<style>
+/* v6: consistent emoji-above-text in nav buttons */
+.sport-btn{display:flex !important;flex-direction:column !important;align-items:center !important;justify-content:center !important;text-align:center !important;gap:2px !important;line-height:1.15 !important;padding:8px 12px !important;min-width:64px}
+.sport-btn > span:first-child{display:block !important;font-size:22px !important;line-height:1 !important;margin:0 !important;filter:none !important}
+.sport-btn img{display:block !important;margin:0 auto !important}
+</style>
+<script>
+/* v6: fix Otros Deportes emoji to medal */
+(function(){
+  function fixOtrosEmoji(){
+    var btns = Array.from(document.querySelectorAll(".sport-btn"));
+    var otros = btns.find(function(b){return /Otros.{0,3}Deport/i.test(b.textContent)});
+    if(!otros) return;
+    var span = otros.querySelector("span");
+    if(span && span.textContent !== "\uD83C\uDFC5"){
+      span.textContent = "\uD83C\uDFC5";
+      span.removeAttribute("style");
+    }
+  }
+  document.addEventListener("DOMContentLoaded", function(){
+    setTimeout(fixOtrosEmoji, 800);
+    setInterval(fixOtrosEmoji, 2000);
+  });
+})();
+</script>
+
+<script>
+/* v7: aggressive replace of Mas Deportes panel content with new MD_CATS */
+(function(){
+  var observed = null;
+  function isMDPanel(p){if(!p)return false;return /panel-(otros|mas-deportes)/.test(p.id||"")}
+  function shouldReplace(p){if(!isMDPanel(p))return false;if(p.dataset.mdV3Done==="1")return false;return !p.querySelector(".md-hero")}
+  function applyV3MD(){
+    if(typeof window.renderMasDeportesV2!=="function")return;
+    var panels=document.querySelectorAll('[id^="panel-otros"],[id^="panel-mas-deportes"]');
+    panels.forEach(function(p){
+      if(p.classList.contains("active")&&shouldReplace(p)){
+        p.innerHTML=window.renderMasDeportesV2();
+        p.dataset.mdV3Done="1";
+        var sb=document.getElementById("sidebar");if(sb)sb.style.display="none";
+        var llBar=document.querySelector(".local-league-bar,.ll-sport-banner");if(llBar)llBar.style.display="none";
+      }
+    });
+  }
+  function setup(){
+    if(observed)return;
+    observed=new MutationObserver(function(){applyV3MD()});
+    var main=document.querySelector("main");
+    if(main){observed.observe(main,{childList:true,subtree:true,attributes:true,attributeFilter:["class"]})}
+  }
+  function hookOtros(){
+    var btns=Array.from(document.querySelectorAll(".sport-btn"));
+    var otros=btns.find(function(b){return /Otros.{0,3}Deport/i.test(b.textContent)});
+    if(!otros||otros.dataset.v7==="1")return;
+    otros.dataset.v7="1";
+    otros.addEventListener("click",function(){
+      var panels=document.querySelectorAll('[id^="panel-otros"],[id^="panel-mas-deportes"]');
+      panels.forEach(function(p){p.dataset.mdV3Done=""});
+      [80,250,600,1200,2000].forEach(function(d){setTimeout(applyV3MD,d)});
+    },true);
+  }
+  document.addEventListener("DOMContentLoaded",function(){
+    setTimeout(function(){setup();hookOtros();applyV3MD()},700);
+    setInterval(function(){hookOtros();applyV3MD()},2500);
+  });
+})();
+</script>
 </body>
 </html>
 
