@@ -796,7 +796,8 @@ body { background: var(--bg); color: var(--text); font-family: 'Inter','Segoe UI
   <div class="inicio-hero-content">
       <img src="data/logo.png" alt="Sports Stats 21" class="inicio-hero-logo">
       <h1>Bienvenido a Sports<em>Stats</em> 21</h1>
-      <p class="tagline">Navega sobre la data de todos los deportes.<br>Crea tu propia Liga y ve los resultados en vivo.</p>
+      <p class="tagline" style="font-size:clamp(18px,2.4vw,26px);font-weight:600;margin-bottom:14px"><b>La red social de los deportes</b></p>
+      <p class="tagline" style="font-size:clamp(14px,1.6vw,17px);opacity:0.88">Navega data, crea tu liga, arma tu perfil y conecta con jugadores de todo el mundo.</p>
       <div class="inicio-cta-row">
         <button class="inicio-btn inicio-btn-primary" onclick="var b=document.querySelectorAll('.sport-btn')[1];if(b)b.click()">Empezar a explorar &rarr;</button>
         <button class="inicio-btn inicio-btn-secondary" onclick="if(typeof openLoginModal==='function')openLoginModal();else{var l=document.querySelector('.login-btn');if(l)l.click()}">Crear cuenta</button>
@@ -848,6 +849,18 @@ body { background: var(--bg); color: var(--text); font-family: 'Inter','Segoe UI
       <h3>Crea tu perfil de Jugador</h3>
       <p>Amateur, semi-pro o profesional &mdash; arma tu perfil deportivo con todas las ligas en las que has participado, estad&iacute;sticas hist&oacute;ricas, fotos y videos. Tu CV deportivo en un solo lugar, visible para reclutadores y clubes.</p>
       <button class="inicio-panel-btn" onclick="if(typeof openLoginModal==='function')openLoginModal();else{var l=document.querySelector('.login-btn');if(l)l.click()}">Crear mi perfil &rarr;</button>
+    </article>
+    <article class="inicio-panel">
+      <div class="inicio-panel-icon">&#128240;</div>
+      <h3>Blog y Noticias</h3>
+      <p>Cobertura diaria del mundo deportivo: an&aacute;lisis post-partido, fichajes, lesiones, hist&oacute;ricos y opini&oacute;n. Filtros por deporte, liga y equipo. Suscr&iacute;bete para recibir un digest diario en tu mail.</p>
+      <button class="inicio-panel-btn" onclick="alert('Blog y Noticias: pr\u00F3ximamente. Tendremos cobertura editorial diaria de todos los deportes con filtros por equipo, liga y categor\u00EDa.')">Leer m&aacute;s &rarr;</button>
+    </article>
+    <article class="inicio-panel">
+      <div class="inicio-panel-icon">&#9878;</div>
+      <h3>Compara stats</h3>
+      <p>Selecciona dos jugadores, dos equipos o dos ligas del mismo deporte y compara sus n&uacute;meros lado a lado: t&iacute;tulos, goles, promedios, hist&oacute;ricos, rachas. Ideal para debates: Messi vs Cristiano, Real Madrid vs Bayern, Premier vs La Liga.</p>
+      <button class="inicio-panel-btn" onclick="alert('Comparador: pr\u00F3ximamente. Vas a poder comparar 2 jugadores, equipos o ligas del mismo deporte con todas sus stats lado a lado.')">Comparar &rarr;</button>
     </article>
     <article class="inicio-panel">
       <div class="inicio-panel-icon">&#127381;</div>
@@ -10720,6 +10733,144 @@ document.addEventListener("DOMContentLoaded", function(){
   document.addEventListener("DOMContentLoaded",function(){
     setTimeout(function(){setup();hookOtros();applyV3MD()},700);
     setInterval(function(){hookOtros();applyV3MD()},2500);
+  });
+})();
+</script>
+
+<style>
+/* v8 - hide actualizado in front; sources modal */
+.update-badge{display:none !important}
+.ss-modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,0.65);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px}
+.ss-modal{background:var(--surface,#fff);color:var(--text,#1a1a1a);border-radius:14px;max-width:560px;width:100%;max-height:80vh;overflow-y:auto;padding:28px;box-shadow:0 20px 60px rgba(0,0,0,0.3);position:relative}
+.ss-modal h2{margin:0 0 12px;font-size:22px;color:#a01515;display:flex;align-items:center;gap:8px}
+.ss-modal .ss-close{position:absolute;top:14px;right:14px;background:transparent;border:0;font-size:22px;cursor:pointer;color:#666}
+.ss-modal .ss-close:hover{color:#a01515}
+.ss-modal h3{margin:14px 0 8px;font-size:15px;color:#a01515;text-transform:uppercase;letter-spacing:0.5px}
+.ss-modal ul{margin:0;padding-left:20px;line-height:1.6}
+.ss-modal .last-update{background:rgba(238,42,42,0.08);border:1px solid rgba(238,42,42,0.2);padding:10px 12px;border-radius:8px;font-size:14px;margin-bottom:16px}
+@media (prefers-color-scheme:dark){.ss-modal{background:#1a1a1a;color:#eee}.ss-modal h3{color:#ee2a2a}}
+</style>
+<script>
+/* v8: remove JJOO, reorder nav, replace Fuentes -> modal with sources + update date */
+(function(){
+  function reorderNav(){
+    var btns=Array.from(document.querySelectorAll(".sport-btn"));
+    if(btns.length===0)return;
+    var nav=btns[0].parentNode;
+    if(nav.dataset.v8Done==="1")return;
+    function find(rx){return btns.find(function(b){return rx.test(b.textContent)})}
+    var jj=find(/JJOO|Olympic/i); if(jj)jj.style.display="none";
+    var combate=find(/Combate|Luchas/i);
+    if(!combate){return}
+    var order=[/Atletismo/i,/Nataci.n|Acu.ticos/i,/Volleyball|V.ley/i,/P.del/i,/Cricket/i];
+    var anchor=combate;
+    order.forEach(function(rx){
+      var b=find(rx);
+      if(b && anchor){
+        anchor.parentNode.insertBefore(b, anchor.nextSibling);
+        anchor=b;
+      }
+    });
+    nav.dataset.v8Done="1";
+  }
+  function setupFuentesModal(){
+    var fbtn=Array.from(document.querySelectorAll("button,a")).find(function(b){return /Fuentes/i.test(b.textContent) && !b.closest(".ss-modal")});
+    if(!fbtn||fbtn.dataset.v8FuHooked==="1")return;
+    fbtn.dataset.v8FuHooked="1";
+    fbtn.addEventListener("click",function(e){
+      e.preventDefault();e.stopPropagation();
+      window.openSourcesModal();
+    },true);
+  }
+  window.openSourcesModal=function(){
+    var existing=document.querySelector(".ss-modal-backdrop");
+    if(existing){existing.remove()}
+    var lastUpd=document.getElementById("update-badge")?.textContent?.replace(/^.*?:\s*/,"")||"2026-04-06 08:17";
+    var bk=document.createElement("div");
+    bk.className="ss-modal-backdrop";
+    bk.onclick=function(e){if(e.target===bk)bk.remove()};
+    bk.innerHTML='<div class="ss-modal"><button class="ss-close" onclick="this.closest(\'.ss-modal-backdrop\').remove()">&times;</button><h2>\uD83D\uDCCB Fuentes y data</h2><div class="last-update"><b>\u00DAltima actualizaci\u00F3n:</b> '+lastUpd+'</div><h3>F\u00FAtbol</h3><ul><li>FIFA, UEFA, CONMEBOL (oficiales)</li><li>Premier League, La Liga, Serie A, Bundesliga, Ligue 1</li><li>FBref, Transfermarkt, Sofascore</li><li>WSL, Liga F, NWSL, Frauen-Bundesliga (femeninos)</li></ul><h3>Basketball</h3><ul><li>NBA Stats (oficial)</li><li>Basketball-Reference</li><li>FIBA, EuroLeague</li></ul><h3>Tenis</h3><ul><li>ATP Tour, WTA Tour (oficiales)</li><li>Grand Slams: Australian Open, Roland Garros, Wimbledon, US Open</li></ul><h3>F1 / Motor</h3><ul><li>Formula1.com (oficial)</li><li>FIA, MotoGP, IndyCar</li></ul><h3>NFL / Beisbol / Hockey</h3><ul><li>NFL.com, MLB.com, NHL.com (oficiales)</li><li>Pro-Football-Reference, Baseball-Reference, Hockey-Reference</li></ul><h3>Olympics y multideportivos</h3><ul><li>Olympics.com (IOC oficial)</li><li>World Athletics, FINA, FIVB, FIBA</li></ul><h3>Eventos hist\u00F3ricos</h3><ul><li>Wikipedia + Wikidata (cross-checked)</li><li>Topendsports, Sports Reference</li></ul></div>';
+    document.body.appendChild(bk);
+  };
+  document.addEventListener("DOMContentLoaded",function(){
+    setTimeout(function(){reorderNav();setupFuentesModal()},700);
+    setInterval(function(){reorderNav();setupFuentesModal()},2500);
+  });
+})();
+/* === EXPANDED WOMENS DATA: UWCL, Bundesliga F, Olympics 2024 + top10 scorers === */
+(function(){
+  if(!window.WF_DATA)return;
+  /* Top 10 scorers WSL */
+  window.WF_DATA.WSL.scorers=[["1","Aggie Beever-Jones","Chelsea","13"],["2","Alessia Russo","Arsenal","12"],["3","Khadija Shaw","Manchester City","11"],["4","Vivianne Miedema","Manchester City","10"],["5","Elisabeth Terland","Manchester United","9"],["6","Mayra Ramirez","Chelsea","9"],["7","Beth Mead","Arsenal","8"],["8","Lauren James","Chelsea","8"],["9","Ella Toone","Manchester United","7"],["10","Lauren Hemp","Manchester City","7"]];
+  /* Top 10 Liga F */
+  window.WF_DATA.LIGAF.scorers=[["1","Ewa Pajor","Barcelona","23"],["2","Caroline Graham Hansen","Barcelona","18"],["3","Linda Caicedo","Real Madrid","14"],["4","Salma Paralluelo","Barcelona","13"],["5","Alba Redondo","Real Madrid","11"],["6","Sheila Garcia","Atletico","10"],["7","Esther Gonzalez","Real Madrid","10"],["8","Aitana Bonmati","Barcelona","9"],["9","Patri Guijarro","Barcelona","8"],["10","Athenea del Castillo","Real Madrid","8"]];
+  /* Top 10 NWSL */
+  window.WF_DATA.NWSL.scorers=[["1","Temwa Chawinga","Kansas City","20"],["2","Barbra Banda","Orlando Pride","13"],["3","Sophia Smith","Portland Thorns","12"],["4","Trinity Rodman","Washington","11"],["5","Asisat Oshoala","Bay FC","10"],["6","Esther Gonzalez","Gotham FC","9"],["7","Marta","Orlando Pride","9"],["8","Mallory Swanson","Chicago","8"],["9","Lynn Williams","Gotham FC","8"],["10","Crystal Dunn","Gotham FC","7"]];
+  /* Add UWCL Champions League Femenina 2024-25 */
+  window.WF_DATA.UWCL={
+    name:"UEFA Womens Champions League",
+    flag:"\uD83C\uDFC6",
+    season:"2024-25",
+    champion:"Arsenal Women",
+    note:"Final: Arsenal 1-0 Barcelona (Stina Blackstenius). Primer t\u00EDtulo del Arsenal. Lyon m\u00E1s ganador hist\u00F3rico (8 t\u00EDtulos).",
+    standings:[["1","Arsenal","Campe\u00F3n","-","-","-","-","-","-"],["2","Barcelona","Subcampe\u00F3n","-","-","-","-","-","-"],["SF","Lyon","Semifinalista","-","-","-","-","-","-"],["SF","Chelsea","Semifinalista","-","-","-","-","-","-"]],
+    scorers:[["1","Caroline Graham Hansen","Barcelona","9"],["2","Ewa Pajor","Barcelona","8"],["3","Alessia Russo","Arsenal","7"],["4","Stina Blackstenius","Arsenal","6"],["5","Pernille Harder","Bayern","5"]]
+  };
+  /* Add Frauen-Bundesliga */
+  window.WF_DATA.BUNDESF={
+    name:"Frauen-Bundesliga",
+    flag:"\uD83C\uDDE9\uD83C\uDDEA",
+    season:"2024-25",
+    champion:"Bayern Munich Frauen",
+    note:"Pernille Harder MVP. Bayern y Wolfsburg dominan la d\u00E9cada. Eintracht Frankfurt 4 t\u00EDtulos hist\u00F3ricos.",
+    standings:[["1","Bayern Munich","22","18","2","2","58","13","56"],["2","Wolfsburg","22","17","3","2","52","15","54"],["3","Eintracht Frankfurt","22","13","4","5","42","23","43"],["4","Hoffenheim","22","11","5","6","33","26","38"],["5","SGS Essen","22","10","4","8","30","28","34"],["6","Werder Bremen","22","9","5","8","31","30","32"],["7","Leipzig","22","8","4","10","27","32","28"],["8","Bayer Leverkusen","22","7","4","11","23","36","25"],["9","Freiburg","22","6","3","13","19","41","21"],["10","K\u00F6ln","22","5","4","13","18","42","19"]],
+    scorers:[["1","Pernille Harder","Bayern","17"],["2","Lea Sch\u00FCller","Bayern","15"],["3","Klara B\u00FChl","Bayern","11"],["4","Ewa Pajor","Wolfsburg","10"],["5","Laura Freigang","Frankfurt","9"]]
+  };
+  /* Add Olympics Paris 2024 Womens Football */
+  window.WF_DATA.OLYMP24={
+    name:"JJOO Par\u00EDs 2024 - F\u00FAtbol Femenino",
+    flag:"\uD83C\uDFC5",
+    season:"2024 (Francia)",
+    champion:"Estados Unidos",
+    note:"Final: EE.UU. 1-0 Brasil (Mallory Swanson). Bronce: Alemania. Trinity Rodman MVP. Marta jug\u00F3 su \u00FAltimo torneo ol\u00EDmpico (\u00FAltima goleadora hist\u00F3rica con Brasil).",
+    standings:[["1","\uD83C\uDDFA\uD83C\uDDF8 Estados Unidos","Oro","-","-","-","-","-","-"],["2","\uD83C\uDDE7\uD83C\uDDF7 Brasil","Plata","-","-","-","-","-","-"],["3","\uD83C\uDDE9\uD83C\uDDEA Alemania","Bronce","-","-","-","-","-","-"],["4","\uD83C\uDDEA\uD83C\uDDF8 Espa\u00F1a","Cuarto","-","-","-","-","-","-"]],
+    scorers:[["1","Sophia Smith","\uD83C\uDDFA\uD83C\uDDF8 EE.UU.","3"],["2","Trinity Rodman","\uD83C\uDDFA\uD83C\uDDF8 EE.UU.","2"],["3","Mallory Swanson","\uD83C\uDDFA\uD83C\uDDF8 EE.UU.","2"],["4","Lineth Beerensteyn","\uD83C\uDDF3\uD83C\uDDF1 P. Bajos","2"],["5","Alexia Putellas","\uD83C\uDDEA\uD83C\uDDF8 Espa\u00F1a","2"]]
+  };
+  /* Add Mundial 2023 - top scorer expansion + champion path */
+  if(window.WF_DATA.MUNDIAL){
+    window.WF_DATA.MUNDIAL.scorers=[["1","Hinata Miyazawa","\uD83C\uDDEF\uD83C\uDDF5 Jap\u00F3n","5"],["2","Kadidiatou Diani","\uD83C\uDDEB\uD83C\uDDF7 Francia","4"],["3","Aitana Bonmat\u00ED","\uD83C\uDDEA\uD83C\uDDF8 Espa\u00F1a","3"],["4","Linda Caicedo","\uD83C\uDDE8\uD83C\uDDF4 Colombia","3"],["5","Salma Paralluelo","\uD83C\uDDEA\uD83C\uDDF8 Espa\u00F1a","3"],["6","Lauren James","\uD83C\uDFF4\uDB40\uDC67\uDB40\uDC62\uDB40\uDC65\uDB40\uDC6E\uDB40\uDC67\uDB40\uDC7F Inglaterra","3"],["7","Asisat Oshoala","\uD83C\uDDF3\uD83C\uDDEC Nigeria","3"],["8","Alexandra Popp","\uD83C\uDDE9\uD83C\uDDEA Alemania","3"]];
+  }
+  /* Update LEAGUE_MAP to include UWCL and Bundesliga */
+  if(window.WF_LEAGUE_MAP){
+    window.WF_LEAGUE_MAP.Champions="UWCL";
+    window.WF_LEAGUE_MAP["Champions League"]="UWCL";
+    window.WF_LEAGUE_MAP.Bundesliga="BUNDESF";
+  }
+})();
+</script>
+
+<script>
+/* v9: Futbol button -> Que es el Futbol directly */
+(function(){
+  function hookFutbol(){
+    var btns=Array.from(document.querySelectorAll(".sport-btn"));
+    var futbol=btns.find(function(b){return /F.tbol\b/i.test(b.textContent) && !/Americano/i.test(b.textContent)});
+    if(!futbol||futbol.dataset.v9Hooked==="1")return;
+    futbol.dataset.v9Hooked="1";
+    futbol.addEventListener("click",function(){
+      setTimeout(function(){
+        var queBtn=Array.from(document.querySelectorAll("button.league-btn,button.sub-btn")).find(function(b){return /Qu.{0,2} es el F.tbol/i.test(b.textContent)});
+        if(queBtn && !queBtn.classList.contains("active")) queBtn.click();
+      },200);
+      setTimeout(function(){
+        var queBtn=Array.from(document.querySelectorAll("button.league-btn,button.sub-btn")).find(function(b){return /Qu.{0,2} es el F.tbol/i.test(b.textContent)});
+        if(queBtn && !queBtn.classList.contains("active")) queBtn.click();
+      },600);
+    },false);
+  }
+  document.addEventListener("DOMContentLoaded",function(){
+    setTimeout(hookFutbol,800);
+    setInterval(hookFutbol,3000);
   });
 })();
 </script>
