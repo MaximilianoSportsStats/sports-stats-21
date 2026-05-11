@@ -10874,6 +10874,22 @@ document.addEventListener("DOMContentLoaded", function(){
   });
 })();
 </script>
+
+<script>
+/* v10 hotfix: REMOVE JJOO button from DOM */
+(function(){
+  function killJJOO(){
+    var btns=Array.from(document.querySelectorAll(".sport-btn"));
+    var jj=btns.find(function(b){return /JJOO/i.test(b.textContent)});
+    if(jj){jj.remove()}
+  }
+  document.addEventListener("DOMContentLoaded",function(){
+    setTimeout(killJJOO,400);
+    setTimeout(killJJOO,1000);
+    setInterval(killJJOO,2000);
+  });
+})();
+</script>
 </body>
 </html>
 
