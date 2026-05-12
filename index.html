@@ -10979,19 +10979,16 @@ document.addEventListener("DOMContentLoaded", function(){
   }
   function fixTagline(){
     if(done.tagline) return;
-    // Only target the hero tagline - much more focused than scanning all elements
-    var hero = document.querySelector('.hero, .inicio-hero, header, main, .main-content');
-    var scope = hero || document.body;
-    // Use TreeWalker for speed
-    var walker = document.createTreeWalker(scope, NodeFilter.SHOW_TEXT, null);
-    var n;
-    while((n = walker.nextNode())){
-      if(n.nodeValue && n.nodeValue.indexOf('jugadores') > -1 && n.nodeValue.length < 400){
+    var w = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null);
+    var n; var count = 0;
+    while((n = w.nextNode())){
+      if(n.nodeValue && n.nodeValue.indexOf('jugadores')>-1 && n.nodeValue.length < 400){
         n.nodeValue = n.nodeValue.replace(/jugadores/g, 'deportistas');
-        done.tagline = true;
-        break;
+        count++;
       }
+      if(count > 10) break;
     }
+    if(count > 0) done.tagline = true;
   }
   function reorderHeader(){
     if(done.header) return;
