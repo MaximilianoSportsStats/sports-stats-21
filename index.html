@@ -11215,6 +11215,121 @@ document.addEventListener("DOMContentLoaded", function(){
 })();
 </script>
 
+<script>
+/* v13: alinear botones (normalización JS) + logo hero object-fit:contain + panel Centros Deportivos */
+(function(){
+  'use strict';
+  if(window.__v13_loaded) return; window.__v13_loaded = true;
+  var st = document.createElement('style'); st.id='v13-css';
+  st.textContent = ".sport-btn{display:flex !important;flex-direction:column !important;align-items:center !important;justify-content:center !important;text-align:center !important;min-height:82px !important;padding:8px 6px !important;gap:6px !important;line-height:1 !important;}.sport-btn .ss-emoji-wrap{display:flex !important;align-items:center !important;justify-content:center !important;height:28px !important;line-height:1 !important;font-size:22px !important;}.sport-btn .ss-name-wrap{display:flex !important;align-items:center !important;justify-content:center !important;font-size:11.5px !important;line-height:1.2 !important;min-height:28px !important;max-width:100% !important;}img.inicio-hero-logo{object-fit:contain !important;background:transparent !important;padding:0 !important;border:0 !important;border-radius:0 !important;box-shadow:none !important;outline:none !important;filter:drop-shadow(0 4px 12px rgba(0,0,0,.35)) !important;}.inicio-panel-cd{background:linear-gradient(135deg,rgba(255,77,77,.08),rgba(255,77,77,.02)) !important;border:1px solid rgba(255,77,77,.25) !important;}.inicio-panel-cd .inicio-panel-icon{color:#ff4d4d !important;}";
+  document.head.appendChild(st);
+
+  function normalizeBtn(btn){
+    if(btn.dataset.v13norm === '1') return;
+    var firstSpan = btn.querySelector(':scope > span');
+    var emojiHtml = '', emojiStyle = '', restText = '';
+    function looksEmoji(s){
+      if(!s) return false;
+      var cp = s.codePointAt(0);
+      // common emoji ranges (using decimal to avoid \u{} parser issues)
+      if(cp >= 0x1F000 && cp <= 0x1FFFF) return true;
+      if(cp >= 0x2600 && cp <= 0x27BF) return true;
+      if(cp >= 0x2700 && cp <= 0x27FF) return true;
+      if(cp === 0x200D || cp === 0xFE0F) return true;
+      return false;
+    }
+    if(firstSpan && looksEmoji(firstSpan.textContent.trim())){
+      emojiHtml = firstSpan.textContent.trim();
+      emojiStyle = firstSpan.getAttribute('style') || '';
+      var bits = [];
+      Array.from(btn.childNodes).forEach(function(n){
+        if(n === firstSpan) return;
+        bits.push(n.textContent || '');
+      });
+      restText = bits.join(' ').replace(/\s+/g,' ').trim();
+    } else {
+      var txt = btn.textContent.trim();
+      if(looksEmoji(txt)){
+        var idx = txt.search(/\s/);
+        if(idx > 0){ emojiHtml = txt.slice(0, idx); restText = txt.slice(idx+1).trim(); }
+        else { emojiHtml = txt; restText = ''; }
+      } else { restText = txt; }
+    }
+    if(!restText && !emojiHtml) return;
+    var styleAttr = emojiStyle ? ' style="' + emojiStyle.replace(/"/g,'&quot;') + '"' : '';
+    btn.innerHTML = '<span class="ss-emoji-wrap"' + styleAttr + '>' + emojiHtml + '</span><span class="ss-name-wrap">' + restText.replace(/</g,'&lt;') + '</span>';
+    btn.dataset.v13norm = '1';
+  }
+  function normalizeAll(){
+    document.querySelectorAll('.sport-btn').forEach(normalizeBtn);
+  }
+
+  function addCentrosPanel(){
+    if(document.getElementById('v13-cd-panel')) return;
+    var sec = document.querySelector('.inicio-panels');
+    if(!sec) return;
+    var art = document.createElement('article');
+    art.id = 'v13-cd-panel';
+    art.className = 'inicio-panel inicio-panel-cd';
+    art.innerHTML = '<div class="inicio-panel-icon">📍</div>' +
+      '<h3>Encuentra tu centro deportivo más cercano</h3>' +
+      '<p>Busca <b>gimnasios, clubes, estadios y canchas</b> cerca tuyo. Filtra por deporte, estacionamiento, capacidad, horarios, precios y servicios. Ideal para encontrar dónde jugar, entrenar o ver un partido.</p>' +
+      '<button type="button" class="v13-cd-btn" style="margin-top:10px;background:#ff4d4d;color:#fff;border:0;padding:9px 16px;border-radius:8px;font-weight:600;cursor:pointer;font-size:13px;">Buscar centros 📍</button>';
+    sec.appendChild(art);
+    art.querySelector('.v13-cd-btn').addEventListener('click', function(e){ e.stopPropagation(); openCdModal(); });
+    art.addEventListener('click', function(e){
+      if(e.target.classList.contains('v13-cd-btn')) return;
+      openCdModal();
+    });
+  }
+  function openCdModal(){
+    var m = document.getElementById('v13-cd-modal');
+    if(!m){
+      m = document.createElement('div'); m.id='v13-cd-modal'; m.className='v12-modal-backdrop';
+      m.innerHTML = '<div class="v12-modal" style="max-width:560px">' +
+        '<button class="modal-close" type="button">×</button>' +
+        '<h2 style="margin-top:0">📍 Centros Deportivos Cercanos</h2>' +
+        '<p class="sub">Encuentra el lugar perfecto para jugar tu deporte favorito.</p>' +
+        '<label>Tu ubicación</label>' +
+        '<input type="text" id="v13-cd-loc" placeholder="Ciudad, barrio o usa GPS" />' +
+        '<div class="row">' +
+          '<div><label>Tipo de lugar</label><select id="v13-cd-type"><option value="">Todos</option><option>Gimnasio</option><option>Club deportivo</option><option>Estadio</option><option>Cancha pública</option><option>Centro de alto rendimiento</option><option>Piscina</option><option>Pista de atletismo</option></select></div>' +
+          '<div><label>Deporte</label><select id="v13-cd-sport"><option value="">Cualquier deporte</option><option>Fútbol</option><option>Basketball</option><option>Tenis</option><option>Pádel</option><option>Natación</option><option>Atletismo</option><option>Volleyball</option><option>Rugby</option><option>Hockey</option><option>Béisbol</option><option>Combate (MMA/Boxeo)</option><option>Golf</option><option>Ciclismo</option><option>Cricket</option><option>Fútbol Americano</option></select></div>' +
+        '</div>' +
+        '<label>Filtros</label>' +
+        '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:13px;color:#bcc1cf;margin-bottom:14px;">' +
+          '<label style="text-transform:none;letter-spacing:normal;display:flex;gap:6px;align-items:center;"><input type="checkbox" style="width:auto;margin:0"> 🅿️ Estacionamiento</label>' +
+          '<label style="text-transform:none;letter-spacing:normal;display:flex;gap:6px;align-items:center;"><input type="checkbox" style="width:auto;margin:0"> 🚿 Duchas / Vestidores</label>' +
+          '<label style="text-transform:none;letter-spacing:normal;display:flex;gap:6px;align-items:center;"><input type="checkbox" style="width:auto;margin:0"> 🌙 Abierto noches</label>' +
+          '<label style="text-transform:none;letter-spacing:normal;display:flex;gap:6px;align-items:center;"><input type="checkbox" style="width:auto;margin:0"> ☀️ Abierto fines de semana</label>' +
+          '<label style="text-transform:none;letter-spacing:normal;display:flex;gap:6px;align-items:center;"><input type="checkbox" style="width:auto;margin:0"> ♿ Accesible</label>' +
+          '<label style="text-transform:none;letter-spacing:normal;display:flex;gap:6px;align-items:center;"><input type="checkbox" style="width:auto;margin:0"> 👶 Apto niños</label>' +
+        '</div>' +
+        '<div class="row"><div><label>Capacidad mínima</label><select id="v13-cd-cap"><option>Cualquiera</option><option>10+</option><option>50+</option><option>200+</option><option>1.000+</option><option>10.000+</option></select></div><div><label>Distancia máxima</label><select id="v13-cd-dist"><option>1 km</option><option selected>5 km</option><option>10 km</option><option>25 km</option><option>50 km</option></select></div></div>' +
+        '<p class="sub" style="margin:14px 0 0;font-size:12px;">🔧 <b>Próximamente:</b> base de datos integrada con Google Maps + reseñas + reserva online + tarjeta de afiliado.</p>' +
+        '<div class="btns"><button class="btn-secondary" type="button" data-cancel>Cerrar</button><button class="btn-primary" type="button" data-search>Buscar 🔍</button></div>' +
+        '</div>';
+      document.body.appendChild(m);
+      m.addEventListener('click', function(e){
+        if(e.target===m || e.target.classList.contains('modal-close') || e.target.dataset.cancel!==undefined){ m.classList.remove('open'); return; }
+        if(e.target.dataset.search!==undefined){
+          alert('🔧 Funcionalidad en desarrollo. Próximamente: resultados reales con mapa y reseñas. Gracias por probar Sports Stats 21!');
+        }
+      });
+    }
+    m.classList.add('open');
+  }
+  window.__openCd = openCdModal;
+
+  function applyAll(){ try{ normalizeAll(); addCentrosPanel(); }catch(e){ console.warn('[v13]', e); } }
+  if(document.readyState==='complete'||document.readyState==='interactive'){ setTimeout(applyAll, 200); }
+  else { document.addEventListener('DOMContentLoaded', function(){ setTimeout(applyAll, 200); }); }
+  setTimeout(applyAll, 1800);
+  setTimeout(applyAll, 4500);
+  console.log('[v13] loaded · normalize sport-btn · logo contain · panel centros deportivos');
+})();
+</script>
+
 </body>
 </html>
 
