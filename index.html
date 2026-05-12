@@ -11339,7 +11339,7 @@ document.addEventListener("DOMContentLoaded", function(){
   var cleanCount = 0;
   var cleanInt = setInterval(function(){
     cleanCount++;
-    if(cleanCount > 8){ clearInterval(cleanInt); return; }
+    if(cleanCount > 60){ clearInterval(cleanInt); return; }
     try { document.querySelectorAll('.sport-btn').forEach(function(b){ if(!b.dataset.v13norm) return; var hasJunk = Array.from(b.childNodes).some(function(n){ return n.nodeType===3 && (n.nodeValue||'').trim(); }); if(hasJunk){ b.dataset.v13norm = ''; normalizeBtn(b); } }); } catch(e){}
   }, 1200);
   console.log('[v13] loaded · normalize sport-btn · logo contain · panel centros deportivos');
