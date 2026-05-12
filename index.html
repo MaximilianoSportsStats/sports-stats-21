@@ -10896,6 +10896,56 @@ document.addEventListener("DOMContentLoaded", function(){
   });
 })();
 </script>
+
+<script>
+/* v11: Eventos Globales reduced to 2 categorias + planet icon + add Ciclismo as principal */
+(function(){
+  /* Reduce EG_DATA to only Multideportivos + Invierno */
+  window.EG_DATA = [
+    {key:"multi", icon:"\uD83C\uDF1F", name:"Multideportivos", events:["Juegos Olimpicos Verano","Juegos Olimpicos Invierno","Juegos Paralimpicos","Juegos Panamericanos","Juegos Europeos","Juegos Asiaticos","Juegos Africanos","Juegos Commonwealth","Universiada FISU","World Games","X Games","Juegos del Mediterraneo","Juegos Bolivarianos","Juegos Sudamericanos","Juegos de la Lusofonia","Juegos Militares CISM","Juegos Mundiales Universitarios"]},
+    {key:"invierno", icon:"\u26C4", name:"Invierno y extremos", events:["Winter X Games","FIS Alpine Ski World Cup","Four Hills Tournament","Biathlon World Cup","Snowboard World Championships","Red Bull Rampage","WSL Championship Tour","Freeride World Tour","Cliff Diving World Series","Wingsuit BASE Champ","Crashed Ice","Ice Speedway","Big-Wave Tour","Skyrunning World Series","UTMB Trail","Hardrock 100","Eco-Challenge Adventure"]}
+  ];
+
+  /* Add Ciclismo to NEW_PRINCIPAL */
+  if(window.NEW_PRINCIPAL){
+    window.NEW_PRINCIPAL.ciclismo = {
+      emoji:"\uD83D\uDEB4",
+      name:"Ciclismo",
+      desc:"Deporte rey de la resistencia. Tour de France, Giro d Italia, Vuelta a Espana. M\u00E1s de 200 corredores por etapa, 3 semanas de carrera, 3.500+ km por Grand Tour.",
+      variants:["Ciclismo Ruta","Ciclismo Pista","Mountain Bike (MTB)","BMX (Racing/Freestyle)","Ciclocross","Gravel","Trial Bike","Downhill"],
+      events:["Tour de France","Giro d Italia","Vuelta a Espana","Tour de France Femmes","Mundial UCI Ruta","Paris-Roubaix","Milan-San Remo","Liege-Bastogne-Liege","Tour de Suisse","Olympic Cycling"]
+    };
+  }
+
+  /* Replace Eventos Globales button emoji with planet + add Ciclismo button */
+  function patchNav(){
+    var btns = Array.from(document.querySelectorAll(".sport-btn"));
+    var eg = btns.find(function(b){return /Eventos.{0,3}Glob/i.test(b.textContent)});
+    if(eg){
+      var sp = eg.querySelector("span");
+      if(sp && sp.textContent !== "\uD83C\uDF0D"){sp.textContent = "\uD83C\uDF0D"}
+    }
+    /* Add Ciclismo button if not present */
+    var ciclismo = btns.find(function(b){return /\bCiclismo\b/i.test(b.textContent)});
+    if(!ciclismo){
+      /* Insert after Cricket button */
+      var cricket = btns.find(function(b){return /\bCricket\b/i.test(b.textContent)});
+      if(cricket){
+        var b = document.createElement("button");
+        b.className = "sport-btn";
+        b.dataset.v3 = "ciclismo";
+        b.innerHTML = '<span>\uD83D\uDEB4</span> Ciclismo';
+        b.onclick = function(){if(typeof window.showStubSport==="function")window.showStubSport("ciclismo", b)};
+        cricket.parentNode.insertBefore(b, cricket.nextSibling);
+      }
+    }
+  }
+  document.addEventListener("DOMContentLoaded",function(){
+    setTimeout(patchNav, 800);
+    setInterval(patchNav, 2500);
+  });
+})();
+</script>
 </body>
 </html>
 
