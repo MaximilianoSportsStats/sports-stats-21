@@ -11346,6 +11346,64 @@ document.addEventListener("DOMContentLoaded", function(){
 })();
 </script>
 
+<script>
+/* v14: Novedades último + cleanInt permanente + logo hero cover + sin emojis sociales footer */
+(function(){
+  if(window.__v14_loaded) return; window.__v14_loaded = true;
+  var st = document.createElement('style'); st.id='v14-css';
+  st.textContent = "img.inicio-hero-logo{object-fit:cover !important;border-radius:22% !important;background:transparent !important;padding:0 !important;border:0 !important;outline:none !important;filter:drop-shadow(0 6px 14px rgba(0,0,0,.4)) !important;}.v12-footer-social{display:none !important;}";
+  document.head.appendChild(st);
+  // Reorder: move Novedades panel to end (after Centros Deportivos)
+  function reorderPanels(){
+    var sec = document.querySelector('.inicio-panels'); if(!sec) return;
+    var panels = Array.from(sec.children);
+    var nov = panels.find(function(p){ var h = p.querySelector('h3'); return h && /Novedades/i.test(h.textContent); });
+    if(nov && nov !== sec.lastElementChild){
+      sec.appendChild(nov); // moves to end
+    }
+  }
+  // Permanent (but bounded-frequency) clean for sport-btn re-renders
+  function cleanSportBtns(){
+    document.querySelectorAll('.sport-btn').forEach(function(b){
+      var hasJunk = Array.from(b.childNodes).some(function(n){ return n.nodeType===3 && (n.nodeValue||'').trim(); });
+      if(hasJunk){
+        // Re-run prior normalize if defined globally; otherwise just remove trailing text
+        if(typeof window.__forceNormalize === 'function'){ window.__forceNormalize(b); return; }
+        // Fallback: remove trailing/standalone text nodes
+        Array.from(b.childNodes).forEach(function(n){
+          if(n.nodeType===3 && (n.nodeValue||'').trim()){ b.removeChild(n); }
+        });
+      }
+    });
+  }
+  // Scoped MutationObserver on the sport nav container
+  function setupObserver(){
+    var nav = document.querySelector('.sport-nav, nav.sports, [class*="sport-nav"]') || (document.querySelector('.sport-btn') && document.querySelector('.sport-btn').parentElement);
+    if(!nav) return;
+    var pending = false;
+    var mo = new MutationObserver(function(){
+      if(pending) return;
+      pending = true;
+      requestAnimationFrame(function(){
+        pending = false;
+        cleanSportBtns();
+        reorderPanels();
+      });
+    });
+    mo.observe(nav, {childList:true, subtree:true, characterData:true});
+    window.__v14_mo = mo;
+  }
+  function applyAll(){ try{ reorderPanels(); cleanSportBtns(); setupObserver(); }catch(e){ console.warn('[v14]', e); } }
+  if(document.readyState==='complete'||document.readyState==='interactive'){ setTimeout(applyAll, 250); }
+  else { document.addEventListener('DOMContentLoaded', function(){ setTimeout(applyAll, 250); }); }
+  setTimeout(applyAll, 1500);
+  setTimeout(applyAll, 4000);
+  // Permanent low-frequency safety net
+  setInterval(function(){ try{ cleanSportBtns(); reorderPanels(); }catch(e){} }, 4000);
+  console.log('[v14] loaded · Novedades al final · MutationObserver scoped · logo cover · footer sin emojis');
+})();
+</script>
+
 </body>
 </html>
 
