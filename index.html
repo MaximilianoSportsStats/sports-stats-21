@@ -10947,53 +10947,80 @@ document.addEventListener("DOMContentLoaded", function(){
 })();
 </script>
 <script>
-/* v12: Padel emoji + alineación botones + expansión info + footer + reorder header + tagline + login form + idiomas + logo inicio */
+/* v12.1 - leve, sin setInterval/MO global */
 (function(){
   'use strict';
-  var v12css = document.createElement('style');
-  v12css.id = 'v12-css';
-  v12css.textContent = ".sport-btn{display:flex !important;flex-direction:column !important;align-items:center !important;justify-content:flex-start !important;text-align:center !important;min-height:82px !important;padding:10px 8px !important;line-height:1.1 !important;gap:6px !important;}.sport-btn .sport-emoji{font-size:24px !important;line-height:1 !important;display:block !important;}.sport-btn .sport-name{font-size:12px !important;line-height:1.2 !important;display:flex !important;align-items:center !important;justify-content:center !important;flex:1 !important;min-height:30px !important;}.inicio-hero-logo,.inicio-logo,.panel-inicio-logo{background:transparent !important;padding:0 !important;border-radius:0 !important;box-shadow:none !important;border:0 !important;}.v12-footer{background:#0a0a14;color:#9ba3b4;padding:48px 24px 28px;margin-top:60px;border-top:1px solid #1c2030;font-size:14px;font-family:inherit;}.v12-footer-grid{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:32px;}.v12-footer h4{color:#fff;font-size:13px;letter-spacing:1.2px;text-transform:uppercase;margin:0 0 16px;font-weight:600;}.v12-footer ul{list-style:none;padding:0;margin:0;}.v12-footer li{margin-bottom:10px;}.v12-footer a{color:#9ba3b4;text-decoration:none;transition:color .2s;cursor:pointer;}.v12-footer a:hover{color:#ff4d4d;}.v12-footer-bottom{max-width:1200px;margin:32px auto 0;padding-top:24px;border-top:1px solid #1c2030;display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;color:#5a6478;font-size:12px;}.v12-footer-social{display:flex;gap:14px;}.v12-footer-social a{font-size:18px;}";
-  document.head.appendChild(v12css);
-  var v12css2 = document.createElement('style');
-  v12css2.textContent = ".v12-modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.78);z-index:99998;display:none;align-items:center;justify-content:center;padding:20px;}.v12-modal-backdrop.open{display:flex;}.v12-modal{position:relative;background:#13141d;border:1px solid #2a2e44;border-radius:14px;max-width:480px;width:100%;padding:28px;max-height:92vh;overflow-y:auto;color:#e8eaed;font-family:inherit;}.v12-modal h2{margin:0 0 6px;color:#fff;font-size:22px;}.v12-modal .sub{color:#9ba3b4;font-size:13px;margin:0 0 22px;}.v12-modal label{display:block;font-size:12px;color:#bcc1cf;margin-bottom:6px;text-transform:uppercase;letter-spacing:.8px;}.v12-modal input,.v12-modal select{width:100%;background:#0c0d15;border:1px solid #2a2e44;color:#fff;padding:11px 13px;border-radius:8px;font-size:14px;margin-bottom:14px;font-family:inherit;box-sizing:border-box;}.v12-modal input:focus,.v12-modal select:focus{outline:none;border-color:#ff4d4d;}.v12-modal .row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}.v12-modal .check{display:flex;align-items:flex-start;gap:8px;font-size:12px;color:#bcc1cf;margin-bottom:10px;line-height:1.5;}.v12-modal .check input{width:auto;margin:2px 0 0;}.v12-modal .check a{color:#ff7a7a;cursor:pointer;}.v12-modal .btns{display:flex;gap:10px;margin-top:18px;}.v12-modal button{flex:1;padding:11px;border-radius:8px;font-weight:600;font-size:14px;cursor:pointer;font-family:inherit;border:none;}.v12-modal .btn-primary{background:#ff4d4d;color:#fff;}.v12-modal .btn-secondary{background:transparent;color:#9ba3b4;border:1px solid #2a2e44;}.v12-modal .modal-close{position:absolute;right:14px;top:10px;font-size:26px;color:#9ba3b4;background:none;border:none;cursor:pointer;padding:4px 10px;width:auto;flex:0;}.v12-tabs{display:flex;gap:0;margin-bottom:18px;border-bottom:1px solid #2a2e44;}.v12-tab{flex:1;padding:10px;text-align:center;cursor:pointer;color:#9ba3b4;font-size:13px;border-bottom:2px solid transparent;text-transform:uppercase;letter-spacing:.7px;}.v12-tab.active{color:#ff4d4d;border-bottom-color:#ff4d4d;}.stub-section{margin-top:18px;}.stub-section h4{color:#ff4d4d;margin:0 0 10px;font-size:13px;letter-spacing:1.2px;text-transform:uppercase;}.stub-rec-grid,.stub-rank-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;}.stub-card{background:#13141d;border:1px solid #2a2e44;border-radius:10px;padding:12px 14px;font-size:13px;}.stub-card b{color:#fff;display:block;margin-bottom:3px;font-size:14px;}.stub-card span{color:#9ba3b4;display:block;}";
-  document.head.appendChild(v12css2);
+  if(window.__v12_1_loaded) return; window.__v12_1_loaded = true;
+  var st = document.createElement('style'); st.id='v12-css';
+  st.textContent=".sport-btn{display:flex !important;flex-direction:column !important;align-items:center !important;justify-content:flex-start !important;text-align:center !important;min-height:78px !important;padding:8px 6px !important;line-height:1.1 !important;gap:5px !important;}.sport-btn .sport-emoji,.sport-btn .ico,.sport-btn>span:first-child{font-size:22px !important;line-height:1 !important;display:block !important;}.sport-btn .sport-name,.sport-btn>span:last-child{font-size:11.5px !important;line-height:1.2 !important;display:flex !important;align-items:center !important;justify-content:center !important;flex:1 !important;min-height:28px !important;}.inicio-hero-logo,.inicio-logo,.panel-inicio-logo{background:transparent !important;padding:0 !important;border-radius:0 !important;box-shadow:none !important;border:0 !important;}.v12-footer{background:#0a0a14;color:#9ba3b4;padding:48px 24px 28px;margin-top:60px;border-top:1px solid #1c2030;font-size:14px;font-family:inherit;}.v12-footer-grid{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:32px;}.v12-footer h4{color:#fff;font-size:13px;letter-spacing:1.2px;text-transform:uppercase;margin:0 0 16px;font-weight:600;}.v12-footer ul{list-style:none;padding:0;margin:0;}.v12-footer li{margin-bottom:10px;}.v12-footer a{color:#9ba3b4;text-decoration:none;cursor:pointer;}.v12-footer a:hover{color:#ff4d4d;}.v12-footer-bottom{max-width:1200px;margin:32px auto 0;padding-top:24px;border-top:1px solid #1c2030;display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;color:#5a6478;font-size:12px;}.v12-footer-social{display:flex;gap:14px;}.v12-footer-social a{font-size:18px;}.v12-modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.78);z-index:99998;display:none;align-items:center;justify-content:center;padding:20px;}.v12-modal-backdrop.open{display:flex;}.v12-modal{position:relative;background:#13141d;border:1px solid #2a2e44;border-radius:14px;max-width:480px;width:100%;padding:28px;max-height:92vh;overflow-y:auto;color:#e8eaed;font-family:inherit;}.v12-modal h2{margin:0 0 6px;color:#fff;font-size:22px;}.v12-modal .sub{color:#9ba3b4;font-size:13px;margin:0 0 22px;}.v12-modal label{display:block;font-size:12px;color:#bcc1cf;margin-bottom:6px;text-transform:uppercase;letter-spacing:.8px;}.v12-modal input,.v12-modal select{width:100%;background:#0c0d15;border:1px solid #2a2e44;color:#fff;padding:11px 13px;border-radius:8px;font-size:14px;margin-bottom:14px;font-family:inherit;box-sizing:border-box;}.v12-modal input:focus,.v12-modal select:focus{outline:none;border-color:#ff4d4d;}.v12-modal .row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}.v12-modal .check{display:flex;align-items:flex-start;gap:8px;font-size:12px;color:#bcc1cf;margin-bottom:10px;line-height:1.5;}.v12-modal .check input{width:auto;margin:2px 0 0;}.v12-modal .check a{color:#ff7a7a;cursor:pointer;}.v12-modal .btns{display:flex;gap:10px;margin-top:18px;}.v12-modal button{flex:1;padding:11px;border-radius:8px;font-weight:600;font-size:14px;cursor:pointer;font-family:inherit;border:none;}.v12-modal .btn-primary{background:#ff4d4d;color:#fff;}.v12-modal .btn-secondary{background:transparent;color:#9ba3b4;border:1px solid #2a2e44;}.v12-modal .modal-close{position:absolute;right:14px;top:10px;font-size:26px;color:#9ba3b4;background:none;border:none;cursor:pointer;width:auto;flex:0;padding:4px 10px;}.v12-tabs{display:flex;gap:0;margin-bottom:18px;border-bottom:1px solid #2a2e44;}.v12-tab{flex:1;padding:10px;text-align:center;cursor:pointer;color:#9ba3b4;font-size:13px;border-bottom:2px solid transparent;text-transform:uppercase;letter-spacing:.7px;}.v12-tab.active{color:#ff4d4d;border-bottom-color:#ff4d4d;}.stub-section{margin-top:18px;}.stub-section h4{color:#ff4d4d;margin:0 0 10px;font-size:13px;letter-spacing:1.2px;text-transform:uppercase;}.stub-rec-grid,.stub-rank-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;}.stub-card{background:#13141d;border:1px solid #2a2e44;border-radius:10px;padding:12px 14px;font-size:13px;}.stub-card b{color:#fff;display:block;margin-bottom:3px;font-size:14px;}.stub-card span{color:#9ba3b4;display:block;}";
+  document.head.appendChild(st);
 
+  var done = {padel:false, tagline:false, header:false, footer:false};
   function fixPadel(){
-    document.querySelectorAll('.sport-btn').forEach(function(btn){
-      var txt = (btn.textContent || '').toLowerCase();
+    var btns = document.querySelectorAll('.sport-btn'); var changed=false;
+    btns.forEach(function(btn){
+      var txt = (btn.textContent||'').toLowerCase();
       if(/p[áa]del/.test(txt)){
-        var emojiEl = btn.querySelector('.sport-emoji');
-        if(emojiEl){ if(emojiEl.textContent !== '🏓') emojiEl.textContent = '🏓'; }
-        else { btn.innerHTML = btn.innerHTML.replace(/🎾|🏸/, '🏓'); }
+        var em = btn.querySelector('.sport-emoji');
+        if(em){ if(em.textContent !== '🏓'){ em.textContent='🏓'; changed=true; } }
+        else {
+          // walk text nodes for an emoji char
+          for(var n=0;n<btn.childNodes.length;n++){
+            var cn = btn.childNodes[n];
+            if(cn.nodeType===3 && /🎾|🏸|🏏/.test(cn.nodeValue)){ cn.nodeValue = cn.nodeValue.replace(/🎾|🏸|🏏/, '🏓'); changed=true; break; }
+            if(cn.nodeType===1 && /^🎾|^🏸|^🏏/.test(cn.textContent)){ cn.textContent = cn.textContent.replace(/🎾|🏸|🏏/, '🏓'); changed=true; break; }
+          }
+          if(!changed && /🎾|🏸|🏏/.test(btn.innerHTML)){ btn.innerHTML = btn.innerHTML.replace(/🎾|🏸|🏏/, '🏓'); changed=true; }
+        }
       }
     });
+    done.padel = btns.length > 0;
+    return changed;
   }
   function fixTagline(){
-    document.querySelectorAll('h1,h2,h3,p,span,div').forEach(function(el){
-      if(el.children.length===0 && el.textContent && el.textContent.indexOf('jugadores')>-1 && el.textContent.length < 400){
-        el.textContent = el.textContent.replace(/jugadores/g, 'deportistas');
+    if(done.tagline) return;
+    // Only target the hero tagline - much more focused than scanning all elements
+    var hero = document.querySelector('.hero, .inicio-hero, header, main, .main-content');
+    var scope = hero || document.body;
+    // Use TreeWalker for speed
+    var walker = document.createTreeWalker(scope, NodeFilter.SHOW_TEXT, null);
+    var n;
+    while((n = walker.nextNode())){
+      if(n.nodeValue && n.nodeValue.indexOf('jugadores') > -1 && n.nodeValue.length < 400){
+        n.nodeValue = n.nodeValue.replace(/jugadores/g, 'deportistas');
+        done.tagline = true;
+        break;
       }
-    });
-  }
-  function reorderHeader(){
-    var iniciar = null, fuentes = null;
-    document.querySelectorAll('button, a').forEach(function(el){
-      var t = (el.textContent || '').trim().toLowerCase();
-      if(!iniciar && /iniciar\s*sesi/.test(t) && el.offsetParent && el.getBoundingClientRect().top < 200) iniciar = el;
-      if(!fuentes && t === 'fuentes' && el.offsetParent && el.getBoundingClientRect().top < 200) fuentes = el;
-    });
-    if(iniciar){ iniciar.style.order = '99'; iniciar.style.marginLeft = 'auto'; }
-    if(fuentes){ fuentes.style.order = '1'; }
-    if(iniciar && iniciar.parentElement){ iniciar.parentElement.style.display = 'flex'; iniciar.parentElement.style.alignItems = 'center'; }
-    if(iniciar && !iniciar.dataset.v12bound){
-      iniciar.dataset.v12bound = '1';
-      iniciar.addEventListener('click', function(e){ e.preventDefault(); e.stopPropagation(); window.__openLogin && window.__openLogin(); }, true);
     }
   }
+  function reorderHeader(){
+    if(done.header) return;
+    var iniciar=null, fuentes=null;
+    document.querySelectorAll('button, a').forEach(function(el){
+      var t = (el.textContent||'').trim();
+      var r = el.getBoundingClientRect();
+      if(r.top > 200 || !el.offsetParent) return;
+      if(!iniciar && /Iniciar\s*Sesi/i.test(t)) iniciar = el;
+      if(!fuentes && /^Fuentes$/i.test(t)) fuentes = el;
+    });
+    if(iniciar){
+      iniciar.style.order = '99';
+      iniciar.style.marginLeft = 'auto';
+      if(iniciar.parentElement){
+        iniciar.parentElement.style.display = 'flex';
+        iniciar.parentElement.style.alignItems = 'center';
+      }
+      if(!iniciar.dataset.v12bound){
+        iniciar.dataset.v12bound = '1';
+        iniciar.addEventListener('click', function(e){ e.preventDefault(); e.stopPropagation(); openLoginModal(); }, true);
+      }
+      done.header = true;
+    }
+    if(fuentes){ fuentes.style.order = '1'; }
+  }
   function addFooter(){
-    if(document.getElementById('v12-footer')) return;
-    var f = document.createElement('footer');
-    f.id = 'v12-footer'; f.className = 'v12-footer';
+    if(done.footer || document.getElementById('v12-footer')){ done.footer = true; return; }
+    var f = document.createElement('footer'); f.id='v12-footer'; f.className='v12-footer';
     f.innerHTML = '<div class="v12-footer-grid">' +
       '<div><h4>Sports Stats 21</h4><ul>' +
         '<li><a data-v12footer="historia">Historia</a></li>' +
@@ -11023,20 +11050,12 @@ document.addEventListener("DOMContentLoaded", function(){
     '<div class="v12-footer-bottom">' +
       '<div>© 2026 Sports Stats 21 · Todos los derechos reservados · La red social de los deportes</div>' +
       '<div class="v12-footer-social">' +
-        '<a title="Instagram">📷</a>' +
-        '<a title="X / Twitter">🐦</a>' +
-        '<a title="TikTok">🎵</a>' +
-        '<a title="YouTube">▶️</a>' +
-        '<a title="LinkedIn">💼</a>' +
+        '<a title="Instagram">📷</a><a title="X/Twitter">🐦</a><a title="TikTok">🎵</a><a title="YouTube">▶️</a><a title="LinkedIn">💼</a>' +
       '</div>' +
     '</div>';
     document.body.appendChild(f);
-    f.addEventListener('click', function(e){
-      var t = e.target.closest('[data-v12footer]');
-      if(!t) return;
-      e.preventDefault();
-      window.__openInfo && window.__openInfo(t.dataset.v12footer);
-    });
+    f.addEventListener('click', function(e){ var t=e.target.closest('[data-v12footer]'); if(!t) return; e.preventDefault(); openInfoModal(t.dataset.v12footer); });
+    done.footer = true;
   }
 
   var INFO = {
@@ -11047,7 +11066,7 @@ document.addEventListener("DOMContentLoaded", function(){
     contacto:{title:'Contacto', body:'¿Tienes una pregunta, sugerencia o quieres reportar un dato incorrecto? Escríbenos a contacto@sportsstats21.com. Respondemos en menos de 48 horas hábiles.'},
     ayuda:{title:'Centro de Ayuda', body:'Encuentra respuestas a las preguntas más frecuentes: cómo crear tu perfil, cómo conectar con otros deportistas, cómo crear o unirte a una liga local. Próximamente: artículos paso a paso, videos tutoriales y chat en vivo.'},
     feedback:{title:'Sugerencias', body:'Tu opinión nos hace mejorar. Si tienes ideas para nuevos deportes, funcionalidades o cómo presentar mejor la data, escríbenos a sugerencias@sportsstats21.com.'},
-    estado:{title:'Estado del Servicio', body:'Todos los sistemas operando con normalidad. Última verificación: hace pocos minutos. Suscríbete para recibir notificaciones de incidentes en status.sportsstats21.com.'},
+    estado:{title:'Estado del Servicio', body:'Todos los sistemas operando con normalidad. Última verificación: hace pocos minutos.'},
     privacidad:{title:'Política de Privacidad', body:'Tu información personal es tuya. Solo usamos los datos estrictamente necesarios para que la plataforma funcione: nombre, fecha de nacimiento, nacionalidad y email. No vendemos datos a terceros. Puedes solicitar la eliminación de tu cuenta en cualquier momento desde el panel de perfil. Cumplimos con GDPR y normativas locales.'},
     terminos:{title:'Términos y Condiciones', body:'Al usar Sports Stats 21 aceptas: respetar a otros miembros de la comunidad, no publicar contenido ofensivo o falso, no usar la plataforma para fines comerciales no autorizados, y entender que los datos estadísticos son referenciales y no constituyen recomendación de apuesta.'},
     cookies:{title:'Política de Cookies', body:'Usamos cookies esenciales para mantener tu sesión iniciada y recordar tus preferencias (idioma, deportes favoritos). No usamos cookies de publicidad ni rastreo de terceros. Puedes desactivar cookies no esenciales desde la configuración de tu navegador.'},
@@ -11061,64 +11080,47 @@ document.addEventListener("DOMContentLoaded", function(){
     var info = INFO[key] || {title:'Sports Stats 21', body:'Próximamente.'};
     var m = document.getElementById('v12-info-modal');
     if(!m){
-      m = document.createElement('div');
-      m.id = 'v12-info-modal'; m.className = 'v12-modal-backdrop';
+      m = document.createElement('div'); m.id='v12-info-modal'; m.className='v12-modal-backdrop';
       m.innerHTML = '<div class="v12-modal"><button class="modal-close" type="button">×</button><h2 id="v12-info-title"></h2><p style="line-height:1.6;color:#bcc1cf;font-size:14px;margin:0 0 20px;" id="v12-info-body"></p><div class="btns"><button class="btn-primary" type="button">Entendido</button></div></div>';
       document.body.appendChild(m);
       m.addEventListener('click', function(e){
-        if(e.target === m || e.target.classList.contains('modal-close') || e.target.classList.contains('btn-primary')){
-          m.classList.remove('open');
-        }
+        if(e.target === m || e.target.classList.contains('modal-close') || e.target.classList.contains('btn-primary')) m.classList.remove('open');
       });
     }
     m.querySelector('#v12-info-title').textContent = info.title;
     m.querySelector('#v12-info-body').textContent = info.body;
     m.classList.add('open');
   }
-  window.__openInfo = openInfoModal;
-
   function openLoginModal(){
     var m = document.getElementById('v12-login-modal');
     if(!m){
-      m = document.createElement('div');
-      m.id = 'v12-login-modal'; m.className = 'v12-modal-backdrop';
-      var nacOpts = '<option value="">Seleccionar país</option>' +
-        ['Argentina','Bolivia','Brasil','Chile','Colombia','Costa Rica','Cuba','Ecuador','El Salvador','España','Estados Unidos','Guatemala','Honduras','México','Nicaragua','Panamá','Paraguay','Perú','Puerto Rico','República Dominicana','Uruguay','Venezuela'].map(function(c){return '<option>'+c+'</option>';}).join('') +
-        '<option disabled>──────────</option>' +
-        ['Alemania','Australia','Bélgica','Canadá','China','Corea del Sur','Croacia','Dinamarca','Egipto','Francia','Grecia','India','Inglaterra','Irlanda','Israel','Italia','Japón','Marruecos','Nigeria','Noruega','Países Bajos','Polonia','Portugal','Reino Unido','Sudáfrica','Suecia','Suiza','Turquía','Otro'].map(function(c){return '<option>'+c+'</option>';}).join('');
+      m = document.createElement('div'); m.id='v12-login-modal'; m.className='v12-modal-backdrop';
+      var paises1 = ['Argentina','Bolivia','Brasil','Chile','Colombia','Costa Rica','Cuba','Ecuador','El Salvador','España','Estados Unidos','Guatemala','Honduras','México','Nicaragua','Panamá','Paraguay','Perú','Puerto Rico','República Dominicana','Uruguay','Venezuela'];
+      var paises2 = ['Alemania','Australia','Bélgica','Canadá','China','Corea del Sur','Croacia','Dinamarca','Egipto','Francia','Grecia','India','Inglaterra','Irlanda','Israel','Italia','Japón','Marruecos','Nigeria','Noruega','Países Bajos','Polonia','Portugal','Reino Unido','Sudáfrica','Suecia','Suiza','Turquía','Otro'];
+      var nacOpts = '<option value="">Seleccionar país</option>' + paises1.map(function(c){return '<option>'+c+'</option>';}).join('') + '<option disabled>──────────</option>' + paises2.map(function(c){return '<option>'+c+'</option>';}).join('');
       m.innerHTML = '<div class="v12-modal">' +
         '<button class="modal-close" type="button" aria-label="cerrar">×</button>' +
         '<div class="v12-tabs"><div class="v12-tab active" data-tab="login">Iniciar Sesión</div><div class="v12-tab" data-tab="register">Crear Cuenta</div></div>' +
         '<div id="v12-login-pane">' +
-          '<h2 style="margin-top:0">Bienvenido</h2>' +
-          '<p class="sub">Accede a tu perfil de Sports Stats 21.</p>' +
+          '<h2 style="margin-top:0">Bienvenido</h2><p class="sub">Accede a tu perfil de Sports Stats 21.</p>' +
           '<label>Email</label><input type="email" id="v12-login-email" placeholder="tu@email.com" />' +
           '<label>Contraseña</label><input type="password" id="v12-login-pass" placeholder="••••••••" />' +
           '<div class="btns"><button class="btn-secondary" type="button" data-cancel>Cancelar</button><button class="btn-primary" type="button" data-login>Entrar</button></div>' +
         '</div>' +
         '<div id="v12-register-pane" style="display:none">' +
-          '<h2 style="margin-top:0">Crea tu cuenta</h2>' +
-          '<p class="sub">Necesitamos algunos datos para armar tu perfil deportivo.</p>' +
-          '<div class="row"><div><label>Nombre *</label><input type="text" id="v12-reg-nombre" required /></div><div><label>Apellido *</label><input type="text" id="v12-reg-apellido" required /></div></div>' +
-          '<div class="row"><div><label>Sexo</label><select id="v12-reg-sexo"><option value="">Seleccionar</option><option value="M">Masculino</option><option value="F">Femenino</option><option value="O">Prefiero no decirlo</option></select></div><div><label>Fecha Nacimiento *</label><input type="date" id="v12-reg-dob" required /></div></div>' +
-          '<label>Nacionalidad *</label><select id="v12-reg-nac" required>' + nacOpts + '</select>' +
-          '<label>Email *</label><input type="email" id="v12-reg-email" required />' +
-          '<label>Contraseña *</label><input type="password" id="v12-reg-pass" required />' +
+          '<h2 style="margin-top:0">Crea tu cuenta</h2><p class="sub">Necesitamos algunos datos para armar tu perfil deportivo.</p>' +
+          '<div class="row"><div><label>Nombre *</label><input type="text" id="v12-reg-nombre" /></div><div><label>Apellido *</label><input type="text" id="v12-reg-apellido" /></div></div>' +
+          '<div class="row"><div><label>Sexo</label><select id="v12-reg-sexo"><option value="">Seleccionar</option><option value="M">Masculino</option><option value="F">Femenino</option><option value="O">Prefiero no decirlo</option></select></div><div><label>Fecha Nacimiento *</label><input type="date" id="v12-reg-dob" /></div></div>' +
+          '<label>Nacionalidad *</label><select id="v12-reg-nac">' + nacOpts + '</select>' +
+          '<label>Email *</label><input type="email" id="v12-reg-email" />' +
+          '<label>Contraseña *</label><input type="password" id="v12-reg-pass" />' +
           '<label>Idioma</label><select id="v12-reg-idioma">' +
-            '<option value="es" selected>Español</option>' +
-            '<option value="en">English</option>' +
-            '<option value="de">Alemán (Deutsch)</option>' +
-            '<option value="fr">Francés (Français)</option>' +
-            '<option value="it">Italiano</option>' +
-            '<option value="pt">Portugués (Português)</option>' +
-            '<option value="zh">Chino (中文)</option>' +
-            '<option value="hi">Hindú (हिन्दी)</option>' +
+            '<option value="es" selected>Español</option><option value="en">English</option><option value="de">Alemán (Deutsch)</option><option value="fr">Francés (Français)</option><option value="it">Italiano</option><option value="pt">Portugués (Português)</option><option value="zh">Chino (中文)</option><option value="hi">Hindú (हिन्दी)</option>' +
           '</select>' +
           '<div class="check"><input type="checkbox" id="v12-reg-tc" /><label for="v12-reg-tc" style="text-transform:none;letter-spacing:normal;margin:0;">Acepto los <a data-v12footer="terminos">Términos y Condiciones</a> *</label></div>' +
           '<div class="check"><input type="checkbox" id="v12-reg-pp" /><label for="v12-reg-pp" style="text-transform:none;letter-spacing:normal;margin:0;">Acepto la <a data-v12footer="privacidad">Política de Privacidad</a> *</label></div>' +
           '<div class="btns"><button class="btn-secondary" type="button" data-cancel>Cancelar</button><button class="btn-primary" type="button" data-register>Crear cuenta</button></div>' +
-        '</div>' +
-      '</div>';
+        '</div></div>';
       document.body.appendChild(m);
       m.querySelectorAll('.v12-tab').forEach(function(tab){
         tab.addEventListener('click', function(){
@@ -11129,30 +11131,26 @@ document.addEventListener("DOMContentLoaded", function(){
         });
       });
       m.addEventListener('click', function(e){
-        if(e.target === m || e.target.classList.contains('modal-close') || e.target.dataset.cancel !== undefined){ m.classList.remove('open'); return; }
-        if(e.target.dataset.login !== undefined){
-          var em = m.querySelector('#v12-login-email').value.trim();
-          if(!em){ alert('Ingresa tu email'); return; }
+        if(e.target===m || e.target.classList.contains('modal-close') || e.target.dataset.cancel!==undefined){ m.classList.remove('open'); return; }
+        if(e.target.dataset.login!==undefined){
+          if(!m.querySelector('#v12-login-email').value.trim()){ alert('Ingresa tu email'); return; }
           alert('Próximamente: integración con backend de autenticación. ¡Gracias por probar Sports Stats 21!');
           m.classList.remove('open'); return;
         }
-        if(e.target.dataset.register !== undefined){
-          var req = ['v12-reg-nombre','v12-reg-apellido','v12-reg-dob','v12-reg-nac','v12-reg-email','v12-reg-pass'];
-          for(var i=0;i<req.length;i++){
-            if(!m.querySelector('#'+req[i]).value.trim()){ alert('Completa todos los campos obligatorios (*)'); return; }
-          }
-          if(!m.querySelector('#v12-reg-tc').checked || !m.querySelector('#v12-reg-pp').checked){ alert('Debes aceptar Términos y Política de Privacidad para crear tu cuenta'); return; }
-          var nombre = m.querySelector('#v12-reg-nombre').value.trim();
-          alert('¡Bienvenido ' + nombre + '! Tu perfil fue creado. Próximamente: confirmación por email + panel de perfil.');
+        if(e.target.dataset.register!==undefined){
+          var req=['v12-reg-nombre','v12-reg-apellido','v12-reg-dob','v12-reg-nac','v12-reg-email','v12-reg-pass'];
+          for(var i=0;i<req.length;i++){ if(!m.querySelector('#'+req[i]).value.trim()){ alert('Completa todos los campos obligatorios (*)'); return; } }
+          if(!m.querySelector('#v12-reg-tc').checked || !m.querySelector('#v12-reg-pp').checked){ alert('Debes aceptar Términos y Política de Privacidad'); return; }
+          alert('¡Bienvenido ' + m.querySelector('#v12-reg-nombre').value.trim() + '! Tu perfil fue creado. Próximamente: confirmación por email + panel de perfil.');
           m.classList.remove('open'); return;
         }
-        var fk = e.target.closest('[data-v12footer]');
-        if(fk){ e.preventDefault(); openInfoModal(fk.dataset.v12footer); }
+        var fk = e.target.closest('[data-v12footer]'); if(fk){ e.preventDefault(); openInfoModal(fk.dataset.v12footer); }
       });
     }
     m.classList.add('open');
   }
   window.__openLogin = openLoginModal;
+  window.__openInfo = openInfoModal;
 
   window.STUB_DATA = window.STUB_DATA || {};
   Object.assign(window.STUB_DATA, {
@@ -11160,146 +11158,63 @@ document.addEventListener("DOMContentLoaded", function(){
       desc:"El pádel es uno de los deportes de raqueta de mayor crecimiento mundial. Se juega en pareja sobre una cancha de 20×10m cerrada por paredes de vidrio y malla, combinando elementos de tenis y squash.",
       variants:["Pádel masculino","Pádel femenino","Pádel mixto","Pádel adaptado","Beach pádel"],
       events:["Premier Padel (P1 / P2 / Major)","World Padel Tour (legacy)","Mundial FIP por equipos","Mundial FIP por parejas","Hexagonal Latam"],
-      topPlayers:[
-        {name:"Arturo Coello (ESP)",detail:"#1 ranking masculino"},
-        {name:"Agustín Tapia (ARG)",detail:"#2 ranking — pareja de Coello"},
-        {name:"Ale Galán (ESP)",detail:"Múltiples Majors"},
-        {name:"Juan Lebrón (ESP)",detail:"Múltiples #1 ranking"},
-        {name:"Bea González (ESP)",detail:"Top mundial femenino"},
-        {name:"Gemma Triay (ESP)",detail:"Múltiple campeona Major"},
-        {name:"Delfina Brea (ARG)",detail:"Top mundial femenino"}
-      ],
-      records:[
-        {title:"Pareja con más Majors",detail:"Galán / Lebrón · 11 títulos juntos"},
-        {title:"Más semanas como #1",detail:"Galán · 78 semanas consecutivas"},
-        {title:"Mayor público en partido",detail:"Madrid Major · 12.000 espectadores"},
-        {title:"Países top",detail:"España, Argentina, Italia, Suecia, Brasil, México"}
-      ]
+      topPlayers:[{name:"Arturo Coello (ESP)",detail:"#1 ranking masculino"},{name:"Agustín Tapia (ARG)",detail:"Pareja de Coello"},{name:"Ale Galán (ESP)",detail:"Múltiples Majors"},{name:"Juan Lebrón (ESP)",detail:"Múltiple #1"},{name:"Bea González (ESP)",detail:"Top mundial femenino"},{name:"Gemma Triay (ESP)",detail:"Múltiple campeona"},{name:"Delfina Brea (ARG)",detail:"Top mundial femenino"}],
+      records:[{title:"Pareja con más Majors",detail:"Galán/Lebrón · 11 títulos"},{title:"Más semanas como #1",detail:"Galán · 78 semanas seguidas"},{title:"Mayor público",detail:"Madrid Major · 12.000 espectadores"},{title:"Países top",detail:"ESP, ARG, ITA, SWE, BRA, MEX"}]
     },
     "Ciclismo":{
       desc:"El ciclismo profesional combina ruta, pista, MTB, BMX y disciplinas urbanas. Las tres grandes vueltas — Tour de France, Giro y Vuelta — junto con los Monumentos definen la temporada.",
       variants:["Ruta","Pista (velódromo)","Mountain Bike (XCO/DH)","BMX racing","BMX freestyle","Gravel","Ciclocross"],
       events:["Tour de France","Giro de Italia","Vuelta a España","Tour de France Femmes","Mundial UCI Ruta","Paris-Roubaix","Milán–San Remo","Lieja-Bastoña-Lieja","Il Lombardia","Tour de Flandes"],
-      topPlayers:[
-        {name:"Tadej Pogačar (SLO)",detail:"3× Tour de France · WC Ruta"},
-        {name:"Jonas Vingegaard (DEN)",detail:"2× Tour de France"},
-        {name:"Remco Evenepoel (BEL)",detail:"Vuelta 2022 · WC 2022"},
-        {name:"Mathieu van der Poel (NED)",detail:"WC ruta 2023 · Paris-Roubaix"},
-        {name:"Demi Vollering (NED)",detail:"TdF Femmes 2023"},
-        {name:"Lotte Kopecky (BEL)",detail:"WC ruta femenino"}
-      ],
-      records:[
-        {title:"Récord de la hora",detail:"Filippo Ganna · 56.792 km (2022)"},
-        {title:"Más Tours ganados",detail:"Merckx, Hinault, Indurain, Anquetil · 5 c/u"},
-        {title:"Más Monumentos",detail:"Eddy Merckx · 19 victorias"},
-        {title:"Tour más largo",detail:"TdF 1926 · 5.745 km"}
-      ]
+      topPlayers:[{name:"Tadej Pogačar (SLO)",detail:"3× Tour de France · WC Ruta"},{name:"Jonas Vingegaard (DEN)",detail:"2× Tour de France"},{name:"Remco Evenepoel (BEL)",detail:"Vuelta 2022 · WC 2022"},{name:"Mathieu van der Poel (NED)",detail:"WC ruta 2023 · Roubaix"},{name:"Demi Vollering (NED)",detail:"TdF Femmes 2023"},{name:"Lotte Kopecky (BEL)",detail:"WC ruta femenino"}],
+      records:[{title:"Récord de la hora",detail:"Filippo Ganna · 56.792 km (2022)"},{title:"Más Tours ganados",detail:"Merckx · Hinault · Indurain · Anquetil · 5 c/u"},{title:"Más Monumentos",detail:"Eddy Merckx · 19 victorias"},{title:"Tour más largo",detail:"TdF 1926 · 5.745 km"}]
     },
     "Cricket":{
-      desc:"Deporte de bate y pelota originario de Inglaterra, con 11 jugadores por equipo. Es el segundo deporte más popular del mundo por audiencia. Tres formatos principales: Test, ODI y T20.",
+      desc:"Deporte de bate y pelota originario de Inglaterra, con 11 jugadores por equipo. Segundo deporte más popular del mundo por audiencia. Formatos: Test, ODI y T20.",
       variants:["Test Cricket","One Day International (ODI)","Twenty20 (T20)","Indoor cricket","Beach cricket","The Hundred"],
-      events:["Cricket World Cup (ODI)","T20 World Cup","The Ashes (ENG vs AUS)","IPL (Indian Premier League)","Big Bash League","PSL (Pakistan Super League)","ICC Champions Trophy"],
-      topPlayers:[
-        {name:"Virat Kohli (IND)",detail:"80+ tons internacionales"},
-        {name:"Rohit Sharma (IND)",detail:"Capitán India · récord 264 ODI"},
-        {name:"Babar Azam (PAK)",detail:"Top batsman T20I"},
-        {name:"Pat Cummins (AUS)",detail:"Capitán Australia · WC 2023"},
-        {name:"Joe Root (ENG)",detail:"Top batsman Test"},
-        {name:"Smriti Mandhana (IND)",detail:"Top mundial femenino"}
-      ],
-      records:[
-        {title:"Mayor score Test",detail:"Brian Lara · 400 vs ENG (2004)"},
-        {title:"Mayor score ODI",detail:"Rohit Sharma · 264 vs SL (2014)"},
-        {title:"Más wickets Test",detail:"Muttiah Muralitharan · 800"},
-        {title:"Jugador IPL más caro",detail:"Mitchell Starc · 3.18M USD (2024)"}
-      ]
+      events:["Cricket World Cup (ODI)","T20 World Cup","The Ashes","IPL (India)","Big Bash League","PSL","ICC Champions Trophy"],
+      topPlayers:[{name:"Virat Kohli (IND)",detail:"80+ tons internacionales"},{name:"Rohit Sharma (IND)",detail:"Capitán India · récord 264 ODI"},{name:"Babar Azam (PAK)",detail:"Top batsman T20I"},{name:"Pat Cummins (AUS)",detail:"Capitán AUS · WC 2023"},{name:"Joe Root (ENG)",detail:"Top batsman Test"},{name:"Smriti Mandhana (IND)",detail:"Top mundial femenino"}],
+      records:[{title:"Mayor score Test",detail:"Brian Lara · 400 vs ENG (2004)"},{title:"Mayor score ODI",detail:"Rohit Sharma · 264 vs SL (2014)"},{title:"Más wickets Test",detail:"Muralitharan · 800"},{title:"IPL más caro",detail:"Mitchell Starc · 3.18M USD (2024)"}]
     },
     "Volleyball":{
-      desc:"Voleibol — deporte olímpico jugado entre dos equipos de 6 (sala) o 2 (playa) sobre una red. Combina fuerza, salto, técnica y trabajo en equipo. Muy popular en Brasil, Italia, Polonia y Asia.",
-      variants:["Voleibol sala (6 vs 6)","Beach Volleyball (2 vs 2)","Snow Volleyball","Sitting Volleyball (paralímpico)","Footvolley","Indoor mixto"],
-      events:["Mundial FIVB (sala y playa)","Volleyball Nations League (VNL)","Juegos Olímpicos","European Championship","Sudamericano","World Beach Pro Tour"],
-      topPlayers:[
-        {name:"Wilfredo León (POL)",detail:"Top opuesto mundial"},
-        {name:"Yuji Nishida (JPN)",detail:"Top atacante asiático"},
-        {name:"Paola Egonu (ITA)",detail:"Top opuesta femenina"},
-        {name:"Tijana Bošković (SRB)",detail:"Top mundial femenina"},
-        {name:"Mol / Sørum (NOR)",detail:"Oro olímpico playa 2020"},
-        {name:"Duda / Ana Patrícia (BRA)",detail:"Oro olímpico playa 2024"}
-      ],
-      records:[
-        {title:"Más oros olímpicos M",detail:"URSS/Rusia · 4 títulos"},
-        {title:"Más oros olímpicos F",detail:"Cuba · 3 consecutivos (92-00)"},
-        {title:"Saque más rápido",detail:"Matey Kaziyski · 134 km/h"},
-        {title:"Salto más alto",detail:"Leonel Marshall (CUB) · 1.27 m"}
-      ]
+      desc:"Voleibol — deporte olímpico jugado entre dos equipos de 6 (sala) o 2 (playa) sobre una red. Combina fuerza, salto y técnica. Muy popular en Brasil, Italia, Polonia y Asia.",
+      variants:["Voleibol sala (6 vs 6)","Beach Volleyball (2 vs 2)","Snow Volleyball","Sitting Volleyball","Footvolley","Indoor mixto"],
+      events:["Mundial FIVB (sala y playa)","Volleyball Nations League","Juegos Olímpicos","European Championship","Sudamericano","World Beach Pro Tour"],
+      topPlayers:[{name:"Wilfredo León (POL)",detail:"Top opuesto mundial"},{name:"Yuji Nishida (JPN)",detail:"Top atacante asiático"},{name:"Paola Egonu (ITA)",detail:"Top opuesta femenina"},{name:"Tijana Bošković (SRB)",detail:"Top mundial femenina"},{name:"Mol / Sørum (NOR)",detail:"Oro olímpico playa 2020"},{name:"Duda / Ana Patrícia (BRA)",detail:"Oro olímpico playa 2024"}],
+      records:[{title:"Más oros olímpicos M",detail:"URSS/Rusia · 4 títulos"},{title:"Más oros olímpicos F",detail:"Cuba · 3 seguidos (92-00)"},{title:"Saque más rápido",detail:"Matey Kaziyski · 134 km/h"},{title:"Salto más alto",detail:"Leonel Marshall · 1.27 m"}]
     },
     "Atletismo":{
-      desc:"Atletismo — la disciplina madre del deporte olímpico. Pista (velocidad, medio fondo, fondo, vallas, relevos), campo (saltos, lanzamientos), ruta (maratón, marcha) y combinadas (decatlón, heptatlón).",
+      desc:"Atletismo — la disciplina madre del deporte olímpico. Pista (velocidad, medio fondo, fondo, vallas, relevos), campo (saltos, lanzamientos), ruta (maratón, marcha) y combinadas.",
       variants:["Pista (sprint/medio/fondo)","Campo (saltos y lanzamientos)","Maratón y ruta","Marcha atlética","Cross country","Decatlón / Heptatlón","Para-atletismo"],
-      events:["Mundial de Atletismo","Juegos Olímpicos","Diamond League","World Marathon Majors (Boston, NY, Chicago, Berlín, Londres, Tokio)","European Championships","Pan American Games"],
-      topPlayers:[
-        {name:"Noah Lyles (USA)",detail:"Oro 100m París 2024 · WC 100/200m"},
-        {name:"Letsile Tebogo (BOT)",detail:"Oro 200m París 2024"},
-        {name:"Sha Carri Richardson (USA)",detail:"WC 100m 2023"},
-        {name:"Sydney McLaughlin-Levrone (USA)",detail:"Récord mundial 400m vallas"},
-        {name:"Faith Kipyegon (KEN)",detail:"3× oro 1500m olímpico"},
-        {name:"Mondo Duplantis (SWE)",detail:"Récord mundial garrocha 6.26m"}
-      ],
-      records:[
-        {title:"100m hombres",detail:"Usain Bolt · 9.58s (Berlín 2009)"},
-        {title:"100m mujeres",detail:"Florence Griffith-Joyner · 10.49s (1988)"},
-        {title:"Maratón hombres",detail:"Kelvin Kiptum · 2:00:35 (Chicago 2023)"},
-        {title:"Maratón mujeres",detail:"Ruth Chepngetich · 2:09:56 (Chicago 2024)"},
-        {title:"Garrocha",detail:"Mondo Duplantis · 6.26m (2024)"},
-        {title:"Salto largo hombres",detail:"Mike Powell · 8.95m (1991)"}
-      ]
+      events:["Mundial de Atletismo","Juegos Olímpicos","Diamond League","World Marathon Majors","European Championships","Pan American Games"],
+      topPlayers:[{name:"Noah Lyles (USA)",detail:"Oro 100m París 2024"},{name:"Letsile Tebogo (BOT)",detail:"Oro 200m París 2024"},{name:"Sha Carri Richardson (USA)",detail:"WC 100m 2023"},{name:"Sydney McLaughlin-Levrone (USA)",detail:"WR 400m vallas"},{name:"Faith Kipyegon (KEN)",detail:"3× oro 1500m olímpico"},{name:"Mondo Duplantis (SWE)",detail:"WR garrocha 6.26m"}],
+      records:[{title:"100m hombres",detail:"Usain Bolt · 9.58s (2009)"},{title:"100m mujeres",detail:"Florence Griffith-Joyner · 10.49s (1988)"},{title:"Maratón hombres",detail:"Kelvin Kiptum · 2:00:35 (Chicago 2023)"},{title:"Maratón mujeres",detail:"Ruth Chepngetich · 2:09:56 (Chicago 2024)"},{title:"Garrocha",detail:"Mondo Duplantis · 6.26m (2024)"},{title:"Salto largo hombres",detail:"Mike Powell · 8.95m (1991)"}]
     }
   });
   window.renderStubSportV12 = function(sport){
-    var d = window.STUB_DATA[sport];
-    if(!d) return '<p>Próximamente: data completa para '+sport+'.</p>';
-    var h = '<div class="stub-content">';
-    h += '<p style="font-size:15px;line-height:1.6;color:#bcc1cf;">'+d.desc+'</p>';
-    if(d.variants){
-      h += '<div class="stub-section"><h4>Variantes</h4><div class="stub-rec-grid">';
-      d.variants.forEach(function(v){h += '<div class="stub-card"><b>'+v+'</b></div>';});
-      h += '</div></div>';
-    }
-    if(d.events){
-      h += '<div class="stub-section"><h4>Eventos y competiciones</h4><div class="stub-rec-grid">';
-      d.events.forEach(function(v){h += '<div class="stub-card"><b>'+v+'</b></div>';});
-      h += '</div></div>';
-    }
-    if(d.topPlayers){
-      h += '<div class="stub-section"><h4>Top deportistas</h4><div class="stub-rank-grid">';
-      d.topPlayers.forEach(function(p){h += '<div class="stub-card"><b>'+p.name+'</b><span>'+p.detail+'</span></div>';});
-      h += '</div></div>';
-    }
-    if(d.records){
-      h += '<div class="stub-section"><h4>Récords y datos</h4><div class="stub-rec-grid">';
-      d.records.forEach(function(r){h += '<div class="stub-card"><b>'+r.title+'</b><span>'+r.detail+'</span></div>';});
-      h += '</div></div>';
-    }
-    h += '</div>';
-    return h;
+    var d = window.STUB_DATA[sport]; if(!d) return '<p>Próximamente: data completa para '+sport+'.</p>';
+    var h = '<div class="stub-content"><p style="font-size:15px;line-height:1.6;color:#bcc1cf;">'+d.desc+'</p>';
+    if(d.variants){ h+='<div class="stub-section"><h4>Variantes</h4><div class="stub-rec-grid">'; d.variants.forEach(function(v){h+='<div class="stub-card"><b>'+v+'</b></div>';}); h+='</div></div>'; }
+    if(d.events){ h+='<div class="stub-section"><h4>Eventos y competiciones</h4><div class="stub-rec-grid">'; d.events.forEach(function(v){h+='<div class="stub-card"><b>'+v+'</b></div>';}); h+='</div></div>'; }
+    if(d.topPlayers){ h+='<div class="stub-section"><h4>Top deportistas</h4><div class="stub-rank-grid">'; d.topPlayers.forEach(function(p){h+='<div class="stub-card"><b>'+p.name+'</b><span>'+p.detail+'</span></div>';}); h+='</div></div>'; }
+    if(d.records){ h+='<div class="stub-section"><h4>Récords y datos</h4><div class="stub-rec-grid">'; d.records.forEach(function(r){h+='<div class="stub-card"><b>'+r.title+'</b><span>'+r.detail+'</span></div>';}); h+='</div></div>'; }
+    return h + '</div>';
   };
   if(typeof window.renderStubSport === 'function'){
     var orig_v12 = window.renderStubSport;
-    window.renderStubSport = function(sport){
-      if(window.STUB_DATA[sport]) return window.renderStubSportV12(sport);
-      return orig_v12.apply(this, arguments);
-    };
-  } else {
-    window.renderStubSport = window.renderStubSportV12;
-  }
+    window.renderStubSport = function(s){ return window.STUB_DATA[s] ? window.renderStubSportV12(s) : orig_v12.apply(this, arguments); };
+  } else { window.renderStubSport = window.renderStubSportV12; }
   window.NEW_PRINCIPAL = Object.assign(window.NEW_PRINCIPAL || {}, window.STUB_DATA);
-  function applyAll(){ try{ fixPadel(); reorderHeader(); fixTagline(); addFooter(); }catch(e){} }
-  if(document.readyState === 'complete' || document.readyState === 'interactive'){ applyAll(); }
-  else { document.addEventListener('DOMContentLoaded', applyAll); }
-  setInterval(applyAll, 2500);
-  var mo = new MutationObserver(function(){ try{ fixPadel(); reorderHeader(); fixTagline(); }catch(e){} });
-  mo.observe(document.body, {childList:true, subtree:true});
-  console.log('[v12] patch loaded · padel emoji · alineación · footer · login form · idioma · logo inicio · expanded sport data');
+
+  function applyAll(){ try{ fixPadel(); reorderHeader(); fixTagline(); addFooter(); }catch(e){ console.warn('[v12.1]', e); } }
+  if(document.readyState === 'complete' || document.readyState === 'interactive'){
+    setTimeout(applyAll, 100);
+  } else {
+    document.addEventListener('DOMContentLoaded', function(){ setTimeout(applyAll, 100); });
+  }
+  // One scoped retry after 1.5s in case dynamic content is still mounting
+  setTimeout(applyAll, 1500);
+  setTimeout(applyAll, 4000);
+  console.log('[v12.1] patch loaded · sin loops · padel + alineación + footer + login + idiomas + tagline + logo inicio');
 })();
 </script>
 
