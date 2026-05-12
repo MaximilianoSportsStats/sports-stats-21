@@ -11225,39 +11225,46 @@ document.addEventListener("DOMContentLoaded", function(){
   document.head.appendChild(st);
 
   function normalizeBtn(btn){
-    if(btn.dataset.v13norm === '1') return;
     var firstSpan = btn.querySelector(':scope > span');
-    var emojiHtml = '', emojiStyle = '', restText = '';
-    function looksEmoji(s){
-      if(!s) return false;
-      var cp = s.codePointAt(0);
-      // common emoji ranges (using decimal to avoid \u{} parser issues)
-      if(cp >= 0x1F000 && cp <= 0x1FFFF) return true;
-      if(cp >= 0x2600 && cp <= 0x27BF) return true;
-      if(cp >= 0x2700 && cp <= 0x27FF) return true;
-      if(cp === 0x200D || cp === 0xFE0F) return true;
-      return false;
-    }
-    if(firstSpan && looksEmoji(firstSpan.textContent.trim())){
+    var emojiHtml='', emojiStyle='', restText='';
+    function looksEmoji(s){ if(!s)return false; var cp=s.codePointAt(0); if(cp>=0x1F000&&cp<=0x1FFFF)return true; if(cp>=0x2600&&cp<=0x27BF)return true; if(cp>=0x2700&&cp<=0x27FF)return true; if(cp===0x200D||cp===0xFE0F)return true; return false; }
+    if(firstSpan && firstSpan.classList && firstSpan.classList.contains('ss-emoji-wrap')){
       emojiHtml = firstSpan.textContent.trim();
       emojiStyle = firstSpan.getAttribute('style') || '';
-      var bits = [];
-      Array.from(btn.childNodes).forEach(function(n){
-        if(n === firstSpan) return;
-        bits.push(n.textContent || '');
-      });
-      restText = bits.join(' ').replace(/\s+/g,' ').trim();
-    } else {
-      var txt = btn.textContent.trim();
-      if(looksEmoji(txt)){
-        var idx = txt.search(/\s/);
-        if(idx > 0){ emojiHtml = txt.slice(0, idx); restText = txt.slice(idx+1).trim(); }
-        else { emojiHtml = txt; restText = ''; }
-      } else { restText = txt; }
+    } else if(firstSpan && looksEmoji(firstSpan.textContent.trim())){
+      emojiHtml = firstSpan.textContent.trim();
+      emojiStyle = firstSpan.getAttribute('style') || '';
     }
+    // Prefer the LAST non-empty trimmed text node (the main label re-injected by page renderer)
+    var textParts = [];
+    Array.from(btn.childNodes).forEach(function(n){
+      if(n.nodeType === 3){
+        var t = (n.nodeValue || '').trim();
+        if(t) textParts.push(t);
+      } else if(n.nodeType === 1){
+        if(n.classList && n.classList.contains('ss-emoji-wrap')) return;
+        if(n.classList && n.classList.contains('ss-name-wrap')) return;
+        if(n === firstSpan && (emojiHtml || looksEmoji(n.textContent.trim()))) return;
+        var t = (n.textContent || '').trim();
+        if(t) textParts.push(t);
+      }
+    });
+    // If no emoji detected from firstSpan, try extracting from first text part
+    if(!emojiHtml && textParts.length > 0){
+      var first = textParts[0];
+      if(looksEmoji(first)){
+        var sp = first.search(/\s/);
+        if(sp > 0){ emojiHtml = first.slice(0, sp); textParts[0] = first.slice(sp+1).trim(); }
+        else { emojiHtml = first; textParts[0] = ''; }
+      }
+    }
+    // Use the LAST non-empty text (page re-renders the main label as trailing text)
+    restText = '';
+    for(var k = textParts.length-1; k >= 0; k--){ if(textParts[k]){ restText = textParts[k]; break; } }
     if(!restText && !emojiHtml) return;
     var styleAttr = emojiStyle ? ' style="' + emojiStyle.replace(/"/g,'&quot;') + '"' : '';
-    btn.innerHTML = '<span class="ss-emoji-wrap"' + styleAttr + '>' + emojiHtml + '</span><span class="ss-name-wrap">' + restText.replace(/</g,'&lt;') + '</span>';
+    var html = '<span class="ss-emoji-wrap"' + styleAttr + '>' + emojiHtml + '</span><span class="ss-name-wrap">' + restText.replace(/</g,'&lt;') + '</span>';
+    if(btn.innerHTML !== html) btn.innerHTML = html;
     btn.dataset.v13norm = '1';
   }
   function normalizeAll(){
@@ -11326,6 +11333,14 @@ document.addEventListener("DOMContentLoaded", function(){
   else { document.addEventListener('DOMContentLoaded', function(){ setTimeout(applyAll, 200); }); }
   setTimeout(applyAll, 1800);
   setTimeout(applyAll, 4500);
+  setTimeout(applyAll, 7000);
+  // Bounded interval to clean trailing text added by page renderer
+  var cleanCount = 0;
+  var cleanInt = setInterval(function(){
+    cleanCount++;
+    if(cleanCount > 8){ clearInterval(cleanInt); return; }
+    try { document.querySelectorAll('.sport-btn').forEach(function(b){ if(!b.dataset.v13norm) return; var hasJunk = Array.from(b.childNodes).some(function(n){ return n.nodeType===3 && (n.nodeValue||'').trim(); }); if(hasJunk){ b.dataset.v13norm = ''; normalizeBtn(b); } }); } catch(e){}
+  }, 1200);
   console.log('[v13] loaded · normalize sport-btn · logo contain · panel centros deportivos');
 })();
 </script>
