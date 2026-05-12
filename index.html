@@ -11268,6 +11268,7 @@ document.addEventListener("DOMContentLoaded", function(){
     if(btn.innerHTML !== newHtml){ btn.innerHTML = newHtml; }
     btn.dataset.v13norm = '1';
   }
+  window.__normalizeBtn = normalizeBtn;
   function normalizeAll(){
     document.querySelectorAll('.sport-btn').forEach(normalizeBtn);
   }
@@ -11369,10 +11370,8 @@ document.addEventListener("DOMContentLoaded", function(){
       if(hasJunk){
         // Re-run prior normalize if defined globally; otherwise just remove trailing text
         if(typeof window.__forceNormalize === 'function'){ window.__forceNormalize(b); return; }
-        // Fallback: remove trailing/standalone text nodes
-        Array.from(b.childNodes).forEach(function(n){
-          if(n.nodeType===3 && (n.nodeValue||'').trim()){ b.removeChild(n); }
-        });
+        // Fallback: use normalize if available, else no-op
+          if(typeof window.__normalizeBtn === "function"){ window.__normalizeBtn(b); }
       }
     });
   }
