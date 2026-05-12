@@ -11225,46 +11225,47 @@ document.addEventListener("DOMContentLoaded", function(){
   document.head.appendChild(st);
 
   function normalizeBtn(btn){
-    var firstSpan = btn.querySelector(':scope > span');
-    var emojiHtml='', emojiStyle='', restText='';
     function looksEmoji(s){ if(!s)return false; var cp=s.codePointAt(0); if(cp>=0x1F000&&cp<=0x1FFFF)return true; if(cp>=0x2600&&cp<=0x27BF)return true; if(cp>=0x2700&&cp<=0x27FF)return true; if(cp===0x200D||cp===0xFE0F)return true; return false; }
-    if(firstSpan && firstSpan.classList && firstSpan.classList.contains('ss-emoji-wrap')){
-      emojiHtml = firstSpan.textContent.trim();
-      emojiStyle = firstSpan.getAttribute('style') || '';
-    } else if(firstSpan && looksEmoji(firstSpan.textContent.trim())){
-      emojiHtml = firstSpan.textContent.trim();
-      emojiStyle = firstSpan.getAttribute('style') || '';
+    // Strategy: gather BEST emoji and BEST name candidate from current state, then rebuild only if needed.
+    var emojiHtml='', emojiStyle='', nameText='';
+    var firstSpan = btn.querySelector(':scope > span');
+    // 1. Emoji: prefer existing ss-emoji-wrap, else first span if looks emoji, else first emoji char in textContent
+    var emojiWrap = btn.querySelector(':scope > span.ss-emoji-wrap');
+    if(emojiWrap){ emojiHtml = emojiWrap.textContent.trim(); emojiStyle = emojiWrap.getAttribute('style')||''; }
+    else if(firstSpan && looksEmoji(firstSpan.textContent.trim())){ emojiHtml = firstSpan.textContent.trim(); emojiStyle = firstSpan.getAttribute('style')||''; }
+    else {
+      var raw = (btn.textContent||'').trim();
+      if(looksEmoji(raw)){
+        var sp = raw.search(/\s/);
+        emojiHtml = sp>0 ? raw.slice(0, sp) : raw;
+      }
     }
-    // Prefer the LAST non-empty trimmed text node (the main label re-injected by page renderer)
-    var textParts = [];
+    // 2. Name candidates (in priority): trailing text nodes, then non-emoji spans, then existing ss-name-wrap, then text after emoji in textContent
+    var candidates = [];
     Array.from(btn.childNodes).forEach(function(n){
-      if(n.nodeType === 3){
-        var t = (n.nodeValue || '').trim();
-        if(t) textParts.push(t);
-      } else if(n.nodeType === 1){
+      if(n.nodeType === 3){ var t=(n.nodeValue||'').trim(); if(t && !looksEmoji(t)) candidates.push(t); }
+      else if(n.nodeType === 1){
         if(n.classList && n.classList.contains('ss-emoji-wrap')) return;
-        if(n.classList && n.classList.contains('ss-name-wrap')) return;
-        if(n === firstSpan && (emojiHtml || looksEmoji(n.textContent.trim()))) return;
+        if(n === firstSpan && emojiHtml === (n.textContent||'').trim()) return;
         var t = (n.textContent || '').trim();
-        if(t) textParts.push(t);
+        if(t && !looksEmoji(t)) candidates.push(t);
       }
     });
-    // If no emoji detected from firstSpan, try extracting from first text part
-    if(!emojiHtml && textParts.length > 0){
-      var first = textParts[0];
-      if(looksEmoji(first)){
-        var sp = first.search(/\s/);
-        if(sp > 0){ emojiHtml = first.slice(0, sp); textParts[0] = first.slice(sp+1).trim(); }
-        else { emojiHtml = first; textParts[0] = ''; }
-      }
+    // Also check ss-name-wrap value
+    var nameWrap = btn.querySelector(':scope > span.ss-name-wrap');
+    if(nameWrap && (nameWrap.textContent||'').trim()){ candidates.unshift((nameWrap.textContent||'').trim()); }
+    // Also try splitting full textContent
+    if(candidates.length === 0){
+      var fullText = (btn.textContent||'').trim();
+      if(emojiHtml && fullText.indexOf(emojiHtml) === 0){ var after = fullText.slice(emojiHtml.length).trim(); if(after) candidates.push(after); }
+      else if(fullText && !looksEmoji(fullText)) candidates.push(fullText);
     }
-    // Use the LAST non-empty text (page re-renders the main label as trailing text)
-    restText = '';
-    for(var k = textParts.length-1; k >= 0; k--){ if(textParts[k]){ restText = textParts[k]; break; } }
-    if(!restText && !emojiHtml) return;
+    // Pick the LAST non-empty candidate (page renderer re-adds main label as trailing text)
+    for(var k = candidates.length-1; k >= 0; k--){ if(candidates[k]){ nameText = candidates[k]; break; } }
+    if(!nameText && !emojiHtml) return;
     var styleAttr = emojiStyle ? ' style="' + emojiStyle.replace(/"/g,'&quot;') + '"' : '';
-    var html = '<span class="ss-emoji-wrap"' + styleAttr + '>' + emojiHtml + '</span><span class="ss-name-wrap">' + restText.replace(/</g,'&lt;') + '</span>';
-    if(btn.innerHTML !== html) btn.innerHTML = html;
+    var newHtml = '<span class="ss-emoji-wrap"' + styleAttr + '>' + emojiHtml + '</span><span class="ss-name-wrap">' + nameText.replace(/</g,'&lt;') + '</span>';
+    if(btn.innerHTML !== newHtml){ btn.innerHTML = newHtml; }
     btn.dataset.v13norm = '1';
   }
   function normalizeAll(){
