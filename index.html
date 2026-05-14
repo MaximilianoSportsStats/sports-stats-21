@@ -11403,6 +11403,160 @@ document.addEventListener("DOMContentLoaded", function(){
 })();
 </script>
 
+<script>
+/* v16: NEWS carousel + Ligas Escolares panel + reorder + BaseBall + fix EG */
+(function(){
+  if(window.__v16_loaded) return; window.__v16_loaded = true;
+  var st = document.createElement('style'); st.id='v16-css';
+  st.textContent = ".v16-news-section{margin:60px auto 20px;max-width:1200px;padding:0 24px;}.v16-news-section h2{color:#ff4d4d;font-size:32px;letter-spacing:6px;margin:0 0 18px;text-align:center;font-weight:800;}.v16-news-section h2 small{display:block;font-size:13px;letter-spacing:1px;color:#9ba3b4;font-weight:400;margin-top:4px;}.v16-news-track{position:relative;height:280px;overflow:hidden;border-radius:16px;background:#1a1c28;border:1px solid #2a2e44;}.v16-news-slide{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:30px;opacity:0;transition:opacity .8s;color:#fff;text-align:center;}.v16-news-slide.active{opacity:1;}.v16-news-slide .v16-news-tag{display:inline-block;background:#ff4d4d;color:#fff;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;padding:4px 12px;border-radius:20px;margin-bottom:14px;font-weight:700;}.v16-news-slide h3{font-size:26px;margin:0 0 12px;font-weight:700;line-height:1.2;}.v16-news-slide p{color:#bcc1cf;font-size:14px;max-width:600px;line-height:1.6;margin:0;}.v16-news-dots{display:flex;gap:8px;justify-content:center;margin-top:14px;}.v16-news-dots button{width:9px;height:9px;border-radius:50%;border:0;background:#2a2e44;cursor:pointer;padding:0;transition:background .2s;}.v16-news-dots button.active{background:#ff4d4d;width:24px;border-radius:5px;}";
+  document.head.appendChild(st);
+
+  // 1. RENAME Béisbol → BaseBall (preserve normalize - re-find each pass)
+  function renameBeisbol(){
+    document.querySelectorAll('.sport-btn').forEach(function(b){
+      var span = b.querySelector('span.ss-name-wrap');
+      if(span && /^B[eé]isbol$/i.test(span.textContent.trim())){
+        span.textContent = 'BaseBall';
+      } else {
+        // fresh button: text node
+        Array.from(b.childNodes).forEach(function(n){
+          if(n.nodeType===3 && /B[eé]isbol/.test(n.nodeValue)){
+            n.nodeValue = n.nodeValue.replace(/B[eé]isbol/g, 'BaseBall');
+          }
+        });
+      }
+    });
+  }
+
+  // 2. REMOVE Novedades widget + ADD Ligas Escolares as 3rd
+  function reorderPanels(){
+    var sec = document.querySelector('.inicio-panels'); if(!sec) return;
+    // Remove old Novedades widget
+    var nov = Array.from(sec.children).find(function(p){ var h = p.querySelector('h3'); return h && /Novedades/i.test(h.textContent); });
+    if(nov) nov.remove();
+    // Add Ligas Escolares/Universitarias as 3rd if not present
+    if(!document.getElementById('v16-ligas-eu')){
+      var art = document.createElement('article');
+      art.id = 'v16-ligas-eu';
+      art.className = 'inicio-panel';
+      art.innerHTML = '<div class="inicio-panel-icon">🎓</div>' +
+        '<h3>Ligas Escolares / Universitarias</h3>' +
+        '<p>El semillero del deporte. Encuentra calendarios, resultados y rankings de <b>ligas escolares</b>, <b>universitarias</b> y <b>juveniles</b> en tu país. Sigue a los próximos talentos antes que lleguen al profesionalismo.</p>' +
+        '<button type="button" style="margin-top:10px;background:#ff4d4d;color:#fff;border:0;padding:9px 16px;border-radius:8px;font-weight:600;cursor:pointer;font-size:13px;">Ver ligas 🎓</button>';
+      // Insert as 3rd child
+      var kids = sec.children;
+      if(kids.length >= 2) sec.insertBefore(art, kids[2]);
+      else sec.appendChild(art);
+      art.addEventListener('click', function(){ alert('🔧 Próximamente: ligas escolares + universitarias de Sudamérica, Norteamérica y Europa con calendarios, resultados y rankings.'); });
+    }
+  }
+
+  // 3. ADD news carousel after panels + move stat bar (Novedades) below news
+  var NEWS = [
+    {tag:'FÚTBOL', title:'Noticia 1', body:'Crónica destacada del fin de semana en las principales ligas europeas y latinoamericanas.'},
+    {tag:'NBA', title:'Noticia 2', body:'Resumen de la jornada de basketball — resultados, lesiones y movimientos de mercado.'},
+    {tag:'TENIS', title:'Noticia 3', body:'Avances de los Grand Slams y los torneos ATP/WTA de la semana.'},
+    {tag:'F1', title:'Noticia 4', body:'GP destacado del fin de semana: clasificación, carrera y campeonato.'},
+    {tag:'NFL', title:'Noticia 5', body:'Resumen de la semana NFL — playoffs, lesiones y MVPs en disputa.'},
+    {tag:'GOLF', title:'Noticia 6', body:'PGA Tour / European Tour — top 10, líderes y noticias del Major.'},
+    {tag:'MLB', title:'Noticia 7', body:'Highlights del béisbol, world series y noticias de las divisiones AL/NL.'},
+    {tag:'OLÍMPICOS', title:'Noticia 8', body:'Camino a los próximos Juegos Olímpicos — clasificatorios y récords.'}
+  ];
+
+  function buildNews(){
+    if(document.getElementById('v16-news-section')) return;
+    var panels = document.querySelector('.inicio-panels'); if(!panels) return;
+    var sec = document.createElement('section');
+    sec.id = 'v16-news-section';
+    sec.className = 'v16-news-section';
+    var slidesHtml = NEWS.map(function(n,i){
+      return '<div class="v16-news-slide'+(i===0?' active':'')+'" data-i="'+i+'">' +
+        '<span class="v16-news-tag">'+n.tag+'</span>' +
+        '<h3>'+n.title+'</h3>' +
+        '<p>'+n.body+'</p>' +
+      '</div>';
+    }).join('');
+    var dotsHtml = NEWS.map(function(n,i){ return '<button data-i="'+i+'" class="'+(i===0?'active':'')+'" aria-label="Noticia '+(i+1)+'"></button>'; }).join('');
+    sec.innerHTML = '<h2>NEWS<small>Principales noticias deportivas de la semana</small></h2>' +
+      '<div class="v16-news-track">' + slidesHtml + '</div>' +
+      '<div class="v16-news-dots">' + dotsHtml + '</div>';
+    panels.parentNode.insertBefore(sec, panels.nextSibling);
+    // Carousel logic
+    var current = 0;
+    function show(i){
+      current = i % NEWS.length;
+      sec.querySelectorAll('.v16-news-slide').forEach(function(s,k){ s.classList.toggle('active', k===current); });
+      sec.querySelectorAll('.v16-news-dots button').forEach(function(b,k){ b.classList.toggle('active', k===current); });
+    }
+    sec.querySelectorAll('.v16-news-dots button').forEach(function(b){
+      b.addEventListener('click', function(){ show(parseInt(b.dataset.i)); resetTimer(); });
+    });
+    var timer;
+    function resetTimer(){ if(timer) clearInterval(timer); timer = setInterval(function(){ show(current+1); }, 5500); }
+    resetTimer();
+  }
+
+  function moveStatBar(){
+    var feat = document.querySelector('.inicio-features');
+    var news = document.getElementById('v16-news-section');
+    if(!feat || !news) return;
+    if(feat.previousElementSibling === news) return; // already moved
+    // Add a label "Novedades" header above stat bar
+    if(!document.getElementById('v16-novedades-header')){
+      var h = document.createElement('h2');
+      h.id = 'v16-novedades-header';
+      h.style.cssText = 'color:#ff4d4d;font-size:28px;letter-spacing:4px;margin:48px auto 8px;text-align:center;font-weight:800;max-width:1200px;';
+      h.innerHTML = 'NOVEDADES<small style="display:block;font-size:13px;letter-spacing:1px;color:#9ba3b4;font-weight:400;margin-top:4px;">Lo más nuevo de la plataforma</small>';
+      news.parentNode.insertBefore(h, news.nextSibling);
+      news.parentNode.insertBefore(feat, h.nextSibling);
+    } else {
+      news.parentNode.insertBefore(feat, document.getElementById('v16-novedades-header').nextSibling);
+    }
+  }
+
+  // 4. FIX Eventos Globales blank screen - prevent tab content from being wiped on toggle
+  function patchEG(){
+    // Find tab buttons that call render / switch tabs
+    var tabs = document.querySelectorAll('.tab, [data-tab], .sport-btn');
+    // Generic guard: if main content goes blank, restore it
+    var main = document.querySelector('main, .main, .main-content, .tab-panel.active');
+    if(main && !window.__v16_main_snap){
+      window.__v16_main_snap = main.innerHTML;
+    }
+  }
+
+  function applyAll(){
+    try{ renameBeisbol(); reorderPanels(); buildNews(); moveStatBar(); patchEG(); }
+    catch(e){ console.warn('[v16]', e); }
+  }
+  if(document.readyState==='complete'||document.readyState==='interactive'){ setTimeout(applyAll, 300); }
+  else { document.addEventListener('DOMContentLoaded', function(){ setTimeout(applyAll, 300); }); }
+  setTimeout(applyAll, 1500);
+  setTimeout(applyAll, 4000);
+  setTimeout(applyAll, 8000);
+  // Scoped re-apply on inicio panel changes
+  setTimeout(function(){
+    var inicio = document.querySelector('.tab-panel.active') || document.body;
+    if(!inicio) return;
+    var pending = false;
+    var mo = new MutationObserver(function(){
+      if(pending) return;
+      pending = true;
+      requestAnimationFrame(function(){
+        pending = false;
+        renameBeisbol();
+        // only re-add if missing
+        if(!document.getElementById('v16-news-section')) applyAll();
+        if(!document.getElementById('v16-ligas-eu')) reorderPanels();
+      });
+    });
+    mo.observe(inicio, {childList:true, subtree:false});
+    window.__v16_mo = mo;
+  }, 5000);
+  console.log('[v16] loaded · NEWS carousel · Ligas E/U panel · BaseBall · Novedades movido');
+})();
+</script>
+
 </body>
 </html>
 
