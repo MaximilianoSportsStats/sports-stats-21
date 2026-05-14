@@ -11872,6 +11872,109 @@ document.addEventListener("DOMContentLoaded", function(){
 })();
 </script>
 
+<script>
+/* v19: NEWS rotación 1-en-1 (8 estados con wrap) + EG snapshot/restore */
+(function(){
+  if(window.__v19_loaded) return; window.__v19_loaded = true;
+
+  var NEWS19 = [
+    {tag:'FÚTBOL', title:'Noticia 1', body:'Crónica destacada del fin de semana en las principales ligas europeas y latinoamericanas. Resultados, lesiones y la pelea por el campeonato.'},
+    {tag:'NBA', title:'Noticia 2', body:'Resumen de la jornada — resultados, lesiones y movimientos de mercado.'},
+    {tag:'TENIS', title:'Noticia 3', body:'Avances de Grand Slams y torneos ATP/WTA de la semana.'},
+    {tag:'F1', title:'Noticia 4', body:'GP destacado del fin de semana: clasificación, carrera y campeonato.'},
+    {tag:'NFL', title:'Noticia 5', body:'Resumen de la semana NFL — playoffs, lesiones y MVPs en disputa. Los líderes de la conferencia se preparan para el tramo final.'},
+    {tag:'GOLF', title:'Noticia 6', body:'PGA Tour y European Tour — top 10, líderes y noticias del Major.'},
+    {tag:'MLB', title:'Noticia 7', body:'Highlights del béisbol, World Series y noticias de las divisiones AL/NL.'},
+    {tag:'OLÍMPICOS', title:'Noticia 8', body:'Camino a los próximos Juegos Olímpicos — clasificatorios y récords.'}
+  ];
+
+  function rebuildNews19(){
+    var sec = document.getElementById('v16-news-section');
+    if(!sec) return;
+    // mark v18 obsolete, switch to v19 layout
+    if(sec.dataset.v19 === '1') return;
+    var dotsHtml = NEWS19.map(function(n,i){ return '<button data-i="'+i+'" class="'+(i===0?'active':'')+'" aria-label="Noticia '+(i+1)+'"></button>'; }).join('');
+    sec.innerHTML = '<h2 style="color:#ff4d4d;font-size:32px;letter-spacing:6px;margin:0 0 18px;text-align:center;font-weight:800;">NEWS<small style="display:block;font-size:13px;letter-spacing:1px;color:#9ba3b4;font-weight:400;margin-top:4px;">Principales noticias deportivas de la semana</small></h2>' +
+      '<div class="v18-news-grid">' +
+        '<div class="v18-news-big"></div>' +
+        '<div class="v18-news-mini-col">' +
+          '<div class="v18-news-mini"></div>' +
+          '<div class="v18-news-mini"></div>' +
+          '<div class="v18-news-mini"></div>' +
+        '</div>' +
+      '</div>' +
+      '<div class="v18-news-dots">' + dotsHtml + '</div>';
+    sec.dataset.v19 = '1';
+    sec.dataset.v18 = '1';
+
+    var current = 0;
+    function render(){
+      var big = sec.querySelector('.v18-news-big');
+      var nBig = NEWS19[current % NEWS19.length];
+      big.innerHTML = '<span class="v18-tag">'+nBig.tag+'</span><div><h3>'+nBig.title+'</h3><p>'+nBig.body+'</p></div>';
+      sec.querySelectorAll('.v18-news-mini').forEach(function(m, k){
+        var n = NEWS19[(current + 1 + k) % NEWS19.length];
+        m.innerHTML = '<span class="v18-tag">'+n.tag+'</span><div><h4>'+n.title+'</h4><p>'+n.body+'</p></div>';
+      });
+      sec.querySelectorAll('.v18-news-dots button').forEach(function(b,i){ b.classList.toggle('active', i===(current%NEWS19.length)); });
+    }
+    sec.querySelectorAll('.v18-news-dots button').forEach(function(b){
+      b.addEventListener('click', function(){ current = parseInt(b.dataset.i); render(); resetTimer(); });
+    });
+    var timer;
+    function resetTimer(){ if(timer) clearInterval(timer); timer = setInterval(function(){ current = (current+1) % NEWS19.length; render(); }, 5500); }
+    render();
+    resetTimer();
+  }
+
+  // EG bug fix: snapshot on first render, restore if blank later
+  var EG_SNAP = null;
+  function snapEG(){
+    var eg = document.getElementById('v3-panel') || document.querySelector('[id*="eventos"], [id*="globales"]');
+    if(!eg) return;
+    var text = (eg.textContent||'').trim();
+    if(text.length > 200 && eg.children.length >= 2){
+      EG_SNAP = eg.innerHTML;
+      window.__EG_SNAP = EG_SNAP;
+    }
+  }
+  function restoreEGIfBlank(){
+    var eg = document.getElementById('v3-panel') || document.querySelector('[id*="eventos"], [id*="globales"]');
+    if(!eg) return;
+    // is active and blank?
+    var isActive = eg.classList.contains('active') || getComputedStyle(eg).display !== 'none';
+    if(!isActive) return;
+    var text = (eg.textContent||'').trim();
+    if(text.length < 50 && EG_SNAP){
+      eg.innerHTML = EG_SNAP;
+      console.log('[v19] EG restored from snapshot');
+    }
+  }
+
+  function applyAll(){
+    try{
+      rebuildNews19();
+      snapEG();
+      restoreEGIfBlank();
+    } catch(e){ console.warn('[v19]', e); }
+  }
+  if(document.readyState==='complete'||document.readyState==='interactive'){ setTimeout(applyAll, 400); }
+  else { document.addEventListener('DOMContentLoaded', function(){ setTimeout(applyAll, 400); }); }
+  setTimeout(applyAll, 1600);
+  setTimeout(applyAll, 4000);
+  // Periodic check for EG blank state + capture snapshot when visible
+  setInterval(function(){ snapEG(); restoreEGIfBlank(); }, 1200);
+  // Also listen for clicks on Eventos Globales nav button to force render
+  setTimeout(function(){
+    var egBtn = Array.from(document.querySelectorAll('.sport-btn')).find(function(b){ return /Eventos Globales/i.test(b.textContent); });
+    if(egBtn){
+      egBtn.addEventListener('click', function(){ setTimeout(restoreEGIfBlank, 200); setTimeout(restoreEGIfBlank, 500); setTimeout(restoreEGIfBlank, 1000); }, true);
+    }
+  }, 2500);
+  console.log('[v19] loaded · NEWS rotación 1-en-1 · EG snapshot/restore');
+})();
+</script>
+
 </body>
 </html>
 
