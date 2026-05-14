@@ -11557,6 +11557,225 @@ document.addEventListener("DOMContentLoaded", function(){
 })();
 </script>
 
+<script>
+/* v17: restaurar stat bar + widget Novedades grande + Baseball + reorder + followers */
+(function(){
+  if(window.__v17_loaded) return; window.__v17_loaded = true;
+  var st = document.createElement('style'); st.id='v17-css';
+  st.textContent = ".v17-updates-widget{max-width:1200px;margin:18px auto 60px;padding:0 24px;}.v17-updates-card{background:#13141d;border:1px solid #2a2e44;border-radius:18px;padding:34px 38px;color:#e8eaed;}.v17-updates-card h3{color:#fff;font-size:22px;margin:0 0 6px;}.v17-updates-card .sub{color:#9ba3b4;font-size:14px;margin:0 0 22px;}.v17-update-row{display:grid;grid-template-columns:130px 1fr;gap:18px;align-items:start;padding:16px 0;border-bottom:1px solid #1c2030;}.v17-update-row:last-child{border-bottom:0;}.v17-update-row time{color:#ff4d4d;font-size:13px;font-weight:600;letter-spacing:.5px;}.v17-update-row .v17-update-body{color:#e8eaed;font-size:14px;line-height:1.5;}.v17-update-row .v17-update-body b{color:#fff;}.v17-update-tag{display:inline-block;background:rgba(255,77,77,.15);color:#ff7a7a;font-size:11px;letter-spacing:1px;text-transform:uppercase;padding:3px 9px;border-radius:6px;margin-left:8px;font-weight:700;}.v17-followers-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;background:linear-gradient(135deg,#13141d,#1a1c28);border:1px solid #2a2e44;border-radius:14px;padding:14px 20px;margin:18px 0 22px;color:#e8eaed;font-family:inherit;}.v17-followers-info{display:flex;align-items:center;gap:14px;}.v17-followers-info .v17-followers-count{font-size:22px;font-weight:800;color:#fff;line-height:1;}.v17-followers-info .v17-followers-count small{display:block;font-size:11px;color:#9ba3b4;font-weight:500;letter-spacing:1px;text-transform:uppercase;margin-top:4px;}.v17-followers-info .v17-followers-trend{color:#4ade80;font-size:12px;font-weight:600;display:flex;align-items:center;gap:4px;}.v17-follow-btn{background:#ff4d4d;color:#fff;border:0;padding:9px 18px;border-radius:8px;font-weight:700;cursor:pointer;font-size:13px;letter-spacing:.5px;transition:background .2s;font-family:inherit;}.v17-follow-btn:hover{background:#e64545;}.v17-follow-btn.following{background:transparent;border:1px solid #2a2e44;color:#9ba3b4;}.v17-follow-btn.following:hover{background:rgba(255,77,77,.1);border-color:#ff4d4d;color:#ff7a7a;}";
+  document.head.appendChild(st);
+
+  // 1. Restaurar stat bar a posición original (entre hero y panels)
+  function restoreStatBar(){
+    var feat = document.querySelector('.inicio-features');
+    var panels = document.querySelector('.inicio-panels');
+    var hero = document.querySelector('.inicio-hero, .hero-carousel');
+    if(!feat || !panels) return;
+    // Insert .inicio-features just before .inicio-panels
+    if(feat.nextElementSibling !== panels){
+      panels.parentNode.insertBefore(feat, panels);
+    }
+  }
+
+  // 2. BaseBall → Baseball
+  function fixBaseball(){
+    document.querySelectorAll('.sport-btn').forEach(function(b){
+      var span = b.querySelector('span.ss-name-wrap');
+      if(span && /^baseball$/i.test(span.textContent.trim()) && span.textContent.trim() !== 'Baseball'){
+        span.textContent = 'Baseball';
+      }
+      if(span && /^b[eé]isbol$/i.test(span.textContent.trim())){
+        span.textContent = 'Baseball';
+      }
+    });
+  }
+
+  // 3. Reorder widgets in .inicio-panels
+  // Target order:
+  // 1 ¿Qué es?, 2 Explora deportes, 3 Ligas Escolares/U, 4 Crea/explora Ligas Locales,
+  // 5 Crea tu perfil, 6 Conecta con deportistas, 7 Recluta y descubre, 8 Blog, 9 Compara, 10 Centros
+  function reorderPanels(){
+    var sec = document.querySelector('.inicio-panels'); if(!sec) return;
+    var byTitle = function(rgx){
+      return Array.from(sec.children).find(function(p){
+        var h = p.querySelector('h3'); return h && rgx.test(h.textContent);
+      });
+    };
+    var p1 = byTitle(/¿Qu[eé] es Sports/i);
+    var p2 = byTitle(/Explora deportes/i);
+    var p3 = byTitle(/Ligas Escolares/i);
+    var p4 = byTitle(/Crea o explora Ligas/i);
+    var p5 = byTitle(/Crea tu perfil/i);
+    var p6 = byTitle(/Conecta con deportistas/i);
+    var p7 = byTitle(/Recluta/i);
+    var p8 = byTitle(/Blog/i);
+    var p9 = byTitle(/Compara/i);
+    var p10 = byTitle(/Centros|centro deportivo/i);
+    var order = [p1,p2,p3,p4,p5,p6,p7,p8,p9,p10].filter(Boolean);
+    // append in order — appendChild moves nodes
+    order.forEach(function(p){ sec.appendChild(p); });
+  }
+
+  // 4. Reorder sport buttons in .sport-nav
+  // Move Combate after Basketball; Ciclismo after Natación
+  function reorderSports(){
+    var nav = document.querySelector('.sport-nav'); if(!nav) return;
+    function findBtn(rgx){
+      return Array.from(nav.querySelectorAll('.sport-btn')).find(function(b){
+        var t = (b.querySelector('.ss-name-wrap')||{}).textContent || b.textContent;
+        return rgx.test(t.trim());
+      });
+    }
+    var basketball = findBtn(/^basketball$/i);
+    var combate = findBtn(/^combate$/i);
+    var natacion = findBtn(/^nataci[oó]n$/i);
+    var ciclismo = findBtn(/^ciclismo$/i);
+    if(combate && basketball){
+      if(basketball.nextElementSibling !== combate){ basketball.parentNode.insertBefore(combate, basketball.nextElementSibling); }
+    }
+    if(ciclismo && natacion){
+      if(natacion.nextElementSibling !== ciclismo){ natacion.parentNode.insertBefore(ciclismo, natacion.nextElementSibling); }
+    }
+  }
+
+  // 5. Add Novedades widget (platform updates / changelog)
+  var UPDATES = [
+    {date: 'May 2026', tag: 'NUEVO', text: '<b>Centros Deportivos Cercanos</b> · busca gimnasios, clubes y estadios con filtros por deporte, estacionamiento, capacidad y horarios.'},
+    {date: 'May 2026', tag: 'NUEVO', text: '<b>Ligas Escolares / Universitarias</b> · agregamos el semillero — encuentra calendarios, resultados y rankings juveniles.'},
+    {date: 'May 2026', tag: 'MEJORA', text: '<b>Carrusel de NEWS</b> · 8 noticias deportivas rotando cada 5.5s en el inicio.'},
+    {date: 'Apr 2026', tag: 'MEJORA', text: '<b>15 deportes principales</b> + categorías Otros Deportes (250+ disciplinas) según arquitectura completa Sports Stats 21.'},
+    {date: 'Apr 2026', tag: 'NUEVO', text: '<b>Eventos Globales</b> separados de deportes (Mundiales, Olímpicos, Tour de France, Grand Slams, Super Bowl, World Series).'},
+    {date: 'Mar 2026', tag: 'NUEVO', text: '<b>Toggle Masculino / Femenino</b> en cada liga (WSL, Liga F, NWSL, UEFA Women, Mundial Femenino 2023).'},
+    {date: 'Mar 2026', tag: 'NUEVO', text: '<b>Liga Escolar + Liga Local</b> · crea ligas amateur, calendarios e inscripciones.'},
+    {date: 'Feb 2026', tag: 'MEJORA', text: '<b>Perfil de Deportista</b> + sistema de seguidores · sigue tu deporte, liga, equipo o jugador favorito.'},
+    {date: 'Feb 2026', tag: 'INICIO', text: '<b>Sports Stats 21 lanza beta</b> · La red social de los deportes ya está al aire.'}
+  ];
+  function buildNovedadesWidget(){
+    if(document.getElementById('v17-updates-widget')) return;
+    var novH = document.getElementById('v16-novedades-header');
+    if(!novH) return;
+    var sec = document.createElement('div');
+    sec.id = 'v17-updates-widget';
+    sec.className = 'v17-updates-widget';
+    var rows = UPDATES.map(function(u){
+      return '<div class="v17-update-row"><time>' + u.date + ' <span class="v17-update-tag">' + u.tag + '</span></time>' +
+        '<div class="v17-update-body">' + u.text + '</div></div>';
+    }).join('');
+    sec.innerHTML = '<div class="v17-updates-card">' +
+      '<h3>📋 Changelog de la plataforma</h3>' +
+      '<p class="sub">Las últimas actualizaciones, deportes agregados y mejoras de producto.</p>' +
+      rows +
+    '</div>';
+    // Insert AFTER the novedades header
+    novH.parentNode.insertBefore(sec, novH.nextSibling);
+  }
+
+  // 6. Followers count inside each sport page
+  // Seeded fake follower numbers per sport (until backend exists)
+  var SPORT_FOLLOWERS = {
+    'futbol': 12450000, 'soccer': 12450000, 'football': 12450000,
+    'basketball': 4820000, 'tennis': 2150000, 'tenis': 2150000,
+    'baseball': 1380000, 'beisbol': 1380000,
+    'football-americano': 3200000, 'futbol-americano': 3200000, 'nfl': 3200000,
+    'hockey': 980000, 'rugby': 620000, 'golf': 540000,
+    'combate': 1810000, 'mma': 1810000,
+    'cricket': 6740000, 'volleyball': 720000,
+    'atletismo': 410000, 'athletics': 410000,
+    'natacion': 290000, 'swimming': 290000,
+    'ciclismo': 380000, 'cycling': 380000,
+    'padel': 510000, 'pádel': 510000,
+    'carreras': 2400000, 'racing': 2400000, 'f1': 2400000,
+    'otros-deportes': 1200000, 'eventos-globales': 5500000
+  };
+  function fmtFollowers(n){
+    if(n >= 1000000) return (n/1000000).toFixed(1).replace(/\.0$/,'') + 'M';
+    if(n >= 1000) return (n/1000).toFixed(1).replace(/\.0$/,'') + 'K';
+    return String(n);
+  }
+  function getFollowerKey(panel){
+    if(!panel) return null;
+    var id = (panel.id || '').toLowerCase().replace('panel-','').replace('tab-','');
+    return id;
+  }
+  function injectFollowersBar(panel){
+    if(!panel || panel.querySelector('.v17-followers-bar')) return;
+    if(/inicio/i.test(panel.id || '')) return; // skip Inicio
+    var key = getFollowerKey(panel);
+    var count = SPORT_FOLLOWERS[key];
+    if(count == null){
+      // try matching by title
+      var h = panel.querySelector('h1, h2, h3');
+      var title = h ? h.textContent.trim().toLowerCase() : '';
+      for(var k in SPORT_FOLLOWERS){
+        if(title.indexOf(k) > -1){ count = SPORT_FOLLOWERS[k]; break; }
+      }
+      if(count == null) count = Math.floor(Math.random() * 500000) + 50000;
+    }
+    var trend = '+' + (Math.floor(Math.random() * 50) + 5) + 'K esta semana';
+    var followKey = 'v17-follow-' + key;
+    var following = localStorage.getItem(followKey) === '1';
+    var bar = document.createElement('div');
+    bar.className = 'v17-followers-bar';
+    bar.innerHTML = '<div class="v17-followers-info">' +
+        '<div class="v17-followers-count">' + fmtFollowers(count) + '<small>seguidores</small></div>' +
+        '<div class="v17-followers-trend">📈 ' + trend + '</div>' +
+      '</div>' +
+      '<button class="v17-follow-btn ' + (following?'following':'') + '" type="button">' + (following ? '✓ Siguiendo' : '+ Seguir') + '</button>';
+    // Find a good insertion point
+    var heading = panel.querySelector('h1, h2, .ll-sport-banner, [class*="banner"]');
+    if(heading && heading.parentElement){
+      heading.parentElement.insertBefore(bar, heading.nextSibling);
+    } else {
+      panel.insertBefore(bar, panel.firstChild);
+    }
+    var btn = bar.querySelector('.v17-follow-btn');
+    btn.addEventListener('click', function(){
+      following = !following;
+      if(following){
+        localStorage.setItem(followKey, '1');
+        btn.classList.add('following');
+        btn.textContent = '✓ Siguiendo';
+        var c = bar.querySelector('.v17-followers-count');
+        var newCount = (count = count + 1);
+        c.innerHTML = fmtFollowers(newCount) + '<small>seguidores</small>';
+      } else {
+        localStorage.removeItem(followKey);
+        btn.classList.remove('following');
+        btn.textContent = '+ Seguir';
+        var c2 = bar.querySelector('.v17-followers-count');
+        var newC = (count = Math.max(0, count - 1));
+        c2.innerHTML = fmtFollowers(newC) + '<small>seguidores</small>';
+      }
+    });
+  }
+  function injectAllFollowers(){
+    var panels = document.querySelectorAll('.tab-panel');
+    panels.forEach(function(p){
+      // skip non-sport panels
+      if(/^panel-(inicio|home)$/i.test(p.id || '')) return;
+      injectFollowersBar(p);
+    });
+  }
+
+  function applyAll(){
+    try{
+      fixBaseball();
+      reorderSports();
+      restoreStatBar();
+      reorderPanels();
+      buildNovedadesWidget();
+      injectAllFollowers();
+    } catch(e){ console.warn('[v17]', e); }
+  }
+  if(document.readyState==='complete'||document.readyState==='interactive'){ setTimeout(applyAll, 350); }
+  else { document.addEventListener('DOMContentLoaded', function(){ setTimeout(applyAll, 350); }); }
+  setTimeout(applyAll, 1700);
+  setTimeout(applyAll, 4500);
+  setTimeout(applyAll, 9000);
+  console.log('[v17] loaded · stat bar restaurado · widget Novedades · Baseball · reorder widgets/deportes · followers');
+})();
+</script>
+
 </body>
 </html>
 
