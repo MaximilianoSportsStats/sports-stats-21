@@ -12432,6 +12432,97 @@ document.addEventListener("DOMContentLoaded", function(){
 })();
 </script>
 
+<script>
+/* v24: NEWS section (Fútbol) + sub-items AMISTOSOS */
+(function(){
+  if(window.__v24_loaded) return; window.__v24_loaded = true;
+
+  function addNewsSection(){
+    var aside = document.querySelector('aside.sidebar'); if(!aside) return;
+    if(aside.dataset.v24news === '1') return;
+    var headers = Array.from(aside.querySelectorAll('.continent-header'));
+    var mundialH = headers.find(function(h){ return /MUNDIAL/i.test((h.textContent||'').trim()); });
+    if(!mundialH) return;
+    // Build new NEWS section: header + leagues list (start collapsed)
+    var newsHeader = document.createElement('div');
+    newsHeader.className = 'continent-header';
+    newsHeader.setAttribute('onclick','toggleContinent(this)');
+    newsHeader.setAttribute('data-cont','news');
+    newsHeader.setAttribute('data-v22-collapsed','1');
+    newsHeader.innerHTML = '📰 NEWS <span class="caret">▾</span>';
+    var newsList = document.createElement('div');
+    newsList.className = 'continent-leagues';
+    newsList.setAttribute('data-v22-collapsed','1');
+    var NEWS_ITEMS = [
+      {emoji:'📰', name:'Última hora', badge:'Vivo'},
+      {emoji:'⚽', name:'Resultados de la jornada', badge:'Hoy'},
+      {emoji:'🔥', name:'Top fichajes', badge:'Mercado'},
+      {emoji:'🚑', name:'Lesiones y ausencias', badge:'Info'},
+      {emoji:'📊', name:'Estadísticas destacadas', badge:'Stats'},
+      {emoji:'📅', name:'Próximos partidos', badge:'Calendario'},
+      {emoji:'🏆', name:'Especial Champions', badge:'UCL'},
+      {emoji:'🌍', name:'Mundial Femenino 2027', badge:'Camino'}
+    ];
+    NEWS_ITEMS.forEach(function(it){
+      var b = document.createElement('button');
+      b.className = 'sub-btn';
+      b.innerHTML = it.emoji + ' ' + it.name + '<span class="badge">' + it.badge + '</span>';
+      newsList.appendChild(b);
+    });
+    // Insert before MUNDIAL
+    mundialH.parentNode.insertBefore(newsHeader, mundialH);
+    mundialH.parentNode.insertBefore(newsList, mundialH);
+    aside.dataset.v24news = '1';
+  }
+
+  function expandAmistosos(){
+    var aside = document.querySelector('aside.sidebar'); if(!aside) return;
+    if(aside.dataset.v24amistosos === '1') return;
+    var headers = Array.from(aside.querySelectorAll('.continent-header'));
+    var amH = headers.find(function(h){ return /AMISTOSOS/i.test((h.textContent||'').trim()); });
+    if(!amH) return;
+    var amList = amH.nextElementSibling;
+    if(!amList || !amList.classList.contains('continent-leagues')) return;
+    // Clear and add 6 sub-items
+    amList.innerHTML = '';
+    var AM_SUB = [
+      {emoji:'🌎', name:'Selecciones', badge:'Internacional'},
+      {emoji:'⚽', name:'Equipos', badge:'Clubes'},
+      {emoji:'⭐', name:'Leyendas', badge:'Legends'},
+      {emoji:'🤝', name:'Amigos', badge:'Casual'},
+      {emoji:'🎨', name:'Mixto', badge:'M+F'},
+      {emoji:'✨', name:'Otros', badge:'Varios'}
+    ];
+    AM_SUB.forEach(function(it){
+      var b = document.createElement('button');
+      b.className = 'sub-btn';
+      b.innerHTML = it.emoji + ' ' + it.name + '<span class="badge">' + it.badge + '</span>';
+      amList.appendChild(b);
+    });
+    aside.dataset.v24amistosos = '1';
+  }
+
+  function applyAll(){ try{ addNewsSection(); expandAmistosos(); } catch(e){ console.warn('[v24]', e); } }
+  if(document.readyState==='complete'||document.readyState==='interactive'){ setTimeout(applyAll, 700); }
+  else { document.addEventListener('DOMContentLoaded', function(){ setTimeout(applyAll, 700); }); }
+  setTimeout(applyAll, 2000);
+  setTimeout(applyAll, 4500);
+  setTimeout(applyAll, 9000);
+  setTimeout(function(){
+    var pending = false;
+    var mo = new MutationObserver(function(){
+      if(pending) return; pending = true;
+      requestAnimationFrame(function(){ pending = false;
+        var aside = document.querySelector('aside.sidebar');
+        if(aside && (aside.dataset.v24news !== '1' || aside.dataset.v24amistosos !== '1')){ applyAll(); }
+      });
+    });
+    mo.observe(document.body, {childList:true, subtree:true});
+  }, 5000);
+  console.log('[v24] loaded · NEWS section Fútbol + AMISTOSOS sub-items');
+})();
+</script>
+
 </body>
 </html>
 
