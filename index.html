@@ -11975,6 +11975,105 @@ document.addEventListener("DOMContentLoaded", function(){
 })();
 </script>
 
+<script>
+/* v20: agregar fuentes oficiales + data extra Fútbol/Tenis/Carreras desde OneNote */
+(function(){
+  if(window.__v20_loaded) return; window.__v20_loaded = true;
+  var st = document.createElement('style'); st.id='v20-css';
+  st.textContent = ".v20-sources{margin:24px 0 0;padding:18px 22px;background:linear-gradient(135deg,rgba(255,77,77,.06),rgba(255,77,77,.02));border:1px solid rgba(255,77,77,.18);border-radius:14px;}.v20-sources h4{color:#ff4d4d;margin:0 0 6px;font-size:13px;letter-spacing:1.5px;text-transform:uppercase;font-weight:700;display:flex;align-items:center;gap:8px;}.v20-sources p{color:#9ba3b4;font-size:12px;margin:0 0 12px;}.v20-sources ul{list-style:none;padding:0;margin:0;display:flex;flex-wrap:wrap;gap:8px;}.v20-sources ul li{}.v20-sources a{display:inline-flex;align-items:center;gap:6px;background:rgba(255,77,77,.1);color:#ff7a7a;text-decoration:none;font-size:12px;padding:6px 12px;border-radius:8px;border:1px solid rgba(255,77,77,.2);transition:all .2s;}.v20-sources a:hover{background:#ff4d4d;color:#fff;border-color:#ff4d4d;}.v20-cat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin-top:14px;}.v20-cat-card{background:#13141d;border:1px solid #2a2e44;border-radius:10px;padding:14px 16px;color:#e8eaed;font-size:13px;}.v20-cat-card b{display:block;color:#fff;font-size:14px;margin-bottom:6px;}.v20-cat-card span{color:#9ba3b4;display:block;line-height:1.5;}";
+  document.head.appendChild(st);
+
+  var SOURCES = {
+    'futbol': {
+      title: 'Federación Internacional de Fútbol Asociación (FIFA)',
+      desc: 'Organismo rector mundial del fútbol. Fundado en 1904 en París, sede en Zúrich (Suiza). 211 federaciones afiliadas, más que la ONU. Organiza el Mundial masculino, femenino, sub-20, sub-17 y eFootball.',
+      urls: [
+        {u:'https://www.fifa.com/es/home', t:'fifa.com'},
+        {u:'https://inside.fifa.com/es/legal/documents', t:'Reglamentos'},
+        {u:'https://inside.fifa.com/es/organisation', t:'Organización'}
+      ]
+    },
+    'tenis': {
+      title: 'ATP Tour, ITF y Grand Slams',
+      desc: 'El tenis profesional se rige por la ITF (reglas), ATP (circuito masculino) y WTA (femenino). Los 4 Grand Slams (Australian Open, Roland Garros, Wimbledon, US Open) son los torneos más importantes del calendario.',
+      urls: [
+        {u:'https://www.atptour.com/es', t:'ATP Tour'},
+        {u:'https://www.itftennis.com/media/2512/2020-rules-of-tennis-spanish.pdf', t:'ITF Reglas (PDF)'},
+        {u:'https://es.wikipedia.org/wiki/Grand_Slam_(tenis)', t:'Grand Slams (Wiki)'}
+      ]
+    },
+    'carreras': {
+      title: 'FIA Single-Seater (F1, F2, F3, F4)',
+      desc: 'La pirámide oficial del automovilismo monoplaza FIA. F4 es la puerta de entrada (16+ años), F3 el siguiente paso, F2 la antesala de F1, y F1 la categoría reina. Reglamento técnico unificado por la FIA.',
+      urls: [
+        {u:'https://www.formula1.com/', t:'Formula 1'},
+        {u:'https://www.fiaformula2.com/', t:'Formula 2'},
+        {u:'https://es.wikipedia.org/wiki/F%C3%B3rmula_1', t:'F1 (Wiki)'},
+        {u:'https://es.wikipedia.org/wiki/F%C3%B3rmula_4', t:'F4 (Wiki)'},
+        {u:'https://f4spain.org/es/about-us/', t:'F4 Spain'},
+        {u:'https://es.wikipedia.org/wiki/Campeonato_NACAM_de_F%C3%B3rmula_4', t:'F4 NACAM (Wiki)'}
+      ],
+      categories: [
+        {name:'Formula 1', desc:'Categoría reina · 24 GPs/año · 10 equipos · 20 pilotos · motores 1.6L V6 turbo híbrido'},
+        {name:'Formula 2', desc:'Antesala de F1 · 14 fines de semana · monoplaza Dallara F2 2024 · motor Mecachrome 3.4L V6'},
+        {name:'Formula 3', desc:'FIA F3 Championship · soporte F1 europeo · monoplaza Dallara F3 2025 · motor Mecachrome 3.4L V6'},
+        {name:'Formula 4', desc:'Puerta de entrada FIA (16+ años) · campeonatos regionales (España, Italia, NACAM, etc.) · monoplaza estandarizado'}
+      ]
+    }
+  };
+
+  function buildSourcesBlock(key){
+    var s = SOURCES[key]; if(!s) return '';
+    var h = '<div class="v20-sources">' +
+      '<h4>📚 Fuentes oficiales</h4>' +
+      '<p><b style="color:#fff;">' + s.title + '</b> · ' + s.desc + '</p>' +
+      '<ul>' + s.urls.map(function(u){ return '<li><a href="'+u.u+'" target="_blank" rel="noopener">🔗 '+u.t+'</a></li>'; }).join('') + '</ul>';
+    if(s.categories){
+      h += '<div class="v20-cat-grid">' + s.categories.map(function(c){ return '<div class="v20-cat-card"><b>'+c.name+'</b><span>'+c.desc+'</span></div>'; }).join('') + '</div>';
+    }
+    h += '</div>';
+    return h;
+  }
+
+  function injectSources(){
+    var map = {
+      'panel-soccer': 'futbol', 'panel-futbol': 'futbol',
+      'panel-tennis': 'tenis', 'panel-tenis': 'tenis',
+      'panel-f1': 'carreras', 'panel-racing': 'carreras', 'panel-carreras': 'carreras'
+    };
+    Object.keys(map).forEach(function(pid){
+      var p = document.getElementById(pid); if(!p) return;
+      if(p.querySelector('.v20-sources')) return;
+      p.insertAdjacentHTML('beforeend', buildSourcesBlock(map[pid]));
+    });
+    // also try by panel matching keyword in id
+    document.querySelectorAll('.tab-panel').forEach(function(p){
+      var id = (p.id||'').toLowerCase();
+      var key = null;
+      if(/soccer|futbol/.test(id) && !/americano/.test(id)) key='futbol';
+      else if(/tennis|tenis/.test(id)) key='tenis';
+      else if(/racing|f1|carreras|motor/.test(id)) key='carreras';
+      if(key && !p.querySelector('.v20-sources')){
+        p.insertAdjacentHTML('beforeend', buildSourcesBlock(key));
+      }
+    });
+  }
+
+  function applyAll(){ try{ injectSources(); } catch(e){ console.warn('[v20]', e); } }
+  if(document.readyState==='complete'||document.readyState==='interactive'){ setTimeout(applyAll, 500); }
+  else { document.addEventListener('DOMContentLoaded', function(){ setTimeout(applyAll, 500); }); }
+  setTimeout(applyAll, 1800);
+  setTimeout(applyAll, 4500);
+  setTimeout(applyAll, 9000);
+  // observe sport panel changes
+  setTimeout(function(){
+    var mo = new MutationObserver(function(){ injectSources(); });
+    document.querySelectorAll('.tab-panel').forEach(function(p){ try{ mo.observe(p, {childList:true}); }catch(e){} });
+  }, 2500);
+  console.log('[v20] loaded · fuentes oficiales para Fútbol/Tenis/Carreras');
+})();
+</script>
+
 </body>
 </html>
 
