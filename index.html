@@ -12074,6 +12074,198 @@ document.addEventListener("DOMContentLoaded", function(){
 })();
 </script>
 
+<script>
+/* v21: Changelog paginado (4/pag, sin auto-rotate) + Fútbol sidebar colapsado + OTROS unificado */
+(function(){
+  if(window.__v21_loaded) return; window.__v21_loaded = true;
+  var st = document.createElement('style'); st.id='v21-css';
+  st.textContent = ".v21-changelog-dots{display:flex;gap:8px;justify-content:center;margin-top:18px;}.v21-changelog-dots button{width:9px;height:9px;border-radius:50%;border:0;background:#2a2e44;cursor:pointer;padding:0;transition:all .2s;}.v21-changelog-dots button.active{background:#ff4d4d;width:26px;border-radius:5px;}.v21-collapsed{max-height:0 !important;overflow:hidden !important;opacity:0 !important;padding-top:0 !important;padding-bottom:0 !important;margin-top:0 !important;margin-bottom:0 !important;border-width:0 !important;}";
+  document.head.appendChild(st);
+
+  // ===== 1) Changelog paginated 4 per page, no auto-rotate =====
+  function paginateChangelog(){
+    var widget = document.getElementById('v17-updates-widget');
+    if(!widget) return;
+    if(widget.dataset.v21 === '1') return;
+    var card = widget.querySelector('.v17-updates-card');
+    if(!card) return;
+    var rows = Array.from(card.querySelectorAll('.v17-update-row'));
+    if(rows.length <= 4){ widget.dataset.v21 = '1'; return; }
+    var perPage = 4;
+    var pages = Math.ceil(rows.length / perPage);
+    // wrap rows in a container (or just toggle display)
+    function showPage(p){
+      rows.forEach(function(r,i){
+        var page = Math.floor(i / perPage);
+        r.style.display = (page === p) ? '' : 'none';
+      });
+      var dots = widget.querySelectorAll('.v21-changelog-dots button');
+      dots.forEach(function(b,i){ b.classList.toggle('active', i===p); });
+    }
+    // Build dots
+    var dotsBar = document.createElement('div');
+    dotsBar.className = 'v21-changelog-dots';
+    for(var k=0;k<pages;k++){
+      var b = document.createElement('button');
+      b.dataset.page = String(k);
+      b.className = (k===0?'active':'');
+      b.setAttribute('aria-label','Página '+(k+1));
+      (function(idx){ b.addEventListener('click', function(){ showPage(idx); }); })(k);
+      dotsBar.appendChild(b);
+    }
+    card.appendChild(dotsBar);
+    widget.dataset.v21 = '1';
+    showPage(0);
+  }
+
+  // ===== 2) Fútbol sidebar: collapse all sections + unify OTROS =====
+  // Soccer-specific sidebar lives in #panel-soccer.
+  function findSoccerSidebar(){
+    var p = document.getElementById('panel-soccer'); if(!p) return null;
+    // common patterns
+    var aside = p.querySelector('aside, .ll-sidebar, .sport-sidebar, .sidebar, .league-side, [class*="sidebar"]');
+    if(aside) return aside;
+    // try first column with many <details> or h-sections
+    var cols = p.querySelectorAll(':scope > div, :scope > section');
+    for(var i=0;i<cols.length;i++){
+      if(cols[i].querySelectorAll('details, .accordion-section, [class*="acc"]').length > 3) return cols[i];
+    }
+    return null;
+  }
+
+  function collapseSoccerSections(){
+    var p = document.getElementById('panel-soccer'); if(!p) return;
+    if(p.dataset.v21col === '1') return;
+    // Strategy 1: HTML <details> elements
+    var details = p.querySelectorAll('details');
+    if(details.length > 0){
+      details.forEach(function(d){ d.removeAttribute('open'); });
+    }
+    // Strategy 2: any element with "open" or "expanded" class
+    p.querySelectorAll('.open, .expanded, .is-open, [aria-expanded="true"]').forEach(function(el){
+      el.classList.remove('open');
+      el.classList.remove('expanded');
+      el.classList.remove('is-open');
+      if(el.getAttribute('aria-expanded') === 'true') el.setAttribute('aria-expanded','false');
+    });
+    // Strategy 3: hide ULs that follow section headers (regions like MUNDIAL, EUROPA)
+    var regionHeaders = ['MUNDIAL','EUROPA','AMÉRICA DEL SUR','AMERICA DEL SUR','AMÉRICA DEL NORTE','AMERICA DEL NORTE','ASIA','OCEANÍA','OCEANIA','ÁFRICA','AFRICA','AMISTOSOS','OTROS'];
+    var allH = p.querySelectorAll('h1,h2,h3,h4,h5,h6,strong,div,span');
+    allH.forEach(function(h){
+      var t = (h.textContent||'').trim();
+      if(regionHeaders.indexOf(t.toUpperCase()) > -1){
+        // Walk siblings until next header — hide content below header
+        var sib = h.nextElementSibling;
+        while(sib){
+          var sibText = (sib.textContent||'').trim().toUpperCase();
+          if(regionHeaders.indexOf(sibText) > -1) break;
+          if(sib.tagName === 'UL' || sib.tagName === 'OL' || sib.tagName === 'DIV'){
+            // collapse content
+            if(!sib.dataset.v21orig){
+              sib.dataset.v21orig = sib.style.display || '';
+              sib.style.display = 'none';
+            }
+          }
+          sib = sib.nextElementSibling;
+        }
+        // make header clickable to toggle
+        if(!h.dataset.v21toggle){
+          h.dataset.v21toggle = '1';
+          h.style.cursor = 'pointer';
+          h.addEventListener('click', function(e){
+            var s = h.nextElementSibling;
+            while(s){
+              var sT = (s.textContent||'').trim().toUpperCase();
+              if(regionHeaders.indexOf(sT) > -1) break;
+              if(s.tagName === 'UL' || s.tagName === 'OL' || s.tagName === 'DIV'){
+                s.style.display = (s.style.display === 'none') ? '' : 'none';
+              }
+              s = s.nextElementSibling;
+            }
+          });
+        }
+      }
+    });
+    p.dataset.v21col = '1';
+  }
+
+  function unifyOtros(){
+    var p = document.getElementById('panel-soccer'); if(!p) return;
+    if(p.dataset.v21otros === '1') return;
+    // find Más list (Fútbol 7, Futbolito, Fútbol Playa, Futsal) and append into OTROS
+    var nodes = Array.from(p.querySelectorAll('*'));
+    var otrosHeader = nodes.find(function(el){ return el.children.length === 0 && /^\s*OTROS\s*$/i.test((el.textContent||'').trim()); });
+    var masHeader = nodes.find(function(el){ return el.children.length === 0 && /^\s*M[áa]s\s*$/i.test((el.textContent||'').trim()); });
+    if(!otrosHeader && !masHeader) return;
+    // Collect items from both
+    function getListAfter(h){
+      var s = h ? h.nextElementSibling : null;
+      while(s && s.tagName !== 'UL' && s.tagName !== 'OL'){
+        if(s.querySelector && s.querySelector('ul, ol')) return s.querySelector('ul, ol');
+        s = s.nextElementSibling;
+      }
+      return s && (s.tagName==='UL'||s.tagName==='OL') ? s : null;
+    }
+    var otrosUL = otrosHeader ? getListAfter(otrosHeader) : null;
+    var masUL = masHeader ? getListAfter(masHeader) : null;
+    if(!otrosUL && masUL){ otrosUL = masUL; }
+    if(!otrosUL) return;
+    // Order target: Kings, Queens, Fútbol 7, Futbolito, Futsal, Fútbol Playa
+    var WANT = ['Kings League','Queens League','Fútbol 7','Futbolito','Futsal','Fútbol Playa'];
+    function findItem(name){
+      var allLi = p.querySelectorAll('li, a, button, span, div');
+      for(var i=0;i<allLi.length;i++){
+        var t = (allLi[i].textContent||'').trim();
+        if(t === name || (allLi[i].children.length === 0 && t === name)){
+          // climb to LI if possible
+          var li = allLi[i].closest('li'); return li || allLi[i];
+        }
+      }
+      return null;
+    }
+    // Clear OTROS content + rebuild
+    otrosUL.innerHTML = '';
+    WANT.forEach(function(name){
+      var existing = findItem(name);
+      if(existing){ otrosUL.appendChild(existing); return; }
+      // synth simple LI
+      var li = document.createElement('li');
+      li.style.cssText = 'padding:6px 12px;color:#374151;display:flex;align-items:center;gap:8px;';
+      li.textContent = name;
+      otrosUL.appendChild(li);
+    });
+    // Hide the Más header + its old list
+    if(masHeader && masHeader !== otrosHeader){
+      masHeader.style.display = 'none';
+      if(masUL && masUL !== otrosUL) masUL.style.display = 'none';
+    }
+    p.dataset.v21otros = '1';
+  }
+
+  function applyAll(){
+    try{ paginateChangelog(); collapseSoccerSections(); unifyOtros(); }
+    catch(e){ console.warn('[v21]', e); }
+  }
+  if(document.readyState==='complete'||document.readyState==='interactive'){ setTimeout(applyAll, 500); }
+  else { document.addEventListener('DOMContentLoaded', function(){ setTimeout(applyAll, 500); }); }
+  setTimeout(applyAll, 1800);
+  setTimeout(applyAll, 4500);
+  setTimeout(applyAll, 9000);
+  // re-apply when soccer panel mutates
+  setTimeout(function(){
+    var p = document.getElementById('panel-soccer');
+    if(!p) return;
+    var pending = false;
+    var mo = new MutationObserver(function(){
+      if(pending) return; pending = true;
+      requestAnimationFrame(function(){ pending = false; collapseSoccerSections(); unifyOtros(); });
+    });
+    mo.observe(p, {childList:true, subtree:true});
+  }, 3500);
+  console.log('[v21] loaded · changelog 4/pag sin auto-rotate · sidebar Fútbol colapsado + OTROS unificado');
+})();
+</script>
+
 </body>
 </html>
 
