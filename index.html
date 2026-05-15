@@ -12313,7 +12313,10 @@ document.addEventListener("DOMContentLoaded", function(){
     if(!otrosH) return;
     var otrosList = otrosH.nextElementSibling;
     if(!otrosList || !otrosList.classList.contains('continent-leagues')) return;
-    if(otrosList.dataset.v22fix === '1') return;
+    if(otrosList.dataset.v23fix === '1') {
+      window.__refreshKingsQueens && window.__refreshKingsQueens();
+      return;
+    }
     var allItems = [];
     Array.from(otrosList.children).forEach(function(c){
       if(c.tagName === 'BUTTON' && c.classList && c.classList.contains('sub-btn')){
@@ -12323,18 +12326,71 @@ document.addEventListener("DOMContentLoaded", function(){
         subs.forEach(function(s){ allItems.push(s); });
       }
     });
-    var TARGET = ['Kings League','Queens League','Fútbol 7','Futbolito','Futsal','Fútbol Playa','Fútbol Femenino Amateur','Fútbol 5','Fútbol 9'];
-    var ordered = [];
-    TARGET.forEach(function(name){
+    function findItem(name){
       for(var i=0;i<allItems.length;i++){
         var t = (allItems[i].textContent||'').trim();
-        if(t.indexOf(name) > -1){ ordered.push(allItems.splice(i,1)[0]); return; }
+        if(t.indexOf(name) > -1){ return allItems.splice(i,1)[0]; }
       }
-    });
-    allItems.forEach(function(it){ ordered.push(it); });
+      return null;
+    }
+    var kings = findItem('Kings League');
+    var queens = findItem('Queens League');
+    var futbolito = findItem('Futbolito');
+    var f5 = findItem('Fútbol 5');
+    var f7 = findItem('Fútbol 7');
+    var f9 = findItem('Fútbol 9');
+    var futsal = findItem('Futsal');
+    var playa = findItem('Fútbol Playa');
+    // remove Femenino Amateur entirely
+    var femAm = findItem('Femenino Amateur');
+    // Clear and re-append in new order
     otrosList.innerHTML = '';
-    ordered.forEach(function(it){ otrosList.appendChild(it); });
-    otrosList.dataset.v22fix = '1';
+    // Slot 1: Kings or Queens based on toggle
+    if(kings && queens){
+      var kingsQueensSlot = document.createElement('div');
+      kingsQueensSlot.dataset.v23slot = 'kq';
+      kingsQueensSlot.appendChild(kings);
+      kingsQueensSlot.appendChild(queens);
+      // Hide one based on current M/F
+      function updateKQ(){
+        var fLabel = document.querySelector('.toggle-mf .f.active, .mf-toggle .f.active, [class*="toggle"] .active, [data-gender="F"].active, .gender-f.active');
+        // Generic detection: any element with text "F" in toggle context that is active
+        var isFemale = false;
+        // Look for FÚTBOL header with M/F switch where F is selected
+        var mfToggle = document.querySelector('aside.sidebar .toggle, aside.sidebar [class*="toggle"], aside.sidebar .gender-toggle');
+        // simpler: check buttons in sidebar containing M/F
+        var btns = aside.querySelectorAll('button, span, div');
+        // Try the existing .qf-toggle .qf-tab.active or any [data-gender]
+        var activeF = aside.querySelector('[data-gender="F"].active') || aside.querySelector('.tab.F.active') || aside.querySelector('.qf-tab.active');
+        // Most direct: window.__currentGender flag if exists
+        if(window.__SS_GENDER === 'F') isFemale = true;
+        // Detect via the visible M/F badge state
+        var mfBadges = aside.querySelectorAll('.qf-tab, [class*="gender-tab"], button.m, button.f');
+        mfBadges.forEach(function(b){
+          var t = (b.textContent||'').trim();
+          if(/^F$/i.test(t) && (b.classList.contains('active') || b.getAttribute('aria-pressed')==='true' || b.classList.contains('on'))){
+            isFemale = true;
+          }
+        });
+        kings.style.display = isFemale ? 'none' : '';
+        queens.style.display = isFemale ? '' : 'none';
+      }
+      window.__refreshKingsQueens = updateKQ;
+      updateKQ();
+      otrosList.appendChild(kingsQueensSlot);
+      // Listen for clicks on M/F toggles
+      aside.querySelectorAll('.qf-tab, button, span').forEach(function(b){
+        var t = (b.textContent||'').trim();
+        if(/^[MF]$/i.test(t) && b.offsetParent){
+          b.addEventListener('click', function(){ setTimeout(updateKQ, 100); }, true);
+        }
+      });
+    }
+    // Slots 2-7
+    [futbolito, f5, f7, f9, futsal, playa].forEach(function(it){
+      if(it) otrosList.appendChild(it);
+    });
+    otrosList.dataset.v23fix = '1';
   }
   function applyAll(){
     try{
