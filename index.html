@@ -12944,6 +12944,54 @@ document.addEventListener("DOMContentLoaded", function(){
 })();
 </script>
 
+<script>
+/* v28: fusionar top nav con header del logo en una sola barra */
+(function(){
+  if(window.__v28_loaded) return; window.__v28_loaded = true;
+  var st = document.createElement('style'); st.id='v28-css';
+  st.textContent = "#v26-main-nav.v28-merged{position:static !important;border-bottom:0 !important;background:transparent !important;padding:0 !important;flex:1;justify-content:flex-start !important;margin-left:18px;}#v26-main-nav.v28-merged button{padding:8px 14px !important;font-size:13.5px !important;}@media(max-width:900px){#v26-main-nav.v28-merged{margin-left:8px;}#v26-main-nav.v28-merged button{padding:6px 10px !important;font-size:12.5px !important;gap:5px;}#v26-main-nav.v28-merged button .v26-emoji{font-size:15px !important;}}";
+  document.head.appendChild(st);
+
+  function mergeNav(){
+    var nav = document.getElementById('v26-main-nav'); if(!nav) return;
+    if(nav.dataset.v28merged === '1') return;
+    // Find the logo container — it's the parent of the SS logo image at top-left
+    var siteLogo = document.querySelector('.logo, .site-logo, .header-logo, [class*="site-title"]');
+    if(!siteLogo){
+      // Fallback: find first image in topbar (small one)
+      var imgs = document.querySelectorAll('img');
+      for(var i=0;i<imgs.length;i++){
+        var r = imgs[i].getBoundingClientRect();
+        if(r.top < 60 && r.width < 100 && r.width > 10){ siteLogo = imgs[i].parentElement; break; }
+      }
+    }
+    if(!siteLogo) return;
+    // Find topbar (parent of logo that's a flex row)
+    var topbar = siteLogo.parentElement;
+    while(topbar && topbar !== document.body){
+      var cs = getComputedStyle(topbar);
+      if(cs.display === 'flex' && topbar.getBoundingClientRect().width > 600) break;
+      topbar = topbar.parentElement;
+    }
+    if(!topbar || topbar === document.body){
+      topbar = siteLogo.parentElement;
+    }
+    // Move nav into topbar after siteLogo
+    nav.classList.add('v28-merged');
+    siteLogo.parentNode.insertBefore(nav, siteLogo.nextSibling);
+    nav.dataset.v28merged = '1';
+  }
+
+  function applyAll(){ try{ mergeNav(); } catch(e){ console.warn('[v28]', e); } }
+  if(document.readyState==='complete'||document.readyState==='interactive'){ setTimeout(applyAll, 1000); }
+  else { document.addEventListener('DOMContentLoaded', function(){ setTimeout(applyAll, 1000); }); }
+  setTimeout(applyAll, 2200);
+  setTimeout(applyAll, 5000);
+  setTimeout(applyAll, 9500);
+  console.log('[v28] loaded · top nav merged with logo bar');
+})();
+</script>
+
 </body>
 </html>
 
