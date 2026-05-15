@@ -3,7 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sports Stats 21</title>
 <link rel="icon" type="image/png" href="data/logo.png">
 <script src="https://cdnjs.cloudflare.com/ajax/lihhbs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script src="data/compiled/all_data.js"></script>
@@ -12520,6 +12519,160 @@ document.addEventListener("DOMContentLoaded", function(){
     mo.observe(document.body, {childList:true, subtree:true});
   }, 5000);
   console.log('[v24] loaded · NEWS section Fútbol + AMISTOSOS sub-items');
+})();
+</script>
+
+<script>
+/* v25: intro hero + 9 widgets + Blogs section + Fuentes al footer + buscador arriba */
+(function(){
+  if(window.__v25_loaded) return; window.__v25_loaded = true;
+  var st = document.createElement('style'); st.id='v25-css';
+  st.textContent = ".v25-intro{max-width:1200px;margin:36px auto 24px;padding:34px 32px;background:linear-gradient(135deg,#fff,#fdf2f3);border:1px solid #fecaca;border-radius:18px;box-shadow:0 6px 18px rgba(255,77,77,.07);}.v25-intro h2{color:#c8102e;font-size:26px;margin:0 0 14px;font-weight:800;line-height:1.2;display:flex;align-items:center;gap:12px;}.v25-intro h2 .v25-icon{display:inline-flex;align-items:center;justify-content:center;width:42px;height:42px;background:#ff4d4d;color:#fff;border-radius:10px;font-size:22px;flex:0 0 auto;}.v25-intro p{color:#374151;font-size:15px;line-height:1.65;margin:0 0 14px;}.v25-intro p b{color:#0f172a;}.v25-stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:20px;}@media(max-width:760px){.v25-stats-grid{grid-template-columns:repeat(2,1fr);}}.v25-stat{background:rgba(255,255,255,.7);border:1px solid #fecaca;border-radius:12px;padding:18px 14px;text-align:center;}.v25-stat .v25-stat-val{color:#c8102e;font-size:32px;font-weight:800;line-height:1;}.v25-stat .v25-stat-lbl{color:#6b7280;font-size:12px;margin-top:8px;letter-spacing:.4px;}.v25-search-bar{display:flex;align-items:center;gap:10px;max-width:520px;width:100%;background:#fff;border:1px solid #e2e8f0;border-radius:24px;padding:8px 14px;margin:0 18px;flex:1;}.v25-search-bar input{flex:1;border:0;outline:0;font-size:14px;color:#0f172a;background:transparent;font-family:inherit;}.v25-search-bar .v25-search-icon{color:#9ca3af;font-size:16px;}.v25-fuentes-foot{display:inline-flex;align-items:center;gap:6px;color:#9ba3b4;font-size:13px;text-decoration:none;}.v25-fuentes-foot:hover{color:#ff7a7a;}";
+  document.head.appendChild(st);
+
+  // 1. Build intro section (¿Qué es SS21? + stat bar)
+  function buildIntro(){
+    var sec = document.querySelector('.inicio-panels'); if(!sec) return;
+    if(document.getElementById('v25-intro')) return;
+    var qf = Array.from(sec.children).find(function(p){ var h = p.querySelector('h3'); return h && /¿Qu[eé] es Sports Stats/i.test(h.textContent); });
+    if(qf) qf.remove();
+    var feat = document.querySelector('.inicio-features');
+    if(feat) feat.style.display = 'none';
+    var intro = document.createElement('section');
+    intro.id = 'v25-intro';
+    intro.className = 'v25-intro';
+    intro.innerHTML = '<h2><span class="v25-icon">📊</span>¿Qué es Sports Stats 21?</h2>' +
+      '<p><b>Sports Stats 21 es la red social de los deportes.</b> Una plataforma única para seguir, comparar y conectar alrededor de tus disciplinas favoritas. Desde fútbol y NBA hasta deportes regionales y emergentes, con datos históricos desde 1888 hasta hoy.</p>' +
+      '<p>📰 <b>NEWS</b> diarias · 🏆 <b>Ligas oficiales</b>, escolares y locales · 🎯 <b>Sigue</b> a tus deportes, equipos, ligas y jugadores favoritos · ⚡ <b>Estadísticas en vivo</b> · 🤝 <b>Conecta</b> con deportistas, recluta talento y arma tu liga local.</p>' +
+      '<div class="v25-stats-grid">' +
+        '<div class="v25-stat"><div class="v25-stat-val">15</div><div class="v25-stat-lbl">Deportes principales</div></div>' +
+        '<div class="v25-stat"><div class="v25-stat-val">250+</div><div class="v25-stat-lbl">Otros deportes</div></div>' +
+        '<div class="v25-stat"><div class="v25-stat-val">130+</div><div class="v25-stat-lbl">Años de historia</div></div>' +
+        '<div class="v25-stat"><div class="v25-stat-val">M / F</div><div class="v25-stat-lbl">Toggle por liga</div></div>' +
+      '</div>';
+    sec.parentNode.insertBefore(intro, sec);
+  }
+
+  // 2. Remove "Blog y Noticias" widget
+  function removeBlogWidget(){
+    var sec = document.querySelector('.inicio-panels'); if(!sec) return;
+    var blog = Array.from(sec.children).find(function(p){ var h = p.querySelector('h3'); return h && /Blog y Noticias/i.test(h.textContent); });
+    if(blog) blog.remove();
+  }
+
+  // 3. Build Blogs section after NEWS carousel
+  var BLOGS = [
+    {tag:'OPINIÓN', title:'Blog 1', body:'Análisis táctico de la jornada europea — formaciones, lecturas y datos.'},
+    {tag:'HISTORIA', title:'Blog 2', body:'El día que cambió un campeonato — una historia para los archivos del deporte.'},
+    {tag:'PERFILES', title:'Blog 3', body:'Las nuevas estrellas que están por explotar — Sub-21 a seguir.'},
+    {tag:'DATOS', title:'Blog 4', body:'Comparativa estadística entre dos generaciones — números frente a frente.'},
+    {tag:'COLUMNA', title:'Blog 5', body:'Opinión de un editor invitado sobre el momento del deporte mundial.'},
+    {tag:'ENTREVISTA', title:'Blog 6', body:'Conversación exclusiva con un protagonista — su carrera y su visión.'},
+    {tag:'GUÍA', title:'Blog 7', body:'Cómo seguir tu deporte favorito en Sports Stats 21 — tips y atajos.'},
+    {tag:'COMUNIDAD', title:'Blog 8', body:'Los mejores posts de la semana hechos por usuarios de la plataforma.'}
+  ];
+  function buildBlogs(){
+    if(document.getElementById('v25-blogs-section')) return;
+    var news = document.getElementById('v16-news-section'); if(!news) return;
+    var sec = document.createElement('section');
+    sec.id = 'v25-blogs-section';
+    sec.className = 'v16-news-section';
+    sec.innerHTML = '<h2 style="color:#ff4d4d;font-size:32px;letter-spacing:6px;margin:0 0 18px;text-align:center;font-weight:800;">BLOGS<small style="display:block;font-size:13px;letter-spacing:1px;color:#9ba3b4;font-weight:400;margin-top:4px;">Crea o lee opiniones, análisis y entrevistas de la comunidad</small></h2>' +
+      '<div class="v18-news-grid">' +
+        '<div class="v18-news-big"></div>' +
+        '<div class="v18-news-mini-col">' +
+          '<div class="v18-news-mini"></div>' +
+          '<div class="v18-news-mini"></div>' +
+          '<div class="v18-news-mini"></div>' +
+        '</div>' +
+      '</div>' +
+      '<div class="v18-news-dots"></div>' +
+      '<div style="text-align:center;margin-top:20px;"><button id="v25-create-blog" style="background:#ff4d4d;color:#fff;border:0;padding:11px 24px;border-radius:10px;font-weight:700;cursor:pointer;font-size:14px;letter-spacing:.5px;">✍️ Crear blog</button></div>';
+    news.parentNode.insertBefore(sec, news.nextSibling);
+    // dots
+    var dotsBar = sec.querySelector('.v18-news-dots');
+    BLOGS.forEach(function(b,i){
+      var d = document.createElement('button');
+      d.dataset.i = String(i);
+      d.className = (i===0?'active':'');
+      d.setAttribute('aria-label','Blog '+(i+1));
+      dotsBar.appendChild(d);
+    });
+    var current = 0;
+    function render(){
+      var big = sec.querySelector('.v18-news-big');
+      var nBig = BLOGS[current % BLOGS.length];
+      big.innerHTML = '<span class="v18-tag">'+nBig.tag+'</span><div><h3>'+nBig.title+'</h3><p>'+nBig.body+'</p></div>';
+      sec.querySelectorAll('.v18-news-mini').forEach(function(m, k){
+        var n = BLOGS[(current + 1 + k) % BLOGS.length];
+        m.innerHTML = '<span class="v18-tag">'+n.tag+'</span><div><h4>'+n.title+'</h4><p>'+n.body+'</p></div>';
+      });
+      sec.querySelectorAll('.v18-news-dots button').forEach(function(b,i){ b.classList.toggle('active', i===(current%BLOGS.length)); });
+    }
+    sec.querySelectorAll('.v18-news-dots button').forEach(function(b){
+      b.addEventListener('click', function(){ current = parseInt(b.dataset.i); render(); resetTimer(); });
+    });
+    var timer;
+    function resetTimer(){ if(timer) clearInterval(timer); timer = setInterval(function(){ current = (current+1) % BLOGS.length; render(); }, 6500); }
+    render(); resetTimer();
+    sec.querySelector('#v25-create-blog').addEventListener('click', function(){ alert('🔧 Próximamente: editor de blogs para que vos crees tus análisis, opiniones, entrevistas y guías deportivas.'); });
+  }
+
+  // 4. Move "Fuentes" pill from top to footer + add search bar at top
+  function moveFuentesAndAddSearch(){
+    // Find Fuentes button in top header
+    var fuentes = Array.from(document.querySelectorAll('button, a')).find(function(el){
+      var t = (el.textContent||'').trim();
+      return /^Fuentes/i.test(t) && el.getBoundingClientRect().top < 100;
+    });
+    if(fuentes && !fuentes.dataset.v25moved){
+      fuentes.style.display = 'none';
+      fuentes.dataset.v25moved = '1';
+      // Add a "Fuentes" link to the footer
+      var foot = document.getElementById('v12-footer');
+      if(foot){
+        var bottom = foot.querySelector('.v12-footer-bottom');
+        if(bottom && !document.getElementById('v25-fuentes-foot')){
+          var span = document.createElement('a');
+          span.id = 'v25-fuentes-foot';
+          span.className = 'v25-fuentes-foot';
+          span.textContent = '📋 Fuentes oficiales';
+          span.style.cursor = 'pointer';
+          span.addEventListener('click', function(){ fuentes.click(); });
+          bottom.insertBefore(span, bottom.firstChild);
+        }
+      }
+    }
+    // Add search bar in the empty space at top, after the title
+    if(document.getElementById('v25-search-bar')) return;
+    var iniciarBtn = Array.from(document.querySelectorAll('button, a')).find(function(el){
+      var t = (el.textContent||'').trim();
+      return /Iniciar\s*Sesi/i.test(t) && el.getBoundingClientRect().top < 100;
+    });
+    if(!iniciarBtn) return;
+    var bar = document.createElement('div');
+    bar.id = 'v25-search-bar';
+    bar.className = 'v25-search-bar';
+    bar.innerHTML = '<span class="v25-search-icon">🔍</span>' +
+      '<input type="search" placeholder="Buscar deportes, ligas, equipos, jugadores..." />';
+    // Insert before iniciar button in same parent
+    if(iniciarBtn.parentElement) iniciarBtn.parentElement.insertBefore(bar, iniciarBtn);
+    bar.querySelector('input').addEventListener('keydown', function(e){
+      if(e.key === 'Enter'){
+        var q = (e.target.value||'').trim();
+        if(!q) return;
+        alert('🔧 Próximamente: búsqueda global en Sports Stats 21.\n\nBuscaste: "' + q + '"');
+      }
+    });
+  }
+
+  function applyAll(){ try{ buildIntro(); removeBlogWidget(); buildBlogs(); moveFuentesAndAddSearch(); } catch(e){ console.warn('[v25]', e); } }
+  if(document.readyState==='complete'||document.readyState==='interactive'){ setTimeout(applyAll, 700); }
+  else { document.addEventListener('DOMContentLoaded', function(){ setTimeout(applyAll, 700); }); }
+  setTimeout(applyAll, 1800);
+  setTimeout(applyAll, 4500);
+  setTimeout(applyAll, 9000);
+  console.log('[v25] loaded · intro hero + Blogs + Fuentes footer + search top');
 })();
 </script>
 
