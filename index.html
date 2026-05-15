@@ -12787,6 +12787,163 @@ document.addEventListener("DOMContentLoaded", function(){
 })();
 </script>
 
+<script>
+/* v27: nav izquierda + Inicio→Todos + páginas dedicadas Noticias/Blogs/Centros */
+(function(){
+  if(window.__v27_loaded) return; window.__v27_loaded = true;
+  var st = document.createElement('style'); st.id='v27-css';
+  st.textContent = "#v26-main-nav{justify-content:flex-start !important;padding-left:24px !important;}body.v27-view-noticias #v25-intro,body.v27-view-noticias .inicio-panels,body.v27-view-noticias #v17-updates-widget,body.v27-view-noticias #v16-novedades-header,body.v27-view-noticias .inicio-hero,body.v27-view-noticias .hero-carousel,body.v27-view-noticias #v25-blogs-section{display:none !important;}body.v27-view-blogs #v25-intro,body.v27-view-blogs .inicio-panels,body.v27-view-blogs #v17-updates-widget,body.v27-view-blogs #v16-novedades-header,body.v27-view-blogs .inicio-hero,body.v27-view-blogs .hero-carousel,body.v27-view-blogs #v16-news-section{display:none !important;}body.v27-view-centros #v25-intro,body.v27-view-centros .inicio-panels:not(.v27-cd-only),body.v27-view-centros #v17-updates-widget,body.v27-view-centros #v16-novedades-header,body.v27-view-centros .inicio-hero,body.v27-view-centros .hero-carousel,body.v27-view-centros #v16-news-section,body.v27-view-centros #v25-blogs-section{display:none !important;}body.v27-view-centros .inicio-panel:not(#v13-cd-panel){display:none !important;}body.v27-view-centros #v13-cd-panel{grid-column:1 / -1 !important;max-width:880px;margin:60px auto !important;padding:36px !important;}.v27-page-header{max-width:1200px;margin:30px auto 8px;padding:0 24px;}.v27-page-header h1{color:#0f172a;font-size:34px;margin:0;font-weight:800;display:flex;align-items:center;gap:14px;}.v27-page-header h1 .v27-emoji{font-size:32px;}.v27-page-header p{color:#475569;font-size:15px;margin:8px 0 0;}#v16-news-section,#v25-blogs-section{transition:margin-top .2s;}body.v27-view-noticias #v16-news-section,body.v27-view-blogs #v25-blogs-section{margin-top:8px !important;}";
+  document.head.appendChild(st);
+
+  // 1. Rename "Inicio" sport button → "Todos" inside Deportes dropdown
+  function renameInicioToTodos(){
+    var sportNav = document.querySelector('.sport-nav, nav.sport-nav'); if(!sportNav) return;
+    var inicioBtn = Array.from(sportNav.querySelectorAll('.sport-btn')).find(function(b){
+      var span = b.querySelector('.ss-name-wrap');
+      return span && /^Inicio$/i.test((span.textContent||'').trim());
+    });
+    if(!inicioBtn) return;
+    var nameSpan = inicioBtn.querySelector('.ss-name-wrap');
+    if(nameSpan && nameSpan.textContent.trim() !== 'Todos'){
+      nameSpan.textContent = 'Todos';
+    }
+    // also fix the emoji to something like 🏆 or keep 🏠
+    var em = inicioBtn.querySelector('.ss-emoji-wrap');
+    if(em && em.textContent.trim() === '🏠'){
+      // keep emoji as is or change to 🏆
+    }
+  }
+
+  // 2. Page view system: hide everything except target section
+  function setPageView(view){
+    document.body.classList.remove('v27-view-noticias','v27-view-blogs','v27-view-centros');
+    // Ensure Inicio tab is active (so sport detail panels are hidden)
+    var sportNav = document.querySelector('.sport-nav');
+    if(sportNav){
+      var inicioBtn = Array.from(sportNav.querySelectorAll('.sport-btn')).find(function(b){
+        var span = b.querySelector('.ss-name-wrap');
+        var t = span ? span.textContent.trim() : b.textContent.trim();
+        return /^(Inicio|Todos)$/i.test(t);
+      });
+      if(inicioBtn && !inicioBtn.classList.contains('active')) inicioBtn.click();
+    }
+    if(view) document.body.classList.add('v27-view-'+view);
+    window.scrollTo({top:0, behavior:'smooth'});
+  }
+
+  // 3. Inject page headers for each dedicated view
+  function injectPageHeaders(){
+    // Header for Noticias
+    var news = document.getElementById('v16-news-section');
+    if(news && !document.getElementById('v27-noticias-header')){
+      var h = document.createElement('div');
+      h.id = 'v27-noticias-header';
+      h.className = 'v27-page-header';
+      h.style.display = 'none';
+      h.innerHTML = '<h1><span class="v27-emoji">📰</span>Noticias</h1><p>Principales noticias deportivas de la semana, actualizadas continuamente.</p>';
+      news.parentNode.insertBefore(h, news);
+    }
+    // Header for Blogs
+    var blogs = document.getElementById('v25-blogs-section');
+    if(blogs && !document.getElementById('v27-blogs-header')){
+      var h2 = document.createElement('div');
+      h2.id = 'v27-blogs-header';
+      h2.className = 'v27-page-header';
+      h2.style.display = 'none';
+      h2.innerHTML = '<h1><span class="v27-emoji">✍️</span>Blogs</h1><p>Crea y descubre opiniones, análisis, entrevistas y guías deportivas de la comunidad.</p>';
+      blogs.parentNode.insertBefore(h2, blogs);
+    }
+    // Header for Centros
+    var cd = document.getElementById('v13-cd-panel');
+    if(cd && cd.parentNode && !document.getElementById('v27-centros-header')){
+      var h3 = document.createElement('div');
+      h3.id = 'v27-centros-header';
+      h3.className = 'v27-page-header';
+      h3.style.display = 'none';
+      h3.innerHTML = '<h1><span class="v27-emoji">📍</span>Centros Deportivos</h1><p>Busca gimnasios, clubes, estadios y canchas cerca tuyo. Filtra por deporte, estacionamiento, capacidad, horarios y servicios.</p>';
+      cd.parentNode.insertBefore(h3, cd.parentNode.firstChild);
+    }
+  }
+  function showHidePageHeaders(view){
+    var ids = {noticias:'v27-noticias-header', blogs:'v27-blogs-header', centros:'v27-centros-header'};
+    ['noticias','blogs','centros'].forEach(function(v){
+      var el = document.getElementById(ids[v]); if(el) el.style.display = (v===view) ? '' : 'none';
+    });
+  }
+
+  // 4. Override v26 nav click behavior to set page views
+  function bindNav(){
+    var nav = document.getElementById('v26-main-nav'); if(!nav) return;
+    if(nav.dataset.v27bound === '1') return;
+    nav.dataset.v27bound = '1';
+    // Capture phase, stop existing v26 handler from interfering
+    nav.addEventListener('click', function(e){
+      var btn = e.target.closest('button'); if(!btn) return;
+      var id = btn.dataset.v26id;
+      e.stopImmediatePropagation();
+      e.preventDefault();
+      nav.querySelectorAll('button').forEach(function(b){ b.classList.remove('active'); });
+      btn.classList.add('active');
+      document.body.classList.remove('v26-show-deportes');
+      var sportNav = document.querySelector('.sport-nav');
+      function goInicio(){
+        var inicioBtn = Array.from(sportNav.querySelectorAll('.sport-btn')).find(function(b){
+          var span = b.querySelector('.ss-name-wrap');
+          var t = span ? span.textContent.trim() : b.textContent.trim();
+          return /^(Inicio|Todos)$/i.test(t);
+        });
+        if(inicioBtn && !inicioBtn.classList.contains('active')) inicioBtn.click();
+      }
+      if(id === 'inicio'){
+        setPageView(null);
+        showHidePageHeaders(null);
+        window.scrollTo({top:0, behavior:'smooth'});
+      } else if(id === 'deportes'){
+        setPageView(null);
+        showHidePageHeaders(null);
+        document.body.classList.add('v26-show-deportes');
+        renameInicioToTodos();
+        setTimeout(function(){ sportNav.scrollIntoView({behavior:'smooth', block:'start'}); }, 50);
+      } else if(id === 'noticias'){
+        goInicio();
+        setTimeout(function(){
+          setPageView('noticias');
+          showHidePageHeaders('noticias');
+        }, 100);
+      } else if(id === 'blogs'){
+        goInicio();
+        setTimeout(function(){
+          setPageView('blogs');
+          showHidePageHeaders('blogs');
+        }, 100);
+      } else if(id === 'centros'){
+        goInicio();
+        setTimeout(function(){
+          setPageView('centros');
+          showHidePageHeaders('centros');
+        }, 100);
+      }
+    }, true);
+  }
+
+  function applyAll(){
+    try{
+      renameInicioToTodos();
+      injectPageHeaders();
+      bindNav();
+    } catch(e){ console.warn('[v27]', e); }
+  }
+  if(document.readyState==='complete'||document.readyState==='interactive'){ setTimeout(applyAll, 900); }
+  else { document.addEventListener('DOMContentLoaded', function(){ setTimeout(applyAll, 900); }); }
+  setTimeout(applyAll, 2200);
+  setTimeout(applyAll, 5000);
+  setTimeout(applyAll, 9500);
+  // Re-apply rename when sport-nav re-renders
+  setInterval(renameInicioToTodos, 4000);
+  console.log('[v27] loaded · nav izq · Inicio→Todos · páginas dedicadas Noticias/Blogs/Centros');
+})();
+</script>
+
 </body>
 </html>
 
