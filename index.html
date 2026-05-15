@@ -12266,6 +12266,137 @@ document.addEventListener("DOMContentLoaded", function(){
 })();
 </script>
 
+<script>
+/* v22: Sidebar Fútbol - colapsar todas las regiones por default + unificar OTROS+Más */
+(function(){
+  if(window.__v22_loaded) return; window.__v22_loaded = true;
+  var st = document.createElement('style'); st.id='v22-css';
+  st.textContent = ".continent-leagues[data-v22-collapsed='1']{display:none !important;}.continent-header[data-v22-collapsed='1'] .caret{transform:rotate(-90deg);display:inline-block;transition:transform .15s;}";
+  document.head.appendChild(st);
+
+  function collapseAllContinents(){
+    var aside = document.querySelector('aside.sidebar'); if(!aside) return;
+    var headers = aside.querySelectorAll('.continent-header');
+    if(headers.length === 0) return;
+    headers.forEach(function(h){
+      var leagues = h.nextElementSibling;
+      if(leagues && leagues.classList && leagues.classList.contains('continent-leagues')){
+        if(!h.dataset.v22init){
+          h.dataset.v22init = '1';
+          leagues.setAttribute('data-v22-collapsed','1');
+          h.setAttribute('data-v22-collapsed','1');
+        }
+      }
+    });
+    // Override the existing onclick toggle to use our flag
+    if(!window.__v22_orig_toggleContinent && typeof window.toggleContinent === 'function'){
+      window.__v22_orig_toggleContinent = window.toggleContinent;
+      window.toggleContinent = function(headerEl){
+        var leagues = headerEl.nextElementSibling;
+        if(!leagues || !leagues.classList.contains('continent-leagues')) return;
+        var collapsed = leagues.getAttribute('data-v22-collapsed') === '1';
+        if(collapsed){
+          leagues.removeAttribute('data-v22-collapsed');
+          headerEl.removeAttribute('data-v22-collapsed');
+        } else {
+          leagues.setAttribute('data-v22-collapsed','1');
+          headerEl.setAttribute('data-v22-collapsed','1');
+        }
+      };
+    }
+  }
+
+  function unifyOtrosMas(){
+    var aside = document.querySelector('aside.sidebar'); if(!aside) return;
+    if(aside.dataset.v22otros === '1') return;
+    var headers = Array.from(aside.querySelectorAll('.continent-header'));
+    function findHeader(rgx){
+      return headers.find(function(h){ return rgx.test((h.textContent||'').trim()); });
+    }
+    var otrosH = findHeader(/OTROS/i);
+    var masH = findHeader(/^[^A-Za-z]*M[áa]s\b/i) || findHeader(/M[áa]s$/i);
+    if(!otrosH){
+      return;
+    }
+    var otrosList = otrosH.nextElementSibling;
+    if(!otrosList || !otrosList.classList.contains('continent-leagues')) return;
+    if(masH){
+      var masList = masH.nextElementSibling;
+      if(masList && masList.classList.contains('continent-leagues')){
+        // Move all .sub-btn (or any child) from masList into otrosList — append
+        Array.from(masList.children).forEach(function(c){ otrosList.appendChild(c); });
+        // hide Más header + list
+        masH.style.display = 'none';
+        masList.style.display = 'none';
+      }
+    }
+    // Reorder children inside OTROS by name
+    var TARGET_ORDER = ['Kings League','Queens League','Fútbol 7','Futbolito','Futsal','Fútbol Playa','Fútbol Femenino Amateur','Fútbol 5','Fútbol 9'];
+    var children = Array.from(otrosList.children);
+    var byName = {};
+    children.forEach(function(c){
+      var t = (c.textContent||'').trim();
+      // strip leading emoji + spaces and trailing badge text like 'Liga' or 'Copa'
+      var clean = t.replace(/^[\u{1F000}-\u{1FFFF}\u{2600}-\u{27BF}\u{2700}-\u{27FF}\u{200D}\u{FE0F}]+\s*/u,'').replace(/(Liga|Copa|Pronto|Local|Escolar)\s*$/, '').trim();
+      byName[clean] = byName[clean] || [];
+      byName[clean].push(c);
+    });
+    // First, append target order children
+    TARGET_ORDER.forEach(function(name){
+      var arr = byName[name];
+      if(arr && arr.length){ arr.forEach(function(el){ otrosList.appendChild(el); }); }
+    });
+    // Then append any leftovers
+    Array.from(otrosList.children).forEach(function(c){
+      var t = (c.textContent||'').trim().replace(/^[\u{1F000}-\u{1FFFF}\u{2600}-\u{27BF}\u{2700}-\u{27FF}\u{200D}\u{FE0F}]+\s*/u,'').replace(/(Liga|Copa|Pronto|Local|Escolar)\s*$/, '').trim();
+      if(TARGET_ORDER.indexOf(t) === -1){
+        // already in place, but move to end to keep them after target order
+        otrosList.appendChild(c);
+      }
+    });
+    aside.dataset.v22otros = '1';
+  }
+
+  function applyAll(){
+    try{
+      collapseAllContinents();
+      unifyOtrosMas();
+    } catch(e){ console.warn('[v22]', e); }
+  }
+  if(document.readyState==='complete'||document.readyState==='interactive'){ setTimeout(applyAll, 600); }
+  else { document.addEventListener('DOMContentLoaded', function(){ setTimeout(applyAll, 600); }); }
+  setTimeout(applyAll, 1500);
+  setTimeout(applyAll, 3000);
+  setTimeout(applyAll, 6000);
+  setTimeout(applyAll, 10000);
+  // Re-apply when sidebar mutates (sport switch re-renders)
+  setTimeout(function(){
+    var body = document.body;
+    var pending = false;
+    var mo = new MutationObserver(function(){
+      if(pending) return; pending = true;
+      requestAnimationFrame(function(){ pending = false;
+        var aside = document.querySelector('aside.sidebar');
+        if(aside && aside.dataset.v22otros !== '1'){
+          applyAll();
+        }
+      });
+    });
+    mo.observe(body, {childList:true, subtree:false});
+    // also watch for #panel-soccer to render
+    var ps = document.getElementById('panel-soccer');
+    if(ps){
+      var mo2 = new MutationObserver(function(){
+        if(pending) return; pending = true;
+        requestAnimationFrame(function(){ pending = false; applyAll(); });
+      });
+      mo2.observe(ps, {childList:true, subtree:false});
+    }
+  }, 4000);
+  console.log('[v22] loaded · sidebar Fútbol colapsado por default + OTROS unificado');
+})();
+</script>
+
 </body>
 </html>
 
