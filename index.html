@@ -2,7 +2,6 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="icon" type="image/png" href="data/logo.png">
 <script src="https://cdnjs.cloudflare.com/ajax/lihhbs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script src="data/compiled/all_data.js"></script>
@@ -12623,7 +12622,7 @@ document.addEventListener("DOMContentLoaded", function(){
     // Find Fuentes button in top header
     var fuentes = Array.from(document.querySelectorAll('button, a')).find(function(el){
       var t = (el.textContent||'').trim();
-      return /^Fuentes/i.test(t) && el.getBoundingClientRect().top < 100;
+      return /Fuentes/i.test(t) && t.length < 20 && el.getBoundingClientRect().top < 100;
     });
     if(fuentes && !fuentes.dataset.v25moved){
       fuentes.style.display = 'none';
