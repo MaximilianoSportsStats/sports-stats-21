@@ -12308,55 +12308,34 @@ document.addEventListener("DOMContentLoaded", function(){
 
   function unifyOtrosMas(){
     var aside = document.querySelector('aside.sidebar'); if(!aside) return;
-    if(aside.dataset.v22otros === '1') return;
     var headers = Array.from(aside.querySelectorAll('.continent-header'));
-    function findHeader(rgx){
-      return headers.find(function(h){ return rgx.test((h.textContent||'').trim()); });
-    }
-    var otrosH = findHeader(/OTROS/i);
-    var masH = findHeader(/^[^A-Za-z]*M[áa]s\b/i) || findHeader(/M[áa]s$/i);
-    if(!otrosH){
-      return;
-    }
+    var otrosH = headers.find(function(h){ return /OTROS/i.test((h.textContent||'').trim()); });
+    if(!otrosH) return;
     var otrosList = otrosH.nextElementSibling;
     if(!otrosList || !otrosList.classList.contains('continent-leagues')) return;
-    if(masH){
-      var masList = masH.nextElementSibling;
-      if(masList && masList.classList.contains('continent-leagues')){
-        // Move all .sub-btn (or any child) from masList into otrosList — append
-        Array.from(masList.children).forEach(function(c){ otrosList.appendChild(c); });
-        // hide Más header + list
-        masH.style.display = 'none';
-        masList.style.display = 'none';
-      }
-    }
-    // Reorder children inside OTROS by name
-    var TARGET_ORDER = ['Kings League','Queens League','Fútbol 7','Futbolito','Futsal','Fútbol Playa','Fútbol Femenino Amateur','Fútbol 5','Fútbol 9'];
-    var children = Array.from(otrosList.children);
-    var byName = {};
-    children.forEach(function(c){
-      var t = (c.textContent||'').trim();
-      // strip leading emoji + spaces and trailing badge text like 'Liga' or 'Copa'
-      var clean = t.replace(/^[\u{1F000}-\u{1FFFF}\u{2600}-\u{27BF}\u{2700}-\u{27FF}\u{200D}\u{FE0F}]+\s*/u,'').replace(/(Liga|Copa|Pronto|Local|Escolar)\s*$/, '').trim();
-      byName[clean] = byName[clean] || [];
-      byName[clean].push(c);
-    });
-    // First, append target order children
-    TARGET_ORDER.forEach(function(name){
-      var arr = byName[name];
-      if(arr && arr.length){ arr.forEach(function(el){ otrosList.appendChild(el); }); }
-    });
-    // Then append any leftovers
+    if(otrosList.dataset.v22fix === '1') return;
+    var allItems = [];
     Array.from(otrosList.children).forEach(function(c){
-      var t = (c.textContent||'').trim().replace(/^[\u{1F000}-\u{1FFFF}\u{2600}-\u{27BF}\u{2700}-\u{27FF}\u{200D}\u{FE0F}]+\s*/u,'').replace(/(Liga|Copa|Pronto|Local|Escolar)\s*$/, '').trim();
-      if(TARGET_ORDER.indexOf(t) === -1){
-        // already in place, but move to end to keep them after target order
-        otrosList.appendChild(c);
+      if(c.tagName === 'BUTTON' && c.classList && c.classList.contains('sub-btn')){
+        allItems.push(c);
+      } else if(c.classList && c.classList.contains('country-group')){
+        var subs = c.querySelectorAll('.sub-btn');
+        subs.forEach(function(s){ allItems.push(s); });
       }
     });
-    aside.dataset.v22otros = '1';
+    var TARGET = ['Kings League','Queens League','Fútbol 7','Futbolito','Futsal','Fútbol Playa','Fútbol Femenino Amateur','Fútbol 5','Fútbol 9'];
+    var ordered = [];
+    TARGET.forEach(function(name){
+      for(var i=0;i<allItems.length;i++){
+        var t = (allItems[i].textContent||'').trim();
+        if(t.indexOf(name) > -1){ ordered.push(allItems.splice(i,1)[0]); return; }
+      }
+    });
+    allItems.forEach(function(it){ ordered.push(it); });
+    otrosList.innerHTML = '';
+    ordered.forEach(function(it){ otrosList.appendChild(it); });
+    otrosList.dataset.v22fix = '1';
   }
-
   function applyAll(){
     try{
       collapseAllContinents();
