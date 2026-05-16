@@ -13767,6 +13767,56 @@ document.addEventListener("DOMContentLoaded", function(){
 })();
 </script>
 
+<script>
+/* v34: cleanup - detener setIntervals viejos para mejorar performance */
+(function(){
+  if(window.__v34_loaded) return; window.__v34_loaded = true;
+  // Track all setInterval/setTimeout/MutationObserver created from now
+  // Already-running intervals can't be tracked retroactively, so brute-force clear all interval IDs in range
+  // After 25 seconds (when all v* applies should be stable), kill ALL intervals
+  setTimeout(function(){
+    // Brute-force clear intervals (each id is small int)
+    for(var i = 1; i < 99999; i++){
+      try { clearInterval(i); } catch(e){}
+    }
+    // Also disconnect any MutationObservers we know about
+    ['__v14_mo','__v22_mo','__v33_mo'].forEach(function(k){
+      try { if(window[k] && typeof window[k].disconnect === 'function') window[k].disconnect(); } catch(e){}
+    });
+    // Also brute-force find any MutationObserver instances via a known global
+    try {
+      var allObservers = [];
+      Object.keys(window).forEach(function(k){
+        try { if(window[k] && typeof window[k] === 'object' && window[k].constructor && window[k].constructor.name === 'MutationObserver'){ window[k].disconnect(); } } catch(e){}
+      });
+    } catch(e){}
+    console.log('[v34] killed all intervals at 25s mark');
+  }, 25000);
+
+  // Also prevent rogue scroll-to-top calls: wrap window.scrollTo and ignore if user has scrolled
+  var origScrollTo = window.scrollTo.bind(window);
+  var userInteracted = false;
+  window.addEventListener('wheel', function(){ userInteracted = true; setTimeout(function(){ userInteracted = false; }, 1500); }, {passive: true});
+  window.addEventListener('touchmove', function(){ userInteracted = true; setTimeout(function(){ userInteracted = false; }, 1500); }, {passive: true});
+  window.addEventListener('keydown', function(e){ if(['PageDown','PageUp','ArrowDown','ArrowUp','Space','Home','End'].indexOf(e.code) > -1){ userInteracted = true; setTimeout(function(){ userInteracted = false; }, 1500); } }, true);
+  // Only allow scrollTo if user just clicked nav (set window.__v34_navClicked = true briefly)
+  document.addEventListener('click', function(e){
+    if(e.target.closest('#v26-main-nav button, .sport-btn, .v29-todos-card, .v32-card')){
+      window.__v34_navClicked = true;
+      setTimeout(function(){ window.__v34_navClicked = false; }, 800);
+    }
+  }, true);
+  window.scrollTo = function(){
+    if(userInteracted && !window.__v34_navClicked){
+      // user is scrolling; ignore programmatic scrollTo
+      return;
+    }
+    return origScrollTo.apply(window, arguments);
+  };
+  console.log('[v34] cleanup loaded · interval kill at 25s · scroll guard active');
+})();
+</script>
+
 </body>
 </html>
 
