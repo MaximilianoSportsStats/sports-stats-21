@@ -13632,7 +13632,7 @@ document.addEventListener("DOMContentLoaded", function(){
       } else if(view === 'noticias'){
         var ng = document.getElementById('v32-news-grid-sec');
         if(ng){
-          ng.style.display = '';
+          ng.style.display = 'block';
           var inner = ng.querySelector('.v32-grid');
           if(inner && typeof window.__v32buildGrid === 'function'){
             inner.innerHTML = window.__v32buildGrid('news', sport);
@@ -13641,7 +13641,7 @@ document.addEventListener("DOMContentLoaded", function(){
       } else if(view === 'blogs'){
         var bg = document.getElementById('v32-blogs-grid-sec');
         if(bg){
-          bg.style.display = '';
+          bg.style.display = 'block';
           var inner2 = bg.querySelector('.v32-grid');
           if(inner2 && typeof window.__v32buildGrid === 'function'){
             inner2.innerHTML = window.__v32buildGrid('blogs', sport);
