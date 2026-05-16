@@ -13817,6 +13817,165 @@ document.addEventListener("DOMContentLoaded", function(){
 })();
 </script>
 
+<script>
+/* v35: merge Noticias + Blogs + 3 filtros (tipo/deporte/pais) */
+(function(){
+  if(window.__v35_loaded) return; window.__v35_loaded = true;
+  var st = document.createElement('style'); st.id='v35-css';
+  st.textContent = "#v35-nb-page{display:none;max-width:1200px;margin:0 auto;padding:30px 24px;}#v35-nb-page .v27-page-header{margin:0 0 22px;padding:0;}#v35-nb-page .v27-page-header h1{font-size:32px;}.v35-filters{display:flex;flex-wrap:wrap;gap:14px;background:#fff;border:1px solid #e2e8f0;border-radius:14px;padding:18px 20px;margin-bottom:24px;box-shadow:0 2px 8px rgba(15,23,42,.04);}.v35-filter{display:flex;flex-direction:column;gap:6px;min-width:180px;flex:1;}.v35-filter label{font-size:11px;color:#64748b;text-transform:uppercase;letter-spacing:1px;font-weight:600;}.v35-filter select{background:#fff;border:1px solid #cbd5e1;color:#0f172a;padding:10px 12px;border-radius:8px;font-family:inherit;font-size:14px;cursor:pointer;}.v35-filter select:focus{outline:none;border-color:#ff4d4d;}.v35-results-count{color:#64748b;font-size:13px;padding:0 4px 14px;}.v35-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px;}.v35-card{background:#fff;border:1px solid #e2e8f0;border-radius:14px;padding:20px;cursor:pointer;transition:all .2s;display:flex;flex-direction:column;}.v35-card:hover{transform:translateY(-3px);border-color:#ff4d4d;box-shadow:0 6px 18px rgba(15,23,42,.06);}.v35-card-tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;}.v35-card-tag{display:inline-block;font-size:10.5px;letter-spacing:1px;text-transform:uppercase;padding:3px 9px;border-radius:6px;font-weight:700;}.v35-card-tag.t-noticia{background:#fee2e2;color:#c8102e;}.v35-card-tag.t-blog{background:#e0e7ff;color:#3730a3;}.v35-card-tag.t-deporte{background:#fef3c7;color:#92400e;}.v35-card-tag.t-pais{background:#f1f5f9;color:#475569;}.v35-card h3{margin:0 0 10px;color:#0f172a;font-size:16px;font-weight:700;line-height:1.3;}.v35-card p{margin:0;color:#475569;font-size:13.5px;line-height:1.55;}.v35-empty{padding:80px 30px;text-align:center;color:#94a3b8;background:#fff;border:1px dashed #cbd5e1;border-radius:14px;grid-column:1/-1;}";
+  document.head.appendChild(st);
+
+  var ITEMS = [
+    {type:'noticia', tag:'FÚTBOL', sport:'Fútbol', country:'España', title:'Real Madrid sigue líder de La Liga', body:'Crónica del fin de semana: Real Madrid mantiene la cima tras vencer al Sevilla 2-0.'},
+    {type:'noticia', tag:'NBA', sport:'Basketball', country:'EE.UU.', title:'Boston Celtics arranca temporada con victoria', body:'Tatum dominó con 35 puntos en el opener contra New York.'},
+    {type:'noticia', tag:'TENIS', sport:'Tenis', country:'Australia', title:'Alcaraz avanza en Australian Open', body:'Sin perder un set, el español llega a octavos.'},
+    {type:'noticia', tag:'F1', sport:'Carreras', country:'Mónaco', title:'Pole de Verstappen en Mónaco', body:'El neerlandés marca la mejor vuelta y partirá primero.'},
+    {type:'noticia', tag:'NFL', sport:'Fútbol Americano', country:'EE.UU.', title:'Chiefs avanzan a final de conferencia', body:'Mahomes lidera la remontada en el cuarto cuarto.'},
+    {type:'noticia', tag:'GOLF', sport:'Golf', country:'EE.UU.', title:'Rahm gana torneo PGA', body:'El español se impone en playoff de muerte súbita.'},
+    {type:'noticia', tag:'MLB', sport:'Baseball', country:'EE.UU.', title:'Dodgers ganan el World Series', body:'Ohtani figura clave en la conquista del título.'},
+    {type:'noticia', tag:'OLÍMPICOS', sport:'Atletismo', country:'Kenya', title:'Récord mundial de maratón en Berlín', body:'Kipchoge baja su propia marca por 28 segundos.'},
+    {type:'noticia', tag:'FÚTBOL', sport:'Fútbol', country:'Argentina', title:'Boca y River empatan en el Monumental', body:'Superclásico vibrante que terminó 1-1 con polémica del VAR.'},
+    {type:'noticia', tag:'FÚTBOL', sport:'Fútbol', country:'Brasil', title:'Flamengo conquista Libertadores', body:'Tercera Copa Libertadores en su historia.'},
+    {type:'blog', tag:'OPINIÓN', sport:'Fútbol', country:'España', title:'Análisis táctico del Clásico', body:'Cómo Xavi planteó el partido y por qué Ancelotti respondió con un 4-4-2 cerrado.'},
+    {type:'blog', tag:'HISTORIA', sport:'Atletismo', country:'Jamaica', title:'El día que Bolt rompió el 100m', body:'Una historia para los archivos del deporte.'},
+    {type:'blog', tag:'PERFILES', sport:'Tenis', country:'España', title:'Las nuevas estrellas del tenis español', body:'Sub-21 que vienen pisando fuerte.'},
+    {type:'blog', tag:'DATOS', sport:'Basketball', country:'EE.UU.', title:'Curry vs Magic: comparativa', body:'Los números frente a frente de dos generaciones.'},
+    {type:'blog', tag:'COLUMNA', sport:'Fútbol Americano', country:'EE.UU.', title:'El estado de la NFL', body:'Opinión de un editor invitado.'},
+    {type:'blog', tag:'ENTREVISTA', sport:'Carreras', country:'Reino Unido', title:'Conversación con Hamilton', body:'Su carrera y su visión del nuevo Mercedes.'},
+    {type:'blog', tag:'GUÍA', sport:'Pádel', country:'Argentina', title:'Cómo seguir el WPT en Sports Stats 21', body:'Tips y atajos para no perderte un partido.'},
+    {type:'blog', tag:'COMUNIDAD', sport:'Baseball', country:'México', title:'Posts destacados de la semana', body:'Los mejores aportes de la comunidad mexicana.'},
+    {type:'blog', tag:'OPINIÓN', sport:'Fútbol', country:'Chile', title:'La Roja rumbo al Mundial', body:'¿Qué necesita Chile para clasificar?'},
+    {type:'blog', tag:'HISTORIA', sport:'Volleyball', country:'Brasil', title:'La generación dorada del vóley brasileño', body:'Recordando los Juegos de Beijing 2008.'}
+  ];
+  var COUNTRIES_LIST = Array.from(new Set(ITEMS.map(function(it){ return it.country; }))).sort();
+  var SPORTS_LIST = Array.from(new Set(ITEMS.map(function(it){ return it.sport; }))).sort();
+
+  function buildNBPage(){
+    if(document.getElementById('v35-nb-page')) return;
+    var inicio = document.querySelector('.tab-panel.active') || document.body;
+    var page = document.createElement('section');
+    page.id = 'v35-nb-page';
+    page.innerHTML = '<div class="v27-page-header"><h1><span class="v27-emoji">📰</span>Noticias y Blogs</h1><p>Toda la cobertura periodística y la opinión de la comunidad. Filtrá por tipo, deporte o país.</p></div>' +
+      '<div class="v35-filters">' +
+        '<div class="v35-filter"><label>Tipo</label><select id="v35-f-type"><option value="">Todos</option><option value="noticia">Solo Noticias</option><option value="blog">Solo Blogs</option></select></div>' +
+        '<div class="v35-filter"><label>Deporte</label><select id="v35-f-sport"><option value="">Todos los deportes</option>' + SPORTS_LIST.map(function(s){ return '<option value="'+s+'">'+s+'</option>'; }).join('') + '</select></div>' +
+        '<div class="v35-filter"><label>País</label><select id="v35-f-country"><option value="">Todos los países</option>' + COUNTRIES_LIST.map(function(c){ return '<option value="'+c+'">'+c+'</option>'; }).join('') + '</select></div>' +
+      '</div>' +
+      '<div class="v35-results-count" id="v35-count"></div>' +
+      '<div class="v35-grid" id="v35-grid"></div>';
+    inicio.appendChild(page);
+    function render(){
+      var t = document.getElementById('v35-f-type').value;
+      var s = document.getElementById('v35-f-sport').value;
+      var c = document.getElementById('v35-f-country').value;
+      var filtered = ITEMS.filter(function(it){
+        if(t && it.type !== t) return false;
+        if(s && it.sport !== s) return false;
+        if(c && it.country !== c) return false;
+        return true;
+      });
+      var grid = document.getElementById('v35-grid');
+      var count = document.getElementById('v35-count');
+      if(filtered.length === 0){
+        grid.innerHTML = '<div class="v35-empty">Sin resultados. Probá quitando algún filtro.</div>';
+      } else {
+        grid.innerHTML = filtered.map(function(it){
+          var typeClass = it.type === 'noticia' ? 't-noticia' : 't-blog';
+          var typeLabel = it.type === 'noticia' ? '📰 Noticia' : '✍️ Blog';
+          return '<div class="v35-card"><div class="v35-card-tags">' +
+            '<span class="v35-card-tag '+typeClass+'">'+typeLabel+'</span>' +
+            '<span class="v35-card-tag t-deporte">'+it.sport+'</span>' +
+            '<span class="v35-card-tag t-pais">'+it.country+'</span>' +
+            '</div><h3>'+it.title+'</h3><p>'+it.body+'</p></div>';
+        }).join('');
+      }
+      count.textContent = filtered.length + ' resultado' + (filtered.length===1?'':'s');
+    }
+    page.querySelectorAll('select').forEach(function(sel){ sel.addEventListener('change', render); });
+    render();
+  }
+
+  function mergeNavButtons(){
+    var nav = document.getElementById('v26-main-nav'); if(!nav) return;
+    if(nav.dataset.v35merged === '1') return;
+    var noticias = nav.querySelector('button[data-v26id="noticias"]');
+    var blogs = nav.querySelector('button[data-v26id="blogs"]');
+    if(!noticias || !blogs) return;
+    // Replace noticias with combined button
+    noticias.dataset.v26id = 'nb';
+    noticias.innerHTML = '<span class="v26-emoji">📰</span><span>Noticias y Blogs</span>';
+    blogs.style.display = 'none';
+    nav.dataset.v35merged = '1';
+  }
+
+  function showNBPage(){
+    // hide all home & v32 sections
+    var ids = ['v25-intro','v16-news-section','v25-blogs-section','v17-updates-widget','v16-novedades-header','v29-todos-page','v32-news-grid-sec','v32-blogs-grid-sec','v27-noticias-header','v27-blogs-header','v27-centros-header'];
+    ids.forEach(function(id){ var e=document.getElementById(id); if(e) e.style.display='none'; });
+    var hero = document.querySelector('.inicio-hero, .hero-carousel');
+    if(hero) hero.style.display = 'none';
+    var panels = document.querySelector('.inicio-panels');
+    if(panels) panels.style.display = 'none';
+    var sn = document.querySelector('.sport-nav');
+    if(sn) sn.style.cssText = 'display:none !important;';
+    // Show NB page
+    var nb = document.getElementById('v35-nb-page');
+    if(nb) nb.style.display = 'block';
+    window.__v34_navClicked = true;
+    window.scrollTo({top:0, behavior:'smooth'});
+  }
+  function hideNBPage(){
+    var nb = document.getElementById('v35-nb-page');
+    if(nb) nb.style.display = 'none';
+  }
+
+  function bindV35Nav(){
+    var nav = document.getElementById('v26-main-nav'); if(!nav) return;
+    if(nav.dataset.v35bound === '1') return;
+    nav.dataset.v35bound = '1';
+    nav.addEventListener('click', function(e){
+      var btn = e.target.closest('button'); if(!btn) return;
+      var id = btn.dataset.v26id;
+      if(id === 'nb'){
+        e.stopImmediatePropagation();
+        e.preventDefault();
+        // Toggle: if already active → back to inicio
+        if(btn.classList.contains('active')){
+          nav.querySelectorAll('button').forEach(function(b){ b.classList.remove('active'); });
+          nav.querySelector('button[data-v26id="inicio"]').classList.add('active');
+          hideNBPage();
+          // restore inicio sections
+          ['v25-intro','v16-news-section','v25-blogs-section','v17-updates-widget','v16-novedades-header'].forEach(function(id){ var e=document.getElementById(id); if(e) e.style.display=''; });
+          var hero = document.querySelector('.inicio-hero, .hero-carousel');
+          if(hero) hero.style.display = '';
+          var panels = document.querySelector('.inicio-panels');
+          if(panels) panels.style.display = '';
+          window.__v34_navClicked = true;
+          window.scrollTo({top:0, behavior:'smooth'});
+          return;
+        }
+        // Activate NB
+        nav.querySelectorAll('button').forEach(function(b){ b.classList.remove('active'); });
+        btn.classList.add('active');
+        showNBPage();
+        return;
+      }
+      // For other buttons, let v33 handler run (capture phase already added it)
+      // But ensure NB page is hidden when navigating elsewhere
+      hideNBPage();
+    }, true); // capture
+  }
+
+  function applyAll(){ try{ buildNBPage(); mergeNavButtons(); bindV35Nav(); } catch(e){ console.warn('[v35]', e); } }
+  if(document.readyState==='complete'||document.readyState==='interactive'){ setTimeout(applyAll, 1500); }
+  else { document.addEventListener('DOMContentLoaded', function(){ setTimeout(applyAll, 1500); }); }
+  setTimeout(applyAll, 3500);
+  setTimeout(applyAll, 7000);
+  setTimeout(applyAll, 12000);
+  console.log('[v35] loaded · Noticias y Blogs merged · 3 filtros');
+})();
+</script>
+
 </body>
 </html>
 
