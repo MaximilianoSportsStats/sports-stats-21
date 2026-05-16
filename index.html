@@ -13317,6 +13317,56 @@ document.addEventListener("DOMContentLoaded", function(){
 })();
 </script>
 
+<script>
+/* v31: sport-bar en Noticias/Blogs + swap buscador/idioma + Centros compacto */
+(function(){
+  if(window.__v31_loaded) return; window.__v31_loaded = true;
+  var st = document.createElement('style'); st.id='v31-css';
+  st.textContent = "html body.v31-show-bar nav.sport-nav,html body.v29-show-bar nav.sport-nav,html body.v26-show-deportes nav.sport-nav{display:flex !important;background:#fafafa !important;border-bottom:1px solid #e2e8f0 !important;padding:14px 12px 10px !important;}#v26-main-nav button[data-v26id='centros']{padding:8px 10px !important;font-size:13px !important;gap:5px !important;white-space:nowrap !important;}#v26-main-nav button[data-v26id='centros'] span:not(.v26-emoji){line-height:1.05 !important;}";
+  document.head.appendChild(st);
+
+  function ensureSportBarHooks(){
+    var nav = document.getElementById('v26-main-nav'); if(!nav) return;
+    if(nav.dataset.v31bound === '1') return;
+    nav.dataset.v31bound = '1';
+    nav.addEventListener('click', function(e){
+      var btn = e.target.closest('button'); if(!btn) return;
+      var id = btn.dataset.v26id;
+      // Force sport-bar visibility for Deportes/Noticias/Blogs in capture; let v29 do its thing then ensure class
+      setTimeout(function(){
+        if(['deportes','noticias','blogs'].indexOf(id) > -1 && btn.classList.contains('active')){
+          document.body.classList.add('v31-show-bar','v29-show-bar');
+        } else {
+          document.body.classList.remove('v31-show-bar');
+          if(!btn.classList.contains('active')) document.body.classList.remove('v29-show-bar');
+        }
+      }, 30);
+    }, true);
+  }
+
+  function swapSearchLang(){
+    var lang = document.getElementById('v30-lang');
+    var search = document.getElementById('v25-search-bar');
+    if(!lang || !search) return;
+    if(lang.dataset.v31swapped === '1') return;
+    // We want order: ... search, lang, iniciar
+    // Move lang AFTER search (currently lang is before search)
+    if(lang.nextElementSibling === search){
+      search.parentNode.insertBefore(lang, search.nextSibling);
+      lang.dataset.v31swapped = '1';
+    }
+  }
+
+  function applyAll(){ try{ ensureSportBarHooks(); swapSearchLang(); } catch(e){ console.warn('[v31]', e); } }
+  if(document.readyState==='complete'||document.readyState==='interactive'){ setTimeout(applyAll, 1300); }
+  else { document.addEventListener('DOMContentLoaded', function(){ setTimeout(applyAll, 1300); }); }
+  setTimeout(applyAll, 2800);
+  setTimeout(applyAll, 6000);
+  setTimeout(applyAll, 10000);
+  console.log('[v31] loaded · sport-bar en Noticias/Blogs · swap buscador/idioma · Centros compacto');
+})();
+</script>
+
 </body>
 </html>
 
