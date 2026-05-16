@@ -13576,6 +13576,197 @@ document.addEventListener("DOMContentLoaded", function(){
 })();
 </script>
 
+<script>
+/* v33: hotfix - clone nav y sport-nav para remover listeners viejos */
+(function(){
+  if(window.__v33_loaded) return; window.__v33_loaded = true;
+
+  function cleanAndBind(){
+    var nav = document.getElementById('v26-main-nav'); if(!nav) return false;
+    var sportNav = document.querySelector('.sport-nav'); if(!sportNav) return false;
+    // Skip if already cleaned by v33
+    if(nav.dataset.v33clean === '1') return true;
+    // Clone main nav to remove all old listeners
+    var navClone = nav.cloneNode(true);
+    navClone.dataset.v33clean = '1';
+    nav.parentNode.replaceChild(navClone, nav);
+    // Clone sport-nav similarly
+    var sportClone = sportNav.cloneNode(true);
+    sportClone.dataset.v33clean = '1';
+    sportNav.parentNode.replaceChild(sportClone, sportNav);
+
+    var currentView = 'inicio';
+    var currentSport = null;
+    window.__v32CurrentView = function(){ return currentView; };
+    window.__v32CurrentSport = function(){ return currentSport; };
+
+    function setSportNavVisible(visible){
+      var sn = document.querySelector('.sport-nav');
+      if(!sn) return;
+      if(visible){
+        sn.style.cssText = 'display:flex !important;background:#fafafa;border-bottom:1px solid #e2e8f0;padding:14px 12px 10px;';
+      } else {
+        sn.style.cssText = 'display:none !important;';
+      }
+    }
+
+    function showOnly(view, sport){
+      // Hide everything first
+      var ids = ['v25-intro','v16-news-section','v25-blogs-section','v17-updates-widget','v16-novedades-header','v29-todos-page','v32-news-grid-sec','v32-blogs-grid-sec','v27-noticias-header','v27-blogs-header','v27-centros-header'];
+      ids.forEach(function(id){ var e=document.getElementById(id); if(e) e.style.display='none'; });
+      var hero = document.querySelector('.inicio-hero, .hero-carousel');
+      if(hero) hero.style.display = 'none';
+      var panels = document.querySelector('.inicio-panels');
+      if(panels){
+        panels.style.display = 'none';
+        document.querySelectorAll('.inicio-panel').forEach(function(p){ p.style.display = ''; });
+      }
+      // Show based on view
+      if(view === 'inicio'){
+        ['v25-intro','v16-news-section','v25-blogs-section','v17-updates-widget','v16-novedades-header'].forEach(function(id){ var e=document.getElementById(id); if(e) e.style.display=''; });
+        if(hero) hero.style.display = '';
+        if(panels) panels.style.display = '';
+      } else if(view === 'deportes'){
+        var todos = document.getElementById('v29-todos-page');
+        if(todos) todos.style.display = '';
+      } else if(view === 'noticias'){
+        var ng = document.getElementById('v32-news-grid-sec');
+        if(ng){
+          ng.style.display = '';
+          var inner = ng.querySelector('.v32-grid');
+          if(inner && typeof window.__v32buildGrid === 'function'){
+            inner.innerHTML = window.__v32buildGrid('news', sport);
+          }
+        }
+      } else if(view === 'blogs'){
+        var bg = document.getElementById('v32-blogs-grid-sec');
+        if(bg){
+          bg.style.display = '';
+          var inner2 = bg.querySelector('.v32-grid');
+          if(inner2 && typeof window.__v32buildGrid === 'function'){
+            inner2.innerHTML = window.__v32buildGrid('blogs', sport);
+          }
+        }
+      } else if(view === 'centros'){
+        if(panels) panels.style.display = '';
+        document.querySelectorAll('.inicio-panel').forEach(function(p){ p.style.display = (p.id === 'v13-cd-panel') ? '' : 'none'; });
+        var hd = document.getElementById('v27-centros-header'); if(hd) hd.style.display='';
+      }
+      window.scrollTo({top:0, behavior:'smooth'});
+    }
+
+    navClone.addEventListener('click', function(e){
+      var btn = e.target.closest('button'); if(!btn) return;
+      e.stopImmediatePropagation();
+      e.preventDefault();
+      var id = btn.dataset.v26id;
+      // Toggle close: clicking same active → close (back to inicio)
+      if(currentView === id && id !== 'inicio'){
+        currentView = 'inicio'; currentSport = null;
+        navClone.querySelectorAll('button').forEach(function(b){ b.classList.remove('active'); });
+        navClone.querySelector('button[data-v26id="inicio"]').classList.add('active');
+        setSportNavVisible(false);
+        sportClone.querySelectorAll('.sport-btn').forEach(function(b){ b.classList.remove('active'); });
+        var inicioSb = Array.from(sportClone.querySelectorAll('.sport-btn')).find(function(b){
+          var n=b.querySelector('.ss-name-wrap'); return n && /^(Inicio|Todos)$/i.test(n.textContent.trim());
+        });
+        if(inicioSb) inicioSb.classList.add('active');
+        showOnly('inicio');
+        return;
+      }
+      currentView = id; currentSport = null;
+      navClone.querySelectorAll('button').forEach(function(b){ b.classList.remove('active'); });
+      btn.classList.add('active');
+      // Show sport-bar only for deportes/noticias/blogs
+      setSportNavVisible(['deportes','noticias','blogs'].indexOf(id) > -1);
+      // Reset sport-btn active to Todos
+      sportClone.querySelectorAll('.sport-btn').forEach(function(b){ b.classList.remove('active'); });
+      var todosBtn = Array.from(sportClone.querySelectorAll('.sport-btn')).find(function(b){
+        var n=b.querySelector('.ss-name-wrap'); return n && /^(Inicio|Todos)$/i.test(n.textContent.trim());
+      });
+      if(todosBtn) todosBtn.classList.add('active');
+      showOnly(id, null);
+    }, true);
+
+    sportClone.addEventListener('click', function(e){
+      var sb = e.target.closest('.sport-btn'); if(!sb) return;
+      var nameSpan = sb.querySelector('.ss-name-wrap');
+      var name = nameSpan ? nameSpan.textContent.trim() : sb.textContent.trim();
+      if(currentView === 'noticias' || currentView === 'blogs'){
+        e.stopImmediatePropagation();
+        e.preventDefault();
+        sportClone.querySelectorAll('.sport-btn').forEach(function(b){ b.classList.remove('active'); });
+        sb.classList.add('active');
+        currentSport = name === 'Todos' || /^Inicio$/i.test(name) ? null : name;
+        showOnly(currentView, currentSport);
+        return;
+      }
+      if(currentView === 'deportes'){
+        if(/^(Inicio|Todos)$/i.test(name)){
+          e.stopImmediatePropagation();
+          e.preventDefault();
+          sportClone.querySelectorAll('.sport-btn').forEach(function(b){ b.classList.remove('active'); });
+          sb.classList.add('active');
+          showOnly('deportes', null);
+          return;
+        }
+        // For specific sport: navigate to sport detail (let event bubble naturally via element click)
+        setTimeout(function(){ setSportNavVisible(true); }, 200);
+      }
+    }, true);
+
+    // Set initial state
+    showOnly('inicio');
+    return true;
+  }
+
+  // Expose buildGrid for v32 grids
+  window.__v32buildGrid = function(type, sport){
+    var list = type === 'news' ? (window.__V32_NEWS || []) : (window.__V32_BLOGS || []);
+    if(!list.length){
+      // Read from existing v32 closure data — fallback: build from existing grid sections if available
+      return '<p style="grid-column:1/-1;text-align:center;color:#9ba3b4;padding:60px 20px;">Cargando...</p>';
+    }
+    var filtered = !sport || sport === 'Todos' ? list : list.filter(function(it){ return it.sport === sport; });
+    if(filtered.length === 0){
+      return '<p style="grid-column:1/-1;text-align:center;color:#9ba3b4;padding:60px 20px;">Sin contenido para <b style="color:#fff;">'+sport+'</b> todavía.</p>';
+    }
+    return filtered.map(function(it){
+      return '<div class="v32-card"><span class="v32-tag">'+it.tag+'</span><h3>'+it.title+'</h3><p>'+it.body+'</p></div>';
+    }).join('');
+  };
+  // Initialize the data lists for v33's grid builder
+  window.__V32_NEWS = [
+    {tag:'FÚTBOL', sport:'Fútbol', title:'Noticia 1', body:'Crónica del fin de semana en las grandes ligas europeas y latinoamericanas.'},
+    {tag:'NBA', sport:'Basketball', title:'Noticia 2', body:'Resumen de la jornada NBA — resultados, lesiones y movimientos de mercado.'},
+    {tag:'TENIS', sport:'Tenis', title:'Noticia 3', body:'Avances de Grand Slams y torneos ATP/WTA de la semana.'},
+    {tag:'F1', sport:'Carreras', title:'Noticia 4', body:'GP destacado del fin de semana: clasificación, carrera y campeonato.'},
+    {tag:'NFL', sport:'Fútbol Americano', title:'Noticia 5', body:'Resumen de la semana NFL — playoffs, lesiones y MVPs en disputa.'},
+    {tag:'GOLF', sport:'Golf', title:'Noticia 6', body:'PGA Tour y European Tour — top 10, líderes y noticias del Major.'},
+    {tag:'MLB', sport:'Baseball', title:'Noticia 7', body:'Highlights del béisbol, World Series y noticias de las divisiones AL/NL.'},
+    {tag:'OLÍMPICOS', sport:'Atletismo', title:'Noticia 8', body:'Camino a los próximos Juegos Olímpicos — clasificatorios y récords.'}
+  ];
+  window.__V32_BLOGS = [
+    {tag:'OPINIÓN', sport:'Fútbol', title:'Blog 1', body:'Análisis táctico de la jornada europea — formaciones, lecturas y datos.'},
+    {tag:'HISTORIA', sport:'Atletismo', title:'Blog 2', body:'El día que cambió un campeonato — una historia para los archivos del deporte.'},
+    {tag:'PERFILES', sport:'Tenis', title:'Blog 3', body:'Las nuevas estrellas que están por explotar — Sub-21 a seguir.'},
+    {tag:'DATOS', sport:'Basketball', title:'Blog 4', body:'Comparativa estadística entre dos generaciones — números frente a frente.'},
+    {tag:'COLUMNA', sport:'Fútbol Americano', title:'Blog 5', body:'Opinión de un editor invitado sobre el momento del deporte mundial.'},
+    {tag:'ENTREVISTA', sport:'Carreras', title:'Blog 6', body:'Conversación exclusiva con un protagonista — su carrera y su visión.'},
+    {tag:'GUÍA', sport:'Pádel', title:'Blog 7', body:'Cómo seguir tu deporte favorito en Sports Stats 21 — tips y atajos.'},
+    {tag:'COMUNIDAD', sport:'Baseball', title:'Blog 8', body:'Los mejores posts de la semana hechos por usuarios de la plataforma.'}
+  ];
+
+  function applyAll(){ try{ cleanAndBind(); } catch(e){ console.warn('[v33]', e); } }
+  if(document.readyState==='complete'||document.readyState==='interactive'){ setTimeout(applyAll, 2000); }
+  else { document.addEventListener('DOMContentLoaded', function(){ setTimeout(applyAll, 2000); }); }
+  setTimeout(applyAll, 4000);
+  setTimeout(applyAll, 8000);
+  setTimeout(applyAll, 14000);
+  console.log('[v33] hotfix loaded · clone nav and sport-nav · single v33 handler');
+})();
+</script>
+
 </body>
 </html>
 
