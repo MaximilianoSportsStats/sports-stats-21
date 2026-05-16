@@ -13240,6 +13240,83 @@ document.addEventListener("DOMContentLoaded", function(){
 })();
 </script>
 
+<script>
+/* v30: caret en Noticias/Blogs + selector idioma con banderas */
+(function(){
+  if(window.__v30_loaded) return; window.__v30_loaded = true;
+  var st = document.createElement('style'); st.id='v30-css';
+  st.textContent = ".v30-lang{position:relative;display:flex;align-items:center;gap:6px;background:#fff;border:1px solid #e2e8f0;border-radius:24px;padding:6px 12px 6px 10px;cursor:pointer;font-size:13px;color:#0f172a;font-family:inherit;user-select:none;}.v30-lang:hover{border-color:#ff4d4d;}.v30-lang .v30-flag{font-size:18px;line-height:1;}.v30-lang::after{content:'▾';font-size:11px;color:#94a3b8;margin-left:2px;}.v30-lang-menu{position:absolute;top:calc(100% + 6px);right:0;background:#fff;border:1px solid #e2e8f0;border-radius:12px;box-shadow:0 12px 28px rgba(15,23,42,.12);min-width:170px;padding:6px;display:none;z-index:120;}.v30-lang.open .v30-lang-menu{display:block;}.v30-lang-menu button{display:flex;align-items:center;gap:9px;width:100%;background:transparent;border:0;color:#0f172a;font-size:13px;padding:8px 12px;border-radius:8px;cursor:pointer;font-family:inherit;}.v30-lang-menu button:hover{background:#f1f5f9;}.v30-lang-menu button.active{background:#ff4d4d;color:#fff;font-weight:600;}.v30-lang-menu button .v30-flag{font-size:17px;line-height:1;}";
+  document.head.appendChild(st);
+
+  // 1. Add caret to Noticias / Blogs (already done via .v26-has-dropdown class on Deportes; do for these 2)
+  function addCarets(){
+    var nav = document.getElementById('v26-main-nav'); if(!nav) return;
+    ['noticias','blogs'].forEach(function(id){
+      var b = nav.querySelector('button[data-v26id="'+id+'"]');
+      if(b && !b.classList.contains('v26-has-dropdown')){
+        b.classList.add('v26-has-dropdown');
+      }
+    });
+  }
+
+  // 2. Inject language selector before search bar
+  var LANGS = [
+    {code:'es', flag:'🇪🇸', label:'Español'},
+    {code:'en', flag:'🇬🇧', label:'Inglés'},
+    {code:'de', flag:'🇩🇪', label:'Alemán'},
+    {code:'fr', flag:'🇫🇷', label:'Francés'},
+    {code:'it', flag:'🇮🇹', label:'Italiano'},
+    {code:'pt', flag:'🇵🇹', label:'Portugués'}
+  ];
+  function injectLangSelector(){
+    if(document.getElementById('v30-lang')) return;
+    var search = document.getElementById('v25-search-bar'); if(!search) return;
+    var current = (localStorage.getItem('v30-lang') || 'es');
+    var currentLang = LANGS.find(function(l){ return l.code === current; }) || LANGS[0];
+    var box = document.createElement('div');
+    box.id = 'v30-lang';
+    box.className = 'v30-lang';
+    box.innerHTML = '<span class="v30-flag" id="v30-lang-flag">'+currentLang.flag+'</span><span id="v30-lang-label">'+currentLang.label+'</span>' +
+      '<div class="v30-lang-menu">' + LANGS.map(function(l){
+        return '<button data-code="'+l.code+'" class="'+(l.code===current?'active':'')+'"><span class="v30-flag">'+l.flag+'</span>'+l.label+'</button>';
+      }).join('') + '</div>';
+    // Insert BEFORE search bar
+    search.parentNode.insertBefore(box, search);
+    box.addEventListener('click', function(e){
+      var btn = e.target.closest('button[data-code]');
+      if(btn){
+        e.stopPropagation();
+        var code = btn.dataset.code;
+        var lang = LANGS.find(function(l){ return l.code === code; });
+        if(!lang) return;
+        localStorage.setItem('v30-lang', code);
+        box.querySelector('#v30-lang-flag').textContent = lang.flag;
+        box.querySelector('#v30-lang-label').textContent = lang.label;
+        box.querySelectorAll('.v30-lang-menu button').forEach(function(b){ b.classList.remove('active'); });
+        btn.classList.add('active');
+        box.classList.remove('open');
+        if(code !== 'es'){
+          alert('🌍 Próximamente: traducción completa al ' + lang.label + '. Por ahora la interfaz sigue en Español, pero ya guardamos tu preferencia.');
+        }
+        return;
+      }
+      box.classList.toggle('open');
+    });
+    document.addEventListener('click', function(e){
+      if(!box.contains(e.target)) box.classList.remove('open');
+    });
+  }
+
+  function applyAll(){ try{ addCarets(); injectLangSelector(); } catch(e){ console.warn('[v30]', e); } }
+  if(document.readyState==='complete'||document.readyState==='interactive'){ setTimeout(applyAll, 1200); }
+  else { document.addEventListener('DOMContentLoaded', function(){ setTimeout(applyAll, 1200); }); }
+  setTimeout(applyAll, 2500);
+  setTimeout(applyAll, 5500);
+  setTimeout(applyAll, 9500);
+  console.log('[v30] loaded · carets Noticias/Blogs + lang selector');
+})();
+</script>
+
 </body>
 </html>
 
