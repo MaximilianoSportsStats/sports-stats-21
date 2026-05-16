@@ -12992,6 +12992,254 @@ document.addEventListener("DOMContentLoaded", function(){
 })();
 </script>
 
+<script>
+/* v29: Todos⭐ + sport-bar persistente + filtro Blogs/Noticias por deporte */
+(function(){
+  if(window.__v29_loaded) return; window.__v29_loaded = true;
+  var st = document.createElement('style'); st.id='v29-css';
+  st.textContent = "body.v29-show-bar .sport-nav{display:flex !important;background:#fafafa;border-bottom:1px solid #e2e8f0;padding:14px 12px 10px;}.v29-todos-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px;max-width:1200px;margin:30px auto;padding:0 24px;}.v29-todos-card{background:#fff;border:1px solid #e2e8f0;border-radius:14px;padding:22px;cursor:pointer;transition:all .2s;}.v29-todos-card:hover{transform:translateY(-3px);border-color:#ff4d4d;box-shadow:0 6px 18px rgba(0,0,0,.06);}.v29-todos-card .v29-todos-icon{font-size:38px;line-height:1;margin-bottom:10px;}.v29-todos-card h3{margin:0 0 6px;color:#0f172a;font-size:16px;font-weight:700;}.v29-todos-card p{margin:0;color:#64748b;font-size:13px;line-height:1.5;}.v29-todos-card .v29-followers{display:inline-block;margin-top:10px;background:rgba(255,77,77,.1);color:#ff4d4d;font-size:11px;font-weight:700;padding:3px 8px;border-radius:6px;letter-spacing:.5px;}";
+  document.head.appendChild(st);
+
+  // 1. Change "Todos" emoji from 🏠 to ⭐
+  function fixTodosEmoji(){
+    var sportNav = document.querySelector('.sport-nav'); if(!sportNav) return;
+    var btn = Array.from(sportNav.querySelectorAll('.sport-btn')).find(function(b){
+      var name = b.querySelector('.ss-name-wrap');
+      var t = name ? name.textContent.trim() : b.textContent.trim();
+      return /^(Inicio|Todos)$/i.test(t);
+    });
+    if(!btn) return;
+    var em = btn.querySelector('.ss-emoji-wrap');
+    if(em && em.textContent.trim() !== '⭐'){ em.textContent = '⭐'; }
+    var name = btn.querySelector('.ss-name-wrap');
+    if(name && name.textContent.trim() !== 'Todos'){ name.textContent = 'Todos'; }
+  }
+
+  // 2. Build a "Todos Deportes" page (summary of all 15 deportes)
+  var DEPORTES_SUMMARY = [
+    {emoji:'⚽', name:'Fútbol', desc:'4 mil millones de seguidores · 211 federaciones FIFA · La Champions, Mundiales y todas las grandes ligas.', followers:'12.4M'},
+    {emoji:'🎾', name:'Tenis', desc:'4 Grand Slams · ATP/WTA Tour · Singles, dobles, mixto y wheelchair.', followers:'2.1M'},
+    {emoji:'🏎️', name:'Carreras', desc:'F1, F2, F3, F4 + IndyCar, NASCAR, rally, Le Mans, Dakar.', followers:'2.4M'},
+    {emoji:'🏀', name:'Basketball', desc:'NBA, EuroLeague, FIBA · 3x3, wheelchair y temporada universitaria.', followers:'4.8M'},
+    {emoji:'🥊', name:'Combate', desc:'Boxeo, MMA, UFC, Bellator, ONE Championship · campeonatos mundiales.', followers:'1.8M'},
+    {emoji:'⚾', name:'Baseball', desc:'MLB, NPB, KBO · World Series, Serie del Caribe, Premier12.', followers:'1.4M'},
+    {emoji:'🏒', name:'Hockey', desc:'NHL, IIHF · Hielo, pasto, sala, ball y rink hockey.', followers:'980K'},
+    {emoji:'🏈', name:'Fútbol Americano', desc:'NFL · Super Bowl · College Football Playoff · Arena, Flag.', followers:'3.2M'},
+    {emoji:'🏉', name:'Rugby', desc:'Six Nations, World Cup, The Rugby Championship · Union, League, Sevens.', followers:'620K'},
+    {emoji:'⛳', name:'Golf', desc:'Masters, PGA, US Open, The Open, Ryder Cup, Solheim Cup.', followers:'540K'},
+    {emoji:'🏃', name:'Atletismo', desc:'Mundial, Diamond League, World Marathon Majors · pista, ruta, campo.', followers:'410K'},
+    {emoji:'🏊', name:'Natación', desc:'Mundial de Acuáticos, JJOO · piscina, aguas abiertas, sincronizada.', followers:'290K'},
+    {emoji:'🚴', name:'Ciclismo', desc:'Tour de France, Giro, Vuelta · ruta, pista, MTB, BMX, gravel.', followers:'380K'},
+    {emoji:'🏐', name:'Volleyball', desc:'Mundial FIVB, Volleyball Nations League · sala y playa.', followers:'720K'},
+    {emoji:'🏓', name:'Pádel', desc:'Premier Padel, World Padel Tour · masculino, femenino, mixto.', followers:'510K'},
+    {emoji:'🏏', name:'Cricket', desc:'World Cup, IPL, The Ashes · Test, ODI, T20, The Hundred.', followers:'6.7M'}
+  ];
+  function buildTodosPage(){
+    if(document.getElementById('v29-todos-page')) return;
+    var sec = document.createElement('section');
+    sec.id = 'v29-todos-page';
+    sec.style.display = 'none';
+    var header = '<div class="v27-page-header"><h1><span class="v27-emoji">⭐</span>Todos los Deportes</h1><p>Resumen general de los 15 deportes principales de Sports Stats 21. Click en cualquiera para ir a su página.</p></div>';
+    var grid = '<div class="v29-todos-grid">' + DEPORTES_SUMMARY.map(function(d){
+      return '<div class="v29-todos-card" data-sport="'+d.name+'">' +
+        '<div class="v29-todos-icon">'+d.emoji+'</div>' +
+        '<h3>'+d.name+'</h3><p>'+d.desc+'</p>' +
+        '<span class="v29-followers">'+d.followers+' seguidores</span>' +
+      '</div>';
+    }).join('') + '</div>';
+    sec.innerHTML = header + grid;
+    // Insert after the inicio panels
+    var panels = document.querySelector('.inicio-panels');
+    if(panels) panels.parentNode.insertBefore(sec, panels.nextSibling);
+    else document.body.appendChild(sec);
+    // delegate click on card → navigate to sport
+    sec.addEventListener('click', function(e){
+      var card = e.target.closest('.v29-todos-card'); if(!card) return;
+      var sn = card.dataset.sport;
+      var sportNav = document.querySelector('.sport-nav');
+      var btn = Array.from(sportNav.querySelectorAll('.sport-btn')).find(function(b){
+        var n = b.querySelector('.ss-name-wrap');
+        var t = n ? n.textContent.trim() : b.textContent.trim();
+        return t === sn;
+      });
+      if(btn) btn.click();
+    });
+  }
+
+  // 3. Filter blogs/news by sport
+  function filterBlogsBySport(name){
+    var blogs = document.getElementById('v25-blogs-section'); if(!blogs) return;
+    // The carousel is dynamic, no easy filter; show notice
+    var notice = blogs.querySelector('.v29-filter-notice');
+    if(name && name !== 'Todos'){
+      if(!notice){
+        notice = document.createElement('div');
+        notice.className = 'v29-filter-notice';
+        notice.style.cssText = 'max-width:900px;margin:0 auto 16px;padding:12px 18px;background:rgba(255,77,77,.08);border:1px solid rgba(255,77,77,.25);border-radius:10px;color:#0f172a;font-size:14px;text-align:center;';
+        blogs.insertBefore(notice, blogs.firstChild);
+      }
+      notice.innerHTML = '🔎 Filtrando blogs de <b>'+name+'</b> · <a href="#" style="color:#ff4d4d;text-decoration:underline;cursor:pointer;" onclick="event.preventDefault();window.__v29ClearFilter && window.__v29ClearFilter();">Quitar filtro</a>';
+    } else if(notice){ notice.remove(); }
+  }
+  function filterNewsBySport(name){
+    var news = document.getElementById('v16-news-section'); if(!news) return;
+    var notice = news.querySelector('.v29-filter-notice');
+    if(name && name !== 'Todos'){
+      if(!notice){
+        notice = document.createElement('div');
+        notice.className = 'v29-filter-notice';
+        notice.style.cssText = 'max-width:900px;margin:0 auto 16px;padding:12px 18px;background:rgba(255,77,77,.08);border:1px solid rgba(255,77,77,.25);border-radius:10px;color:#0f172a;font-size:14px;text-align:center;';
+        news.insertBefore(notice, news.firstChild);
+      }
+      notice.innerHTML = '🔎 Filtrando noticias de <b>'+name+'</b> · <a href="#" style="color:#ff4d4d;text-decoration:underline;cursor:pointer;" onclick="event.preventDefault();window.__v29ClearFilter && window.__v29ClearFilter();">Quitar filtro</a>';
+    } else if(notice){ notice.remove(); }
+  }
+  window.__v29ClearFilter = function(){
+    window.__v29currentSport = null;
+    filterBlogsBySport(null);
+    filterNewsBySport(null);
+  };
+
+  // 4. Override v26/v27 nav behavior — main view + persistent sport-bar
+  function bindV29Nav(){
+    var nav = document.getElementById('v26-main-nav'); if(!nav) return;
+    if(nav.dataset.v29bound === '1') return;
+    nav.dataset.v29bound = '1';
+    var sportNav = document.querySelector('.sport-nav');
+    var todosPage = document.getElementById('v29-todos-page');
+
+    function clearActiveNav(){ nav.querySelectorAll('button').forEach(function(b){ b.classList.remove('active'); }); }
+    function clearViews(){ document.body.classList.remove('v27-view-noticias','v27-view-blogs','v27-view-centros'); }
+    function clearShowBar(){ document.body.classList.remove('v26-show-deportes','v29-show-bar'); }
+    function hidePageHeaders(){ ['v27-noticias-header','v27-blogs-header','v27-centros-header'].forEach(function(id){ var e=document.getElementById(id); if(e) e.style.display='none'; }); }
+    function ensureInicio(){
+      var inicioBtn = Array.from(sportNav.querySelectorAll('.sport-btn')).find(function(b){
+        var n = b.querySelector('.ss-name-wrap');
+        var t = n ? n.textContent.trim() : b.textContent.trim();
+        return /^(Inicio|Todos)$/i.test(t);
+      });
+      if(inicioBtn && !inicioBtn.classList.contains('active')) inicioBtn.click();
+    }
+    function showTodosPage(show){
+      if(todosPage) todosPage.style.display = show ? '' : 'none';
+      if(show){
+        // Hide normal inicio sections (intro, panels, news, blogs, novedades, hero)
+        document.body.classList.add('v29-view-todos');
+      } else {
+        document.body.classList.remove('v29-view-todos');
+      }
+    }
+
+    nav.addEventListener('click', function(e){
+      var btn = e.target.closest('button'); if(!btn) return;
+      e.stopImmediatePropagation();
+      e.preventDefault();
+      var id = btn.dataset.v26id;
+      // Toggle: if same active button clicked → close everything (back to inicio)
+      var wasActive = btn.classList.contains('active');
+      clearActiveNav();
+      clearViews();
+      clearShowBar();
+      hidePageHeaders();
+      showTodosPage(false);
+      window.__v29ClearFilter && window.__v29ClearFilter();
+      if(wasActive){
+        // Closing → return to home (Inicio active)
+        var inicioBtn = nav.querySelector('button[data-v26id="inicio"]');
+        if(inicioBtn) inicioBtn.classList.add('active');
+        ensureInicio();
+        window.scrollTo({top:0, behavior:'smooth'});
+        return;
+      }
+      btn.classList.add('active');
+      window.__v29currentView = id;
+
+      if(id === 'inicio'){
+        ensureInicio();
+        window.scrollTo({top:0, behavior:'smooth'});
+      } else if(id === 'deportes'){
+        document.body.classList.add('v29-show-bar');
+        ensureInicio();
+        // Show "Todos" summary by default
+        fixTodosEmoji();
+        showTodosPage(true);
+        // Scroll to sport-nav
+        setTimeout(function(){ sportNav.scrollIntoView({behavior:'smooth', block:'start'}); }, 50);
+      } else if(id === 'noticias'){
+        document.body.classList.add('v29-show-bar');
+        ensureInicio();
+        document.body.classList.add('v27-view-noticias');
+        var h = document.getElementById('v27-noticias-header'); if(h) h.style.display = '';
+        setTimeout(function(){ window.scrollTo({top:0, behavior:'smooth'}); }, 100);
+      } else if(id === 'blogs'){
+        document.body.classList.add('v29-show-bar');
+        ensureInicio();
+        document.body.classList.add('v27-view-blogs');
+        var h2 = document.getElementById('v27-blogs-header'); if(h2) h2.style.display = '';
+        setTimeout(function(){ window.scrollTo({top:0, behavior:'smooth'}); }, 100);
+      } else if(id === 'centros'){
+        ensureInicio();
+        document.body.classList.add('v27-view-centros');
+        var h3 = document.getElementById('v27-centros-header'); if(h3) h3.style.display = '';
+        setTimeout(function(){
+          var cd = document.getElementById('v13-cd-panel');
+          if(cd){ cd.scrollIntoView({behavior:'smooth', block:'center'}); }
+        }, 100);
+      }
+    }, true);
+
+    // Override sport-btn click: filter blogs/news instead of navigating when in those modes
+    sportNav.addEventListener('click', function(e){
+      var sb = e.target.closest('.sport-btn'); if(!sb) return;
+      var name = (sb.querySelector('.ss-name-wrap')||{}).textContent || sb.textContent;
+      name = name.trim();
+      var view = window.__v29currentView;
+      if(view === 'blogs'){
+        e.stopImmediatePropagation();
+        e.preventDefault();
+        sportNav.querySelectorAll('.sport-btn').forEach(function(b){ b.classList.remove('active'); });
+        sb.classList.add('active');
+        window.__v29currentSport = name;
+        filterBlogsBySport(name);
+        return;
+      } else if(view === 'noticias'){
+        e.stopImmediatePropagation();
+        e.preventDefault();
+        sportNav.querySelectorAll('.sport-btn').forEach(function(b){ b.classList.remove('active'); });
+        sb.classList.add('active');
+        window.__v29currentSport = name;
+        filterNewsBySport(name);
+        return;
+      }
+      // For deportes: toggle Todos page off
+      if(view === 'deportes' && /^(Inicio|Todos)$/i.test(name)){
+        // Show Todos page
+        showTodosPage(true);
+        return;
+      } else if(view === 'deportes'){
+        // Going to a sport detail page from deportes view
+        showTodosPage(false);
+      }
+    }, true);
+  }
+
+  function applyAll(){
+    try{
+      fixTodosEmoji();
+      buildTodosPage();
+      bindV29Nav();
+    } catch(e){ console.warn('[v29]', e); }
+  }
+  if(document.readyState==='complete'||document.readyState==='interactive'){ setTimeout(applyAll, 1100); }
+  else { document.addEventListener('DOMContentLoaded', function(){ setTimeout(applyAll, 1100); }); }
+  setTimeout(applyAll, 2500);
+  setTimeout(applyAll, 5500);
+  setTimeout(applyAll, 9500);
+  setInterval(fixTodosEmoji, 4000);
+  console.log('[v29] loaded · Todos⭐ · sport-bar persistente · filtro Blogs/Noticias');
+})();
+</script>
+
 </body>
 </html>
 
