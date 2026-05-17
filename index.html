@@ -13976,6 +13976,108 @@ document.addEventListener("DOMContentLoaded", function(){
 })();
 </script>
 
+<script>
+/* v36: sidebar lateral en logo + remover botones del top */
+(function(){
+  if(window.__v36_loaded) return; window.__v36_loaded = true;
+  var st = document.createElement('style'); st.id='v36-css';
+  st.textContent = "#v26-main-nav{display:none !important;}.v36-logo-clickable{cursor:pointer;display:inline-flex;align-items:center;gap:8px;}.v36-logo-clickable:hover{opacity:.85;}.v36-burger{display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;background:#f1f5f9;border:0;border-radius:8px;cursor:pointer;color:#0f172a;font-size:16px;margin-right:8px;}.v36-burger:hover{background:#e2e8f0;color:#ff4d4d;}.v36-overlay{position:fixed;inset:0;background:rgba(15,23,42,.55);z-index:299;opacity:0;pointer-events:none;transition:opacity .25s;}.v36-overlay.open{opacity:1;pointer-events:auto;}.v36-side{position:fixed;top:0;left:0;bottom:0;width:300px;background:#fff;box-shadow:8px 0 24px rgba(15,23,42,.12);z-index:300;transform:translateX(-100%);transition:transform .28s cubic-bezier(.2,.7,.3,1);display:flex;flex-direction:column;}.v36-side.open{transform:translateX(0);}.v36-side .v36-head{display:flex;align-items:center;justify-content:space-between;padding:18px 22px;border-bottom:1px solid #e2e8f0;}.v36-side .v36-head h3{margin:0;color:#c8102e;font-weight:800;font-size:18px;display:flex;align-items:center;gap:10px;}.v36-side .v36-close{background:transparent;border:0;color:#94a3b8;font-size:24px;cursor:pointer;padding:4px 8px;border-radius:8px;}.v36-side .v36-close:hover{background:#f1f5f9;color:#0f172a;}.v36-side ul{list-style:none;padding:14px 12px;margin:0;flex:1;}.v36-side li{margin:0;}.v36-side li button{display:flex;align-items:center;gap:14px;width:100%;background:transparent;border:0;color:#0f172a;font-family:inherit;font-size:15px;font-weight:600;padding:13px 16px;border-radius:10px;cursor:pointer;text-align:left;}.v36-side li button:hover{background:#f1f5f9;color:#ff4d4d;}.v36-side li button.active{background:#ff4d4d;color:#fff;}.v36-side li button .v36-emoji{font-size:20px;line-height:1;width:24px;text-align:center;}.v36-side .v36-foot{padding:14px 22px;border-top:1px solid #e2e8f0;color:#94a3b8;font-size:12px;}";
+  document.head.appendChild(st);
+
+  function buildSide(){
+    if(document.getElementById('v36-side')) return;
+    // Burger + Overlay + Side panel
+    var ov = document.createElement('div'); ov.className='v36-overlay'; ov.id='v36-overlay';
+    document.body.appendChild(ov);
+    var side = document.createElement('aside'); side.id='v36-side'; side.className='v36-side';
+    side.innerHTML = '<div class="v36-head"><h3>📋 Menú</h3><button class="v36-close" type="button" aria-label="cerrar">×</button></div>' +
+      '<ul>' +
+        '<li><button data-v36id="deportes"><span class="v36-emoji">🏆</span>Deportes</button></li>' +
+        '<li><button data-v36id="noticias"><span class="v36-emoji">📰</span>Noticias</button></li>' +
+        '<li><button data-v36id="blogs"><span class="v36-emoji">✍️</span>Blogs</button></li>' +
+        '<li><button data-v36id="centros"><span class="v36-emoji">📍</span>Centros Deportivos</button></li>' +
+        '<li><button data-v36id="ligas"><span class="v36-emoji">🎓</span>Ligas Escolares</button></li>' +
+      '</ul>' +
+      '<div class="v36-foot">Sports Stats 21 · La red social de los deportes</div>';
+    document.body.appendChild(side);
+    function open(){ side.classList.add('open'); ov.classList.add('open'); }
+    function close(){ side.classList.remove('open'); ov.classList.remove('open'); }
+    window.__v36_open = open; window.__v36_close = close;
+    ov.addEventListener('click', close);
+    side.querySelector('.v36-close').addEventListener('click', close);
+    side.querySelectorAll('button[data-v36id]').forEach(function(b){
+      b.addEventListener('click', function(){
+        side.querySelectorAll('button[data-v36id]').forEach(function(x){ x.classList.remove('active'); });
+        b.classList.add('active');
+        var id = b.dataset.v36id;
+        close();
+        // Trigger v33's main-nav handler by simulating click on the hidden v26-main-nav button
+        var nav = document.getElementById('v26-main-nav');
+        if(!nav) return;
+        var map = {deportes:'deportes', noticias:'nb', blogs:'nb', centros:'centros', ligas:'ligas'};
+        var targetId = map[id] || id;
+        var target = nav.querySelector('button[data-v26id="'+targetId+'"]');
+        if(target){ target.click(); return; }
+        // Fallback for ligas (no button exists): show Ligas Escolares panel
+        if(id === 'ligas'){
+          // Use Inicio + scroll to Ligas Escolares panel
+          var inicio = nav.querySelector('button[data-v26id="inicio"]');
+          if(inicio) inicio.click();
+          setTimeout(function(){
+            var ligasPanel = Array.from(document.querySelectorAll('.inicio-panel')).find(function(p){
+              var h = p.querySelector('h3'); return h && /Ligas Escolares/i.test(h.textContent);
+            });
+            if(ligasPanel) ligasPanel.scrollIntoView({behavior:'smooth', block:'center'});
+          }, 200);
+        }
+        // For noticias/blogs we triggered the merged 'nb' button. But user wants them separate.
+        // After click, scroll inside the page to show only that type
+        if(id === 'noticias'){
+          setTimeout(function(){
+            var typeSel = document.getElementById('v35-f-type');
+            if(typeSel){ typeSel.value = 'noticia'; typeSel.dispatchEvent(new Event('change')); }
+          }, 300);
+        } else if(id === 'blogs'){
+          setTimeout(function(){
+            var typeSel = document.getElementById('v35-f-type');
+            if(typeSel){ typeSel.value = 'blog'; typeSel.dispatchEvent(new Event('change')); }
+          }, 300);
+        }
+      });
+    });
+  }
+
+  function attachLogoToggle(){
+    var logo = document.querySelector('.logo, .site-logo, [class*="site-title"]') || document.querySelector('img').parentElement;
+    if(!logo) return;
+    if(logo.dataset.v36 === '1') return;
+    // Insert burger button before logo
+    var topbar = logo.parentElement;
+    var burger = document.createElement('button');
+    burger.type = 'button'; burger.className = 'v36-burger'; burger.title = 'Abrir menú';
+    burger.innerHTML = '☰';
+    topbar.insertBefore(burger, logo);
+    burger.addEventListener('click', function(e){ e.stopPropagation(); window.__v36_open && window.__v36_open(); });
+    // Logo also clickable
+    logo.classList.add('v36-logo-clickable');
+    logo.addEventListener('click', function(e){
+      e.stopPropagation();
+      // If clicking on link/button inside, let it through; else open menu
+      if(e.target.closest('a, button')) return;
+      window.__v36_open && window.__v36_open();
+    });
+    logo.dataset.v36 = '1';
+  }
+
+  function applyAll(){ try{ buildSide(); attachLogoToggle(); } catch(e){ console.warn('[v36]', e); } }
+  if(document.readyState==='complete'||document.readyState==='interactive'){ setTimeout(applyAll, 1500); }
+  else { document.addEventListener('DOMContentLoaded', function(){ setTimeout(applyAll, 1500); }); }
+  setTimeout(applyAll, 3500);
+  setTimeout(applyAll, 7000);
+  console.log('[v36] sidebar lateral cargada · top nav oculto');
+})();
+</script>
+
 </body>
 </html>
 
