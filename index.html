@@ -14729,6 +14729,133 @@ undefined
 })();
 </script>
 
+<script>
+(function(){
+  if(window.__v391loaded) return; window.__v391loaded = true;
+
+  var m1 = document.createElement('meta');
+  m1.setAttribute('http-equiv','Cache-Control');
+  m1.setAttribute('content','no-cache, no-store, must-revalidate');
+  document.head.appendChild(m1);
+  var m2 = document.createElement('meta');
+  m2.setAttribute('http-equiv','Pragma');
+  m2.setAttribute('content','no-cache');
+  document.head.appendChild(m2);
+
+  function setView(view){
+    var b = document.body;
+    Array.from(b.classList).forEach(function(c){ if(c.indexOf('v32-view-')===0) b.classList.remove(c); });
+    b.classList.add('v32-view-'+view);
+  }
+  function targetIds(){ return ['v35-nb-page','v38-page-escolares','v38-page-universitarias','v38-page-amateur','v38-page-comparar','v38-page-mapa']; }
+  function showOnly(targetId){
+    var panel = document.getElementById('panel-inicio');
+    if(!panel) return;
+    Array.from(panel.children).forEach(function(c){
+      if(c.id === targetId){ c.style.display='block'; if(c.classList) c.classList.add('show'); }
+      else { c.style.display='none'; }
+    });
+  }
+  function restoreInicio(){
+    var panel = document.getElementById('panel-inicio');
+    if(!panel) return;
+    var targets = targetIds();
+    Array.from(panel.children).forEach(function(c){
+      if(targets.indexOf(c.id) >= 0){ c.style.display='none'; if(c.classList) c.classList.remove('show'); }
+      else { c.style.display=''; }
+    });
+  }
+  function closeSide(){
+    var side = document.getElementById('v36-side');
+    if(side) side.classList.remove('open');
+    document.body.classList.remove('v36-side-open');
+  }
+  function showInicio(){ setView('inicio'); restoreInicio(); }
+  function showDeportes(){ setView('deportes'); restoreInicio(); }
+  function showSpecialPage(id){ setView(id); showOnly('v38-page-'+id); }
+  function showNb(type){
+    setView(type === 'noticia' ? 'noticias' : 'blogs');
+    showOnly('v35-nb-page');
+    var sel = document.getElementById('v35-f-type');
+    if(sel){ sel.value = type; sel.dispatchEvent(new Event('change')); }
+  }
+
+  var NEW_ITEMS = [
+    {key:'profesionales', emoji:'🏆', label:'Deportes Profesionales', fn: showDeportes},
+    {key:'universitarios', emoji:'🎓', label:'Deportes Universitarios', fn: function(){ showSpecialPage('universitarias'); }},
+    {key:'escolares', emoji:'🏫', label:'Deportes Escolares', fn: function(){ showSpecialPage('escolares'); }},
+    {key:'amateur', emoji:'🏟️', label:'Deportes Amateur', fn: function(){ showSpecialPage('amateur'); }},
+    {key:'noticias', emoji:'📰', label:'Noticias', fn: function(){ showNb('noticia'); }},
+    {key:'blogs', emoji:'✍️', label:'Blogs', fn: function(){ showNb('blog'); }},
+    {key:'comparar', emoji:'⚖️', label:'Comparar', fn: function(){ showSpecialPage('comparar'); }},
+    {key:'centros', emoji:'📍', label:'Centros Deportivos', fn: function(){ showSpecialPage('mapa'); }}
+  ];
+
+  function rebuildSidebar(){
+    var side = document.getElementById('v36-side');
+    if(!side) return false;
+    var ul = side.querySelector('ul');
+    if(!ul) return false;
+    if(ul.querySelectorAll('li[data-v391-key]').length === 8) return true;
+    ul.innerHTML = '';
+    NEW_ITEMS.forEach(function(item){
+      var li = document.createElement('li');
+      li.setAttribute('data-v391-key', item.key);
+      li.style.cursor='pointer'; li.style.padding='14px 18px'; li.style.display='flex';
+      li.style.alignItems='center'; li.style.gap='12px'; li.style.fontWeight='700';
+      li.style.color='#222';
+      li.innerHTML = '<span style="font-size:22px">'+item.emoji+'</span><span>'+item.label+'</span>';
+      li.addEventListener('mouseenter', function(){ li.style.background='#fdf2f2'; });
+      li.addEventListener('mouseleave', function(){ if(!li.classList.contains('v391-active')) li.style.background=''; });
+      li.addEventListener('click', function(e){
+        e.preventDefault(); e.stopPropagation();
+        try{ item.fn(); }catch(err){ console.error('v391 fn err', err); }
+        ul.querySelectorAll('li').forEach(function(x){ x.classList.remove('v391-active'); x.style.background=''; x.style.color='#222'; });
+        li.classList.add('v391-active'); li.style.background='#fdf2f2'; li.style.color='#c8102e';
+        setTimeout(closeSide, 100);
+        window.__v391_navClicked = true; window.scrollTo(0,0); setTimeout(function(){window.__v391_navClicked=false;},100);
+      });
+      ul.appendChild(li);
+    });
+    return true;
+  }
+
+  function bindLogo(){
+    var logos = document.querySelectorAll('.header img.logo, .header .ss-logo, header .logo-text, .header .logo');
+    logos.forEach(function(el){
+      if(el.__v391bound) return; el.__v391bound = true;
+      el.style.cursor='pointer';
+      el.addEventListener('click', function(e){
+        if(e.target && e.target.closest && (e.target.closest('.v36-burger') || e.target.closest('#burger'))) return;
+        e.preventDefault();
+        showInicio();
+      }, true);
+    });
+  }
+
+  function bindBurger(){
+    var burger = document.querySelector('.v36-burger');
+    if(!burger || burger.__v391b) return;
+    burger.__v391b = true;
+    burger.addEventListener('click', function(){ rebuildSidebar(); }, true);
+  }
+
+  function tick(){
+    try{ rebuildSidebar(); bindLogo(); bindBurger(); }catch(e){ console.error('v391 tick', e); }
+  }
+  tick();
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', tick);
+  }
+  var tries = 0;
+  var iv = setInterval(function(){
+    tries++;
+    tick();
+    if(tries > 40) clearInterval(iv);
+  }, 250);
+})();
+</script>
+
 </body>
 </html>
 
