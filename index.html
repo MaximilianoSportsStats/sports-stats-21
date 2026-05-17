@@ -14179,6 +14179,194 @@ document.addEventListener("DOMContentLoaded", function(){
 })();
 </script>
 
+<script>
+/* v38: páginas Ligas Escolares/Universitarias/Amateur + Comparar + Mapa Centros */
+(function(){
+  if(window.__v38_loaded) return; window.__v38_loaded = true;
+  var st = document.createElement('style'); st.id='v38-css';
+  st.textContent = ".v38-page{display:none;max-width:1200px;margin:0 auto;padding:30px 24px;}.v38-page.show{display:block;}.v38-hero{background:linear-gradient(135deg,#fff,#fdf2f3);border:1px solid #fecaca;border-radius:18px;padding:30px;margin-bottom:24px;}.v38-hero h1{color:#c8102e;font-size:30px;margin:0 0 10px;font-weight:800;display:flex;align-items:center;gap:12px;}.v38-hero p{color:#475569;font-size:15px;line-height:1.6;margin:0;}.v38-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px;}.v38-card{background:#fff;border:1px solid #e2e8f0;border-radius:14px;padding:22px;}.v38-card h3{margin:0 0 8px;color:#0f172a;font-size:17px;}.v38-card p{margin:0;color:#64748b;font-size:13.5px;line-height:1.55;}.v38-card .v38-meta{display:flex;gap:10px;margin-top:14px;color:#94a3b8;font-size:12px;}.v38-card .v38-meta span{display:inline-flex;align-items:center;gap:4px;}.v38-cta{margin-top:18px;display:flex;gap:10px;flex-wrap:wrap;}.v38-cta button{background:#ff4d4d;color:#fff;border:0;padding:10px 18px;border-radius:10px;font-weight:700;cursor:pointer;font-size:13.5px;font-family:inherit;}.v38-cta button.outline{background:transparent;color:#ff4d4d;border:1px solid #fecaca;}.v38-map{position:relative;height:420px;border-radius:16px;overflow:hidden;background:linear-gradient(135deg,#dbeafe 0%,#bfdbfe 30%,#a7f3d0 60%,#fef3c7 100%);border:1px solid #e2e8f0;}.v38-map-overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;background:rgba(15,23,42,.04);}.v38-map-overlay .v38-map-pin{font-size:48px;animation:v38pinBounce 1.4s infinite ease-in-out;}.v38-map-overlay h3{margin:8px 0 4px;color:#0f172a;font-size:18px;}.v38-map-overlay p{margin:0;color:#475569;font-size:13px;text-align:center;max-width:380px;}@keyframes v38pinBounce{0%,100%{transform:translateY(0);}50%{transform:translateY(-8px);}}.v38-map-dots{position:absolute;inset:0;pointer-events:none;}.v38-map-dot{position:absolute;width:22px;height:22px;background:#ff4d4d;border:3px solid #fff;border-radius:50%;box-shadow:0 4px 10px rgba(0,0,0,.18);transform:translate(-50%,-100%);font-size:11px;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;}.v38-compare-builder{display:grid;grid-template-columns:1fr auto 1fr;gap:18px;align-items:center;background:#fff;border:1px solid #e2e8f0;border-radius:14px;padding:24px;margin-bottom:22px;}.v38-compare-col{display:flex;flex-direction:column;gap:10px;}.v38-compare-col label{font-size:11px;color:#64748b;text-transform:uppercase;letter-spacing:1px;font-weight:700;}.v38-compare-col select{padding:11px 12px;border:1px solid #cbd5e1;border-radius:8px;font-family:inherit;font-size:14px;}.v38-compare-vs{font-size:32px;font-weight:800;color:#ff4d4d;}.v38-compare-row{display:grid;grid-template-columns:1fr 100px 1fr;gap:14px;align-items:center;padding:12px 0;border-bottom:1px solid #f1f5f9;}.v38-compare-stat{font-size:14px;color:#0f172a;}.v38-compare-name{font-weight:700;font-size:13px;color:#475569;text-align:center;text-transform:uppercase;letter-spacing:.5px;}.v38-compare-row.head{background:transparent;border-bottom:2px solid #e2e8f0;font-weight:700;color:#c8102e;}";
+  document.head.appendChild(st);
+
+  function buildPages(){
+    var host = document.querySelector('.tab-panel.active') || document.body;
+    function ensurePage(id, html){
+      if(document.getElementById(id)) return;
+      var sec = document.createElement('section');
+      sec.id = id;
+      sec.className = 'v38-page';
+      sec.innerHTML = html;
+      host.appendChild(sec);
+    }
+    // Ligas Escolares
+    ensurePage('v38-page-escolares',
+      '<div class="v38-hero"><h1>🎓 Ligas Escolares</h1><p>El semillero del deporte. Calendarios, resultados y rankings de las principales ligas escolares de Sudamérica, Norteamérica y Europa. Sigue a los futuros talentos antes que lleguen al profesionalismo.</p></div>' +
+      '<div class="v38-grid">' +
+        ['Liga Escolar Chile (ADIPA)','Liga Escolar Argentina','Liga Escolar Brasil','Federación Escolar España','Liga Escolar Inglaterra (ESFA)','Liga Escolar México','Liga Escolar Colombia','Liga Escolar Perú'].map(function(n,i){
+          return '<div class="v38-card"><h3>🏫 '+n+'</h3><p>Próximamente: calendarios, resultados, rankings y plantillas oficiales.</p><div class="v38-meta"><span>📅 Temporada activa</span><span>👥 '+(Math.floor(Math.random()*120)+30)+' equipos</span></div></div>';
+        }).join('') +
+      '</div>');
+    // Ligas Universitarias
+    ensurePage('v38-page-universitarias',
+      '<div class="v38-hero"><h1>🎓 Ligas Universitarias</h1><p>El paso previo al profesionalismo. NCAA, USports, FedUni, ANAU y todas las ligas universitarias del mundo en un mismo lugar.</p></div>' +
+      '<div class="v38-grid">' +
+        ['NCAA Division I (EE.UU.)','NCAA Division II','NCAA Division III','USports (Canadá)','FedUni Argentina','UB Brasil','Liga Universitaria Chile','BUCS Reino Unido','LNH Universidades España'].map(function(n,i){
+          return '<div class="v38-card"><h3>🏆 '+n+'</h3><p>Próximamente: temporada, conferencias, rankings y draft prospects.</p><div class="v38-meta"><span>📅 NCAA · '+(Math.floor(Math.random()*250)+80)+' universidades</span></div></div>';
+        }).join('') +
+      '</div>');
+    // Ligas Amateur
+    ensurePage('v38-page-amateur',
+      '<div class="v38-hero"><h1>🏟️ Ligas Amateur</h1><p>Crea o únete a ligas amateur de tu barrio, ciudad o club. Sistema completo: inscripciones, calendarios, resultados y tabla de posiciones en vivo.</p></div>' +
+      '<div class="v38-cta"><button>+ Crear mi liga</button><button class="outline">Buscar liga cerca mío</button></div>' +
+      '<div class="v38-grid" style="margin-top:20px;">' +
+        ['Liga Sabatina Las Condes','Liga Empresas Santiago','Torneo Universitarios Buenos Aires','Liga Padel Vitacura','Liga Amateur Mar del Plata','Pickup Basketball Madrid','Liga Veteranos Bogotá','Tennis Club Recoleta'].map(function(n){
+          return '<div class="v38-card"><h3>🏆 '+n+'</h3><p>'+(Math.floor(Math.random()*40)+8)+' equipos · Próximo partido: este sábado · Temporada 2026</p><div class="v38-cta" style="margin-top:12px;"><button class="outline" style="font-size:12px;padding:7px 12px;">Ver liga →</button></div></div>';
+        }).join('') +
+      '</div>');
+    // Comparar
+    ensurePage('v38-page-comparar',
+      '<div class="v38-hero"><h1>⚖️ Comparar</h1><p>Selecciona dos deportistas, equipos o ligas y compara sus números lado a lado: títulos, estadísticas, récords, partidos directos.</p></div>' +
+      '<div class="v38-compare-builder">' +
+        '<div class="v38-compare-col"><label>Comparar A</label><select id="v38-cmp-a"><option>Lionel Messi</option><option>Cristiano Ronaldo</option><option>Real Madrid</option><option>Barcelona</option><option>LeBron James</option><option>Michael Jordan</option><option>Roger Federer</option><option>Rafael Nadal</option></select></div>' +
+        '<div class="v38-compare-vs">VS</div>' +
+        '<div class="v38-compare-col"><label>Comparar B</label><select id="v38-cmp-b"><option>Cristiano Ronaldo</option><option>Lionel Messi</option><option>Barcelona</option><option>Real Madrid</option><option>Michael Jordan</option><option>LeBron James</option><option>Rafael Nadal</option><option>Roger Federer</option></select></div>' +
+      '</div>' +
+      '<div class="v38-card">' +
+        '<div class="v38-compare-row head"><div class="v38-compare-stat" id="v38-cmp-a-name">Lionel Messi</div><div class="v38-compare-name">Stat</div><div class="v38-compare-stat" id="v38-cmp-b-name" style="text-align:right;">Cristiano Ronaldo</div></div>' +
+        '<div class="v38-compare-row"><div class="v38-compare-stat">821</div><div class="v38-compare-name">Goles</div><div class="v38-compare-stat" style="text-align:right;">895</div></div>' +
+        '<div class="v38-compare-row"><div class="v38-compare-stat">8</div><div class="v38-compare-name">Balones de Oro</div><div class="v38-compare-stat" style="text-align:right;">5</div></div>' +
+        '<div class="v38-compare-row"><div class="v38-compare-stat">4</div><div class="v38-compare-name">Champions League</div><div class="v38-compare-stat" style="text-align:right;">5</div></div>' +
+        '<div class="v38-compare-row"><div class="v38-compare-stat">1</div><div class="v38-compare-name">Mundiales</div><div class="v38-compare-stat" style="text-align:right;">0</div></div>' +
+        '<div class="v38-compare-row"><div class="v38-compare-stat">365</div><div class="v38-compare-name">Asistencias</div><div class="v38-compare-stat" style="text-align:right;">253</div></div>' +
+      '</div>' +
+      '<p style="text-align:center;color:#94a3b8;font-size:12px;margin-top:18px;">🔧 Próximamente: comparación dinámica con cualquier deportista/equipo/liga + gráficos.</p>');
+    // Centros Deportivos con mapa
+    if(!document.getElementById('v38-page-mapa')){
+      var sec = document.createElement('section');
+      sec.id = 'v38-page-mapa';
+      sec.className = 'v38-page';
+      sec.innerHTML = '<div class="v38-hero"><h1>📍 Centros Deportivos · Mapa</h1><p>Gimnasios, clubes, estadios y canchas cerca tuyo. Próximamente integración con Google Maps.</p></div>' +
+        '<div class="v38-map">' +
+          '<div class="v38-map-dots">' +
+            '<div class="v38-map-dot" style="left:32%;top:38%;" title="Gimnasio Las Condes">1</div>' +
+            '<div class="v38-map-dot" style="left:48%;top:55%;" title="Club Providencia">2</div>' +
+            '<div class="v38-map-dot" style="left:60%;top:30%;" title="Estadio Nacional">3</div>' +
+            '<div class="v38-map-dot" style="left:25%;top:65%;" title="Cancha Ñuñoa">4</div>' +
+            '<div class="v38-map-dot" style="left:72%;top:48%;" title="Padel La Reina">5</div>' +
+            '<div class="v38-map-dot" style="left:42%;top:72%;" title="Piscina Vitacura">6</div>' +
+          '</div>' +
+          '<div class="v38-map-overlay"><div class="v38-map-pin">📍</div><h3>Mapa interactivo</h3><p>Próximamente: integración con Google Maps + búsqueda por código postal + filtros por deporte y servicios.</p></div>' +
+        '</div>' +
+        '<div class="v38-grid" style="margin-top:24px;">' +
+          [{n:'Gimnasio Las Condes',e:'Av Apoquindo 4500',d:'Pesas, cardio, clases'},{n:'Club Providencia',e:'Pedro de Valdivia 3000',d:'Tenis, pádel, piscina'},{n:'Estadio Nacional',e:'Av Grecia 2001',d:'Atletismo, fútbol'},{n:'Cancha Ñuñoa Sintética',e:'Irarrázaval 4500',d:'Fútbol 5 / 7'},{n:'Padel La Reina',e:'Av Príncipe de Gales 6500',d:'4 canchas pádel'},{n:'Piscina Vitacura',e:'Av Vitacura 5300',d:'Piscina semiolímpica'}].map(function(c,i){
+            return '<div class="v38-card"><h3>'+(i+1)+'. '+c.n+'</h3><p>📌 '+c.e+'</p><p style="margin-top:6px;color:#0f172a;font-weight:600;">'+c.d+'</p><div class="v38-cta" style="margin-top:10px;"><button class="outline" style="font-size:12px;padding:7px 12px;">Cómo llegar</button></div></div>';
+          }).join('') +
+        '</div>';
+      host.appendChild(sec);
+    }
+  }
+
+  function hideAllSpecial(){
+    ['v38-page-escolares','v38-page-universitarias','v38-page-amateur','v38-page-comparar','v38-page-mapa'].forEach(function(id){
+      var e = document.getElementById(id); if(e) e.classList.remove('show');
+    });
+  }
+  function showSpecial(id){
+    hideAllSpecial();
+    // Also hide all inicio sections
+    ['v25-intro','v16-news-section','v25-blogs-section','v17-updates-widget','v16-novedades-header','v29-todos-page','v32-news-grid-sec','v32-blogs-grid-sec','v27-noticias-header','v27-blogs-header','v27-centros-header','v35-nb-page'].forEach(function(x){ var e=document.getElementById(x); if(e) e.style.display='none'; });
+    var hero = document.querySelector('.inicio-hero, .hero-carousel'); if(hero) hero.style.display='none';
+    var panels = document.querySelector('.inicio-panels'); if(panels) panels.style.display='none';
+    var sn = document.querySelector('.sport-nav'); if(sn) sn.style.cssText='display:none !important;';
+    var page = document.getElementById(id);
+    if(page){ page.classList.add('show'); }
+    window.__v34_navClicked = true;
+    window.scrollTo({top:0, behavior:'smooth'});
+  }
+
+  function rebuildSidebarV38(){
+    var side = document.getElementById('v36-side'); if(!side) return;
+    if(side.dataset.v38 === '1') return;
+    var ul = side.querySelector('ul'); if(!ul) return;
+    var ITEMS = [
+      {id:'inicio', emoji:'🏠', label:'Inicio'},
+      {id:'deportes', emoji:'🏆', label:'Deportes'},
+      {id:'noticias', emoji:'📰', label:'Noticias'},
+      {id:'blogs', emoji:'✍️', label:'Blogs'},
+      {id:'centros', emoji:'📍', label:'Centros Deportivos'},
+      {id:'escolares', emoji:'🎓', label:'Ligas Escolares'},
+      {id:'universitarias', emoji:'🏆', label:'Ligas Universitarias'},
+      {id:'amateur', emoji:'🏟️', label:'Ligas Amateur'},
+      {id:'comparar', emoji:'⚖️', label:'Comparar'}
+    ];
+    ul.innerHTML = ITEMS.map(function(it){
+      return '<li><button data-v36id="'+it.id+'"><span class="v36-emoji">'+it.emoji+'</span>'+it.label+'</button></li>';
+    }).join('');
+    side.dataset.v38 = '1';
+    side.dataset.v37 = '1';
+    bindSidebarV38();
+  }
+
+  function bindSidebarV38(){
+    var side = document.getElementById('v36-side'); if(!side) return;
+    var nav = document.getElementById('v26-main-nav'); if(!nav) return;
+    function close(){ window.__v36_close && window.__v36_close(); }
+    function goInicio(){
+      var ib = nav.querySelector('button[data-v26id="inicio"]'); if(ib) ib.click();
+    }
+    side.querySelectorAll('button[data-v36id]').forEach(function(b){
+      b.addEventListener('click', function(){
+        side.querySelectorAll('button[data-v36id]').forEach(function(x){ x.classList.remove('active'); });
+        b.classList.add('active');
+        var id = b.dataset.v36id;
+        close();
+        window.__v34_navClicked = true;
+        // Always start from inicio reset
+        if(id === 'inicio'){
+          hideAllSpecial();
+          goInicio();
+          window.scrollTo({top:0, behavior:'smooth'});
+        } else if(id === 'deportes'){
+          hideAllSpecial();
+          var btn = nav.querySelector('button[data-v26id="deportes"]'); if(btn) btn.click();
+        } else if(id === 'noticias'){
+          hideAllSpecial();
+          // Force fresh open: ensure nb is NOT already active
+          var nb = nav.querySelector('button[data-v26id="nb"]');
+          if(nb){
+            if(nb.classList.contains('active')) nb.click(); // close
+            setTimeout(function(){ nb.click(); setTimeout(function(){ var s=document.getElementById('v35-f-type'); if(s){ s.value='noticia'; s.dispatchEvent(new Event('change')); } }, 400); }, 60);
+          }
+        } else if(id === 'blogs'){
+          hideAllSpecial();
+          var nb = nav.querySelector('button[data-v26id="nb"]');
+          if(nb){
+            if(nb.classList.contains('active')) nb.click();
+            setTimeout(function(){ nb.click(); setTimeout(function(){ var s=document.getElementById('v35-f-type'); if(s){ s.value='blog'; s.dispatchEvent(new Event('change')); } }, 400); }, 60);
+          }
+        } else if(id === 'centros'){
+          showSpecial('v38-page-mapa');
+        } else if(id === 'escolares'){
+          showSpecial('v38-page-escolares');
+        } else if(id === 'universitarias'){
+          showSpecial('v38-page-universitarias');
+        } else if(id === 'amateur'){
+          showSpecial('v38-page-amateur');
+        } else if(id === 'comparar'){
+          showSpecial('v38-page-comparar');
+        }
+      });
+    });
+  }
+
+  function applyAll(){ try{ buildPages(); rebuildSidebarV38(); } catch(e){ console.warn('[v38]', e); } }
+  if(document.readyState==='complete'||document.readyState==='interactive'){ setTimeout(applyAll, 2500); }
+  else { document.addEventListener('DOMContentLoaded', function(){ setTimeout(applyAll, 2500); }); }
+  setTimeout(applyAll, 5000);
+  setTimeout(applyAll, 9500);
+  console.log('[v38] páginas Escolares/Universitarias/Amateur/Comparar/Mapa');
+})();
+</script>
+
 </body>
 </html>
 
