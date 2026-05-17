@@ -14597,6 +14597,138 @@ document.addEventListener("DOMContentLoaded", function(){
 })();
 </script>
 
+undefined
+<script>
+(function(){
+  if(window.__v39loaded) return; window.__v39loaded = true;
+  var style = document.createElement('style');
+  style.id = 'v39-style';
+  style.textContent = '.sport-nav-bar{display:none !important;} body.v32-view-deportes .sport-nav-bar{display:block !important;}';
+  document.head.appendChild(style);
+
+  var userScrolled = false;
+  window.addEventListener('wheel', function(){ userScrolled = true; }, {passive:true});
+  window.addEventListener('touchmove', function(){ userScrolled = true; }, {passive:true});
+  window.addEventListener('keydown', function(e){ if(['ArrowDown','ArrowUp','PageDown','PageUp','End','Home',' '].indexOf(e.key)>=0) userScrolled = true; });
+  var origScrollTo = window.scrollTo.bind(window);
+  window.scrollTo = function(){
+    if(userScrolled && !window.__v39_navClicked){ return; }
+    return origScrollTo.apply(window, arguments);
+  };
+  var origSIV = Element.prototype.scrollIntoView;
+  Element.prototype.scrollIntoView = function(){ if(userScrolled && !window.__v39_navClicked) return; return origSIV.apply(this, arguments); };
+
+  function whenReady(fn){
+    if(document.readyState !== 'loading') setTimeout(fn,900);
+    else document.addEventListener('DOMContentLoaded', function(){ setTimeout(fn,900); });
+  }
+  function setView(view){
+    var b = document.body;
+    Array.from(b.classList).forEach(function(c){ if(c.indexOf('v32-view-')===0) b.classList.remove(c); });
+    b.classList.add('v32-view-'+view);
+  }
+  function targetIds(){ return ['v35-nb-page','v38-page-escolares','v38-page-universitarias','v38-page-amateur','v38-page-comparar','v38-page-mapa']; }
+  function showOnly(targetId){
+    var panel = document.getElementById('panel-inicio');
+    if(!panel) return;
+    Array.from(panel.children).forEach(function(c){
+      if(c.id === targetId){ c.style.display='block'; if(c.classList) c.classList.add('show'); }
+      else { c.style.display='none'; }
+    });
+  }
+  function restoreInicio(){
+    var panel = document.getElementById('panel-inicio');
+    if(!panel) return;
+    var targets = targetIds();
+    Array.from(panel.children).forEach(function(c){
+      if(targets.indexOf(c.id) >= 0){ c.style.display='none'; if(c.classList) c.classList.remove('show'); }
+      else { c.style.display=''; }
+    });
+  }
+  function navFlag(){ window.__v39_navClicked=true; origScrollTo(0,0); setTimeout(function(){window.__v39_navClicked=false; userScrolled=false;},100); }
+  function logoClickShowInicio(){ setView('inicio'); restoreInicio(); navFlag(); }
+  function showDeportes(){ setView('deportes'); restoreInicio(); navFlag(); }
+  function showSpecialPage(id){ setView(id); showOnly('v38-page-'+id); navFlag(); }
+  function showNb(type){
+    setView(type === 'noticia' ? 'noticias' : 'blogs');
+    showOnly('v35-nb-page');
+    var sel = document.getElementById('v35-f-type');
+    if(sel){ sel.value = type; sel.dispatchEvent(new Event('change')); }
+    navFlag();
+  }
+  function closeSide(){
+    var side = document.getElementById('v36-side');
+    if(side) side.classList.remove('open');
+    document.body.classList.remove('v36-side-open');
+  }
+
+  var NEW_ITEMS = [
+    {key:'profesionales', emoji:'🏆', label:'Deportes Profesionales', fn: showDeportes},
+    {key:'universitarios', emoji:'🎓', label:'Deportes Universitarios', fn: function(){ showSpecialPage('universitarias'); }},
+    {key:'escolares', emoji:'🏫', label:'Deportes Escolares', fn: function(){ showSpecialPage('escolares'); }},
+    {key:'amateur', emoji:'🏟️', label:'Deportes Amateur', fn: function(){ showSpecialPage('amateur'); }},
+    {key:'noticias', emoji:'📰', label:'Noticias', fn: function(){ showNb('noticia'); }},
+    {key:'blogs', emoji:'✍️', label:'Blogs', fn: function(){ showNb('blog'); }},
+    {key:'comparar', emoji:'⚖️', label:'Comparar', fn: function(){ showSpecialPage('comparar'); }},
+    {key:'centros', emoji:'📍', label:'Centros Deportivos', fn: function(){ showSpecialPage('mapa'); }}
+  ];
+
+  function rebuildSidebar(){
+    var side = document.getElementById('v36-side');
+    if(!side) return false;
+    var ul = side.querySelector('ul');
+    if(!ul) return false;
+    ul.innerHTML = '';
+    NEW_ITEMS.forEach(function(item){
+      var li = document.createElement('li');
+      li.setAttribute('data-v39-key', item.key);
+      li.style.cursor = 'pointer';
+      li.style.padding = '14px 18px';
+      li.style.display = 'flex';
+      li.style.alignItems = 'center';
+      li.style.gap = '12px';
+      li.style.fontWeight = '700';
+      li.style.color = '#222';
+      li.innerHTML = '<span style="font-size:22px">'+item.emoji+'</span><span>'+item.label+'</span>';
+      li.addEventListener('mouseenter', function(){ li.style.background='#fdf2f2'; });
+      li.addEventListener('mouseleave', function(){ li.style.background=''; });
+      li.addEventListener('click', function(e){
+        e.preventDefault(); e.stopPropagation();
+        try{ item.fn(); }catch(err){ console.error('v39 fn err', err); }
+        ul.querySelectorAll('li').forEach(function(x){ x.style.background=''; x.style.color='#222'; });
+        li.style.background='#fdf2f2'; li.style.color='#c8102e';
+        setTimeout(closeSide, 100);
+      });
+      ul.appendChild(li);
+    });
+    return true;
+  }
+
+  function bindLogo(){
+    var logos = document.querySelectorAll('.header .logo, .header .ss-logo, .header img');
+    logos.forEach(function(el){
+      if(el.__v39bound) return; el.__v39bound = true;
+      el.style.cursor = 'pointer';
+      el.addEventListener('click', function(e){
+        if(e.target && (e.target.id==='burger' || e.target.closest && e.target.closest('#burger'))) return;
+        e.preventDefault();
+        logoClickShowInicio();
+      }, true);
+    });
+  }
+
+  whenReady(function(){
+    var tries = 0;
+    var iv = setInterval(function(){
+      tries++;
+      var sbOk = rebuildSidebar();
+      bindLogo();
+      if((sbOk && tries>2) || tries>30) clearInterval(iv);
+    }, 300);
+  });
+})();
+</script>
+
 </body>
 </html>
 
