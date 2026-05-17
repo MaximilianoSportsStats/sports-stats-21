@@ -14078,6 +14078,107 @@ document.addEventListener("DOMContentLoaded", function(){
 })();
 </script>
 
+<script>
+/* v37: sidebar items - Inicio + Ligas Locales + Comparar + fix wiring */
+(function(){
+  if(window.__v37_loaded) return; window.__v37_loaded = true;
+
+  function rebuildSidebar(){
+    var side = document.getElementById('v36-side'); if(!side) return;
+    if(side.dataset.v37 === '1') return;
+    var ul = side.querySelector('ul'); if(!ul) return;
+    var ITEMS = [
+      {id:'inicio', emoji:'🏠', label:'Inicio'},
+      {id:'deportes', emoji:'🏆', label:'Deportes'},
+      {id:'noticias', emoji:'📰', label:'Noticias'},
+      {id:'blogs', emoji:'✍️', label:'Blogs'},
+      {id:'centros', emoji:'📍', label:'Centros Deportivos'},
+      {id:'ligas', emoji:'🎓', label:'Ligas Escolares'},
+      {id:'ligaslocal', emoji:'🏟️', label:'Ligas Locales'},
+      {id:'comparar', emoji:'⚖️', label:'Comparar'}
+    ];
+    ul.innerHTML = ITEMS.map(function(it){
+      return '<li><button data-v36id="'+it.id+'"><span class="v36-emoji">'+it.emoji+'</span>'+it.label+'</button></li>';
+    }).join('');
+    side.dataset.v37 = '1';
+    // Re-bind clicks for all items (the old listener was lost when we replaced innerHTML)
+    bindSidebarClicks();
+  }
+
+  function goInicio(){
+    var nav = document.getElementById('v26-main-nav'); if(!nav) return;
+    var inicio = nav.querySelector('button[data-v26id="inicio"]');
+    if(inicio) inicio.click();
+  }
+
+  function scrollToPanel(rgx){
+    goInicio();
+    setTimeout(function(){
+      var p = Array.from(document.querySelectorAll('.inicio-panel')).find(function(p){
+        var h = p.querySelector('h3'); return h && rgx.test(h.textContent);
+      });
+      if(p){
+        window.__v34_navClicked = true;
+        p.scrollIntoView({behavior:'smooth', block:'center'});
+        // highlight briefly
+        var orig = p.style.boxShadow;
+        p.style.boxShadow = '0 0 0 3px #ff4d4d, 0 8px 24px rgba(255,77,77,.15)';
+        p.style.transition = 'box-shadow .4s';
+        setTimeout(function(){ p.style.boxShadow = orig; }, 2200);
+      }
+    }, 250);
+  }
+
+  function bindSidebarClicks(){
+    var side = document.getElementById('v36-side'); if(!side) return;
+    var nav = document.getElementById('v26-main-nav'); if(!nav) return;
+    function close(){ window.__v36_close && window.__v36_close(); }
+    side.querySelectorAll('button[data-v36id]').forEach(function(b){
+      b.addEventListener('click', function(){
+        side.querySelectorAll('button[data-v36id]').forEach(function(x){ x.classList.remove('active'); });
+        b.classList.add('active');
+        var id = b.dataset.v36id;
+        close();
+        window.__v34_navClicked = true;
+        if(id === 'inicio'){
+          goInicio();
+          window.scrollTo({top:0, behavior:'smooth'});
+        } else if(id === 'deportes'){
+          var btn = nav.querySelector('button[data-v26id="deportes"]'); if(btn) btn.click();
+        } else if(id === 'noticias'){
+          var btn = nav.querySelector('button[data-v26id="nb"]'); if(btn) btn.click();
+          setTimeout(function(){
+            var sel = document.getElementById('v35-f-type');
+            if(sel){ sel.value = 'noticia'; sel.dispatchEvent(new Event('change')); }
+          }, 350);
+        } else if(id === 'blogs'){
+          var btn = nav.querySelector('button[data-v26id="nb"]'); if(btn) btn.click();
+          setTimeout(function(){
+            var sel = document.getElementById('v35-f-type');
+            if(sel){ sel.value = 'blog'; sel.dispatchEvent(new Event('change')); }
+          }, 350);
+        } else if(id === 'centros'){
+          var btn = nav.querySelector('button[data-v26id="centros"]'); if(btn) btn.click();
+        } else if(id === 'ligas'){
+          scrollToPanel(/Ligas Escolares/i);
+        } else if(id === 'ligaslocal'){
+          scrollToPanel(/Liga(s)? Local(es)?/i);
+        } else if(id === 'comparar'){
+          scrollToPanel(/Compara/i);
+        }
+      });
+    });
+  }
+
+  function applyAll(){ try{ rebuildSidebar(); } catch(e){ console.warn('[v37]', e); } }
+  if(document.readyState==='complete'||document.readyState==='interactive'){ setTimeout(applyAll, 2200); }
+  else { document.addEventListener('DOMContentLoaded', function(){ setTimeout(applyAll, 2200); }); }
+  setTimeout(applyAll, 4500);
+  setTimeout(applyAll, 8500);
+  console.log('[v37] sidebar updated · Inicio + Ligas Locales + Comparar');
+})();
+</script>
+
 </body>
 </html>
 
