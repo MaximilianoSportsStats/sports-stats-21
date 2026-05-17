@@ -14367,6 +14367,124 @@ document.addEventListener("DOMContentLoaded", function(){
 })();
 </script>
 
+<script>
+(function(){
+  if(window.__v381loaded) return; window.__v381loaded = true;
+  function whenReady(fn){
+    if(document.readyState !== 'loading') setTimeout(fn,800);
+    else document.addEventListener('DOMContentLoaded', function(){ setTimeout(fn,800); });
+  }
+  function hideAllHomeSections(){
+    ['escolares','universitarias','amateur','comparar','mapa'].forEach(function(id){
+      var el = document.getElementById('v38-page-'+id);
+      if(el){ el.classList.remove('show'); el.style.display='none'; }
+    });
+    var nb = document.getElementById('v35-nb-page');
+    if(nb){ nb.classList.remove('show'); nb.style.display='none'; }
+  }
+  function setView(view){
+    var b = document.body;
+    Array.from(b.classList).forEach(function(c){ if(c.indexOf('v32-view-')===0) b.classList.remove(c); });
+    b.classList.add('v32-view-'+view);
+  }
+  function hideHomeStuff(){
+    document.querySelectorAll('section, .hero, .widgets-grid, .intro-panel, .sports-section, .blogs-section, .v25-intro, .v25-widgets, .v29-sport-bar').forEach(function(el){
+      if(el.id && el.id.indexOf('v38-page-')===0) return;
+      if(el.id === 'v35-nb-page') return;
+      el.style.display='none';
+    });
+  }
+  function showHomeStuff(){
+    document.querySelectorAll('section, .hero, .widgets-grid, .intro-panel, .sports-section, .blogs-section, .v25-intro, .v25-widgets').forEach(function(el){
+      if(el.id && el.id.indexOf('v38-page-')===0) return;
+      if(el.id === 'v35-nb-page') return;
+      el.style.display='';
+    });
+  }
+  function showInicio(){ setView('inicio'); hideAllHomeSections(); showHomeStuff(); window.scrollTo(0,0); }
+  function showDeportes(){
+    setView('deportes'); hideAllHomeSections(); hideHomeStuff();
+    var sp = document.querySelector('.sports-section'); if(sp) sp.style.display='';
+    var sb = document.querySelector('.v29-sport-bar'); if(sb) sb.style.display='';
+    window.scrollTo(0,0);
+  }
+  function showSpecialPage(id){
+    setView(id); hideAllHomeSections(); hideHomeStuff();
+    var p = document.getElementById('v38-page-'+id);
+    if(p){ p.classList.add('show'); p.style.display='block'; }
+    window.scrollTo(0,0);
+  }
+  function showNb(type){
+    setView(type === 'noticia' ? 'noticias' : 'blogs');
+    hideAllHomeSections(); hideHomeStuff();
+    var nb = document.getElementById('v35-nb-page');
+    if(nb){ nb.classList.add('show'); nb.style.display='block'; }
+    var sel = document.getElementById('v35-f-type');
+    if(sel){ sel.value = type; sel.dispatchEvent(new Event('change')); }
+    window.scrollTo(0,0);
+  }
+  function closeSide(){
+    var side = document.getElementById('v36-side');
+    if(side) side.classList.remove('open');
+    document.body.classList.remove('v36-side-open');
+  }
+  function rewire(){
+    var side = document.getElementById('v36-side');
+    if(!side) return false;
+    var lis = side.querySelectorAll('li');
+    if(lis.length < 9) return false;
+    var MAP = {};
+    MAP['inicio'] = showInicio;
+    MAP['deportes'] = showDeportes;
+    MAP['noticias'] = function(){ showNb('noticia'); };
+    MAP['blogs'] = function(){ showNb('blog'); };
+    MAP['centros'] = function(){ showSpecialPage('mapa'); };
+    MAP['escolares'] = function(){ showSpecialPage('escolares'); };
+    MAP['universitarias'] = function(){ showSpecialPage('universitarias'); };
+    MAP['amateur'] = function(){ showSpecialPage('amateur'); };
+    MAP['comparar'] = function(){ showSpecialPage('comparar'); };
+    function detectKey(txt){
+      var t = txt.toLowerCase();
+      if(t.indexOf('inicio')>=0) return 'inicio';
+      if(t.indexOf('deportes')>=0 && t.indexOf('centros')<0) return 'deportes';
+      if(t.indexOf('noticias')>=0) return 'noticias';
+      if(t.indexOf('blogs')>=0) return 'blogs';
+      if(t.indexOf('centros')>=0) return 'centros';
+      if(t.indexOf('escolares')>=0) return 'escolares';
+      if(t.indexOf('universitarias')>=0) return 'universitarias';
+      if(t.indexOf('amateur')>=0 || t.indexOf('locales')>=0) return 'amateur';
+      if(t.indexOf('comparar')>=0) return 'comparar';
+      return null;
+    }
+    Array.from(lis).forEach(function(li){
+      var txt = (li.textContent||'').trim();
+      var key = detectKey(txt);
+      if(!key) return;
+      var fn = MAP[key];
+      var clone = li.cloneNode(true);
+      li.parentNode.replaceChild(clone, li);
+      clone.style.cursor='pointer';
+      clone.setAttribute('data-v381-key', key);
+      clone.addEventListener('click', function(e){
+        e.preventDefault(); e.stopPropagation();
+        try{ fn(); }catch(err){ console.error('v381 fn err', err); }
+        side.querySelectorAll('li').forEach(function(x){ x.classList.remove('v381-active'); });
+        clone.classList.add('v381-active');
+        setTimeout(closeSide, 100);
+      }, true);
+    });
+    return true;
+  }
+  whenReady(function(){
+    var tries = 0;
+    var iv = setInterval(function(){
+      tries++;
+      if(rewire() || tries>30) clearInterval(iv);
+    }, 300);
+  });
+})();
+</script>
+
 </body>
 </html>
 
