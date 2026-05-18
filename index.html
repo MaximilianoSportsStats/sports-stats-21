@@ -15013,6 +15013,169 @@ undefined
 })();
 </script>
 
+<script>
+(function(){
+  if(window.__v41loaded) return; window.__v41loaded = true;
+  var maxId = setTimeout(function(){}, 0);
+  for(var i=1; i<=maxId; i++){ try{ clearInterval(i); }catch(e){} }
+  window.__v39loaded = true; window.__v391loaded = true; window.__v40loaded = true;
+  var style = document.createElement('style');
+  style.id = 'v41-style';
+  style.textContent = ''+
+    'body.v32-view-deportes .sport-nav-bar{display:block !important;}'+
+    'body.v32-view-deportes nav.sport-nav,body.v32-view-deportes .sport-nav{display:flex !important;flex-wrap:wrap;background:#fafafa;border-bottom:1px solid #e2e8f0;padding:14px 12px 10px;}'+
+    'body:not(.v32-view-deportes) .sport-nav-bar{display:none !important;}'+
+    '.v41-sub{display:none;padding-left:20px;background:#fafafa;list-style:none;margin:0;}'+
+    '.v41-sub.open{display:block;}'+
+    '.v41-sub li{padding:10px 18px;cursor:pointer;display:flex;align-items:center;gap:10px;font-weight:600;font-size:14px;color:#444;}'+
+    '.v41-sub li:hover{background:#fdf2f2;color:#c8102e;}'+
+    '.v41-caret{margin-left:auto;font-size:14px;transition:transform 0.2s;display:inline-block;}'+
+    '.v41-caret.open{transform:rotate(180deg);}';
+  document.head.appendChild(style);
+  function setView(view){
+    var b = document.body;
+    Array.from(b.classList).forEach(function(c){ if(c.indexOf('v32-view-')===0) b.classList.remove(c); });
+    b.classList.add('v32-view-'+view);
+  }
+  function targetIds(){ return ['v35-nb-page','v38-page-escolares','v38-page-universitarias','v38-page-amateur','v38-page-comparar','v38-page-mapa','v29-todos-page']; }
+  function showOnly(targetId){
+    var panel = document.getElementById('panel-inicio');
+    if(!panel) return;
+    Array.from(panel.children).forEach(function(c){
+      if(c.id === targetId){ c.style.display='block'; if(c.classList) c.classList.add('show'); }
+      else { c.style.display='none'; }
+    });
+  }
+  function restoreInicio(){
+    var panel = document.getElementById('panel-inicio');
+    if(!panel) return;
+    var targets = targetIds();
+    Array.from(panel.children).forEach(function(c){
+      if(targets.indexOf(c.id) >= 0){ c.style.display='none'; if(c.classList) c.classList.remove('show'); }
+      else { c.style.display=''; }
+    });
+  }
+  function closeSide(){
+    var side = document.getElementById('v36-side');
+    if(side) side.classList.remove('open');
+    document.body.classList.remove('v36-side-open');
+  }
+  function showInicio(){ setView('inicio'); restoreInicio(); }
+  function showDeportes(){ setView('deportes'); showOnly('v29-todos-page'); }
+  function showSpecialPage(id){ setView(id); showOnly('v38-page-'+id); }
+  function showNb(type){
+    setView(type === 'noticia' ? 'noticias' : 'blogs');
+    showOnly('v35-nb-page');
+    var sel = document.getElementById('v35-f-type');
+    if(sel){ sel.value = type; sel.dispatchEvent(new Event('change')); }
+  }
+  function doNav(fn){
+    window.__v41_navClicked = true;
+    try{ fn(); }catch(e){ console.error('v41 nav', e); }
+    try{ window.scrollTo(0,0); }catch(e){}
+    setTimeout(function(){ window.__v41_navClicked=false; }, 150);
+  }
+  var ITEMS = [
+    {key:'inicio', emoji:'🏠', label:'Inicio', fn: showInicio},
+    {key:'deportes', emoji:'🏆', label:'Deportes', dropdown: [
+      {key:'profesionales', emoji:'🏆', label:'Deportes Profesionales', fn: showDeportes},
+      {key:'universitarios', emoji:'🎓', label:'Deportes Universitarios', fn: function(){ showSpecialPage('universitarias'); }},
+      {key:'escolares', emoji:'🏫', label:'Deportes Escolares', fn: function(){ showSpecialPage('escolares'); }},
+      {key:'amateur', emoji:'🏟️', label:'Deportes Amateur', fn: function(){ showSpecialPage('amateur'); }}
+    ]},
+    {key:'noticias', emoji:'📰', label:'Noticias', fn: function(){ showNb('noticia'); }},
+    {key:'blogs', emoji:'✍️', label:'Blogs', fn: function(){ showNb('blog'); }},
+    {key:'comparar', emoji:'⚖️', label:'Comparar', fn: function(){ showSpecialPage('comparar'); }},
+    {key:'centros', emoji:'📍', label:'Centros Deportivos', fn: function(){ showSpecialPage('mapa'); }}
+  ];
+  function makeItem(item, isSub){
+    var li = document.createElement('li');
+    li.setAttribute('data-v41-key', item.key);
+    if(!isSub){
+      li.style.cursor='pointer'; li.style.padding='14px 18px'; li.style.display='flex';
+      li.style.alignItems='center'; li.style.gap='12px'; li.style.fontWeight='700'; li.style.color='#222';
+      li.style.listStyle='none';
+    }
+    var icon = '<span style="font-size:'+(isSub?'18':'22')+'px">'+item.emoji+'</span>';
+    var label = '<span>'+item.label+'</span>';
+    var caret = item.dropdown ? '<span class="v41-caret">▼</span>' : '';
+    li.innerHTML = icon + label + caret;
+    if(!isSub){
+      li.addEventListener('mouseenter', function(){ if(!li.classList.contains('v41-active')) li.style.background='#fdf2f2'; });
+      li.addEventListener('mouseleave', function(){ if(!li.classList.contains('v41-active')) li.style.background=''; });
+    }
+    return li;
+  }
+  function rebuildSidebar(){
+    var side = document.getElementById('v36-side');
+    if(!side) return false;
+    var ul = side.querySelector('ul');
+    if(!ul) return false;
+    if(ul.querySelectorAll('li[data-v41-key]').length === ITEMS.length) return true;
+    ul.innerHTML = '';
+    ITEMS.forEach(function(item){
+      var li = makeItem(item, false);
+      ul.appendChild(li);
+      if(item.dropdown){
+        var sub = document.createElement('ul');
+        sub.className = 'v41-sub';
+        sub.setAttribute('data-v41-sub-of', item.key);
+        item.dropdown.forEach(function(child){
+          var cli = makeItem(child, true);
+          cli.addEventListener('click', function(e){
+            e.preventDefault(); e.stopPropagation();
+            doNav(child.fn);
+            ul.querySelectorAll('li').forEach(function(x){ x.classList.remove('v41-active'); x.style.background=''; x.style.color=''; });
+            cli.classList.add('v41-active'); cli.style.background='#fdf2f2'; cli.style.color='#c8102e';
+            setTimeout(closeSide, 100);
+          });
+          sub.appendChild(cli);
+        });
+        ul.appendChild(sub);
+        li.addEventListener('click', function(e){
+          e.preventDefault(); e.stopPropagation();
+          var willOpen = !sub.classList.contains('open');
+          sub.classList.toggle('open', willOpen);
+          var caret = li.querySelector('.v41-caret');
+          if(caret) caret.classList.toggle('open', willOpen);
+        });
+      } else {
+        li.addEventListener('click', function(e){
+          e.preventDefault(); e.stopPropagation();
+          doNav(item.fn);
+          ul.querySelectorAll('li').forEach(function(x){ x.classList.remove('v41-active'); x.style.background=''; x.style.color='#222'; });
+          li.classList.add('v41-active'); li.style.background='#fdf2f2'; li.style.color='#c8102e';
+          setTimeout(closeSide, 100);
+        });
+      }
+    });
+    return true;
+  }
+  function bindBurger(){
+    var burger = document.querySelector('.v36-burger');
+    if(!burger || burger.__v41b) return;
+    burger.__v41b = true;
+    burger.addEventListener('click', function(){ rebuildSidebar(); }, true);
+  }
+  function bindLogo(){
+    var logos = document.querySelectorAll('.header img.logo, .header .ss-logo, .header .logo, header .logo-text');
+    logos.forEach(function(el){
+      if(el.__v41l) return; el.__v41l = true;
+      el.style.cursor='pointer';
+      el.addEventListener('click', function(e){
+        if(e.target && e.target.closest && (e.target.closest('.v36-burger') || e.target.closest('#burger'))) return;
+        e.preventDefault();
+        doNav(showInicio);
+      }, true);
+    });
+  }
+  function tick(){ try{ rebuildSidebar(); bindBurger(); bindLogo(); }catch(e){} }
+  tick();
+  if(document.readyState === 'loading'){ document.addEventListener('DOMContentLoaded', tick); }
+  var tries=0; var iv = setInterval(function(){ tries++; tick(); if(tries>=8) clearInterval(iv); }, 250);
+})();
+</script>
+
 </body>
 </html>
 
