@@ -15210,6 +15210,24 @@ undefined
 })();
 </script>
 
+<script>
+(function(){
+  if(window.__v46loaded) return; window.__v46loaded = true;
+  var style = document.createElement('style');
+  style.id = 'v46-style';
+  style.textContent = ''+
+    'html body .sport-nav-bar, html body.v26-mode .sport-nav-bar, html body.v29-show-bar .sport-nav-bar{display:block !important;}'+
+    'html body nav.sport-nav, html body .sport-nav-bar nav.sport-nav, html body.v26-mode nav.sport-nav, html body.v29-show-bar nav.sport-nav{display:flex !important;flex-wrap:wrap !important;background:#fafafa !important;border-bottom:1px solid #e2e8f0 !important;padding:14px 12px 10px !important;}';
+  document.head.appendChild(style);
+  function ensureShown(){
+    var b = document.body;
+    if(!b.classList.contains('v29-show-bar')) b.classList.add('v29-show-bar');
+  }
+  ensureShown();
+  var tries=0; var iv=setInterval(function(){tries++; ensureShown(); if(tries>=8) clearInterval(iv);}, 500);
+})();
+</script>
+
 </body>
 </html>
 
