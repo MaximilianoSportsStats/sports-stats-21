@@ -15191,6 +15191,25 @@ undefined
 })();
 </script>
 
+<script>
+(function(){
+  if(window.__v45loaded) return; window.__v45loaded = true;
+  var style = document.createElement('style');
+  style.id = 'v45-style';
+  style.textContent = ''+
+    '.sport-nav-bar{display:block !important;}'+
+    'nav.sport-nav,.sport-nav{display:flex !important;flex-wrap:wrap;background:#fafafa;border-bottom:1px solid #e2e8f0;padding:14px 12px 10px;}'+
+    'body.v26-mode .sport-nav{display:flex !important;}';
+  document.head.appendChild(style);
+  function ensureShown(){
+    var b = document.body;
+    if(!b.classList.contains('v29-show-bar')) b.classList.add('v29-show-bar');
+  }
+  ensureShown();
+  var tries=0; var iv=setInterval(function(){tries++; ensureShown(); if(tries>=8) clearInterval(iv);}, 500);
+})();
+</script>
+
 </body>
 </html>
 
