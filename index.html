@@ -15180,13 +15180,14 @@ undefined
   if(window.__v42loaded) return; window.__v42loaded = true;
   function syncBar(){
     var b = document.body;
-    if(b.classList.contains('v32-view-deportes')) b.classList.add('v29-show-bar');
-    else b.classList.remove('v29-show-bar');
+    var want = b.classList.contains('v32-view-deportes');
+    var has = b.classList.contains('v29-show-bar');
+    if(want && !has) b.classList.add('v29-show-bar');
+    else if(!want && has) b.classList.remove('v29-show-bar');
   }
   syncBar();
-  var mo = new MutationObserver(function(){ syncBar(); });
-  mo.observe(document.body, {attributes:true, attributeFilter:['class']});
-  var tries=0; var iv=setInterval(function(){tries++; syncBar(); if(tries>=20) clearInterval(iv);}, 250);
+  /* v44: removed MutationObserver to prevent feedback loop */
+  var tries=0; var iv=setInterval(function(){tries++; syncBar(); if(tries>=8) clearInterval(iv);}, 500);
 })();
 </script>
 
