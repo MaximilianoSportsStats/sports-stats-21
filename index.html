@@ -15289,6 +15289,26 @@ window.__v39loaded=true;window.__v391loaded=true;window.__v40loaded=true;window.
 })();
 </script>
 
+<script>
+(function(){
+  if(window.__v49loaded) return; window.__v49loaded=true;
+  function fix(){
+    var bar=document.querySelector('.sport-nav-bar');
+    var nav=document.querySelector('.sport-nav-bar .sport-nav, .sport-nav-bar nav');
+    if(bar){bar.style.setProperty('display','block','important');}
+    if(nav){nav.style.setProperty('display','flex','important');nav.style.setProperty('flex-wrap','wrap','important');}
+  }
+  fix();
+  /* run on body class change (smart - no feedback loop because we only modify nav, not body) */
+  var mo=new MutationObserver(function(muts){fix();});
+  mo.observe(document.body,{attributes:true,attributeFilter:['class']});
+  /* also intercept any click anywhere on the page and reapply 50ms after */
+  document.addEventListener('click',function(){setTimeout(fix,50);setTimeout(fix,250);},true);
+  /* periodic safety net for first 5 seconds */
+  var tries=0;var iv=setInterval(function(){tries++;fix();if(tries>=10)clearInterval(iv);},500);
+})();
+</script>
+
 </body>
 </html>
 
