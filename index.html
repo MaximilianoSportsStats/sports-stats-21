@@ -15719,6 +15719,23 @@ window.__v39loaded=true;window.__v391loaded=true;window.__v40loaded=true;window.
 })();
 </script>
 
+<script>
+(function(){
+  if(window.__v61loaded) return; window.__v61loaded=true;
+  function applyBar(){
+    var bar=document.querySelector('.sport-nav-bar');
+    var nav=document.querySelector('.sport-nav-bar nav.sport-nav, .sport-nav-bar .sport-nav');
+    var inDep=document.body.classList.contains('v32-view-deportes');
+    if(bar){if(inDep){bar.style.setProperty('display','block','important');}else{bar.style.setProperty('display','none','important');}}
+    if(nav){if(inDep){nav.style.setProperty('display','flex','important');nav.style.setProperty('flex-wrap','wrap','important');}else{nav.style.setProperty('display','none','important');}}
+  }
+  applyBar();
+  var mo=new MutationObserver(function(){applyBar();});
+  mo.observe(document.body,{attributes:true,attributeFilter:['class']});
+  var t=0;var iv=setInterval(function(){t++;applyBar();if(t>=15)clearInterval(iv);},250);
+})();
+</script>
+
 </body>
 </html>
 
