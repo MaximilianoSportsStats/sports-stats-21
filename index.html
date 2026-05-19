@@ -15689,6 +15689,36 @@ window.__v39loaded=true;window.__v391loaded=true;window.__v40loaded=true;window.
 })();
 </script>
 
+<script>
+(function(){
+  if(window.__v60loaded) return; window.__v60loaded=true;
+  function applyBar(){
+    var bar=document.querySelector('.sport-nav-bar');
+    var nav=document.querySelector('.sport-nav-bar nav.sport-nav, .sport-nav-bar .sport-nav');
+    var inDeportes=document.body.classList.contains('v32-view-deportes');
+    if(bar){
+      if(inDeportes) bar.style.setProperty('display','block','important');
+      else bar.style.setProperty('display','none','important');
+    }
+    if(nav){
+      if(inDeportes) nav.style.setProperty('display','flex','important');
+      else nav.style.setProperty('display','none','important');
+    }
+  }
+  applyBar();
+  /* Watch body class changes WITHOUT modifying body itself */
+  var lastClass=document.body.className;
+  var iv=setInterval(function(){
+    if(document.body.className!==lastClass){
+      lastClass=document.body.className;
+      applyBar();
+    }
+  },200);
+  /* Also tick a few times at start */
+  var t=0;var iv2=setInterval(function(){t++;applyBar();if(t>=10)clearInterval(iv2);},300);
+})();
+</script>
+
 </body>
 </html>
 
