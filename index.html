@@ -15659,6 +15659,36 @@ window.__v39loaded=true;window.__v391loaded=true;window.__v40loaded=true;window.
 })();
 </script>
 
+<script>
+(function(){
+  if(window.__v58loaded) return; window.__v58loaded=true;
+  function ensureV38Pages(){
+    var panel=document.getElementById('panel-inicio');if(!panel)return;
+    var pages=[
+      {id:'v38-page-escolares',emoji:'🎓',title:'Deportes Escolares',desc:'El semillero del deporte. Calendarios, resultados y rankings de las principales ligas escolares.',cards:['Liga Escolar Chile (ADIPA)','Liga Escolar Argentina','Liga Escolar Brasil','Federacion Escolar Espana','Liga Escolar Inglaterra (ESFA)','Liga Escolar Mexico','Liga Escolar Colombia','Liga Escolar Peru']},
+      {id:'v38-page-universitarias',emoji:'🏆',title:'Deportes Universitarios',desc:'El paso previo al profesionalismo. NCAA, USports, FedUni y todas las ligas universitarias.',cards:['NCAA Division I (EE.UU.)','NCAA Division II','NCAA Division III','USports (Canada)','FedUni Argentina','UB Brasil','Liga Universitaria Chile','BUCS Reino Unido','LNH Universidades Espana']},
+      {id:'v38-page-amateur',emoji:'🏟️',title:'Deportes Amateur',desc:'Ligas amateur y semi-profesionales de tu zona y del mundo.',cards:['Liga Sabatina Las Condes','Liga Dominical Vitacura','Liga Maipu','Liga Amateur Zona Norte','Liga Amateur Zona Sur','Liga Veteranos','Liga Universitaria','Sumate a tu liga local']},
+      {id:'v38-page-comparar',emoji:'⚖️',title:'Comparar',desc:'Selecciona dos deportistas, equipos o ligas y compara sus numeros lado a lado.',cards:['Messi vs Cristiano','Lebron vs Jordan','Federer vs Nadal','Tu vs Tu rival','Real Madrid vs Barcelona','Lakers vs Celtics']},
+      {id:'v38-page-mapa',emoji:'📍',title:'Centros Deportivos',desc:'Gimnasios, clubes, estadios y canchas cerca tuyo. Proximamente integracion con Google Maps.',cards:['Buscar por codigo postal','Filtrar por deporte','Filtrar por servicios','Ver favoritos','Agregar tu centro','Ver mas cercanos']}
+    ];
+    pages.forEach(function(p){
+      if(document.getElementById(p.id)) return;
+      var sec=document.createElement('section');
+      sec.id=p.id;
+      sec.className='v38-page';
+      sec.style.cssText='display:none;padding:24px;';
+      var h='<div style="max-width:1200px;margin:0 auto;"><div style="padding:24px;border:1px solid #e2e8f0;border-radius:12px;background:linear-gradient(135deg,#fff,#fdf2f2);margin-bottom:20px;"><h2 style="color:#c8102e;margin:0 0 8px 0;">'+p.emoji+' '+p.title+'</h2><p style="color:#555;margin:0;">'+p.desc+'</p></div><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;">';
+      p.cards.forEach(function(c){h+='<div style="padding:20px;border:1px solid #e2e8f0;border-radius:12px;background:#fff;"><h3 style="margin:0 0 8px 0;color:#222;font-size:16px;">'+c+'</h3><p style="color:#888;margin:0;font-size:13px;">Proximamente: data completa y rankings.</p></div>';});
+      h+='</div></div>';
+      sec.innerHTML=h;
+      panel.appendChild(sec);
+    });
+  }
+  ensureV38Pages();
+  var tries=0;var iv=setInterval(function(){tries++;ensureV38Pages();if(tries>=10)clearInterval(iv);},300);
+})();
+</script>
+
 </body>
 </html>
 
