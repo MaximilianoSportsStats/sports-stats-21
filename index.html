@@ -15873,6 +15873,26 @@ window.__v39loaded=true;window.__v391loaded=true;window.__v40loaded=true;window.
 })();
 </script>
 
+<script>
+(function(){
+  if(window.__v67loaded) return; window.__v67loaded=true;
+  /* 1. Hide duplicate v27 page headers on Inicio (they belong to dedicated pages) */
+  var st=document.createElement('style');st.id='v67-style';
+  st.textContent='body.v32-view-inicio #v27-noticias-header,body.v32-view-inicio #v27-blogs-header{display:none !important;}';
+  document.head.appendChild(st);
+  /* 2. Scroll guard - block programmatic scrollTo/scrollIntoView when user is scrolling */
+  var userScrolled=false; var lastNav=0;
+  window.addEventListener('wheel',function(){userScrolled=true;},{passive:true});
+  window.addEventListener('touchmove',function(){userScrolled=true;},{passive:true});
+  window.addEventListener('keydown',function(e){if(['ArrowDown','ArrowUp','PageDown','PageUp','End','Home',' '].indexOf(e.key)>=0)userScrolled=true;});
+  document.addEventListener('click',function(e){var t=e.target;if(t && t.closest && (t.closest('#v56-ul li')||t.closest('.sport-nav button')||t.closest('.v36-burger')||t.closest('.league-btn'))){lastNav=Date.now();userScrolled=false;}},true);
+  var origScrollTo=window.scrollTo.bind(window);
+  window.scrollTo=function(){ if(userScrolled && (Date.now()-lastNav>700)){ return; } return origScrollTo.apply(window,arguments); };
+  var origSIV=Element.prototype.scrollIntoView;
+  Element.prototype.scrollIntoView=function(){ if(userScrolled && (Date.now()-lastNav>700)){ return; } return origSIV.apply(this,arguments); };
+})();
+</script>
+
 </body>
 </html>
 
