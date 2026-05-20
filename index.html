@@ -15772,6 +15772,35 @@ window.__v39loaded=true;window.__v391loaded=true;window.__v40loaded=true;window.
 })();
 </script>
 
+<script>
+(function(){
+  if(window.__v64loaded) return; window.__v64loaded=true;
+  var SPECIAL=['v29-todos-page','v38-page-universitarias','v38-page-escolares','v38-page-amateur','v56-page-envivo','v35-nb-page','v38-page-comparar','v38-page-mapa','v56-page-favoritos'];
+  function curView(){ var c=document.body.className.split(' ').filter(function(x){return x.indexOf('v32-view-')===0;}); return c.length?c[c.length-1].replace('v32-view-',''):'inicio'; }
+  function enforce(){
+    var panel=document.getElementById('panel-inicio'); if(!panel) return;
+    var page=window.__v63page;
+    if(page){
+      Array.from(panel.children).forEach(function(ch){
+        if(ch.id===page){ if(ch.style.display==='none') ch.style.display='block'; }
+        else { if(getComputedStyle(ch).display!=='none') ch.style.display='none'; }
+      });
+    } else {
+      /* inicio view: show all non-special children, hide special */
+      Array.from(panel.children).forEach(function(ch){
+        if(SPECIAL.indexOf(ch.id)>=0){ if(getComputedStyle(ch).display!=='none') ch.style.display='none'; }
+        else { if(ch.style.display==='none') ch.style.display=''; }
+      });
+    }
+  }
+  enforce();
+  var mo=new MutationObserver(function(){ enforce(); });
+  mo.observe(document.body,{attributes:true,attributeFilter:['class']});
+  /* Run repeatedly for first 10s to beat v32 applyAll timers (1.8s,4.5s,7s) */
+  var t=0;var iv=setInterval(function(){t++;enforce();if(t>=40)clearInterval(iv);},250);
+})();
+</script>
+
 </body>
 </html>
 
