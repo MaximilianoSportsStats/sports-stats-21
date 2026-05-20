@@ -15719,15 +15719,19 @@ window.__v39loaded=true;window.__v391loaded=true;window.__v40loaded=true;window.
 })();
 </script>
 
+<!-- v62: v61 removed (reemplazado) -->
+
 <script>
 (function(){
-  if(window.__v61loaded) return; window.__v61loaded=true;
+  if(window.__v62loaded) return; window.__v62loaded=true;
+  var DEP=['v32-view-deportes','v32-view-escolares','v32-view-universitarias','v32-view-amateur'];
+  function inDeportes(){var c=document.body.className;for(var i=0;i<DEP.length;i++){if(c.indexOf(DEP[i])>=0)return true;}return false;}
   function applyBar(){
     var bar=document.querySelector('.sport-nav-bar');
     var nav=document.querySelector('.sport-nav-bar nav.sport-nav, .sport-nav-bar .sport-nav');
-    var inDep=document.body.classList.contains('v32-view-deportes');
-    if(bar){if(inDep){bar.style.setProperty('display','block','important');}else{bar.style.setProperty('display','none','important');}}
-    if(nav){if(inDep){nav.style.setProperty('display','flex','important');nav.style.setProperty('flex-wrap','wrap','important');}else{nav.style.setProperty('display','none','important');}}
+    var d=inDeportes();
+    if(bar){if(d){bar.style.setProperty('display','block','important');}else{bar.style.setProperty('display','none','important');}}
+    if(nav){if(d){nav.style.setProperty('display','flex','important');nav.style.setProperty('flex-wrap','wrap','important');}else{nav.style.setProperty('display','none','important');}}
   }
   applyBar();
   var mo=new MutationObserver(function(){applyBar();});
