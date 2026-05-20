@@ -15845,6 +15845,34 @@ window.__v39loaded=true;window.__v391loaded=true;window.__v40loaded=true;window.
 })();
 </script>
 
+<script>
+(function(){
+  if(window.__v66loaded) return; window.__v66loaded=true;
+  var st=document.createElement('style');st.id='v66-style';
+  st.textContent='.v20-sources{display:none !important;}';
+  document.head.appendChild(st);
+  function fixOrder(){
+    var side=document.getElementById('v36-side'); if(!side) return;
+    var ul=document.getElementById('v56-ul'); var head=side.querySelector('.v36-head');
+    if(ul && head && ul.previousElementSibling!==head){ side.insertBefore(ul, head.nextSibling); }
+  }
+  fixOrder();
+  var t=0;var iv=setInterval(function(){t++;fixOrder();var inf=document.querySelectorAll('.v20-sources');inf.forEach(function(e){e.style.setProperty('display','none','important');});if(t>=20)clearInterval(iv);},300);
+  /* When a sport in the bar is clicked, default to Que es el [Sport] */
+  document.addEventListener('click',function(e){
+    var btn=e.target.closest?e.target.closest('.sport-nav button'):null;
+    if(!btn) return;
+    var t=(btn.textContent||'').trim();
+    if(t.indexOf('Todos')>=0||t.indexOf('Otros Deportes')>=0||t.indexOf('Eventos')>=0||t.indexOf('Qué es')>=0) return;
+    setTimeout(function(){
+      var qe=null;
+      document.querySelectorAll('button.league-btn').forEach(function(b){ if((b.textContent||'').indexOf('Qué es')>=0 && !qe) qe=b; });
+      if(qe && !qe.classList.contains('active')) qe.click();
+    },300);
+  },true);
+})();
+</script>
+
 </body>
 </html>
 
