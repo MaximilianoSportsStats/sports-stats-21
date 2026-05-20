@@ -15801,6 +15801,50 @@ window.__v39loaded=true;window.__v391loaded=true;window.__v40loaded=true;window.
 })();
 </script>
 
+<script>
+(function(){
+  if(window.__v65loaded) return; window.__v65loaded=true;
+  var st=document.createElement('style');st.id='v65-style';
+  st.textContent=''+
+    '.inicio-features{display:none !important;}'+
+    '#debug-bar{display:none !important;}'+
+    'body.v32-view-deportes nav.sport-nav{flex-wrap:nowrap !important;gap:2px !important;overflow-x:auto !important;justify-content:flex-start !important;}'+
+    'body.v32-view-deportes nav.sport-nav>button{flex:1 1 0 !important;min-width:0 !important;max-width:none !important;white-space:normal !important;font-size:11px !important;line-height:1.15 !important;padding:8px 2px !important;text-align:center !important;}';
+  document.head.appendChild(st);
+  function clean(){
+    var inf=document.querySelector('.inicio-features'); if(inf) inf.style.setProperty('display','none','important');
+    var db=document.getElementById('debug-bar'); if(db) db.style.setProperty('display','none','important');
+    /* remove stray undefined text nodes that are direct children of body */
+    Array.from(document.body.childNodes).forEach(function(n){ if(n.nodeType===3 && (n.nodeValue||'').trim()==='undefined'){ n.nodeValue=''; } });
+    /* fix Eventos Globales + Otros Deportes buttons (no handler) */
+    document.querySelectorAll('.sport-nav button').forEach(function(b){
+      if(b.__v65fix) return;
+      var t=(b.textContent||'').trim();
+      if((t.indexOf('Eventos')>=0 || t.indexOf('Otros Deportes')>=0) && !b.onclick){
+        b.__v65fix=true;
+        b.addEventListener('click',function(e){
+          e.preventDefault();e.stopPropagation();
+          document.querySelectorAll('.sport-nav button').forEach(function(x){x.classList.remove('active');});
+          b.classList.add('active');
+          var panel=document.getElementById('panel-inicio');
+          var id=t.indexOf('Eventos')>=0?'v65-page-eventos':'v65-page-otros';
+          var title=t.indexOf('Eventos')>=0?'🌍 Eventos Globales':'🏅 Otros Deportes';
+          var desc=t.indexOf('Eventos')>=0?'Mundiales, Juegos Olimpicos, Copas continentales y los grandes eventos del deporte mundial.':'Mas de 250 disciplinas: deportes emergentes, regionales y de nicho.';
+          var sec=document.getElementById(id);
+          if(!sec){sec=document.createElement('section');sec.id=id;sec.style.cssText='padding:24px;';sec.innerHTML='<div style=\"max-width:1100px;margin:0 auto;\"><div style=\"padding:24px;border:1px solid #e2e8f0;border-radius:12px;background:linear-gradient(135deg,#fff,#fdf2f2);\"><h2 style=\"color:#c8102e;margin:0 0 8px 0;\">'+title+'</h2><p style=\"color:#555;margin:0;\">'+desc+'</p></div><p style=\"color:#888;margin-top:20px;\">Proximamente: contenido completo.</p></div>';panel.appendChild(sec);}
+          Array.from(panel.children).forEach(function(ch){ if(ch.id===id){ch.style.display='block';}else{ch.style.display='none';} });
+          window.scrollTo(0,0);
+        },true);
+      }
+    });
+  }
+  clean();
+  var mo=new MutationObserver(function(){clean();});
+  mo.observe(document.body,{attributes:true,attributeFilter:['class']});
+  var t=0;var iv=setInterval(function(){t++;clean();if(t>=20)clearInterval(iv);},300);
+})();
+</script>
+
 </body>
 </html>
 
