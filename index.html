@@ -2,6 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <link rel="icon" type="image/png" href="data/logo.png">
 <script src="https://cdnjs.cloudflare.com/ajax/lihhbs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script src="data/compiled/all_data.js"></script>
@@ -15890,6 +15891,44 @@ window.__v39loaded=true;window.__v391loaded=true;window.__v40loaded=true;window.
   window.scrollTo=function(){ if(userScrolled && (Date.now()-lastNav>700)){ return; } return origScrollTo.apply(window,arguments); };
   var origSIV=Element.prototype.scrollIntoView;
   Element.prototype.scrollIntoView=function(){ if(userScrolled && (Date.now()-lastNav>700)){ return; } return origSIV.apply(this,arguments); };
+})();
+</script>
+
+<script>
+(function(){
+  if(window.__v68loaded) return; window.__v68loaded=true;
+  var st=document.createElement('style');st.id='v68-style';
+  st.textContent=''+
+  '@media (max-width:1024px){'+
+    '.layout{flex-direction:column !important;}'+
+    '.inicio-panels{grid-template-columns:repeat(2,1fr) !important;}'+
+  '}'+
+  '@media (max-width:768px){'+
+    'html{-webkit-text-size-adjust:100%;text-size-adjust:100%;}'+
+    'body{font-size:15px !important;}'+
+    '.main,main.main{padding:12px !important;}'+
+    '.inicio-hero,#heroCarousel{min-height:auto !important;}'+
+    '.inicio-hero h1,#heroCarousel h1{font-size:26px !important;line-height:1.2 !important;}'+
+    '.inicio-hero h2,#heroCarousel h2{font-size:16px !important;}'+
+    '.inicio-hero p,#heroCarousel p{font-size:14px !important;}'+
+    'h1{font-size:24px !important;}h2{font-size:19px !important;}h3{font-size:16px !important;}h4{font-size:14px !important;}'+
+    '.v25-intro p,#v25-intro p{font-size:15px !important;line-height:1.5 !important;}'+
+    '.v25-intro h2,#v25-intro h2{font-size:20px !important;}'+
+    '.inicio-panels,.v29-todos-grid,.v16-news-grid,.v32-grid{grid-template-columns:1fr !important;}'+
+    '.v25-stats-grid{grid-template-columns:repeat(2,1fr) !important;}'+
+    '#v36-side{width:88% !important;max-width:330px !important;}'+
+    'body.v32-view-deportes nav.sport-nav{flex-wrap:nowrap !important;overflow-x:auto !important;-webkit-overflow-scrolling:touch;}'+
+    'body.v32-view-deportes nav.sport-nav>button{flex:0 0 auto !important;min-width:60px !important;font-size:10px !important;}'+
+    '.header{padding:6px 8px !important;}'+
+    'footer [style*=grid],.footer [style*=grid]{grid-template-columns:repeat(2,1fr) !important;}'+
+    'table{display:block;overflow-x:auto;white-space:nowrap;}'+
+  '}'+
+  '@media (max-width:480px){'+
+    '.v25-stats-grid{grid-template-columns:repeat(2,1fr) !important;}'+
+    '.inicio-hero h1,#heroCarousel h1{font-size:22px !important;}'+
+    'footer [style*=grid],.footer [style*=grid]{grid-template-columns:1fr !important;}'+
+  '}';
+  document.head.appendChild(st);
 })();
 </script>
 
