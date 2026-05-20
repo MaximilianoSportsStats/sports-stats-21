@@ -15740,6 +15740,38 @@ window.__v39loaded=true;window.__v391loaded=true;window.__v40loaded=true;window.
 })();
 </script>
 
+<script>
+(function(){
+  if(window.__v63loaded) return; window.__v63loaded=true;
+  var K2V={inicio:'inicio',favoritos:'favoritos',profesionales:'deportes',universitarios:'universitarias',escolares:'escolares',amateur:'amateur',envivo:'envivo',noticias:'noticias',comparar:'comparar',centros:'mapa'};
+  var K2P={profesionales:'v29-todos-page',universitarios:'v38-page-universitarias',escolares:'v38-page-escolares',amateur:'v38-page-amateur',envivo:'v56-page-envivo',noticias:'v35-nb-page',comparar:'v38-page-comparar',centros:'v38-page-mapa',favoritos:'v56-page-favoritos'};
+  var PAGES=['v29-todos-page','v38-page-universitarias','v38-page-escolares','v38-page-amateur','v56-page-envivo','v35-nb-page','v38-page-comparar','v38-page-mapa','v56-page-favoritos'];
+  window.__v63view='inicio'; window.__v63page=null;
+  document.addEventListener('click',function(e){
+    var li=e.target.closest?e.target.closest('#v56-ul li[data-v56-key]'):null;
+    if(!li) return;
+    var key=li.getAttribute('data-v56-key');
+    if(key==='deportes') return;
+    if(K2V[key]){ window.__v63view=K2V[key]; window.__v63page=K2P[key]||null; }
+  },true);
+  function enforce(){
+    var b=document.body, want=window.__v63view;
+    Array.from(b.classList).forEach(function(c){ if(c.indexOf('v32-view-')===0 && c!=='v32-view-'+want) b.classList.remove(c); });
+    if(!b.classList.contains('v32-view-'+want)) b.classList.add('v32-view-'+want);
+    if(window.__v63page){
+      var panel=document.getElementById('panel-inicio');
+      if(panel){
+        var tgt=document.getElementById(window.__v63page);
+        if(tgt && getComputedStyle(tgt).display==='none') tgt.style.display='block';
+        PAGES.forEach(function(pid){ if(pid!==window.__v63page){ var e2=document.getElementById(pid); if(e2 && getComputedStyle(e2).display!=='none') e2.style.display='none'; } });
+      }
+    }
+  }
+  var mo=new MutationObserver(function(){ enforce(); });
+  mo.observe(document.body,{attributes:true,attributeFilter:['class']});
+})();
+</script>
+
 </body>
 </html>
 
