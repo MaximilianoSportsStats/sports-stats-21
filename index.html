@@ -16116,6 +16116,22 @@ window.__v39loaded=true;window.__v391loaded=true;window.__v40loaded=true;window.
   if(document.readyState!=='loading') setup();
 })();
 </script>
+
+<script>
+/* v73: arregla acceso a deportes sin handler (Atletismo, Ciclismo, Volleyball, Cricket, Eventos Globales). Sus chips tenian data-v3 pero no onclick; se mapea al panel correcto y se delega el click. */
+(function(){
+  if(window.__v73loaded) return; window.__v73loaded=true;
+  var MAP={atletismo:'athletics', ciclismo:'cycling', volleyball:'volley', cricket:'cricket', eventos:'olympics'};
+  document.addEventListener('click', function(ev){
+    var t=ev.target; if(!t||!t.closest) return;
+    var b=t.closest('button.sport-btn[data-v3]');
+    if(!b) return;
+    var key=MAP[b.getAttribute('data-v3')];
+    if(!key) return;
+    if(typeof window.switchSport==='function'){ try{ window.switchSport(key, b); }catch(e){} }
+  });
+})();
+</script>
 </body>
 </html>
 
