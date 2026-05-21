@@ -16132,6 +16132,20 @@ window.__v39loaded=true;window.__v391loaded=true;window.__v40loaded=true;window.
   });
 })();
 </script>
+
+<script>
+/* v74: el chip Eventos Globales tiene un handler que detiene la propagacion, asi que v73 (bubble) no lo captura. Reaplicamos la delegacion en fase de captura. */
+(function(){
+  if(window.__v74loaded) return; window.__v74loaded=true;
+  var MAP={atletismo:'athletics', ciclismo:'cycling', volleyball:'volley', cricket:'cricket', eventos:'olympics'};
+  document.addEventListener('click', function(ev){
+    var t=ev.target; if(!t||!t.closest) return;
+    var b=t.closest('button.sport-btn[data-v3]'); if(!b) return;
+    var key=MAP[b.getAttribute('data-v3')]; if(!key) return;
+    if(typeof window.switchSport==='function'){ try{ window.switchSport(key, b); }catch(e){} }
+  }, true);
+})();
+</script>
 </body>
 </html>
 
