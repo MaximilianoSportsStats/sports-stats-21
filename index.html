@@ -16012,6 +16012,37 @@ window.__v39loaded=true;window.__v391loaded=true;window.__v40loaded=true;window.
 })();
 </script>
 
+
+<script>
+/* v71: arregla flicker Noticias/Blogs en Inicio. Envuelve titulo+news+blogs en #v71-wrap para que v64 no re-muestre la seccion oculta. CSS anti-flash. v70 sigue siendo el unico que alterna. */
+(function(){
+  if(window.__v71loaded) return; window.__v71loaded=true;
+  if(!document.getElementById('v71-css')){
+    var s=document.createElement('style'); s.id='v71-css';
+    s.textContent='body.v32-view-inicio #v25-blogs-section{display:none!important;}';
+    (document.head||document.documentElement).appendChild(s);
+  }
+  function nest(){
+    var pi=document.getElementById('panel-inicio');
+    var news=document.getElementById('v16-news-section');
+    var blogs=document.getElementById('v25-blogs-section');
+    if(!pi||!news||!blogs) return false;
+    var title=document.getElementById('v70-title');
+    var wrap=document.getElementById('v71-wrap');
+    if(!wrap){
+      wrap=document.createElement('div'); wrap.id='v71-wrap';
+      news.parentNode.insertBefore(wrap, title||news);
+    }
+    if(title && title.parentNode!==wrap) wrap.appendChild(title);
+    if(news.parentNode!==wrap) wrap.appendChild(news);
+    if(blogs.parentNode!==wrap) wrap.appendChild(blogs);
+    return true;
+  }
+  nest();
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',nest);
+  var t=0,iv=setInterval(function(){ t++; nest(); var w=document.getElementById('v71-wrap'),ti=document.getElementById('v70-title'); if((w&&ti&&ti.parentNode===w)||t>=40) clearInterval(iv); },300);
+})();
+</script>
 </body>
 </html>
 
