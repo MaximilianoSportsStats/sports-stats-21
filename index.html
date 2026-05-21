@@ -16043,6 +16043,79 @@ window.__v39loaded=true;window.__v391loaded=true;window.__v40loaded=true;window.
   var t=0,iv=setInterval(function(){ t++; nest(); var w=document.getElementById('v71-wrap'),ti=document.getElementById('v70-title'); if((w&&ti&&ti.parentNode===w)||t>=40) clearInterval(iv); },300);
 })();
 </script>
+
+<script>
+/* v72: feed mezclado Noticias+Blogs en Inicio. Secuencia 2 noticias : 1 blog, pagina de 4 (1 grande + 3 chicas) cambia cada 6s. Reemplaza el toggle de v70 (rename ids para neutralizarlo) y oculta las secciones originales. */
+(function(){
+  if(window.__v72loaded) return; window.__v72loaded=true;
+  function build(){
+    var N=window.__V32_NEWS||[], B=window.__V32_BLOGS||[];
+    if(!N.length||!B.length) return null;
+    var seq=[], ni=0, bi=0;
+    for(var c=0;c<8;c++){
+      seq.push(N[ni++ % N.length]);
+      seq.push(N[ni++ % N.length]);
+      seq.push(B[bi++ % B.length]);
+    }
+    return seq;
+  }
+  function card(d, big){
+    var div=document.createElement('div');
+    div.className=big?'v18-news-big':'v18-news-mini';
+    var tag=document.createElement('span'); tag.className='v18-tag'; tag.textContent=(d&&d.tag)||'';
+    var inner=document.createElement('div');
+    var h=document.createElement(big?'h3':'h4'); h.textContent=(d&&d.title)||'';
+    var p=document.createElement('p'); p.textContent=(d&&d.body)||'';
+    inner.appendChild(h); inner.appendChild(p);
+    div.appendChild(tag); div.appendChild(inner);
+    return div;
+  }
+  var seq=null, pages=[], page=0, timer=null;
+  function makePages(){ seq=build(); if(!seq) return false; pages=[]; for(var i=0;i<seq.length;i+=4) pages.push(seq.slice(i,i+4)); return pages.length>0; }
+  function dotsRender(dw){
+    dw.innerHTML='';
+    for(var d=0; d<pages.length; d++){ (function(d){
+      var b=document.createElement('button'); var act=(d===(page%pages.length));
+      b.style.cssText='border:none;outline:none;cursor:pointer;padding:0;margin:0 4px;height:9px;border-radius:9px;transition:all .3s;'+(act?'width:26px;background:#c8102e;':'width:9px;background:#cfd3da;');
+      b.addEventListener('click',function(){ page=d; render(); restart(); });
+      dw.appendChild(b);
+    })(d); }
+  }
+  function render(){
+    var feed=document.getElementById('v72-feed'); if(!feed) return;
+    var g=feed.querySelector('.v18-news-grid'); if(!g) return;
+    var pg=pages[page%pages.length]; if(!pg) return;
+    g.innerHTML='';
+    g.appendChild(card(pg[0], true));
+    var col=document.createElement('div'); col.className='v18-news-mini-col';
+    for(var i=1;i<pg.length;i++) col.appendChild(card(pg[i], false));
+    g.appendChild(col);
+    var dw=feed.querySelector('.v18-news-dots'); if(dw) dotsRender(dw);
+  }
+  function restart(){ if(timer) clearInterval(timer); timer=setInterval(function(){ page=(page+1)%pages.length; render(); }, 6000); }
+  function setup(){
+    var wrap=document.getElementById('v71-wrap'); if(!wrap) return false;
+    if(!makePages()) return false;
+    var title=document.getElementById('v70-title'); if(!title) return false;
+    if(!document.getElementById('v72-feed')){
+      var feed=document.createElement('div'); feed.id='v72-feed';
+      feed.style.cssText='max-width:1200px;margin:22px auto 0;padding:0 24px;box-sizing:border-box;';
+      var g=document.createElement('div'); g.className='v18-news-grid'; feed.appendChild(g);
+      var dw=document.createElement('div'); dw.className='v18-news-dots'; dw.style.cssText='text-align:center;margin:18px 0 6px;'; feed.appendChild(dw);
+      var bs=document.getElementById('v25-blogs-section');
+      if(bs && bs.children[3]) feed.appendChild(bs.children[3]);
+      if(title.nextSibling) wrap.insertBefore(feed, title.nextSibling); else wrap.appendChild(feed);
+    }
+    var ns=document.getElementById('v16-news-section'); var bs2=document.getElementById('v25-blogs-section');
+    if(ns){ ns.id='v16-news-section_x'; ns.style.setProperty('display','none','important'); }
+    if(bs2){ bs2.id='v25-blogs-section_x'; bs2.style.setProperty('display','none','important'); }
+    render(); restart();
+    return true;
+  }
+  var tries=0; var iv=setInterval(function(){ tries++; if(setup()||tries>=60) clearInterval(iv); }, 300);
+  if(document.readyState!=='loading') setup();
+})();
+</script>
 </body>
 </html>
 
