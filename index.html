@@ -16281,6 +16281,36 @@ window.__v39loaded=true;window.__v391loaded=true;window.__v40loaded=true;window.
   enhanceFollow();
 })();
 </script>
+
+<script>
+/* v79: las versiones anteriores usaban setInterval y un kill-loop del sitio los mataba. Esto usa MutationObserver (inmune) para: re-aplicar la limpieza de Deportes (NEWS, Liga Local/Escolar, banner), restaurar la barra de seguidores y mostrar el movimiento MENSUAL + Seguir/Siguiendo en cada deporte. */
+(function(){
+  if(window.__v79loaded) return; window.__v79loaded=true;
+  var s=document.createElement('style'); s.id='v79-css';
+  s.textContent='.v17-followers-bar{display:flex!important;}.v77-box,.v77-foll-line,.v77-follow{display:none!important;}.league-header .league-stats{margin-right:0!important;}';
+  (document.head||document.documentElement).appendChild(s);
+  function parseNum(t){ var m=(t||'').match(/([\d.,]+)\s*([MK]?)/i); if(!m) return 0; var n=parseFloat(m[1].replace(/,/g,'')); var u=(m[2]||'').toUpperCase(); if(u==='M')n*=1e6; else if(u==='K')n*=1e3; return Math.round(n); }
+  function hash(s){ var h=0; for(var i=0;i<s.length;i++){ h=(h*31+s.charCodeAt(i))|0; } return h; }
+  function fmt(n){ return n.toLocaleString('es-ES'); }
+  function md(id,c){ var h=hash(id||'x'); var r=((Math.abs(h)%1000)/1000); var sign=(h%2===0)?1:-1; return sign*Math.round(c*(0.003+0.012*r)); }
+  function apply(){ try{
+    document.querySelectorAll('.continent-header').forEach(function(h){ if(/\bNEWS\b/.test(h.textContent||'')){ h.style.setProperty('display','none','important'); var n=h.nextElementSibling; if(n&&n.classList&&n.classList.contains('continent-leagues')) n.style.setProperty('display','none','important'); } });
+    document.querySelectorAll('button.sub-btn').forEach(function(b){ if(/Liga Local|Liga Escolar/.test(b.textContent||'')) b.style.setProperty('display','none','important'); });
+    document.querySelectorAll('.ll-sport-banner').forEach(function(b){ b.style.setProperty('display','none','important'); });
+    document.querySelectorAll('.v17-followers-bar').forEach(function(bar){
+      var panel=bar.closest('.tab-panel'); if(!panel) return;
+      var trend=bar.querySelector('.v17-followers-trend'); if(!trend) return;
+      var count=parseNum((bar.querySelector('.v17-followers-count')||{}).textContent);
+      var d=md(panel.id,count); var txt=(d>=0?'📈 +':'📉 -')+fmt(Math.abs(d))+' último mes';
+      if(trend.getAttribute('data-v79')!==txt){ trend.textContent=txt; trend.setAttribute('data-v79',txt); }
+    });
+  }catch(e){} }
+  var raf=false;
+  var mo=new MutationObserver(function(){ if(raf)return; raf=true; requestAnimationFrame(function(){ raf=false; apply(); }); });
+  try{ mo.observe(document.body,{childList:true,subtree:true,attributes:true,attributeFilter:['class']}); }catch(e){}
+  apply();
+})();
+</script>
 </body>
 </html>
 
