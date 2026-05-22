@@ -16146,6 +16146,26 @@ window.__v39loaded=true;window.__v391loaded=true;window.__v40loaded=true;window.
   }, true);
 })();
 </script>
+
+<script>
+/* v75: Inicio - elimina seccion BLOGS/NEWS duplicada (un guardian re-crea v25-blogs-section con id original) dejando solo el feed #v72-feed. Ademas min-height al grid para que no salte al cambiar de pagina. */
+(function(){
+  if(window.__v75loaded) return; window.__v75loaded=true;
+  if(!document.getElementById('v75-css')){
+    var s=document.createElement('style'); s.id='v75-css';
+    s.textContent='#v72-feed .v18-news-grid{min-height:470px;}body.v32-view-inicio [id^="v16-news-section"],body.v32-view-inicio [id^="v25-blogs-section"]{display:none!important;}';
+    (document.head||document.documentElement).appendChild(s);
+  }
+  function hideStray(){
+    if(!document.body.classList.contains('v32-view-inicio')) return;
+    var els=document.querySelectorAll('#panel-inicio [id^="v16-news-section"], #panel-inicio [id^="v25-blogs-section"]');
+    for(var i=0;i<els.length;i++){ var e=els[i]; if(e.closest&&e.closest('#v72-feed'))continue; e.style.setProperty('display','none','important'); }
+  }
+  hideStray();
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',hideStray);
+  setInterval(hideStray, 700);
+})();
+</script>
 </body>
 </html>
 
