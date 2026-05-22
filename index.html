@@ -16234,6 +16234,53 @@ window.__v39loaded=true;window.__v391loaded=true;window.__v40loaded=true;window.
   setInterval(enhance, 900);
 })();
 </script>
+
+<script>
+/* v78: fixes - (1) Inicio: colapsa secciones news/blogs duplicadas que un guardian re-muestra (sin parpadeo). (2) oculta el feed de inicio en otras vistas (no flash al ir a Deportes). (3) reinyecta el boton Seguir/Siguiendo en el header de liga/deporte de forma robusta. */
+(function(){
+  if(window.__v78loaded) return; window.__v78loaded=true;
+  if(!document.getElementById('v78-css')){
+    var s=document.createElement('style'); s.id='v78-css';
+    s.textContent=
+      'body.v32-view-inicio [id^="v16-news-section"],body.v32-view-inicio [id^="v25-blogs-section"]{position:absolute!important;left:-9999px!important;top:0!important;width:0!important;height:0!important;max-height:0!important;margin:0!important;padding:0!important;overflow:hidden!important;opacity:0!important;pointer-events:none!important;}'+
+      'body:not(.v32-view-inicio) #v71-wrap{display:none!important;}'+
+      '.v17-followers-bar{display:none!important;}'+
+      '.league-header{position:relative;}'+
+      '.league-header .league-stats{margin-right:104px;}'+
+      '.v77-follow{position:absolute;top:14px;right:16px;border:none;cursor:pointer;font-weight:700;font-size:13px;padding:8px 16px;border-radius:999px;background:#c8102e;color:#fff;z-index:5;}'+
+      '.v77-follow.on{background:#fff;color:#c8102e;border:1.5px solid #c8102e;}'+
+      '.v77-foll-line{margin-top:6px;font-size:13px;color:#555;font-weight:600;}'+
+      '.v77-foll-line .up{color:#16a34a;} .v77-foll-line .down{color:#dc2626;}';
+    (document.head||document.documentElement).appendChild(s);
+  }
+  function parseNum(t){ var m=(t||'').match(/([\d.,]+)\s*([MK]?)/i); if(!m) return 0; var n=parseFloat(m[1].replace(/,/g,'')); var u=(m[2]||'').toUpperCase(); if(u==='M')n*=1e6; else if(u==='K')n*=1e3; return Math.round(n); }
+  function hash(s){ var h=0; for(var i=0;i<s.length;i++){ h=(h*31+s.charCodeAt(i))|0; } return h; }
+  function fmt(n){ return n.toLocaleString('es-ES'); }
+  function md(id,c){ var h=hash(id||'x'); var r=((Math.abs(h)%1000)/1000); var sign=(h%2===0)?1:-1; return sign*Math.round(c*(0.003+0.012*r)); }
+  function sync(btn,o){ var on=o && /siguiendo/i.test(o.textContent||''); btn.textContent=on?'✓ Siguiendo':'+ Seguir'; btn.classList.toggle('on',!!on); }
+  function enhanceFollow(){
+    try{
+      document.querySelectorAll('.tab-panel.active .league-header').forEach(function(lh){
+        var panel=lh.closest('.tab-panel'); if(!panel) return;
+        var origBtn=panel.querySelector('.v17-follow-btn');
+        var count=parseNum((panel.querySelector('.v17-followers-count')||{}).textContent);
+        var btn=lh.querySelector('.v77-follow');
+        if(!btn){ btn=document.createElement('button'); btn.className='v77-follow'; (function(b,o){ b.addEventListener('click',function(){ if(o)o.click(); setTimeout(function(){sync(b,o);},30); }); })(btn,origBtn); lh.appendChild(btn); }
+        sync(btn,origBtn);
+        var sub=lh.querySelector('.league-sub');
+        if(sub && !lh.querySelector('.v77-foll-line')){
+          var d=md(panel.id,count);
+          var line=document.createElement('div'); line.className='v77-foll-line';
+          line.innerHTML=(count?fmt(count):'—')+' seguidores · <span class="'+(d>=0?'up':'down')+'">'+(d>=0?'+':'-')+fmt(Math.abs(d))+' último mes</span>';
+          sub.parentNode.insertBefore(line, sub.nextSibling);
+        }
+      });
+    }catch(e){}
+  }
+  setInterval(enhanceFollow, 700);
+  enhanceFollow();
+})();
+</script>
 </body>
 </html>
 
