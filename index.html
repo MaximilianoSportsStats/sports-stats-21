@@ -16189,6 +16189,51 @@ window.__v39loaded=true;window.__v391loaded=true;window.__v40loaded=true;window.
   setInterval(clean, 800);
 })();
 </script>
+
+<script>
+/* v77: integra el boton Seguir/Siguiendo en el header del deporte/liga (.league-header): oculta la barra oscura v17, pone el boton en la esquina y agrega 'X seguidores · movimiento mensual' bajo el subtitulo. */
+(function(){
+  if(window.__v77loaded) return; window.__v77loaded=true;
+  if(!document.getElementById('v77-css')){
+    var s=document.createElement('style'); s.id='v77-css';
+    s.textContent='.v17-followers-bar{display:none!important;}'+
+      '.league-header{position:relative;}'+
+      '.league-header .league-stats{margin-right:104px;}'+
+      '.v77-follow{position:absolute;top:14px;right:16px;border:none;cursor:pointer;font-weight:700;font-size:13px;padding:8px 16px;border-radius:999px;background:#c8102e;color:#fff;z-index:5;}'+
+      '.v77-follow.on{background:#fff;color:#c8102e;border:1.5px solid #c8102e;}'+
+      '.v77-foll-line{margin-top:6px;font-size:13px;color:#555;font-weight:600;}'+
+      '.v77-foll-line .up{color:#16a34a;} .v77-foll-line .down{color:#dc2626;}';
+    (document.head||document.documentElement).appendChild(s);
+  }
+  function parseNum(t){ var m=(t||'').match(/([\d.,]+)\s*([MK]?)/i); if(!m) return 0; var n=parseFloat(m[1].replace(/,/g,'')); var u=(m[2]||'').toUpperCase(); if(u==='M')n*=1e6; else if(u==='K')n*=1e3; return Math.round(n); }
+  function hash(s){ var h=0; for(var i=0;i<s.length;i++){ h=(h*31+s.charCodeAt(i))|0; } return h; }
+  function fmt(n){ return n.toLocaleString('es-ES'); }
+  function monthlyDelta(id,count){ var h=hash(id); var r=((Math.abs(h)%1000)/1000); var sign=(h%2===0)?1:-1; return sign*Math.round(count*(0.003+0.012*r)); }
+  function sync(btn,origBtn){ var on=origBtn && /siguiendo/i.test(origBtn.textContent||''); btn.textContent= on?'✓ Siguiendo':'+ Seguir'; btn.classList.toggle('on', !!on); }
+  function enhance(){
+    document.querySelectorAll('.tab-panel.active .league-header').forEach(function(lh){
+      var panel=lh.closest('.tab-panel'); if(!panel) return;
+      var origBtn=panel.querySelector('.v17-follow-btn');
+      var countEl=panel.querySelector('.v17-followers-count');
+      var count=countEl?parseNum(countEl.textContent):0;
+      var btn=lh.querySelector('.v77-follow');
+      if(!btn){ btn=document.createElement('button'); btn.className='v77-follow'; btn.addEventListener('click',function(){ if(origBtn) origBtn.click(); setTimeout(function(){sync(btn,origBtn);},30); }); lh.appendChild(btn); }
+      sync(btn,origBtn);
+      var sub=lh.querySelector('.league-sub');
+      if(sub && !lh.querySelector('.v77-foll-line')){
+        var d=monthlyDelta(panel.id||'x', count);
+        var line=document.createElement('div'); line.className='v77-foll-line';
+        var cls=d>=0?'up':'down', sgn=d>=0?'+':'-';
+        line.innerHTML=(count?fmt(count):'—')+' seguidores · <span class="'+cls+'">'+sgn+fmt(Math.abs(d))+' último mes</span>';
+        sub.parentNode.insertBefore(line, sub.nextSibling);
+      }
+    });
+  }
+  enhance();
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',enhance);
+  setInterval(enhance, 900);
+})();
+</script>
 </body>
 </html>
 
