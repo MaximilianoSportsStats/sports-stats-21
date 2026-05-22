@@ -16166,6 +16166,29 @@ window.__v39loaded=true;window.__v391loaded=true;window.__v40loaded=true;window.
   setInterval(hideStray, 700);
 })();
 </script>
+
+<script>
+/* v76: Deportes - quita NEWS del sidebar, Liga Local/Escolar de cada pais, y el banner verde Liga Local de cada deporte. */
+(function(){
+  if(window.__v76loaded) return; window.__v76loaded=true;
+  function clean(){
+    document.querySelectorAll('.continent-header').forEach(function(h){
+      if(/\bNEWS\b/.test(h.textContent||'')){
+        h.style.setProperty('display','none','important');
+        var n=h.nextElementSibling;
+        if(n && n.classList && n.classList.contains('continent-leagues')) n.style.setProperty('display','none','important');
+      }
+    });
+    document.querySelectorAll('button.sub-btn').forEach(function(b){
+      if(/Liga Local|Liga Escolar/.test(b.textContent||'')) b.style.setProperty('display','none','important');
+    });
+    document.querySelectorAll('.ll-sport-banner').forEach(function(b){ b.style.setProperty('display','none','important'); });
+  }
+  clean();
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',clean);
+  setInterval(clean, 800);
+})();
+</script>
 </body>
 </html>
 
