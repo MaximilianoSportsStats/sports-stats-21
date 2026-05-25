@@ -16311,6 +16311,53 @@ window.__v39loaded=true;window.__v391loaded=true;window.__v40loaded=true;window.
   apply();
 })();
 </script>
+
+<script>
+/* v80: fusiona la barra oscura de seguidores DENTRO de la tarjeta hero del deporte (.qf-hero) = un solo cuadro con Seguir/Siguiendo + seguidores + movimiento mensual. Si no hay hero visible (otras pestañas), deja la barra con el movimiento mensual. MutationObserver (inmune al kill-loop). Tambien re-aplica limpieza de Deportes. */
+(function(){
+  if(window.__v80loaded) return; window.__v80loaded=true;
+  function parseNum(t){ var m=(t||'').match(/([\d.,]+)\s*([MK]?)/i); if(!m) return 0; var n=parseFloat(m[1].replace(/,/g,'')); var u=(m[2]||'').toUpperCase(); if(u==='M')n*=1e6; else if(u==='K')n*=1e3; return Math.round(n); }
+  function hash(s){ var h=0; for(var i=0;i<s.length;i++){ h=(h*31+s.charCodeAt(i))|0; } return h; }
+  function fmt(n){ return n.toLocaleString('es-ES'); }
+  function md(id,c){ var h=hash(id||'x'); var r=((Math.abs(h)%1000)/1000); var sign=(h%2===0)?1:-1; return sign*Math.round(c*(0.003+0.012*r)); }
+  function syncBtn(b,o){ var on=o&&/siguiendo/i.test(o.textContent||''); var l=on?'✓ Siguiendo':'+ Seguir'; if(b.textContent!==l)b.textContent=l; b.style.background=on?'rgba(255,255,255,.2)':'#fff'; b.style.color=on?'#fff':'#c8102e'; b.style.border=on?'1.5px solid rgba(255,255,255,.85)':'none'; }
+  function apply(){ try{
+    document.querySelectorAll('.continent-header').forEach(function(h){ if(/\bNEWS\b/.test(h.textContent||'')){ h.style.setProperty('display','none','important'); var n=h.nextElementSibling; if(n&&n.classList&&n.classList.contains('continent-leagues')) n.style.setProperty('display','none','important'); } });
+    document.querySelectorAll('button.sub-btn').forEach(function(b){ if(/Liga Local|Liga Escolar/.test(b.textContent||'')) b.style.setProperty('display','none','important'); });
+    document.querySelectorAll('.ll-sport-banner').forEach(function(b){ b.style.setProperty('display','none','important'); });
+    document.querySelectorAll('.tab-panel.active').forEach(function(panel){
+      var bar=panel.querySelector('.v17-followers-bar'); if(!bar) return;
+      var hero=panel.querySelector('.qf-hero'); var heroVisible=hero&&hero.offsetParent!==null;
+      var origBtn=panel.querySelector('.v17-follow-btn');
+      var count=parseNum((panel.querySelector('.v17-followers-count')||{}).textContent);
+      var d=md(panel.id,count);
+      if(heroVisible){
+        if(bar.style.display!=='none') bar.style.setProperty('display','none','important');
+        if(getComputedStyle(hero).position==='static') hero.style.position='relative';
+        var box=hero.querySelector(':scope > .v80-box');
+        if(!box){
+          box=document.createElement('div'); box.className='v80-box';
+          box.style.cssText='position:absolute;top:18px;right:20px;z-index:8;display:flex;flex-direction:column;align-items:flex-end;gap:7px;';
+          var btn=document.createElement('button'); btn.className='v80-follow';
+          btn.style.cssText='border:none;cursor:pointer;font-weight:700;font-size:13px;padding:8px 18px;border-radius:999px;box-shadow:0 1px 5px rgba(0,0,0,.18);';
+          (function(b,o){ b.addEventListener('click',function(e){e.stopPropagation(); if(o)o.click(); setTimeout(function(){syncBtn(b,o);},30);}); })(btn,origBtn);
+          var foll=document.createElement('div'); foll.style.cssText='font-size:12.5px;font-weight:700;white-space:nowrap;color:rgba(255,255,255,.95);';
+          foll.innerHTML=fmt(count)+' seguidores · <span style="color:'+(d>=0?'#86efac':'#fca5a5')+'">'+(d>=0?'+':'-')+fmt(Math.abs(d))+' este mes</span>';
+          box.appendChild(btn); box.appendChild(foll); hero.appendChild(box); syncBtn(btn,origBtn);
+        } else { syncBtn(box.querySelector('.v80-follow'), origBtn); }
+      } else {
+        if(bar.style.display==='none') bar.style.removeProperty('display');
+        var trend=bar.querySelector('.v17-followers-trend');
+        if(trend){ var txt=(d>=0?'📈 +':'📉 -')+fmt(Math.abs(d))+' este mes'; if(trend.textContent!==txt) trend.textContent=txt; }
+      }
+    });
+  }catch(e){} }
+  var raf=false;
+  var mo=new MutationObserver(function(){ if(raf)return; raf=true; requestAnimationFrame(function(){ raf=false; apply(); }); });
+  try{ mo.observe(document.body,{childList:true,subtree:true,attributes:true,attributeFilter:['class']}); }catch(e){}
+  apply();
+})();
+</script>
 </body>
 </html>
 
