@@ -16393,6 +16393,55 @@ window.__v39loaded=true;window.__v391loaded=true;window.__v40loaded=true;window.
   apply();
 })();
 </script>
+
+<script>
+/* v82: (A) integra Seguir/Siguiendo + seguidores + movimiento mensual DENTRO de la tarjeta de liga/copa (.league-header), ocultando la barra oscura (clase, para que v80 no la reviva). (B) agrega 'Selección' como primer item en cada país del sidebar de Fútbol. MutationObserver (inmune al kill-loop, re-inyecta tras re-render). */
+(function(){
+  if(window.__v82loaded) return; window.__v82loaded=true;
+  var s=document.createElement('style'); s.id='v82-css';
+  s.textContent='.v82-hidebar{display:none!important;}.league-header .league-stats{margin-right:150px;}';
+  (document.head||document.documentElement).appendChild(s);
+  function parseNum(t){ var m=(t||'').match(/([\d.,]+)\s*([MK]?)/i); if(!m) return 0; var n=parseFloat(m[1].replace(/,/g,'')); var u=(m[2]||'').toUpperCase(); if(u==='M')n*=1e6; else if(u==='K')n*=1e3; return Math.round(n); }
+  function hash(s){ var h=0; for(var i=0;i<s.length;i++){ h=(h*31+s.charCodeAt(i))|0; } return h; }
+  function fmt(n){ return n.toLocaleString('es-ES'); }
+  function md(id,c){ var h=hash(id||'x'); var r=((Math.abs(h)%1000)/1000); var sign=(h%2===0)?1:-1; return sign*Math.round(c*(0.003+0.012*r)); }
+  function syncBtn(b,o){ var on=o&&/siguiendo/i.test(o.textContent||''); var l=on?'✓ Siguiendo':'+ Seguir'; if(b.textContent!==l)b.textContent=l; b.style.background=on?'#fff':'#c8102e'; b.style.color=on?'#c8102e':'#fff'; b.style.border=on?'1.5px solid #c8102e':'none'; }
+  function apply(){ try{
+    document.querySelectorAll('.tab-panel.active').forEach(function(panel){
+      var lh=panel.querySelector('.league-header');
+      var bar=panel.querySelector('.v17-followers-bar');
+      if(lh && lh.offsetParent!==null){
+        if(bar) bar.classList.add('v82-hidebar');
+        if(getComputedStyle(lh).position==='static') lh.style.position='relative';
+        if(!lh.querySelector('.v82-box')){
+          var origBtn=panel.querySelector('.v17-follow-btn');
+          var count=parseNum((panel.querySelector('.v17-followers-count')||{}).textContent);
+          var d=md(panel.id+(lh.querySelector('.league-title')||{}).textContent,count);
+          var box=document.createElement('div'); box.className='v82-box'; box.style.cssText='position:absolute;top:16px;right:18px;z-index:8;display:flex;flex-direction:column;align-items:flex-end;gap:6px;';
+          var btn=document.createElement('button'); btn.className='v82-follow'; btn.style.cssText='border:none;cursor:pointer;font-weight:700;font-size:13px;padding:8px 17px;border-radius:999px;box-shadow:0 1px 4px rgba(0,0,0,.15);';
+          (function(b,o){ b.addEventListener('click',function(e){e.stopPropagation(); if(o)o.click(); setTimeout(function(){syncBtn(b,o);},30);}); })(btn,origBtn);
+          syncBtn(btn,origBtn);
+          var foll=document.createElement('div'); foll.style.cssText='font-size:12.5px;font-weight:700;white-space:nowrap;color:#555;';
+          foll.innerHTML=fmt(count)+' seguidores · <span style="color:'+(d>=0?'#16a34a':'#dc2626')+'">'+(d>=0?'+':'-')+fmt(Math.abs(d))+' este mes</span>';
+          box.appendChild(btn); box.appendChild(foll); lh.appendChild(box);
+        }
+      }
+    });
+    document.querySelectorAll('.country-sub').forEach(function(cs){
+      if(cs.querySelector('.v82-seleccion')) return;
+      var first=cs.querySelector('button.sub-btn'); if(!first) return;
+      var b=document.createElement('button'); b.className='sub-btn v82-seleccion'; b.setAttribute('data-key','Seleccion');
+      b.innerHTML='🎽 Selección <span class="sub-tag" style="background:#fee2e2;color:#c8102e;">Nac.</span>';
+      b.addEventListener('click',function(){ try{ if(window.sbLeagueClick) window.sbLeagueClick(b); }catch(e){} });
+      cs.insertBefore(b, first);
+    });
+  }catch(e){} }
+  var raf=false;
+  var mo=new MutationObserver(function(){ if(raf)return; raf=true; requestAnimationFrame(function(){raf=false;apply();}); });
+  try{ mo.observe(document.body,{childList:true,subtree:true,attributes:true,attributeFilter:['class']}); }catch(e){}
+  apply();
+})();
+</script>
 </body>
 </html>
 
