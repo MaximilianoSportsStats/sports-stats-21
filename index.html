@@ -16555,6 +16555,23 @@ window.__v39loaded=true;window.__v391loaded=true;window.__v40loaded=true;window.
 })();
 </script>
 
+
+<script>
+(function(){
+  if(window.__v85loaded)return;window.__v85loaded=true;
+  var st=document.createElement('style'); st.textContent='.v85-hidebar{display:none !important;}'; document.head.appendChild(st);
+  function hide(){ document.querySelectorAll('#panel-soccer .v17-followers-bar').forEach(function(b){ b.classList.add('v85-hidebar'); }); }
+  function show(){ document.querySelectorAll('#panel-soccer .v17-followers-bar').forEach(function(b){ b.classList.remove('v85-hidebar'); }); }
+  document.addEventListener('click',function(e){
+    if(!e.target||!e.target.closest) return;
+    var sel=e.target.closest('.v82-seleccion');
+    var sub=e.target.closest('.sub-btn');
+    if(sel){ setTimeout(hide,60); setTimeout(hide,200); }
+    else if(sub){ show(); }
+  },true);
+})();
+</script>
+
 </body>
 </html>
 
