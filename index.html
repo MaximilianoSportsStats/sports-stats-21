@@ -16652,6 +16652,163 @@ window.__v39loaded=true;window.__v391loaded=true;window.__v40loaded=true;window.
 })();
 </script>
 
+
+<script>
+(function(){
+  if(window.__v87loaded)return;window.__v87loaded=true;
+  var PODCASTS=[
+    ['🎙️','La Albiceleste rumbo a 2026','Andrés Iniesta López','Fútbol','42 min','Sep 2025'],
+    ['🏀','NBA Tip-Off: previa de la temporada','Marina Salas','Basketball','38 min','Oct 2025'],
+    ['🏎','F1 después de Verstappen','Carlos Reutemann Jr.','Carreras','51 min','Sep 2025'],
+    ['🎾','Tenis: ¿quién hereda a Djokovic?','Lucía Ferreira','Tenis','35 min','Ago 2025'],
+    ['🏏','El renacer del cricket en Asia','Ravi Mehta','Cricket','47 min','Jul 2025'],
+    ['⚽','Análisis táctico: Premier League 24/25','Diego Martín','Fútbol','55 min','Ago 2025']
+  ];
+  var ARTICLES=[
+    ['📊','Cómo el VAR cambió el fútbol moderno','Lucas Pereyra','Análisis','8 min','Fútbol'],
+    ['🏆','El día que Argentina conquistó Qatar','Inés Castro','Histórico','12 min','Fútbol'],
+    ['🌎','¿Por qué la NBA es más global que nunca?','Marcos Rivera','Análisis','9 min','Basketball'],
+    ['🎯','La revolución táctica de Pep Guardiola','Diego Sánchez','Tácticas','11 min','Fútbol'],
+    ['🎤','Entrevista exclusiva: Lamine Yamal','Carla Mendes','Entrevistas','7 min','Fútbol'],
+    ['🏓','Por qué el pádel está conquistando el mundo','Roberto Vidal','Opinión','6 min','Pádel']
+  ];
+  var OPPS=[
+    ['⚽','Try-out Boca Juniors Sub-17','Boca Juniors','Buenos Aires, AR','Sub-17','Fútbol','15 Oct 2025'],
+    ['🏈','Becas deportivas USA NCAA','NCAA Division I','California, US','Universitario','Fútbol Am.','1 Nov 2025'],
+    ['🏀','Scouts NBA Latinoamérica','NBA Academy','São Paulo, BR','Sub-19','Basketball','20 Oct 2025'],
+    ['⚽','Academia Real Madrid · Pruebas','Real Madrid','Madrid, ES','Sub-15','Fútbol','30 Sep 2025'],
+    ['🎾','Convocatoria Selección Chile Tenis','Fed. Chilena','Santiago, CL','Sub-21','Tenis','12 Oct 2025'],
+    ['🏅','Becas universitarias deportivas MX','Sec. Deporte MX','Ciudad de México','Universitario','Multi','5 Nov 2025']
+  ];
+  var SEG_LIGAS=[['⚽','Premier League','Inglaterra','12.4M'],['⚽','La Liga','España','9.8M'],['🏀','NBA','EEUU','22.1M']];
+  var SEG_EQUIPOS=[['⚪','Real Madrid','Fútbol','155.7M'],['🟣','Lakers','Basketball','24.8M'],['🔴','River Plate','Fútbol','11.2M'],['🔵','Boca Juniors','Fútbol','13.9M']];
+  var SEG_JUG=[['🇦🇷','Lionel Messi','Fútbol — Inter Miami','502M'],['🇺🇸','LeBron James','Basketball — Lakers','158M'],['🇳🇱','Max Verstappen','F1 — Red Bull','11.8M'],['🇪🇸','Lamine Yamal','Fútbol — Barcelona','42.6M']];
+  var SEG_SEL=[['🇦🇷','Argentina','28.5M'],['🇪🇸','España','17.4M'],['🇫🇷','Francia','19.8M']];
+  var HISTORIA=[['2024','💡','Idea inicial — Sports Stats 21 nace de la frustración por la fragmentación de los datos deportivos.'],['Mar 2025','🛠️','Primer prototipo — Foco en fútbol y NBA con stats unificadas.'],['Jun 2025','🚀','Lanzamiento beta — Apertura a primeros usuarios con 15 deportes.'],['Sep 2025','🌍','Apertura pública — Plataforma global con ligas profesionales, escolares y amateur.']];
+  var ROADMAP=[['Q4 2025','📱','App móvil iOS y Android'],['Q1 2026','📡','Live scores en tiempo real vía API'],['Q2 2026','💼','Marketplace de reclutamiento con video-perfiles'],['Q3 2026','🎥','Streaming de ligas locales y escolares']];
+  var EQUIPO=[['👤','Maximiliano Valenzuela','Founder & CEO','Visión, producto y estrategia'],['🔍','Posición abierta','CTO','Buscamos tech lead apasionado por el deporte'],['🔍','Posición abierta','Head of Design','UX/UI para la red social del deporte'],['🔍','Posición abierta','Head of Content','Datos, contenidos y partners de ligas']];
+  function esc(s){return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;');}
+  function chips(arr){ return arr.map(function(f,i){ return '<span style="background:'+(i===0?'var(--primary)':'var(--surface)')+';color:'+(i===0?'#fff':'var(--muted)')+';border:1px solid var(--border);border-radius:18px;padding:6px 14px;font-size:13px;font-weight:600;cursor:pointer">'+esc(f)+'</span>'; }).join(''); }
+  function header(emoji,title,sub){ return '<div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:24px 28px"><div style="display:flex;align-items:center;gap:14px"><div style="font-size:44px">'+emoji+'</div><div><div style="font-size:26px;font-weight:800">'+title+'</div><div style="color:var(--muted);font-size:14px;margin-top:3px">'+sub+'</div></div></div></div>'; }
+  function featured(emoji,tag,title,desc,btn){ return '<div style="background:linear-gradient(135deg,#fff7f7 0%,#fff 100%);border:1px solid var(--border);border-radius:14px;padding:24px;margin-top:18px;display:flex;gap:24px;align-items:flex-start"><div style="font-size:64px;line-height:1">'+emoji+'</div><div style="flex:1"><div style="font-size:11px;color:var(--primary);font-weight:700;letter-spacing:1px">'+tag+'</div><div style="font-size:20px;font-weight:800;margin:4px 0 8px">'+esc(title)+'</div><div style="color:var(--muted);font-size:14px;line-height:1.5">'+esc(desc)+'</div><div style="margin-top:14px"><button style="background:var(--primary);color:#fff;border:none;border-radius:8px;padding:10px 22px;font-weight:700;cursor:pointer">'+btn+'</button></div></div></div>'; }
+  function grid(cards){ return '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:18px">'+cards.join('')+'</div>'; }
+  function card(emoji,tag,title,meta,btn){ return '<div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:18px"><div style="display:flex;justify-content:space-between;align-items:start"><div style="font-size:36px">'+emoji+'</div><span style="background:var(--surface2);border:1px solid var(--border);border-radius:14px;padding:3px 10px;font-size:11px;font-weight:700;color:var(--muted)">'+esc(tag)+'</span></div><div style="font-weight:700;font-size:15px;margin:10px 0 4px;line-height:1.3">'+esc(title)+'</div><div style="color:var(--muted);font-size:12px;line-height:1.5">'+meta+'</div><button style="margin-top:12px;background:var(--primary);color:#fff;border:none;border-radius:8px;padding:7px 14px;font-size:13px;font-weight:600;cursor:pointer">'+btn+'</button></div>'; }
+  function footer(t){ return '<div style="color:var(--muted);font-size:12px;margin-top:18px">'+t+'</div>'; }
+  function follow_card(emoji,name,meta,fol){ return '<div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px;display:flex;align-items:center;gap:12px"><div style="font-size:32px;line-height:1">'+emoji+'</div><div style="flex:1;min-width:0"><div style="font-weight:700;font-size:14px">'+esc(name)+'</div><div style="color:var(--muted);font-size:11px;margin-top:2px">'+esc(meta)+' · '+fol+' seguidores</div></div><span style="background:var(--surface2);border:1px solid var(--border);border-radius:14px;padding:4px 10px;font-size:11px;font-weight:700;color:#16a34a;white-space:nowrap">✓ Siguiendo</span></div>'; }
+  function section(title,content){ return '<div style="margin-top:22px"><div style="font-size:13px;font-weight:700;color:var(--primary);margin-bottom:10px;letter-spacing:.5px">'+title+'</div>'+content+'</div>'; }
+  function renderPodcast(){ var cs=PODCASTS.map(function(p){ return card(p[0],p[3],p[1],'🎤 '+esc(p[2])+' · ⏱ '+esc(p[4])+' · '+esc(p[5]),'▶ Reproducir'); }); return '<div>'+header('🎙️','Podcast','Episodios semanales: análisis, entrevistas y previas de cada deporte.')+featured('⭐','EPISODIO DESTACADO','Edición especial: Mundial 2026 — todo lo que viene','Calendario, sedes, favoritos y los nombres que marcarán la próxima Copa del Mundo. 1 h 12 min — Estreno 28 Sep 2025.','▶ Reproducir ahora')+'<div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:22px">'+chips(['Todos','Fútbol','Basketball','Tenis','Carreras','Cricket'])+'</div>'+grid(cs)+footer('📻 Datos ilustrativos · Próximamente: reproductor integrado y suscripciones por deporte.')+'</div>'; }
+  function renderArticles(){ var cs=ARTICLES.map(function(a){ return card(a[0],a[3],a[1],'✍️ '+esc(a[2])+' · 📖 '+esc(a[4])+' lectura · '+esc(a[5]),'Leer artículo →'); }); return '<div>'+header('📝','Artículos','Análisis largos, opinión, tácticas, históricos y entrevistas exclusivas.')+featured('📰','ARTÍCULO DESTACADO','Mundial 2026: ¿se viene el cambio de era?','Una mirada profunda al rediseño de la Copa del Mundo, la nueva geografía del fútbol y los protagonistas que definirán la era post-Messi. 15 min de lectura.','Leer artículo →')+'<div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:22px">'+chips(['Todos','Análisis','Opinión','Histórico','Tácticas','Entrevistas'])+'</div>'+grid(cs)+footer('📝 Datos ilustrativos · Próximamente: comentarios y guardado de artículos.')+'</div>'; }
+  function renderReclutar(){ var cs=OPPS.map(function(o){ return card(o[0],o[5],o[1],'🏛 '+esc(o[2])+' · 📍 '+esc(o[3])+' · 🎯 '+esc(o[4])+'<br>📅 Cierre: '+esc(o[6]),'Postular →'); }); return '<div>'+header('🎯','Reclutar','Conectamos clubes, scouts, academias y deportistas. Encuentra oportunidades o publica las tuyas.')+featured('🌟','PROGRAMA DESTACADO','Scouting Global Sports Stats 21','Plataforma abierta a clubes y academias del mundo para encontrar talento joven. Si eres deportista, completa tu perfil; si eres club, publica tu convocatoria. Lanzamiento: 2025.','Crear mi perfil')+'<div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:22px">'+chips(['Todas','Try-outs','Becas','Scouts','Academias'])+'</div>'+grid(cs)+footer('🎯 Datos ilustrativos · Próximamente: postulación directa, video-perfiles y mensajería con clubes.')+'</div>'; }
+  function pill(label){ return '<span style="background:var(--surface2);border:1px solid var(--border);border-radius:18px;padding:6px 14px;font-size:13px;display:inline-flex;align-items:center;gap:6px;margin:0 6px 6px 0;cursor:pointer">'+label+' <span style="font-size:10px;color:#16a34a;font-weight:700">✓</span></span>'; }
+  function renderSeguidores(){
+    var dp=['Fútbol','Basketball','F1','Tenis','NFL'].map(pill).join('');
+    var ligas=SEG_LIGAS.map(function(l){return follow_card(l[0],l[1],l[2],l[3]);}).join('');
+    var equipos=SEG_EQUIPOS.map(function(e){return follow_card(e[0],e[1],e[2],e[3]);}).join('');
+    var jug=SEG_JUG.map(function(j){return follow_card(j[0],j[1],j[2],j[3]);}).join('');
+    var sel=SEG_SEL.map(function(s){return follow_card(s[0],'Selección '+s[1],'Fútbol',s[2]);}).join('');
+    return '<div>'+header('👥','Seguidores','Lo que sigues en Sports Stats 21: deportes, ligas, equipos, jugadores y selecciones.')+
+      '<div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:20px 24px;margin-top:18px;display:flex;gap:36px;align-items:center;flex-wrap:wrap"><div><div style="font-size:24px;font-weight:800;color:var(--primary)">47</div><div style="font-size:11px;color:var(--muted);letter-spacing:.5px">SIGUIENDO</div></div><div><div style="font-size:24px;font-weight:800;color:#16a34a">+5</div><div style="font-size:11px;color:var(--muted);letter-spacing:.5px">ESTE MES</div></div><div><div style="font-size:24px;font-weight:800">5</div><div style="font-size:11px;color:var(--muted);letter-spacing:.5px">DEPORTES</div></div><div><div style="font-size:24px;font-weight:800">17</div><div style="font-size:11px;color:var(--muted);letter-spacing:.5px">EQUIPOS Y JUGADORES</div></div></div>'+
+      section('🏅 DEPORTES','<div style="display:flex;flex-wrap:wrap">'+dp+'</div>')+
+      section('🏆 LIGAS','<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">'+ligas+'</div>')+
+      section('🏟️ EQUIPOS','<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px">'+equipos+'</div>')+
+      section('⭐ JUGADORES','<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px">'+jug+'</div>')+
+      section('🎽 SELECCIONES','<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">'+sel+'</div>')+
+      footer('👥 Datos ilustrativos · Próximamente: gestión real de seguidos, notificaciones y feed personalizado.')+'</div>';
+  }
+  function renderMasSS21(){
+    var feats=[['📊','15+ deportes principales','Cobertura desde fútbol y NBA hasta cricket, esgrima y deportes emergentes.'],['🌎','Global','Ligas y selecciones de 5 continentes con datos históricos desde 1888.'],['🏟️','4 niveles','Profesional, universitario, escolar y amateur — todo en una plataforma.'],['🤝','Red social','Sigue, compara y conecta con deportistas y clubes de todo el mundo.']];
+    var featGrid=feats.map(function(f){ return '<div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:18px"><div style="font-size:32px">'+f[0]+'</div><div style="font-weight:700;font-size:15px;margin:8px 0 4px">'+esc(f[1])+'</div><div style="color:var(--muted);font-size:13px;line-height:1.4">'+esc(f[2])+'</div></div>'; }).join('');
+    var hist=HISTORIA.map(function(h,i){ return '<div style="display:flex;gap:14px;padding:14px 0;'+(i<HISTORIA.length-1?'border-bottom:1px solid var(--border);':'')+'"><div style="font-size:26px">'+h[1]+'</div><div style="flex:1"><div style="font-weight:700;font-size:13px;color:var(--primary);letter-spacing:.3px">'+esc(h[0])+'</div><div style="font-size:14px;margin-top:4px">'+esc(h[2])+'</div></div></div>'; }).join('');
+    var rm=ROADMAP.map(function(r){ return '<div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px"><div style="font-size:11px;color:var(--primary);font-weight:700;letter-spacing:.5px">'+esc(r[0])+'</div><div style="font-size:26px;margin:6px 0">'+r[1]+'</div><div style="font-size:13px;font-weight:600;line-height:1.4">'+esc(r[2])+'</div></div>'; }).join('');
+    var team=EQUIPO.map(function(t){ return '<div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:18px;text-align:center"><div style="font-size:38px">'+t[0]+'</div><div style="font-weight:700;font-size:14px;margin-top:6px">'+esc(t[1])+'</div><div style="font-size:11px;color:var(--primary);font-weight:600;margin-top:2px;letter-spacing:.3px">'+esc(t[2])+'</div><div style="font-size:12px;color:var(--muted);margin-top:6px;line-height:1.4">'+esc(t[3])+'</div></div>'; }).join('');
+    return '<div>'+header('🌟','Más Sobre SS 21','La historia, la misión y el equipo detrás de la red social del deporte.')+
+      '<div style="background:linear-gradient(135deg,#fef2f2 0%,#fff 100%);border:1px solid var(--border);border-radius:14px;padding:28px 30px;margin-top:18px"><div style="font-size:11px;color:var(--primary);font-weight:700;letter-spacing:1px">MISIÓN</div><div style="font-size:19px;font-weight:700;margin-top:6px;line-height:1.45">"Unir a todos los deportistas del mundo en una sola plataforma — profesionales, universitarios, escolares y amateurs — con datos confiables, comunidad real y herramientas para crecer."</div></div>'+
+      section('¿QUÉ ES SPORTS STATS 21?','<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px">'+featGrid+'</div>')+
+      section('📜 HISTORIA','<div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:6px 22px">'+hist+'</div>')+
+      section('👥 EQUIPO','<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px">'+team+'</div>')+
+      section('🚀 ROADMAP','<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px">'+rm+'</div>')+
+      '<div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:22px 24px;margin-top:24px;display:flex;align-items:center;gap:20px"><div style="font-size:34px">📬</div><div style="flex:1"><div style="font-weight:700;font-size:16px">¿Tienes una idea o quieres colaborar?</div><div style="color:var(--muted);font-size:13px;margin-top:4px">Escríbenos a hello@sportsstats21.com o @SportsStats21 en redes.</div></div></div>'+
+      footer('🌟 Plataforma en desarrollo activo · El roadmap puede cambiar según feedback de la comunidad.')+'</div>';
+  }
+  function showSection(key,html){
+    var pi=document.getElementById('panel-inicio'); if(!pi) return;
+    try{ window.goInicio&&window.goInicio(); }catch(_){}
+    var pg=document.getElementById('v87-page-'+key);
+    if(!pg){ pg=document.createElement('div'); pg.id='v87-page-'+key; pg.style.cssText='margin:24px'; pi.appendChild(pg); }
+    pg.innerHTML=html;
+    function paint(){
+      window.__v63view='inicio';
+      var cls=document.body.className.split(/\s+/).filter(function(c){return c && c.indexOf('v32-view-')!==0;});
+      cls.push('v32-view-inicio'); document.body.className=cls.join(' ');
+      Array.prototype.forEach.call(pi.children,function(c){ c.style.setProperty('display','none','important'); });
+      document.querySelectorAll('[id^="v38-page-"]').forEach(function(p){ p.style.setProperty('display','none','important'); });
+      document.querySelectorAll('[id^="v86-page-"]').forEach(function(p){ p.style.setProperty('display','none','important'); });
+      pg.style.setProperty('display','block','important');
+      window.scrollTo(0,0);
+    }
+    paint(); requestAnimationFrame(paint); setTimeout(paint,60);
+  }
+  function go(key){
+    if(key==='podcast') showSection('podcast',renderPodcast());
+    else if(key==='articulos') showSection('articulos',renderArticles());
+    else if(key==='reclutar') showSection('reclutar',renderReclutar());
+    else if(key==='seguidores') showSection('seguidores',renderSeguidores());
+    else if(key==='masss21') showSection('masss21',renderMasSS21());
+  }
+  window.__v87go=go;
+  document.addEventListener('click',function(e){
+    var li=e.target&&e.target.closest?e.target.closest('[data-v86-sub]'):null;
+    if(!li) return;
+    var k=li.getAttribute('data-v86-sub');
+    if(k==='podcast'||k==='articulos'||k==='reclutar'){ e.stopImmediatePropagation(); go(k); }
+  },true);
+  function applySidebar(){
+    var ul=document.getElementById('v56-ul'); if(!ul) return;
+    var contHdr=ul.querySelector('[data-v86-key="contenido"]');
+    if(contHdr){
+      var contSub=contHdr.nextElementSibling;
+      if(contSub && contSub.classList.contains('v56-sub-list') && !contSub.querySelector('[data-v87-sub="seguidores"]')){
+        var seg=document.createElement('li'); seg.className='v56-sub-item'; seg.setAttribute('data-v87-sub','seguidores');
+        seg.innerHTML='<span style="font-size:18px">👥</span><span>Seguidores</span>';
+        seg.addEventListener('click',function(e){ e.stopPropagation(); go('seguidores'); });
+        var centros=contSub.querySelector('[data-v56-key="centros"]');
+        if(centros) contSub.insertBefore(seg,centros); else contSub.appendChild(seg);
+      }
+    }
+    if(!ul.querySelector('[data-v87-key="masss21"]')){
+      var top=document.createElement('li'); top.className='v56-item'; top.setAttribute('data-v87-key','masss21');
+      top.innerHTML='<span style="font-size:22px">🌟</span><span>Más Sobre SS 21</span>';
+      top.addEventListener('click',function(){ go('masss21'); });
+      ul.appendChild(top);
+    }
+  }
+  function applyHome(){
+    var ip=document.querySelector('#panel-inicio .inicio-panels');
+    if(!ip) return;
+    Array.prototype.forEach.call(ip.querySelectorAll('.inicio-panel'),function(p){
+      if(p.dataset.v87wired==='1') return;
+      var t=(p.textContent||'').toLowerCase();
+      if(t.indexOf('recluta')>=0 && t.indexOf('talento')>=0){
+        p.style.cursor='pointer'; p.dataset.v87wired='1';
+        p.addEventListener('click',function(){ go('reclutar'); });
+      }
+    });
+    function mkPanel(emoji,title,desc,key){
+      var a=document.createElement('article'); a.className='inicio-panel'; a.style.cursor='pointer'; a.setAttribute('data-v87-panel',key);
+      a.innerHTML='<div style="font-size:32px">'+emoji+'</div><h3 style="margin:10px 0 6px;font-size:17px">'+title+'</h3><p style="margin:0;color:var(--muted);font-size:14px;line-height:1.4">'+desc+'</p>';
+      a.addEventListener('click',function(){ go(key); });
+      return a;
+    }
+    if(!ip.querySelector('[data-v87-panel="podcast"]')) ip.appendChild(mkPanel('🎙️','Escucha podcasts deportivos','Análisis, entrevistas y previas semanales de tus deportes favoritos.','podcast'));
+    if(!ip.querySelector('[data-v87-panel="articulos"]')) ip.appendChild(mkPanel('📝','Lee análisis y artículos','Notas largas, tácticas, opinión y entrevistas exclusivas.','articulos'));
+    if(!ip.querySelector('[data-v87-panel="seguidores"]')) ip.appendChild(mkPanel('👥','Tus seguidos','Gestiona los deportes, ligas, equipos y jugadores que sigues.','seguidores'));
+    if(!ip.querySelector('[data-v87-panel="masss21"]')) ip.appendChild(mkPanel('🌟','Conoce SS 21','Historia, misión, equipo y roadmap de la plataforma.','masss21'));
+  }
+  applySidebar(); applyHome();
+  var t=0; var iv=setInterval(function(){ applySidebar(); applyHome(); if(++t>10) clearInterval(iv); },300);
+})();
+</script>
+
 </body>
 </html>
 
