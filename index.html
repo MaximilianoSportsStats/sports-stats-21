@@ -16572,6 +16572,86 @@ window.__v39loaded=true;window.__v391loaded=true;window.__v40loaded=true;window.
 })();
 </script>
 
+
+<script>
+(function(){
+  if(window.__v86loaded)return;window.__v86loaded=true;
+  function showV86Page(key,label,emoji){
+    var pi=document.getElementById('panel-inicio'); if(!pi) return;
+    try{ window.goInicio&&window.goInicio(); }catch(_){}
+    var pg=document.getElementById('v86-page-'+key);
+    if(!pg){
+      pg=document.createElement('div'); pg.id='v86-page-'+key;
+      pg.style.cssText='margin:24px';
+      pg.innerHTML='<div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:36px 28px"><div style="font-size:26px;font-weight:800">'+emoji+' '+label+'</div><div style="color:var(--muted);margin-top:10px;font-size:15px">Sección en construcción — próximamente.</div></div>';
+      pi.appendChild(pg);
+    }
+    function paint(){
+      window.__v63view='inicio';
+      var cls=document.body.className.split(/\s+/).filter(function(c){return c && c.indexOf('v32-view-')!==0;});
+      cls.push('v32-view-inicio'); document.body.className=cls.join(' ');
+      Array.prototype.forEach.call(pi.children,function(c){ c.style.setProperty('display','none','important'); });
+      document.querySelectorAll('[id^="v38-page-"]').forEach(function(p){ p.style.setProperty('display','none','important'); });
+      pg.style.setProperty('display','block','important');
+      window.scrollTo(0,0);
+    }
+    paint(); requestAnimationFrame(paint); setTimeout(paint,60);
+  }
+  function apply(){
+    var ul=document.getElementById('v56-ul'); if(!ul) return;
+    if(ul.dataset.v86done==='1' && ul.querySelector('[data-v86-key="contenido"]')) return;
+    var dep=ul.querySelector('[data-v56-key="deportes"]');
+    if(dep){
+      var spans=dep.querySelectorAll('span');
+      Array.prototype.forEach.call(spans,function(s){
+        var t=(s.textContent||'').trim();
+        if(t==='Deportes') s.textContent='Estadísticas Deportes';
+      });
+    }
+    var env=ul.querySelector('[data-v56-key="envivo"]');
+    if(env && dep) ul.insertBefore(env, dep);
+    var depSub=null; for(var i=0;i<ul.children.length;i++){ if(ul.children[i].tagName==='UL' && ul.children[i].className.indexOf('v56-sub-list')>=0){ depSub=ul.children[i]; break; } }
+    var cmp=ul.querySelector('[data-v56-key="comparar"]');
+    if(depSub && cmp && cmp.parentElement!==depSub){ cmp.className='v56-sub-item'; depSub.appendChild(cmp); }
+    if(!ul.querySelector('[data-v86-key="contenido"]')){
+      var hdr=document.createElement('li');
+      hdr.className='v56-item';
+      hdr.setAttribute('data-v86-key','contenido');
+      hdr.innerHTML='<span style="font-size:22px">📚</span><span>Contenido y Comunidad</span><span class="v86-caret" style="margin-left:auto;font-size:11px">▼</span>';
+      var nsub=document.createElement('ul');
+      nsub.className='v56-sub-list';
+      nsub.style.display='none';
+      var noti=ul.querySelector('[data-v56-key="noticias"]');
+      if(noti){ noti.className='v56-sub-item'; nsub.appendChild(noti); }
+      function mk(key,emoji,label){
+        var li=document.createElement('li'); li.className='v56-sub-item';
+        li.setAttribute('data-v86-sub',key);
+        li.innerHTML='<span style="font-size:18px">'+emoji+'</span><span>'+label+'</span>';
+        li.addEventListener('click',function(e){ e.stopPropagation(); showV86Page(key,label,emoji); });
+        return li;
+      }
+      nsub.appendChild(mk('podcast','🎙️','Podcast'));
+      nsub.appendChild(mk('articulos','📝','Artículos'));
+      nsub.appendChild(mk('reclutar','🎯','Reclutar'));
+      var cen=ul.querySelector('[data-v56-key="centros"]');
+      if(cen){ cen.className='v56-sub-item'; nsub.appendChild(cen); }
+      ul.appendChild(hdr);
+      ul.appendChild(nsub);
+      hdr.addEventListener('click',function(){
+        var show=(nsub.style.display==='none'||!nsub.style.display);
+        nsub.style.display=show?'block':'none';
+        var c=hdr.querySelector('.v86-caret'); if(c) c.textContent=show?'▲':'▼';
+      });
+    }
+    ul.dataset.v86done='1';
+  }
+  apply();
+  var t=0; var iv=setInterval(function(){ apply(); if(++t>8) clearInterval(iv); },250);
+  var um=document.getElementById('v56-ul');
+  if(um) new MutationObserver(function(){ if(!document.querySelector('[data-v86-key="contenido"]')){ um.dataset.v86done=''; apply(); } }).observe(um,{childList:true});
+})();
+</script>
+
 </body>
 </html>
 
