@@ -16809,6 +16809,27 @@ window.__v39loaded=true;window.__v391loaded=true;window.__v40loaded=true;window.
 })();
 </script>
 
+
+<script>
+(function(){
+  if(window.__v88loaded)return;window.__v88loaded=true;
+  var HOME_IDS=['heroCarousel','v25-intro','v71-wrap','v16-novedades-header','v17-updates-widget'];
+  var HOME_CLS=['inicio-features','inicio-panels'];
+  function enforce(){
+    var pi=document.getElementById('panel-inicio'); if(!pi) return;
+    var anyV87=false;
+    var ps=document.querySelectorAll('[id^="v87-page-"]');
+    for(var i=0;i<ps.length;i++){ if(getComputedStyle(ps[i]).display!=='none'){ anyV87=true; break; } }
+    if(!anyV87) return;
+    HOME_IDS.forEach(function(id){ var e=document.getElementById(id); if(e && e.style.display!=='none') e.style.setProperty('display','none','important'); });
+    HOME_CLS.forEach(function(cls){ var els=pi.querySelectorAll('.'+cls); Array.prototype.forEach.call(els,function(e){ if(e.style.display!=='none') e.style.setProperty('display','none','important'); }); });
+  }
+  enforce();
+  function attach(){ var pi=document.getElementById('panel-inicio'); if(!pi){ setTimeout(attach,200); return; } new MutationObserver(enforce).observe(pi,{attributes:true,subtree:true,attributeFilter:['style','class']}); }
+  attach();
+})();
+</script>
+
 </body>
 </html>
 
