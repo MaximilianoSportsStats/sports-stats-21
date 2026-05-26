@@ -16830,6 +16830,166 @@ window.__v39loaded=true;window.__v391loaded=true;window.__v40loaded=true;window.
 })();
 </script>
 
+
+<script>
+(function(){
+  if(window.__v89loaded)return;window.__v89loaded=true;
+  function getFavs(){ try{return JSON.parse(localStorage.getItem('ss21_favs')||'[]');}catch(e){return [];} }
+  function setFavs(a){ try{localStorage.setItem('ss21_favs',JSON.stringify(a));}catch(e){} try{window.dispatchEvent(new Event('ss21favs-changed'));}catch(_){} }
+  function isFav(id){ return getFavs().some(function(f){return f.id===id;}); }
+  function addFav(id,data){ var fs=getFavs(); if(fs.some(function(f){return f.id===id;})) return; var o={id:id,addedAt:Date.now()}; for(var k in data) o[k]=data[k]; fs.push(o); setFavs(fs); }
+  function removeFav(id){ setFavs(getFavs().filter(function(f){return f.id!==id;})); }
+  function toggleFav(id,data){ if(isFav(id)) removeFav(id); else addFav(id,data); }
+  window.__ss21favs={get:getFavs,is:isFav,toggle:toggleFav,add:addFav,remove:removeFav};
+  function makeFavBtn(id,data){
+    var b=document.createElement('button');
+    b.className='v89-fav-btn'; b.setAttribute('data-fav-id',id);
+    function paint(){
+      var on=isFav(id);
+      b.innerHTML=(on?'⭐':'☆')+' '+(on?'Favorito':'Favoritos');
+      b.style.cssText='background:'+(on?'#fff3cd':'transparent')+';border:1px solid '+(on?'#ffc107':'var(--border)')+';border-radius:8px;padding:8px 14px;font-weight:700;cursor:pointer;font-size:14px;color:'+(on?'#856404':'var(--text)');
+    }
+    paint();
+    b.addEventListener('click',function(e){ e.stopPropagation(); toggleFav(id,data); paint(); });
+    window.addEventListener('ss21favs-changed',paint);
+    return b;
+  }
+  function injectFavs(){
+    document.querySelectorAll('.v82-box').forEach(function(box){
+      if(box.querySelector('.v89-fav-btn')) return;
+      var seguir=box.querySelector('.v82-follow'); if(!seguir) return;
+      var lh=box.closest('.league-header'); if(!lh) return;
+      var title='';
+      var heads=lh.querySelectorAll('h1,h2,h3,div,span');
+      for(var i=0;i<heads.length;i++){
+        var st=heads[i].getAttribute('style')||'';
+        var m=st.match(/font-size:\s*(\d+)/);
+        var fs=m?parseInt(m[1]):0;
+        if(fs>=20){ title=(heads[i].textContent||'').trim(); break; }
+      }
+      if(!title) title=(lh.textContent||'').trim().split('\n')[0].slice(0,40);
+      var id='liga:'+title;
+      var fav=makeFavBtn(id,{type:'liga',name:title,sport:'Fútbol',emoji:'🏆'});
+      var wrap=document.createElement('div');
+      wrap.style.cssText='display:flex;gap:8px;justify-content:flex-end';
+      seguir.parentElement.insertBefore(wrap, seguir);
+      wrap.appendChild(fav); wrap.appendChild(seguir);
+    });
+    document.querySelectorAll('.v84-sel').forEach(function(sel){
+      if(sel.querySelector('.v89-fav-btn')) return;
+      var flw=sel.querySelector('.v84-follow'); if(!flw) return;
+      var titleEl=null, flagEl=null;
+      var divs=sel.querySelectorAll('div');
+      for(var i=0;i<divs.length;i++){
+        var st=divs[i].getAttribute('style')||'';
+        if(!titleEl && /font-size:\s*24px/.test(st)) titleEl=divs[i];
+        if(!flagEl && /font-size:\s*46px/.test(st)) flagEl=divs[i];
+      }
+      var name=titleEl?(titleEl.textContent||'').replace(/^Selecci[oó]n de\s+/,'').trim():'';
+      if(!name) return;
+      var flag=flagEl?(flagEl.textContent||'').trim():'🎽';
+      var id='seleccion:'+name;
+      var fav=makeFavBtn(id,{type:'seleccion',name:'Selección de '+name,sport:'Fútbol',emoji:flag});
+      var wrap=document.createElement('div');
+      wrap.style.cssText='display:flex;gap:8px;justify-content:flex-end';
+      flw.parentElement.insertBefore(wrap, flw);
+      wrap.appendChild(fav); wrap.appendChild(flw);
+    });
+  }
+  injectFavs();
+  new MutationObserver(injectFavs).observe(document.body,{childList:true,subtree:true});
+
+  function applySidebar(){
+    var seg=document.querySelector('[data-v87-sub="seguidores"]');
+    if(seg){
+      var spans=seg.querySelectorAll('span');
+      Array.prototype.forEach.call(spans,function(s){ if((s.textContent||'').trim()==='Seguidores') s.textContent='Seguidos'; });
+      var rec=document.querySelector('[data-v86-sub="reclutar"]');
+      if(rec && seg.parentElement===rec.parentElement && rec.previousElementSibling!==seg){
+        rec.parentElement.insertBefore(seg, rec);
+      }
+    }
+  }
+  applySidebar();
+  var t=0; var iv=setInterval(function(){ applySidebar(); if(++t>10) clearInterval(iv); },300);
+
+  function applyHome(){
+    var ip=document.querySelector('#panel-inicio .inicio-panels');
+    if(ip){ var ms=ip.querySelector('[data-v87-panel="masss21"]'); if(ms) ms.remove(); }
+    var intro=document.getElementById('v25-intro');
+    if(intro && !intro.querySelector('.v89-saber-mas')){
+      var btn=document.createElement('button');
+      btn.className='v89-saber-mas'; btn.textContent='Saber más sobre Sports Stats 21 →';
+      btn.style.cssText='margin-top:18px;background:var(--primary);color:#fff;border:none;border-radius:8px;padding:11px 22px;font-weight:700;cursor:pointer;font-size:14px';
+      btn.addEventListener('click',function(){ if(window.__v87go) window.__v87go('masss21'); });
+      intro.appendChild(btn);
+    }
+  }
+  applyHome();
+  var t2=0; var iv2=setInterval(function(){ applyHome(); if(++t2>8) clearInterval(iv2); },300);
+
+  function ehtml(s){return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;');}
+  function renderFavoritos(){
+    var favs=getFavs();
+    var head='<div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:24px 28px"><div style="display:flex;align-items:center;gap:14px"><div style="font-size:44px">⭐</div><div><div style="font-size:26px;font-weight:800">Tus Favoritos</div><div style="color:var(--muted);font-size:14px;margin-top:3px">Ligas, equipos, selecciones y jugadores que marcaste con la estrella.</div></div></div></div>';
+    if(favs.length===0){
+      return '<div>'+head+'<div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:48px 32px;margin-top:18px;text-align:center"><div style="font-size:54px">☆</div><div style="font-size:18px;font-weight:700;margin-top:14px">Aún no tienes favoritos</div><div style="color:var(--muted);margin-top:8px;font-size:14px;line-height:1.5">Toca el botón ☆ Favoritos en cualquier liga o selección para agregarla aquí.</div></div></div>';
+    }
+    var byType={};
+    favs.forEach(function(f){ if(!byType[f.type])byType[f.type]=[]; byType[f.type].push(f); });
+    var tn={liga:'🏆 LIGAS',seleccion:'🎽 SELECCIONES',equipo:'🏟️ EQUIPOS',jugador:'⭐ JUGADORES'};
+    var out='<div>'+head;
+    Object.keys(byType).forEach(function(type){
+      out+='<div style="margin-top:22px"><div style="font-size:13px;font-weight:700;color:var(--primary);margin-bottom:10px;letter-spacing:.5px">'+(tn[type]||type.toUpperCase())+'</div><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">';
+      byType[type].forEach(function(f){
+        var d=new Date(f.addedAt); var ds=d.toLocaleDateString('es-ES',{day:'2-digit',month:'short',year:'numeric'});
+        out+='<div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px;display:flex;align-items:center;gap:12px"><div style="font-size:32px;line-height:1">'+(f.emoji||'⭐')+'</div><div style="flex:1;min-width:0"><div style="font-weight:700;font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+ehtml(f.name)+'</div><div style="color:var(--muted);font-size:11px;margin-top:2px">'+ehtml(f.sport||'')+' · Agregado '+ds+'</div></div><button data-unfav="'+ehtml(f.id)+'" style="background:transparent;border:1px solid var(--border);border-radius:8px;padding:5px 10px;font-size:11px;cursor:pointer;color:var(--muted)">Quitar</button></div>';
+      });
+      out+='</div></div>';
+    });
+    out+='<div style="color:var(--muted);font-size:12px;margin-top:18px">⭐ Tus favoritos se guardan localmente en este navegador.</div></div>';
+    return out;
+  }
+  function showFavoritos(){
+    var pi=document.getElementById('panel-inicio'); if(!pi) return;
+    try{ window.goInicio&&window.goInicio(); }catch(_){}
+    var pg=document.getElementById('v87-page-favoritos');
+    if(!pg){ pg=document.createElement('div'); pg.id='v87-page-favoritos'; pg.style.cssText='margin:24px'; pi.appendChild(pg); }
+    function rebuild(){
+      pg.innerHTML=renderFavoritos();
+      pg.querySelectorAll('[data-unfav]').forEach(function(b){
+        b.addEventListener('click',function(){ removeFav(b.getAttribute('data-unfav')); rebuild(); });
+      });
+    }
+    rebuild();
+    function paint(){
+      window.__v63view='inicio';
+      var cls=document.body.className.split(/\s+/).filter(function(c){return c && c.indexOf('v32-view-')!==0;});
+      cls.push('v32-view-inicio'); document.body.className=cls.join(' ');
+      Array.prototype.forEach.call(pi.children,function(c){ c.style.setProperty('display','none','important'); });
+      document.querySelectorAll('[id^="v38-page-"]').forEach(function(p){ p.style.setProperty('display','none','important'); });
+      document.querySelectorAll('[id^="v86-page-"]').forEach(function(p){ p.style.setProperty('display','none','important'); });
+      pg.style.setProperty('display','block','important');
+      window.scrollTo(0,0);
+    }
+    paint(); requestAnimationFrame(paint); setTimeout(paint,60);
+  }
+  window.__ss21showFavs=showFavoritos;
+
+  document.addEventListener('click',function(e){
+    if(!e.target||!e.target.closest) return;
+    var fav=e.target.closest('[data-v56-key="favoritos"]');
+    if(fav){ e.stopImmediatePropagation(); showFavoritos(); return; }
+    var inicio=e.target.closest('[data-v56-key="inicio"]');
+    if(inicio){
+      setTimeout(function(){
+        document.querySelectorAll('[id^="v87-page-"]').forEach(function(p){ p.style.setProperty('display','none','important'); });
+      },70);
+    }
+  },true);
+})();
+</script>
+
 </body>
 </html>
 
