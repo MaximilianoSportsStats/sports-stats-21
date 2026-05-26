@@ -17010,6 +17010,93 @@ window.__v39loaded=true;window.__v391loaded=true;window.__v40loaded=true;window.
 })();
 </script>
 
+
+<script>
+(function(){
+  if(window.__v91loaded)return;window.__v91loaded=true;
+  function applyIntro(){
+    var intro=document.getElementById('v25-intro');
+    if(intro){ var sm=intro.querySelector('.v89-saber-mas'); if(sm) sm.remove(); }
+    var feats=document.querySelector('.inicio-features');
+    if(feats && feats.children.length>=4){
+      var last=feats.children[3];
+      if(last && !last.dataset.v91massCard){
+        var label=(last.textContent||'').trim();
+        if(/Toggle|M\s*\/\s*F/i.test(label)){
+          last.innerHTML='<div style="font-size:36px">🌟</div><div style="font-weight:800;font-size:18px;margin-top:8px;color:var(--primary)">Más Sobre SS 21</div><div style="font-size:11px;color:var(--muted);margin-top:4px">Historia, misión y equipo</div>';
+          last.style.cursor='pointer';
+          last.addEventListener('click',function(){ if(window.__v87go) window.__v87go('masss21'); });
+          last.dataset.v91massCard='1';
+        }
+      }
+    }
+  }
+  applyIntro();
+  var ti=0; var ivi=setInterval(function(){ applyIntro(); if(++ti>10) clearInterval(ivi); },300);
+  function reorderPanels(){
+    var ip=document.querySelector('#panel-inicio .inicio-panels');
+    if(!ip) return;
+    ['podcast','articulos','seguidores'].forEach(function(k){
+      var p=ip.querySelector('[data-v87-panel="'+k+'"]');
+      if(p && p!==ip.lastElementChild) ip.appendChild(p);
+    });
+  }
+  reorderPanels();
+  function attachOrder(){ var ip=document.querySelector('#panel-inicio .inicio-panels'); if(!ip){ setTimeout(attachOrder,200); return; } new MutationObserver(function(){ reorderPanels(); }).observe(ip,{childList:true}); }
+  attachOrder();
+  function makeFavBtn(id,data){
+    var b=document.createElement('button'); b.className='v89-fav-btn'; b.setAttribute('data-fav-id',id);
+    function paint(){
+      var on=window.__ss21favs && window.__ss21favs.is(id);
+      b.innerHTML=(on?'⭐':'☆')+' '+(on?'Favorito':'Favoritos');
+      b.style.cssText='background:'+(on?'#fff3cd':'transparent')+';border:1px solid '+(on?'#ffc107':'var(--border)')+';border-radius:8px;padding:8px 14px;font-weight:700;cursor:pointer;font-size:14px;color:'+(on?'#856404':'var(--text)');
+    }
+    paint();
+    b.addEventListener('click',function(e){ e.stopPropagation(); window.__ss21favs && window.__ss21favs.toggle(id,data); paint(); });
+    window.addEventListener('ss21favs-changed',paint);
+    return b;
+  }
+  function injectGeneric(){
+    if(!window.__ss21favs) return;
+    var btns=document.querySelectorAll('button');
+    Array.prototype.forEach.call(btns,function(btn){
+      if(btn.classList.contains('v89-fav-btn')) return;
+      if(btn.closest('.v82-box') || btn.closest('.v84-sel')) return;
+      if(btn.parentElement && btn.parentElement.querySelector('.v89-fav-btn')) return;
+      var t=(btn.textContent||'').trim();
+      if(!/^[+]\s*Seguir$|^[✓✔]\s*Siguiendo$/.test(t)) return;
+      if(btn.closest('header,nav,.topbar,.navbar,#topbar')) return;
+      var ctx=btn.closest('section, article, .qf-hero, [class*="hero"], [class*="header"], [class*="card"]');
+      if(!ctx) ctx=btn.parentElement;
+      var titleEl=ctx.querySelector('h1,h2,h3,.title,[class*="title"]');
+      var title=titleEl?(titleEl.textContent||'').trim():'';
+      if(!title){
+        var all=ctx.querySelectorAll('div,span');
+        for(var i=0;i<all.length;i++){
+          var st=all[i].getAttribute('style')||'';
+          var m=st.match(/font-size:\s*(\d+)/);
+          var fs=m?parseInt(m[1]):0;
+          if(fs>=20){ title=(all[i].textContent||'').trim(); break; }
+        }
+      }
+      if(!title || title.length>80) return;
+      var type='item', emoji='⭐';
+      if(/selecci[oó]n/i.test(title)){ type='seleccion'; emoji='🎽'; }
+      else if(/liga|premier|serie|bundesliga|copa/i.test(title)){ type='liga'; emoji='🏆'; }
+      else if(/^[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+\s[A-ZÁÉÍÓÚÑ]/.test(title)){ type='jugador'; emoji='⭐'; }
+      else type='deporte';
+      var id=type+':'+title;
+      var fav=makeFavBtn(id,{type:type,name:title,sport:'',emoji:emoji});
+      var wrap=document.createElement('div'); wrap.style.cssText='display:inline-flex;gap:8px;align-items:center;margin-right:8px';
+      btn.parentElement.insertBefore(wrap, btn);
+      wrap.appendChild(fav);
+    });
+  }
+  injectGeneric();
+  new MutationObserver(injectGeneric).observe(document.body,{childList:true,subtree:true});
+})();
+</script>
+
 </body>
 </html>
 
