@@ -16990,6 +16990,26 @@ window.__v39loaded=true;window.__v391loaded=true;window.__v40loaded=true;window.
 })();
 </script>
 
+
+<script>
+(function(){
+  if(window.__v90loaded)return;window.__v90loaded=true;
+  function clean(){
+    var ip=document.querySelector('#panel-inicio .inicio-panels');
+    if(!ip) return;
+    var ms=ip.querySelector('[data-v87-panel="masss21"]');
+    if(ms) ms.remove();
+  }
+  function attach(){
+    var ip=document.querySelector('#panel-inicio .inicio-panels');
+    if(!ip){ setTimeout(attach,200); return; }
+    clean();
+    new MutationObserver(clean).observe(ip,{childList:true});
+  }
+  attach();
+})();
+</script>
+
 </body>
 </html>
 
