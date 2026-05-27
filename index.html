@@ -17100,6 +17100,76 @@ window.__v39loaded=true;window.__v391loaded=true;window.__v40loaded=true;window.
 })();
 </script>
 
+
+<script>
+(function(){
+  if(window.__v94loaded)return;window.__v94loaded=true;
+  var PANELS=[
+    {key:'stats',emoji:'📊',title:'Estadísticas Deportes',desc:'Explora todos los deportes — Profesionales, Universitarios, Escolares y Amateur. Stats, calendarios, equipos y rankings en un solo lugar.',action:'deportes'},
+    {key:'envivo',emoji:'🔴',title:'Sigue los partidos en Vivo',desc:'Marcadores en tiempo real, transmisiones y eventos en curso para no perderte ningún momento.',action:'envivo'},
+    {key:'perfil',emoji:'👤',title:'Crea tu perfil',desc:'Sé jugador, entrenador, periodista o fanático. Tu identidad deportiva personalizada en SS 21.',action:'perfil'},
+    {key:'conecta',emoji:'🤝',title:'Conecta con Deportistas',desc:'Sigue, contacta y arma comunidad con deportistas, clubes y aficionados de todo el mundo.',action:'conecta'},
+    {key:'reclutar',emoji:'🎯',title:'Recluta y Descubre Talento',desc:'Encuentra try-outs, becas y oportunidades. Si eres club, publica tus convocatorias.',action:'reclutar'},
+    {key:'comparar',emoji:'⚖️',title:'Compara Stats',desc:'Compara jugadores, equipos y ligas lado a lado. Datos históricos y rendimiento actual.',action:'comparar'},
+    {key:'info',emoji:'📰',title:'Entérate de la Información Deportiva',desc:'Lee Noticias, Blogs y Artículos. Escucha los Podcasts. Todo el contenido de tus deportes favoritos.',action:'info'},
+    {key:'centros',emoji:'📍',title:'Encuentra tu centro deportivo más cercano',desc:'Gimnasios, clubes, estadios y canchas cerca tuyo. Próximamente integración con Google Maps.',action:'centros'}
+  ];
+  function showPlaceholder(key,title,emoji){
+    var pi=document.getElementById('panel-inicio'); if(!pi) return;
+    try{ window.goInicio&&window.goInicio(); }catch(_){}
+    var pg=document.getElementById('v87-page-'+key);
+    if(!pg){
+      pg=document.createElement('div'); pg.id='v87-page-'+key; pg.style.cssText='margin:24px';
+      pg.innerHTML='<div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:48px 32px"><div style="font-size:54px">'+emoji+'</div><div style="font-size:24px;font-weight:800;margin-top:14px">'+title+'</div><div style="color:var(--muted);margin-top:10px;font-size:15px;line-height:1.5">Sección en construcción — próximamente.</div></div>';
+      pi.appendChild(pg);
+    }
+    function paint(){
+      window.__v63view='inicio';
+      var cls=document.body.className.split(/\s+/).filter(function(c){return c && c.indexOf('v32-view-')!==0;});
+      cls.push('v32-view-inicio'); document.body.className=cls.join(' ');
+      Array.prototype.forEach.call(pi.children,function(c){ c.style.setProperty('display','none','important'); });
+      document.querySelectorAll('[id^="v38-page-"]').forEach(function(p){p.style.setProperty('display','none','important');});
+      document.querySelectorAll('[id^="v86-page-"]').forEach(function(p){p.style.setProperty('display','none','important');});
+      pg.style.setProperty('display','block','important');
+      window.scrollTo(0,0);
+    }
+    paint(); requestAnimationFrame(paint); setTimeout(paint,60);
+  }
+  function go(action){
+    if(action==='reclutar'){ if(window.__v87go) window.__v87go('reclutar'); return; }
+    if(action==='info'){
+      var li=document.querySelector('[data-v56-key="noticias"]'); if(li) li.click(); return;
+    }
+    if(action==='perfil'){ showPlaceholder('perfil','Crea tu perfil','👤'); return; }
+    if(action==='conecta'){ showPlaceholder('conecta','Conecta con Deportistas','🤝'); return; }
+    var k={deportes:'deportes',envivo:'envivo',comparar:'comparar',centros:'centros'}[action];
+    if(!k) return;
+    var li=document.querySelector('[data-v56-key="'+k+'"]'); if(li) li.click();
+  }
+  function build(){
+    var ip=document.querySelector('#panel-inicio .inicio-panels');
+    if(!ip) return;
+    var existing=ip.querySelectorAll('[data-v94-panel]');
+    if(existing.length===PANELS.length) return;
+    // remove every .inicio-panel article (existing originals + v87 panels)
+    Array.prototype.slice.call(ip.querySelectorAll('.inicio-panel, [data-v87-panel]')).forEach(function(el){ el.remove(); });
+    PANELS.forEach(function(p){
+      var a=document.createElement('article');
+      a.className='inicio-panel'; a.setAttribute('data-v94-panel',p.key); a.style.cursor='pointer';
+      a.innerHTML='<div style="font-size:32px">'+p.emoji+'</div><h3 style="margin:10px 0 6px;font-size:17px">'+p.title+'</h3><p style="margin:0;color:var(--muted);font-size:14px;line-height:1.4">'+p.desc+'</p>';
+      a.addEventListener('click',function(){ go(p.action); });
+      ip.appendChild(a);
+    });
+    // update header text if exists
+    var header=ip.querySelector('.v27-page-header');
+    if(header && !header.dataset.v94){ header.innerHTML='<h2 style="margin:0;color:var(--primary)">🌟 Explora SportsStats 21</h2>'; header.dataset.v94='1'; }
+  }
+  build();
+  function attach(){ var ip=document.querySelector('#panel-inicio .inicio-panels'); if(!ip){ setTimeout(attach,200); return; } new MutationObserver(build).observe(ip,{childList:true}); }
+  attach();
+})();
+</script>
+
 </body>
 </html>
 
