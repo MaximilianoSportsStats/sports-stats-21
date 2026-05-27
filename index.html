@@ -17188,6 +17188,26 @@ window.__v39loaded=true;window.__v391loaded=true;window.__v40loaded=true;window.
 })();
 </script>
 
+
+<script>
+(function(){
+  if(window.__v96loaded)return;window.__v96loaded=true;
+  var ORDER=['stats','envivo','perfil','conecta','reclutar','comparar','info','centros'];
+  function reorder(){
+    var ip=document.querySelector('#panel-inicio .inicio-panels');
+    if(!ip) return;
+    var panels={};
+    ip.querySelectorAll('[data-v94-panel]').forEach(function(p){ panels[p.getAttribute('data-v94-panel')]=p; });
+    if(Object.keys(panels).length<8) return;
+    ORDER.forEach(function(k){ if(panels[k]) ip.appendChild(panels[k]); });
+  }
+  reorder();
+  function attach(){ var ip=document.querySelector('#panel-inicio .inicio-panels'); if(!ip){ setTimeout(attach,200); return; } new MutationObserver(reorder).observe(ip,{childList:true}); }
+  attach();
+  var t=0; var iv=setInterval(function(){ reorder(); if(++t>15) clearInterval(iv); },500);
+})();
+</script>
+
 </body>
 </html>
 
