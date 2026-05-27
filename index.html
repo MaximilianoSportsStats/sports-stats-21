@@ -17011,6 +17011,72 @@ window.__v39loaded=true;window.__v391loaded=true;window.__v40loaded=true;window.
 </script>
 
 
+
+<script>
+(function(){
+  if(window.__v92loaded)return;window.__v92loaded=true;
+  function reorderHome(){
+    var ip=document.querySelector('#panel-inicio .inicio-panels');
+    if(!ip) return;
+    ['podcast','articulos','seguidores'].forEach(function(k){
+      var p=ip.querySelector('[data-v87-panel="'+k+'"]');
+      if(p && p!==ip.lastElementChild) ip.appendChild(p);
+    });
+  }
+  function replaceMF(){
+    var intro=document.getElementById('v25-intro');
+    if(intro){ var sm=intro.querySelector('.v89-saber-mas'); if(sm) sm.remove(); }
+    var feats=document.querySelector('.inicio-features');
+    if(!feats || feats.children.length<4) return;
+    var last=feats.children[3];
+    if(last.dataset.v92mass==='1') return;
+    var label=(last.textContent||'').trim();
+    if(/Toggle|M\s*\/\s*F/i.test(label)){
+      last.innerHTML='<div style="font-size:36px">🌟</div><div style="font-weight:800;font-size:18px;margin-top:8px;color:var(--primary)">Más Sobre SS 21</div><div style="font-size:11px;color:var(--muted);margin-top:4px">Historia, misión y equipo</div>';
+      last.style.cursor='pointer';
+      last.addEventListener('click',function(){ if(window.__v87go) window.__v87go('masss21'); });
+      last.dataset.v92mass='1';
+    }
+  }
+  function makeFavBtn(id,data){
+    var b=document.createElement('button'); b.className='v89-fav-btn'; b.setAttribute('data-fav-id',id);
+    function paint(){
+      var on=window.__ss21favs && window.__ss21favs.is(id);
+      b.innerHTML=(on?'⭐':'☆')+' '+(on?'Favorito':'Favoritos');
+      b.style.cssText='background:'+(on?'#fff3cd':'transparent')+';border:1px solid '+(on?'#ffc107':'rgba(255,255,255,.3)')+';border-radius:8px;padding:6px 12px;font-weight:700;cursor:pointer;font-size:13px;color:'+(on?'#856404':'#fff')+';margin-right:8px';
+    }
+    paint();
+    b.addEventListener('click',function(e){ e.stopPropagation(); window.__ss21favs && window.__ss21favs.toggle(id,data); paint(); });
+    window.addEventListener('ss21favs-changed',paint);
+    return b;
+  }
+  var SPORTS={soccer:'Fútbol',tennis:'Tenis',basketball:'Basketball',nfl:'Fútbol Americano',baseball:'Baseball',hockey:'Hockey',rugby:'Rugby',golf:'Golf',f1:'F1',cycling:'Ciclismo',athletics:'Atletismo',swimming:'Natación',volleyball:'Voleibol',cricket:'Cricket',ufc:'Combate',padel:'Pádel',chess:'Ajedrez',mlb:'MLB',nhl:'NHL',nba:'NBA',olympics:'Eventos Globales'};
+  function injectSportFavs(){
+    if(!window.__ss21favs) return;
+    var bars=document.querySelectorAll('.v17-followers-bar');
+    for(var b=0;b<bars.length;b++){
+      var bar=bars[b];
+      if(bar.querySelector('.v89-fav-btn')) continue;
+      if(getComputedStyle(bar).display==='none') continue;
+      var panel=bar.closest('[id^="panel-"]'); if(!panel) continue;
+      var key=(panel.id||'').replace('panel-','');
+      var sport=SPORTS[key]||key.charAt(0).toUpperCase()+key.slice(1);
+      var seguir=null;
+      var btns=bar.querySelectorAll('button');
+      for(var i=0;i<btns.length;i++){ if(/Seguir|Siguiendo/.test(btns[i].textContent||'')){ seguir=btns[i]; break; } }
+      if(!seguir) continue;
+      var id='deporte:'+sport;
+      var fav=makeFavBtn(id,{type:'deporte',name:sport,sport:sport,emoji:'🏅'});
+      seguir.parentElement.insertBefore(fav, seguir);
+    }
+  }
+  function runAll(){ reorderHome(); replaceMF(); injectSportFavs(); }
+  runAll();
+  var t=0; var iv=setInterval(function(){ runAll(); if(++t>15) clearInterval(iv); },500);
+  new MutationObserver(function(){ setTimeout(injectSportFavs,100); setTimeout(injectSportFavs,400); }).observe(document.body,{attributes:true,attributeFilter:['class']});
+})();
+</script>
+
 </body>
 </html>
 
