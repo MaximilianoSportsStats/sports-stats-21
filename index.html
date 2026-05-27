@@ -17077,6 +17077,29 @@ window.__v39loaded=true;window.__v391loaded=true;window.__v40loaded=true;window.
 })();
 </script>
 
+
+<script>
+(function(){
+  if(window.__v93loaded)return;window.__v93loaded=true;
+  function replaceMFv25(){
+    var stats=document.querySelectorAll('.v25-stat');
+    for(var i=0;i<stats.length;i++){
+      var s=stats[i];
+      if(s.dataset.v93mass==='1') continue;
+      var t=(s.textContent||'').trim();
+      if(/Toggle\s*por\s*liga|M\s*\/\s*F/.test(t)){
+        s.innerHTML='<div style="font-size:32px">🌟</div><div style="font-weight:800;font-size:16px;color:var(--primary);margin-top:6px">Más Sobre SS 21</div><div style="font-size:11px;color:var(--muted);margin-top:2px">Historia, misión y equipo</div>';
+        s.style.cursor='pointer';
+        s.addEventListener('click',function(){ if(window.__v87go) window.__v87go('masss21'); });
+        s.dataset.v93mass='1';
+      }
+    }
+  }
+  replaceMFv25();
+  var t=0; var iv=setInterval(function(){ replaceMFv25(); if(++t>15) clearInterval(iv); },500);
+})();
+</script>
+
 </body>
 </html>
 
