@@ -17170,6 +17170,24 @@ window.__v39loaded=true;window.__v391loaded=true;window.__v40loaded=true;window.
 })();
 </script>
 
+
+<script>
+(function(){
+  if(window.__v95loaded)return;window.__v95loaded=true;
+  function cleanup(){
+    var ip=document.querySelector('#panel-inicio .inicio-panels');
+    if(!ip) return;
+    if(ip.querySelectorAll('[data-v94-panel]').length===0) return;
+    var extras=ip.querySelectorAll('.inicio-panel:not([data-v94-panel]), [data-v87-panel]');
+    extras.forEach(function(e){ e.remove(); });
+  }
+  cleanup();
+  function attach(){ var ip=document.querySelector('#panel-inicio .inicio-panels'); if(!ip){ setTimeout(attach,200); return; } new MutationObserver(cleanup).observe(ip,{childList:true}); }
+  attach();
+  var t=0; var iv=setInterval(function(){ cleanup(); if(++t>20) clearInterval(iv); },500);
+})();
+</script>
+
 </body>
 </html>
 
