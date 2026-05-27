@@ -17212,6 +17212,108 @@ window.__v39loaded=true;window.__v391loaded=true;window.__v40loaded=true;window.
   attach();
 })();
 </script>
+
+<script>
+(function(){
+  if(window.__v98loaded)return;window.__v98loaded=true;
+  function fixHero(){
+    var hero=document.getElementById('heroCarousel'); if(!hero) return;
+    hero.querySelectorAll('button').forEach(function(b){
+      if(!/Empezar/.test(b.textContent||'')) return;
+      var parent=b.parentElement; if(!parent || parent.querySelector('[data-v98-mass]')) return;
+      var cuenta=null;
+      Array.prototype.forEach.call(parent.children,function(c){ if(/Crear cuenta/.test(c.textContent||'')) cuenta=c; });
+      var newBtn;
+      if(cuenta){ newBtn=cuenta.cloneNode(true); newBtn.textContent='Más Sobre SS 21 →'; }
+      else { newBtn=document.createElement('button'); newBtn.textContent='Más Sobre SS 21 →'; newBtn.style.cssText='background:transparent;color:#fff;border:1.5px solid #fff;border-radius:8px;padding:11px 22px;font-weight:700;cursor:pointer;font-size:15px;margin-left:8px'; }
+      newBtn.setAttribute('data-v98-mass','1');
+      newBtn.addEventListener('click',function(e){ e.preventDefault(); e.stopPropagation(); if(window.__v87go) window.__v87go('masss21'); });
+      parent.appendChild(newBtn);
+    });
+  }
+  function hideIntro(){ var intro=document.getElementById('v25-intro'); if(intro && intro.style.display!=='none') intro.style.setProperty('display','none','important'); }
+  var RICH={
+    stats:{desc:'Sumérgete en NBA, NFL, MLB, NHL, F1, Champions League, La Liga, Premier y todas las grandes ligas del mundo. Tablas de posiciones, récords, leyendas, calendarios y data en vivo desde 1888. Profesionales, Universitarios, Escolares y Amateur.', cta:'Explorar deportes →'},
+    envivo:{desc:'Marcadores en tiempo real, transmisiones y eventos en curso. Notificaciones por equipo, partidos del día, resúmenes y momentos clave de fútbol, NBA, F1, tenis y más.', cta:'Ver en vivo →'},
+    perfil:{desc:'Amateur, semi-pro o profesional — arma tu perfil deportivo con todas las ligas en las que has participado, estadísticas históricas, fotos y videos. Tu CV deportivo en un solo lugar, visible para reclutadores y clubes.', cta:'Crear mi perfil →'},
+    conecta:{desc:'La esencia de Sports Stats: la red social del deporte. Conecta con deportistas, equipos y reclutadores de cualquier disciplina. Sigue a tus referentes, manda mensajes a clubes, encuentra compañeros para tu liga local.', cta:'Conectar →'},
+    reclutar:{desc:'Si reclutas para un club, academia o federación, accede a la base completa de deportistas en ligas locales, juveniles y escolares de todo el mundo. Filtros por edad, posición, país y nivel. Data al alcance de scouts profesionales.', cta:'Modo Reclutador →'},
+    comparar:{desc:'Selecciona dos deportistas, dos equipos o dos ligas del mismo deporte y compara sus números lado a lado: títulos, goles, promedios, históricos, rachas. Ideal para debates: Messi vs Cristiano, Real Madrid vs Bayern, Premier vs La Liga.', cta:'Comparar →'},
+    info:{desc:'Todo el contenido deportivo en un solo lugar: noticias diarias, blogs de fans, análisis tácticos, entrevistas exclusivas y podcasts semanales. Filtra por deporte, equipo o jugador para personalizar tu feed.', cta:'Ver Información →'},
+    centros:{desc:'Busca gimnasios, clubes, estadios y canchas cerca tuyo. Filtra por deporte, estacionamiento, capacidad, horarios, precios y servicios. Ideal para encontrar dónde jugar, entrenar o ver un partido. Próximamente integración con Google Maps.', cta:'Buscar centros →'}
+  };
+  function enrichPanels(){
+    var ip=document.querySelector('#panel-inicio .inicio-panels'); if(!ip) return;
+    ip.querySelectorAll('[data-v94-panel]').forEach(function(p){
+      if(p.dataset.v98enriched==='1') return;
+      var key=p.getAttribute('data-v94-panel'); var rich=RICH[key]; if(!rich) return;
+      var pdesc=p.querySelector('p'); if(pdesc) pdesc.textContent=rich.desc;
+      if(!p.querySelector('.v98-cta')){
+        var btn=document.createElement('button'); btn.className='v98-cta'; btn.textContent=rich.cta;
+        btn.style.cssText='margin-top:14px;background:var(--primary);color:#fff;border:none;border-radius:8px;padding:8px 16px;font-weight:700;cursor:pointer;font-size:13px';
+        p.appendChild(btn);
+      }
+      p.dataset.v98enriched='1';
+    });
+  }
+  var NOVEDADES=[
+    ['📰','Mundial 2026 — Sedes confirmadas','USA, Canadá y México con 16 ciudades anfitrionas. Argentina y Francia parten como favoritas.'],
+    ['🏆','Champions League 2025','PSG vs Inter Milán en la gran final del 31 de mayo en Múnich.'],
+    ['🏀','NBA Playoffs 2025','OKC Thunder lidera el Oeste. En el Este: Cavaliers vs Celtics en una serie épica.'],
+    ['🎾','Roland Garros 2025','Alcaraz bicampeón tras una final histórica de 5 sets ante Sinner.'],
+    ['⚽','Copa América 2024','Argentina se consagra por 16ª vez tras vencer a Colombia 1-0 en Miami.']
+  ];
+  function updateNovedades(){
+    var w=document.getElementById('v17-updates-widget'); if(!w) return;
+    if(w.dataset.v98upd==='1') return;
+    var items=NOVEDADES.map(function(n,i){return '<div style="display:flex;gap:14px;padding:14px 0;'+(i<NOVEDADES.length-1?'border-bottom:1px solid var(--border);':'')+'"><div style="font-size:28px">'+n[0]+'</div><div style="flex:1"><div style="font-weight:700;font-size:14px">'+n[1]+'</div><div style="color:var(--muted);font-size:12px;margin-top:3px;line-height:1.4">'+n[2]+'</div></div></div>';}).join('');
+    w.innerHTML='<div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:6px 22px;margin:0 24px">'+items+'</div>';
+    w.dataset.v98upd='1';
+  }
+  var CHALLENGES=[
+    {q:'¿Quién ganó la Copa Libertadores 2024?', opts:['River Plate','Atlético Mineiro','Botafogo','Vélez'], a:2, sport:'⚽'},
+    {q:'¿Cuántas Champions League ganó Real Madrid?', opts:['12','13','14','15'], a:3, sport:'🏆'},
+    {q:'¿Quién es el máximo goleador histórico del Mundial?', opts:['Messi','Klose','Ronaldo','Müller'], a:1, sport:'⚽'},
+    {q:'¿En qué año debutó LeBron James en la NBA?', opts:['2001','2002','2003','2004'], a:2, sport:'🏀'},
+    {q:'¿Cuántos Grand Slams ganó Roger Federer?', opts:['18','19','20','22'], a:2, sport:'🎾'},
+    {q:'¿Quién ganó el Mundial 2022?', opts:['Brasil','Francia','Argentina','Croacia'], a:2, sport:'🏆'},
+    {q:'¿Quién ganó el Mundial 2018?', opts:['Croacia','Argentina','Francia','Bélgica'], a:2, sport:'⚽'}
+  ];
+  function dayIdx(){var d=new Date(); return (d.getFullYear()*1000+d.getMonth()*31+d.getDate())%CHALLENGES.length;}
+  function getStreak(){try{return (JSON.parse(localStorage.getItem('ss21_streak')||'{}').count)||0;}catch(e){return 0;}}
+  function solvedToday(){try{return JSON.parse(localStorage.getItem('ss21_streak')||'{}').lastDate===new Date().toDateString();}catch(e){return false;}}
+  function recordSolved(ok){try{var s=JSON.parse(localStorage.getItem('ss21_streak')||'{}'); var today=new Date().toDateString(); var yest=new Date();yest.setDate(yest.getDate()-1); if(s.lastDate===today) return; if(ok){ if(s.lastDate===yest.toDateString()) s.count=(s.count||0)+1; else s.count=1; } s.lastDate=today; localStorage.setItem('ss21_streak',JSON.stringify(s));}catch(e){}}
+  function renderRetos(){
+    var pi=document.getElementById('panel-inicio'); if(!pi) return;
+    if(document.getElementById('v98-retos')) return;
+    var c=CHALLENGES[dayIdx()]; var st=getStreak(); var sl=solvedToday();
+    var sec=document.createElement('section'); sec.id='v98-retos'; sec.style.cssText='margin:24px';
+    var opts=c.opts.map(function(o,i){return '<button data-opt="'+i+'" style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 16px;font-size:14px;cursor:pointer;font-weight:600;margin:0 8px 8px 0">'+o+'</button>';}).join('');
+    sec.innerHTML='<div style="background:linear-gradient(135deg,#fff7f7 0%,#fff 100%);border:1px solid var(--border);border-radius:16px;padding:24px 28px"><div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px;gap:20px"><div style="flex:1"><div style="font-size:11px;color:var(--primary);font-weight:700;letter-spacing:1px">🎯 RETO DIARIO</div><div style="font-size:20px;font-weight:800;margin-top:4px">'+c.sport+' '+c.q+'</div></div><div style="text-align:right;flex-shrink:0"><div style="font-size:26px;font-weight:800">🔥 '+st+'</div><div style="font-size:11px;color:var(--muted);letter-spacing:.5px">DÍAS DE RACHA</div></div></div>'+
+      (sl?'<div style="color:#16a34a;font-weight:700;padding:10px 14px;background:#dcfce7;border-radius:8px;margin-bottom:8px">✓ Ya respondiste hoy. Vuelve mañana por el próximo reto.</div>':'')+
+      '<div id="v98-opts" style="display:flex;flex-wrap:wrap">'+opts+'</div>'+
+      '<div id="v98-result" style="margin-top:12px"></div>'+
+      '<div style="margin-top:18px;font-size:12px;color:var(--muted)">📌 Próximamente: más retos, ranking semanal y desafíos por deporte.</div></div>';
+    pi.appendChild(sec);
+    sec.querySelectorAll('[data-opt]').forEach(function(b){ b.addEventListener('click',function(){ if(solvedToday()){return;} var idx=parseInt(b.getAttribute('data-opt')); var ok=idx===c.a; var r=sec.querySelector('#v98-result'); sec.querySelectorAll('[data-opt]').forEach(function(x){x.disabled=true;x.style.opacity='0.5';}); if(ok){ recordSolved(true); r.innerHTML='<div style="color:#16a34a;font-weight:700;padding:10px 14px;background:#dcfce7;border-radius:8px">✓ ¡Correcto! Tu racha ahora es de '+getStreak()+' días. 🔥</div>'; b.style.background='#dcfce7'; b.style.borderColor='#16a34a'; b.style.color='#166534'; b.style.opacity='1';} else { recordSolved(false); r.innerHTML='<div style="color:#dc2626;font-weight:700;padding:10px 14px;background:#fef2f2;border-radius:8px">✗ No es esa. La correcta es: <b>'+c.opts[c.a]+'</b></div>'; b.style.background='#fef2f2'; b.style.borderColor='#dc2626'; b.style.color='#991b1b'; b.style.opacity='1';} }); });
+  }
+  function runAll(){ fixHero(); hideIntro(); enrichPanels(); updateNovedades(); renderRetos(); }
+  runAll();
+  var t=0; var iv=setInterval(function(){ runAll(); if(++t>15) clearInterval(iv); },500);
+  document.addEventListener('click',function(e){
+    if(!e.target||!e.target.closest) return;
+    if(e.target.closest('[data-v56-key="inicio"]')){
+      setTimeout(function(){
+        var s=document.getElementById('v98-retos'); if(s) s.style.setProperty('display','block','important');
+        var nov=document.getElementById('v17-updates-widget'); if(nov) nov.style.setProperty('display','block','important');
+        var noh=document.getElementById('v16-novedades-header'); if(noh) noh.style.setProperty('display','block','important');
+        hideIntro();
+      },120);
+    }
+  },true);
+})();
+</script>
+
 </body>
 </html>
 
