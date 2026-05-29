@@ -17463,6 +17463,47 @@ window.addEventListener('popstate', function(e){
 try{ if(!history.state || !history.state.page){ history.replaceState({page:'inicio'}, '', '#inicio'); } }catch(e){}
 })();
 </script>
+<script>
+(function(){
+if(window.__v104loaded)return;window.__v104loaded=true;
+function hideTodosClean(){
+  document.querySelectorAll('.sport-nav .sport-btn').forEach(function(b){
+    var t=(b.textContent||'').trim();
+    if(t.indexOf('Todos')>=0 && t.length<10){
+      b.setAttribute('data-v103-todos','1');
+      b.style.setProperty('display','none','important');
+      if(b.classList.contains('active')){ b.classList.remove('active'); }
+    }
+  });
+}
+hideTodosClean(); setInterval(hideTodosClean,2000);
+function forceInicio(){
+  var pi=document.getElementById('panel-inicio'); if(!pi) return;
+  document.querySelectorAll('.tab-panel').forEach(function(p){
+    if(p.id==='panel-inicio'){
+      p.style.removeProperty('display');
+      p.classList.add('active');
+    } else {
+      p.classList.remove('active');
+      p.style.setProperty('display','none','important');
+    }
+  });
+  document.querySelectorAll('[id^="v87-page-"]').forEach(function(v){
+    v.style.setProperty('display','none','important');
+  });
+  document.querySelectorAll('[data-v26id]').forEach(function(b){
+    if(b.getAttribute('data-v26id')==='inicio') b.classList.add('active');
+    else b.classList.remove('active');
+  });
+}
+function attachInicio2(){
+  var inicio=document.querySelector('[data-v26id="inicio"]');
+  if(!inicio){setTimeout(attachInicio2,300); return;}
+  inicio.addEventListener('click', function(){ setTimeout(forceInicio,30); });
+}
+attachInicio2();
+})();
+</script>
 </body>
 </html>
 
