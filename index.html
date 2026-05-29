@@ -17408,6 +17408,61 @@ setup();
 setInterval(function(){ buildNov(); sync(); }, 1000);
 })();
 </script>
+<script>
+(function(){
+if(window.__v103loaded)return;window.__v103loaded=true;
+var st=document.createElement('style');
+st.textContent='.inicio-panel{display:flex !important;flex-direction:column !important;height:100% !important}.inicio-panel > .v99-cta{margin-top:auto !important;align-self:flex-start !important}.inicio-panels{align-items:stretch !important}.sport-nav .sport-btn[data-v103-todos]{display:none !important}';
+document.head.appendChild(st);
+function hideTodos(){
+  document.querySelectorAll('.sport-nav .sport-btn').forEach(function(b){
+    var t=(b.textContent||'').trim();
+    if(t.indexOf('Todos')>=0 && t.length<10){
+      b.setAttribute('data-v103-todos','1');
+      b.style.setProperty('display','none','important');
+      if(b.classList.contains('active')){
+        var next=b.nextElementSibling;
+        while(next && getComputedStyle(next).display==='none') next=next.nextElementSibling;
+        if(next && next.click) next.click();
+      }
+    }
+  });
+}
+hideTodos(); setInterval(hideTodos,2000);
+function hideAllV87(){
+  document.querySelectorAll('[id^="v87-page-"]').forEach(function(p){
+    p.style.setProperty('display','none','important');
+  });
+}
+function attachInicio(){
+  var inicio=document.querySelector('[data-v26id="inicio"]');
+  if(!inicio){setTimeout(attachInicio,300); return;}
+  inicio.addEventListener('click', function(){
+    setTimeout(function(){
+      hideAllV87();
+      try{history.pushState({page:'inicio'}, '', '#inicio')}catch(e){}
+    }, 20);
+  }, false);
+}
+attachInicio();
+document.addEventListener('click', function(e){
+  var t=e.target.closest('[data-v26id],[data-v87-go]');
+  if(!t) return;
+  var page=t.getAttribute('data-v87-go') || t.getAttribute('data-v26id') || 'inicio';
+  setTimeout(function(){
+    if(history.state && history.state.page===page) return;
+    try{history.pushState({page:page}, '', '#'+page)}catch(e){}
+  }, 20);
+}, true);
+window.addEventListener('popstate', function(e){
+  hideAllV87();
+  var inicio=document.querySelector('[data-v26id="inicio"]');
+  if(inicio) inicio.click();
+  setTimeout(hideAllV87, 50);
+});
+try{ if(!history.state || !history.state.page){ history.replaceState({page:'inicio'}, '', '#inicio'); } }catch(e){}
+})();
+</script>
 </body>
 </html>
 
