@@ -17536,6 +17536,39 @@ wrapMenuBody();
 setInterval(wrapMenuBody,3000);
 })();
 </script>
+<script>
+(function(){
+if(window.__v106loaded)return;window.__v106loaded=true;
+var st=document.createElement("style");
+st.textContent=".v36-side{display:block !important;height:100vh !important;max-height:100vh !important;overflow-y:auto !important;overflow-x:hidden !important;scrollbar-width:thin;scrollbar-color:#94a3b8 #f1f5f9}.v36-side::-webkit-scrollbar{width:10px;background:#f1f5f9}.v36-side::-webkit-scrollbar-thumb{background:#94a3b8;border-radius:5px;border:2px solid #f1f5f9}.v36-side::-webkit-scrollbar-thumb:hover{background:#64748b}.v36-side > .v36-head{position:sticky !important;top:0 !important;background:var(--surface, #fff) !important;z-index:5;border-bottom:1px solid var(--border, #e2e8f0)}.v36-side > .v36-foot{position:sticky !important;bottom:0 !important;background:var(--surface, #fff) !important;z-index:5;border-top:1px solid var(--border, #e2e8f0)}.v36-side > .v105-menu-body{overflow:visible !important;flex:none !important;display:block !important;padding-bottom:0 !important;height:auto !important;min-height:0 !important}";
+document.head.appendChild(st);
+var side=document.querySelector(".v36-side");
+if(side){ side.style.setProperty("display","block","important"); }
+function forceInicio(){
+  var pi=document.getElementById("panel-inicio"); if(!pi) return;
+  document.querySelectorAll(".tab-panel").forEach(function(p){
+    if(p.id==="panel-inicio"){ p.style.removeProperty("display"); p.classList.add("active"); }
+    else { p.classList.remove("active"); p.style.setProperty("display","none","important"); }
+  });
+  document.querySelectorAll("[id^=\"v87-page-\"]").forEach(function(v){ v.style.setProperty("display","none","important"); });
+  document.querySelectorAll("[data-v26id]").forEach(function(b){
+    if(b.getAttribute("data-v26id")==="inicio") b.classList.add("active"); else b.classList.remove("active");
+  });
+  var overlay=document.querySelector(".v36-overlay");
+  if(overlay) overlay.classList.remove("v36-open");
+  if(side) side.classList.remove("v36-open");
+  document.body.classList.remove("v36-open");
+  try{ history.pushState({page:"inicio"}, "", "#inicio"); }catch(e){}
+}
+document.addEventListener("click", function(e){
+  var btn=e.target.closest("button,a");
+  if(!btn) return;
+  var t=(btn.textContent||"").trim();
+  var isInicio = btn.getAttribute("data-v26id")==="inicio" || (/^[\uD83C\uDFE0]?\s*Inicio\s*$/.test(t) && t.length<15);
+  if(isInicio){ setTimeout(forceInicio,30); setTimeout(forceInicio,250); }
+}, true);
+})();
+</script>
 </body>
 </html>
 
