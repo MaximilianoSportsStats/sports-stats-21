@@ -17744,6 +17744,44 @@ function syncLabels(){
 setInterval(syncLabels,800);
 })();
 </script>
+<script>
+(function(){
+if(window.__v111loaded)return;window.__v111loaded=true;
+function getCurrentSport(){
+  var activeBtn=Array.from(document.querySelectorAll(".sport-btn")).find(function(b){
+    return b.classList.contains("active") && b.offsetParent;
+  });
+  if(!activeBtn) return null;
+  var t=(activeBtn.textContent||"").trim();
+  var match=t.match(/[A-Za-z\u00C0-\u00FF][A-Za-z\u00C0-\u00FF\s]*/);
+  if(!match) return null;
+  var name=match[0].trim();
+  if(name==="Todos") return null;
+  return name;
+}
+var lastSport=null;
+function syncLabels(){
+  var sport=getCurrentSport();
+  if(!sport){ lastSport=null; return; }
+  var sb=document.getElementById("sidebar"); if(!sb) return;
+  if(sport===lastSport && sb.dataset.v111synced===sport) return;
+  sb.querySelectorAll("*").forEach(function(el){
+    if(el.children.length>0) return;
+    var t=(el.textContent||"").trim();
+    if(t==="") return;
+    if(/^F[\u00fa\u00fa]tbol$/i.test(t) || t.toLowerCase()==="fútbol"){
+      if(t.toLowerCase()!==sport.toLowerCase()) el.textContent=sport;
+    }
+    if(/¿Qu[e\u00e9]\s+es\s+el\s+F[u\u00fa]tbol\?/i.test(t)){
+      el.textContent=el.textContent.replace(/¿Qu[e\u00e9]\s+es\s+el\s+F[u\u00fa]tbol\?/i, "¿Qué es el "+sport+"?");
+    }
+  });
+  sb.dataset.v111synced=sport;
+  lastSport=sport;
+}
+setInterval(syncLabels,500);
+})();
+</script>
 </body>
 </html>
 
