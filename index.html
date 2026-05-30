@@ -17876,6 +17876,91 @@ function hookSecs(){
 setTimeout(hookSecs,500); setTimeout(hookSecs,2000); setInterval(hookSecs,5000);
 })();
 </script>
+<script>
+(function(){
+if(window.__v113loaded)return;window.__v113loaded=true;
+var CTA_NAV={
+"Explorar deportes":[["data-v26id","deportes"]],
+"Ver en vivo":[["data-v56-key","envivo"]],
+"Crear mi perfil":[["__login","1"]],
+"Conectar":[["data-v87-sub","seguidores"]],
+"Modo Reclutador":[["data-v86-sub","reclutar"]],
+"Comparar":[["data-v56-key","comparar"]],
+"Ver Información":[["data-v56-key","noticias"]],
+"Buscar centros":[["data-v56-key","centros"]]
+};
+function triggerNav(targets){
+  for(var i=0;i<targets.length;i++){
+    var tg=targets[i];
+    if(tg[0]==="__login"){
+      var lb=document.querySelector(".login-btn");
+      if(lb){ lb.click(); return true; } continue;
+    }
+    var sel="["+tg[0]+"=\""+tg[1]+"\"]";
+    var els=document.querySelectorAll(sel);
+    var vis=Array.from(els).find(function(e){return e.offsetParent});
+    var el=vis||els[0]; if(el){ el.click(); return true; }
+  }
+  return false;
+}
+function hookCTAs(){
+  document.querySelectorAll(".inicio-panel .v99-cta").forEach(function(cta){
+    if(cta.dataset.v113wired) return;
+    var t=(cta.textContent||"").trim().replace(/[\s→]+$/,"").trim();
+    var key=null;
+    Object.keys(CTA_NAV).forEach(function(k){ if(t.indexOf(k)===0) key=k; });
+    if(!key) return;
+    cta.dataset.v113wired="1";
+    cta.addEventListener("click", function(e){ e.stopImmediatePropagation(); e.preventDefault(); triggerNav(CTA_NAV[key]); }, true);
+  });
+}
+setTimeout(hookCTAs,600); setTimeout(hookCTAs,2500); setInterval(hookCTAs,5000);
+var SECTION_NAV={
+"NOTICIAS":[["data-v56-key","noticias"]],
+"BLOGS":[["data-v100-sub","blogs"],["data-v26id","blogs"]],
+"PODCAST":[["data-v86-sub","podcast"]]
+};
+function hookHeaders(){
+  document.querySelectorAll("h1,h2,h3").forEach(function(h){
+    if(h.dataset.v113wired) return;
+    var t=(h.textContent||"").trim().toUpperCase();
+    var key=null;
+    Object.keys(SECTION_NAV).forEach(function(k){ var rx=new RegExp("^[^A-Za-z]*"+k+"$"); if(rx.test(t) && t.length<30) key=k; });
+    if(!key) return;
+    h.dataset.v113wired="1"; h.style.cursor="pointer";
+    h.addEventListener("click", function(e){ e.stopImmediatePropagation(); e.preventDefault(); triggerNav(SECTION_NAV[key]); }, true);
+  });
+}
+setTimeout(hookHeaders,600); setTimeout(hookHeaders,2500); setInterval(hookHeaders,5000);
+var PANEL_SPORTS={"panel-soccer":"Fútbol","panel-tennis":"Tenis","panel-nba":"Basketball","panel-basketball":"Basketball","panel-nfl":"Fútbol Americano","panel-mlb":"Baseball","panel-baseball":"Baseball","panel-nhl":"Hockey","panel-hockey":"Hockey","panel-f1":"Carreras","panel-carreras":"Carreras","panel-combate":"Combate","panel-rugby":"Rugby","panel-golf":"Golf","panel-atletismo":"Atletismo","panel-natacion":"Natación","panel-ciclismo":"Ciclismo","panel-volleyball":"Volleyball","panel-padel":"Pádel","panel-cricket":"Cricket","panel-otros":"Otros Deportes","panel-eventos":"Eventos Globales"};
+var ALL_SPORTS=["Fútbol","Tenis","Basketball","Fútbol Americano","Baseball","Hockey","Carreras","Combate","Rugby","Golf","Atletismo","Natación","Ciclismo","Volleyball","Pádel","Cricket","Otros Deportes","Eventos Globales"];
+function getCurrentSport(){
+  var btn=Array.from(document.querySelectorAll(".sport-btn.active")).find(function(b){return b.offsetParent});
+  if(btn){
+    var t=(btn.textContent||"").trim();
+    for(var i=0;i<ALL_SPORTS.length;i++){ if(t.indexOf(ALL_SPORTS[i])>=0) return ALL_SPORTS[i]; }
+  }
+  var actives=document.querySelectorAll(".tab-panel.active");
+  for(var i=0;i<actives.length;i++){ if(PANEL_SPORTS[actives[i].id]) return PANEL_SPORTS[actives[i].id]; }
+  return null;
+}
+function syncSidebar(){
+  var sb=document.getElementById("sidebar"); if(!sb) return;
+  var sport=getCurrentSport(); if(!sport) return;
+  if(sb.dataset.v113sport===sport) return;
+  sb.querySelectorAll("*").forEach(function(el){
+    if(el.children.length>0) return;
+    var t=(el.textContent||"").trim();
+    if(el.dataset.v113h==="1"){ if(t!==sport) el.textContent=sport; }
+    else { for(var i=0;i<ALL_SPORTS.length;i++){ if(t===ALL_SPORTS[i]){ el.dataset.v113h="1"; if(t!==sport) el.textContent=sport; break; } } }
+    if(el.dataset.v113q==="1"){ el.textContent=el.textContent.replace(/¿Qu[eé]\s+es\s+(el|la|los|las)\s+[^?]+\?/i, "¿Qué es el "+sport+"?"); }
+    else if(/¿Qu[eé]\s+es\s+(el|la|los|las)\s+.+\?/i.test(t)){ el.dataset.v113q="1"; el.textContent=el.textContent.replace(/¿Qu[eé]\s+es\s+(el|la|los|las)\s+[^?]+\?/i, "¿Qué es el "+sport+"?"); }
+  });
+  sb.dataset.v113sport=sport;
+}
+setInterval(syncSidebar,500);
+})();
+</script>
 </body>
 </html>
 
