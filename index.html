@@ -17687,6 +17687,63 @@ document.addEventListener("click", function(e){
 }, true);
 })();
 </script>
+<script>
+(function(){
+if(window.__v110loaded)return;window.__v110loaded=true;
+// 1. Cleanup tick during marea window (5s)
+var ticks=0;
+function trackV87(){
+  document.querySelectorAll("[id^=\"v87-page-\"]").forEach(function(pg){
+    if(getComputedStyle(pg).display!=="none" && pg.style.display!=="none") pg.dataset.v110want="1";
+  });
+}
+function cleanup(){
+  document.querySelectorAll(".tab-panel").forEach(function(p){
+    if(p.id!=="panel-inicio" && p.style.display==="none") p.style.removeProperty("display");
+  });
+  document.querySelectorAll("[id^=\"v87-page-\"]").forEach(function(v){
+    if(v.style.display==="none" && v.dataset.v110want==="1") v.style.removeProperty("display");
+  });
+}
+var iv=setInterval(function(){ trackV87(); cleanup(); ticks++; if(ticks>60) clearInterval(iv); },100);
+// 2. Home spacing CSS + clickable headers cursor
+var st=document.createElement("style");
+st.textContent="#v100-noticias-wrap,#v100-blogs-wrap,#v100-podcast-wrap{margin-top:56px !important;margin-bottom:28px !important;padding-top:8px !important}#v100-noticias-wrap h2,#v100-blogs-wrap h2,#v100-podcast-wrap h2{cursor:pointer !important;transition:color 0.2s !important}#v100-noticias-wrap h2:hover,#v100-blogs-wrap h2:hover,#v100-podcast-wrap h2:hover{color:#9b0d22 !important}";
+document.head.appendChild(st);
+// 3. Hook header clicks
+function hook(wrapId,navId){
+  var wrap=document.getElementById(wrapId); if(!wrap) return;
+  var h=wrap.querySelector("h1,h2,h3"); if(!h || h.dataset.v110hooked) return;
+  h.dataset.v110hooked="1"; h.style.cursor="pointer";
+  h.addEventListener("click", function(){
+    var b=document.querySelector(".v36-side [data-v36id=\""+navId+"\"]");
+    if(b){ b.click(); return; }
+    var sb=document.querySelector("[data-v26id=\""+navId+"\"]");
+    if(sb){ sb.click(); return; }
+  });
+}
+function hookAll(){ hook("v100-noticias-wrap","noticias"); hook("v100-blogs-wrap","blogs"); hook("v100-podcast-wrap","podcast"); }
+setTimeout(hookAll,800); setTimeout(hookAll,3000); setTimeout(hookAll,6000);
+// 4. Per-sport sidebar labels
+var SPORT={soccer:"Fútbol",futbol:"Fútbol",tenis:"Tenis",carreras:"Carreras",basketball:"Basketball",basket:"Basketball",nba:"Basketball",combate:"Combate",baseball:"Baseball",mlb:"Baseball",hockey:"Hockey",nhl:"Hockey",futamericano:"Fútbol Americano",nfl:"Fútbol Americano",rugby:"Rugby",golf:"Golf",atletismo:"Atletismo",natacion:"Natación",ciclismo:"Ciclismo",volleyball:"Volleyball",volley:"Volleyball",padel:"Pádel",cricket:"Cricket",otros:"Otros Deportes",eventos:"Eventos Globales"};
+function syncLabels(){
+  var sb=document.getElementById("sidebar"); if(!sb) return;
+  var sport=null;
+  document.querySelectorAll(".tab-panel.active").forEach(function(p){ var m=p.id.match(/^panel-(.+)$/); if(m && SPORT[m[1]]) sport=m[1]; });
+  if(!sport) return;
+  var name=SPORT[sport];
+  sb.querySelectorAll("*").forEach(function(el){
+    if(el.children.length>0) return;
+    var t=(el.textContent||"").trim();
+    if(/^F[ÚU]TBOL$/.test(t) && t!==name.toUpperCase()) el.textContent=name.toUpperCase();
+    if(/¿Qu[eé]\s+es\s+el\s+F[uú]tbol\?/i.test(t)){
+      el.textContent=el.textContent.replace(/¿Qu[eé]\s+es\s+el\s+F[uú]tbol\?/i, "¿Qué es el "+name+"?");
+    }
+  });
+}
+setInterval(syncLabels,800);
+})();
+</script>
 </body>
 </html>
 
