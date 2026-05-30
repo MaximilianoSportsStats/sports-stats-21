@@ -17646,6 +17646,47 @@ document.addEventListener("click", function(e){
 }, true);
 })();
 </script>
+<script>
+(function(){
+if(window.__v109loaded)return;window.__v109loaded=true;
+function cleanupPanels(){
+  document.querySelectorAll(".tab-panel").forEach(function(p){
+    if(p.id!=="panel-inicio" && p.style.display==="none"){
+      p.style.removeProperty("display");
+    }
+  });
+}
+setTimeout(cleanupPanels,200);
+setTimeout(cleanupPanels,800);
+setTimeout(cleanupPanels,2000);
+setTimeout(cleanupPanels,4000);
+function softInicio(){
+  var pi=document.getElementById("panel-inicio"); if(!pi) return;
+  document.querySelectorAll(".tab-panel").forEach(function(p){
+    if(p.id==="panel-inicio"){ p.style.removeProperty("display"); p.classList.add("active"); }
+    else { p.classList.remove("active"); p.style.removeProperty("display"); }
+  });
+  document.querySelectorAll("[data-v26id]").forEach(function(b){
+    if(b.getAttribute("data-v26id")==="inicio") b.classList.add("active"); else b.classList.remove("active");
+  });
+  document.querySelectorAll("[id^=\"v87-page-\"]").forEach(function(v){ v.style.removeProperty("display"); });
+  document.body.classList.remove("v36-open");
+  var overlay=document.querySelector(".v36-overlay"); if(overlay) overlay.classList.remove("v36-open");
+  var side=document.querySelector(".v36-side"); if(side) side.classList.remove("v36-open");
+}
+document.addEventListener("click", function(e){
+  var btn=e.target.closest("button,a,li");
+  if(!btn) return;
+  var t=(btn.textContent||"").trim();
+  var v26=btn.getAttribute("data-v26id");
+  var isInicio = v26==="inicio" || (t.indexOf("Inicio")>=0 && t.length<15);
+  if(isInicio){
+    setTimeout(softInicio,50);
+    setTimeout(softInicio,300);
+  }
+}, true);
+})();
+</script>
 </body>
 </html>
 
