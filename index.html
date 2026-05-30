@@ -17961,6 +17961,52 @@ function syncSidebar(){
 setInterval(syncSidebar,500);
 })();
 </script>
+<script>
+(function(){
+if(window.__v114loaded)return;window.__v114loaded=true;
+var PANEL_SPORTS={"panel-soccer":"Fútbol","panel-futbol":"Fútbol","panel-tennis":"Tenis","panel-tenis":"Tenis","panel-nba":"Basketball","panel-basketball":"Basketball","panel-nfl":"Fútbol Americano","panel-mlb":"Baseball","panel-baseball":"Baseball","panel-nhl":"Hockey","panel-hockey":"Hockey","panel-f1":"Carreras","panel-carreras":"Carreras","panel-combate":"Combate","panel-rugby":"Rugby","panel-golf":"Golf","panel-atletismo":"Atletismo","panel-natacion":"Natación","panel-ciclismo":"Ciclismo","panel-volleyball":"Volleyball","panel-padel":"Pádel","panel-cricket":"Cricket","panel-otros":"Otros Deportes","panel-eventos":"Eventos Globales"};
+function getCurrentSport(){
+  var actives=document.querySelectorAll(".tab-panel.active");
+  for(var i=0;i<actives.length;i++){ if(PANEL_SPORTS[actives[i].id]) return PANEL_SPORTS[actives[i].id]; }
+  return null;
+}
+var TENIS_HTML='<div class="v114-tenis-sidebar"><div class="v114-section-header"><span>TENIS</span><span class="v114-mf-toggle"><button class="v114-mf v114-mfactive">M</button><button class="v114-mf">F</button></span></div><button class="v114-question">❓ ¿Qué es el Tenis?</button><ul class="v114-submenu"><li>📋 Reglas</li><li>📚 Historia</li><li>🏅 Records</li></ul><button class="v114-section-title">🏆 Ranking</button><div class="v114-section-title v114-with-arrow">🎾 Torneos<span style="float:right">▸</span></div><ul class="v114-submenu"><li>🏆 Copa Davis</li><li>👑 Grand Slams</li><li>⭐ Master 1000</li><li>🎯 ATP 500</li><li>🎾 ATP 250</li><li>🥎 Challenger</li></ul><button class="v114-section-title">📅 Calendario</button></div>';
+var st=document.createElement("style");
+st.textContent=".v114-tenis-sidebar{padding:8px 0;display:none}.v114-tenis-sidebar.v114-active{display:block}.v114-section-header{display:flex;justify-content:space-between;align-items:center;padding:14px 18px;font-weight:700;font-size:13px;letter-spacing:0.5px;color:#64748b;text-transform:uppercase}.v114-mf-toggle{display:inline-flex;background:#f3f4f6;border-radius:999px;padding:2px}.v114-mf{padding:4px 12px;border:none;background:transparent;border-radius:999px;cursor:pointer;font-weight:600;color:#64748b;font-size:13px}.v114-mf.v114-mfactive{background:#c8102e;color:#fff}.v114-question{display:block;width:calc(100% - 16px);text-align:left;padding:14px 16px;margin:8px;background:#fef2f2;border:1px solid #fee2e2;border-radius:10px;color:#c8102e;font-weight:700;cursor:pointer;font-size:14px}.v114-section-title{display:block;width:100%;text-align:left;padding:14px 18px;background:transparent;border:none;border-bottom:1px solid #e2e8f0;color:#0f172a;font-weight:600;cursor:pointer;font-size:13px;letter-spacing:0.5px;text-transform:uppercase}.v114-submenu{list-style:none;padding:4px 0 4px 36px;margin:0}.v114-submenu li{padding:10px 14px;cursor:pointer;color:#475569;font-size:14px;font-weight:500}.v114-submenu li:hover{color:#c8102e}";
+document.head.appendChild(st);
+function ensureSidebar(){
+  var sb=document.getElementById("sidebar"); if(!sb) return;
+  if(!sb.querySelector(".v114-tenis-sidebar")){
+    var d=document.createElement("div");
+    d.innerHTML=TENIS_HTML;
+    sb.appendChild(d.firstElementChild);
+  }
+}
+function syncSidebar(){
+  var sb=document.getElementById("sidebar"); if(!sb) return;
+  ensureSidebar();
+  var sport=getCurrentSport();
+  var tenisBar=sb.querySelector(".v114-tenis-sidebar");
+  var origChildren=Array.from(sb.children).filter(function(c){ return !c.classList.contains("v114-tenis-sidebar")});
+  if(sport==="Tenis"){
+    origChildren.forEach(function(c){ c.style.setProperty("display","none","important"); });
+    if(tenisBar) tenisBar.classList.add("v114-active");
+  } else if(sport==="Fútbol" || !sport){
+    origChildren.forEach(function(c){ c.style.removeProperty("display"); });
+    if(tenisBar) tenisBar.classList.remove("v114-active");
+    sb.querySelectorAll("*").forEach(function(el){
+      if(el.children.length>0) return;
+      if(el.dataset.v113h==="1" && el.textContent!=="Fútbol") el.textContent="Fútbol";
+      if(el.dataset.v113q==="1") el.textContent="❓ ¿Qué es el Fútbol?";
+    });
+  } else {
+    origChildren.forEach(function(c){ c.style.setProperty("display","none","important"); });
+    if(tenisBar) tenisBar.classList.remove("v114-active");
+  }
+}
+setInterval(syncSidebar,400);
+})();
+</script>
 </body>
 </html>
 
