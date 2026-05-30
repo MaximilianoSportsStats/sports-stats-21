@@ -17782,6 +17782,100 @@ function syncLabels(){
 setInterval(syncLabels,500);
 })();
 </script>
+<script>
+(function(){
+if(window.__v112loaded)return;window.__v112loaded=true;
+var ALL_SPORTS=["Fútbol","Tenis","Carreras","Basketball","Combate","Baseball","Hockey","Fútbol Americano","Rugby","Golf","Atletismo","Natación","Ciclismo","Volleyball","Pádel","Cricket","Otros Deportes","Eventos Globales"];
+function isSportName(t){
+  for(var i=0;i<ALL_SPORTS.length;i++){
+    if(t.toLowerCase()===ALL_SPORTS[i].toLowerCase()) return true;
+  }
+  return false;
+}
+function getCurrentSport(){
+  var active=Array.from(document.querySelectorAll(".sport-btn")).find(function(b){
+    return b.classList.contains("active") && b.offsetParent;
+  });
+  if(!active) return null;
+  var t=(active.textContent||"").trim();
+  for(var i=0;i<ALL_SPORTS.length;i++){
+    if(t.indexOf(ALL_SPORTS[i])>=0) return ALL_SPORTS[i];
+  }
+  return null;
+}
+function syncLabels(){
+  var sb=document.getElementById("sidebar"); if(!sb) return;
+  var sport=getCurrentSport(); if(!sport) return;
+  if(sb.dataset.v112sport===sport) return;
+  sb.querySelectorAll("*").forEach(function(el){
+    if(el.children.length>0) return;
+    var t=(el.textContent||"").trim();
+    if(el.dataset.v112isheader==="1"){
+      if(t!==sport) el.textContent=sport;
+    } else if(isSportName(t)){
+      el.dataset.v112isheader="1";
+      if(t!==sport) el.textContent=sport;
+    }
+    if(el.dataset.v112isquestion==="1"){
+      el.textContent=el.textContent.replace(/¿Qu[eé]\s+es\s+(el|la|los|las)\s+[^?]+\?/i, "¿Qué es el "+sport+"?");
+    } else if(/¿Qu[eé]\s+es\s+(el|la|los|las)\s+.+\?/i.test(t)){
+      el.dataset.v112isquestion="1";
+      el.textContent=el.textContent.replace(/¿Qu[eé]\s+es\s+(el|la|los|las)\s+[^?]+\?/i, "¿Qué es el "+sport+"?");
+    }
+  });
+  sb.dataset.v112sport=sport;
+}
+setInterval(syncLabels,500);
+var WIDGET_NAV={"Explorar deportes":"deportes","Ver en vivo":"envivo","Crear mi perfil":"perfil","Conectar":"conecta","Modo Reclutador":"reclutar","Comparar":"comparar","Ver Información":"noticias","Buscar centros":"centros"};
+function hookCTAs(){
+  document.querySelectorAll(".inicio-panel .v99-cta").forEach(function(cta){
+    if(cta.dataset.v112wired) return;
+    var t=(cta.textContent||"").trim().replace(/[\s→]+$/,"").trim();
+    var key=null;
+    Object.keys(WIDGET_NAV).forEach(function(k){ if(t.indexOf(k)===0) key=k; });
+    if(!key) return;
+    var target=WIDGET_NAV[key];
+    cta.dataset.v112wired="1";
+    cta.addEventListener("click", function(){
+      var b=document.querySelector(".v36-side [data-v36id=\""+target+"\"]");
+      if(b){ b.click(); return; }
+      var sb=document.querySelector("[data-v26id=\""+target+"\"]");
+      if(sb){ sb.click(); return; }
+      var byText=Array.from(document.querySelectorAll(".v36-side button, [data-v26id]")).find(function(b){
+        var tt=(b.textContent||"").toLowerCase();
+        return tt.indexOf(target)>=0;
+      });
+      if(byText){ byText.click(); }
+    });
+  });
+}
+setTimeout(hookCTAs,500); setTimeout(hookCTAs,2000); setInterval(hookCTAs,5000);
+var SECTION_NAV={"NOTICIAS":"noticias","BLOGS":"blogs","PODCAST":"podcast"};
+function hookSecs(){
+  document.querySelectorAll("h1,h2,h3").forEach(function(h){
+    if(h.dataset.v112wired) return;
+    var t=(h.textContent||"").trim().toUpperCase();
+    var key=null;
+    Object.keys(SECTION_NAV).forEach(function(k){ if(t.indexOf(k)>=0 && t.length<30) key=k; });
+    if(!key) return;
+    h.dataset.v112wired="1"; h.style.cursor="pointer";
+    h.addEventListener("click", function(){
+      var target=SECTION_NAV[key];
+      var b=document.querySelector(".v36-side [data-v36id=\""+target+"\"]");
+      if(b){ b.click(); return; }
+      var sb=document.querySelector("[data-v26id=\""+target+"\"]");
+      if(sb){ sb.click(); return; }
+      var li=Array.from(document.querySelectorAll(".v36-side li, .v36-side button")).find(function(el){
+        var tt=(el.textContent||"").toLowerCase();
+        return tt.indexOf(target)>=0;
+      });
+      if(li){ li.click(); }
+    });
+  });
+}
+setTimeout(hookSecs,500); setTimeout(hookSecs,2000); setInterval(hookSecs,5000);
+})();
+</script>
 </body>
 </html>
 
