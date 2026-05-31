@@ -18544,6 +18544,81 @@ document.addEventListener("click", function(e){
 }, true);
 })();
 </script>
+<script>
+(function(){
+if(window.__v130loaded)return;window.__v130loaded=true;
+var st=document.createElement("style");
+st.textContent=".sport-nav-bar{flex-wrap:nowrap !important;overflow-x:auto !important;overflow-y:hidden !important}.sport-nav-bar .sport-btn{flex-shrink:0 !important}.sport-nav-bar .sport-btn[data-v130split=\"1\"]{white-space:normal !important;max-width:90px !important;line-height:1.15 !important}";
+document.head.appendChild(st);
+function splitLabels(){
+  document.querySelectorAll(".sport-nav-bar .sport-btn").forEach(function(b){
+    if(b.dataset.v130split) return;
+    var t=(b.textContent||"").trim();
+    if(/Otros\s+Deportes/i.test(t)){
+      b.dataset.v130split="1";
+      b.innerHTML=b.innerHTML.replace(/Otros\s+Deportes/i,"Otros<br>Deportes");
+    } else if(/Eventos\s+Globales/i.test(t)){
+      b.dataset.v130split="1";
+      b.innerHTML=b.innerHTML.replace(/Eventos\s+Globales/i,"Eventos<br>Globales");
+    }
+  });
+}
+splitLabels();
+setInterval(splitLabels, 1500);
+function dedupeFav(){
+  document.querySelectorAll(".v80-box").forEach(function(box){
+    box.querySelectorAll("[data-v116fav],[data-v115isfav]").forEach(function(e){ e.remove(); });
+    box.querySelectorAll("[data-v122wrap=\"1\"]").forEach(function(w){ while(w.firstChild) w.parentNode.insertBefore(w.firstChild, w); w.remove(); });
+    var favs=box.querySelectorAll("[data-v123fav]");
+    if(favs.length>1){ for(var i=1;i<favs.length;i++) favs[i].remove(); }
+    var wraps=box.querySelectorAll("[data-v123wrap=\"1\"]");
+    if(wraps.length>1){ for(var i=1;i<wraps.length;i++){ var w=wraps[i]; while(w.firstChild){ var c=w.firstChild; if(c.dataset && c.dataset.v123fav){ c.remove(); } else { w.parentNode.insertBefore(c,w); } } w.remove(); } }
+  });
+}
+dedupeFav();
+setInterval(dedupeFav, 250);
+})();
+</script>
+<script>
+(function(){
+if(window.__v130aLoaded)return;window.__v130aLoaded=true;
+function nuclearInicio(){
+  var pi=document.getElementById("panel-inicio"); if(!pi) return;
+  document.querySelectorAll(".tab-panel").forEach(function(p){
+    if(p.id==="panel-inicio"){ p.classList.add("active"); p.style.removeProperty("display"); p.style.setProperty("display","block","important"); }
+    else { p.classList.remove("active"); p.style.setProperty("display","none","important"); }
+  });
+  document.querySelectorAll("[id^=\"v87-page-\"]").forEach(function(v){ v.style.setProperty("display","none","important"); });
+  var nav=document.querySelector(".sport-nav-bar");
+  if(nav){ nav.classList.remove("v127-active"); nav.style.setProperty("display","none","important"); }
+  var bcl=document.body.classList;
+  Array.from(bcl).forEach(function(c){ if(/^v32-view-/.test(c)) bcl.remove(c); });
+  bcl.add("v32-view-inicio");
+  document.querySelectorAll("[data-v26id]").forEach(function(b){ if(b.getAttribute("data-v26id")==="inicio") b.classList.add("active"); else b.classList.remove("active"); });
+  document.querySelectorAll("[data-v56-key]").forEach(function(b){ if(b.getAttribute("data-v56-key")==="inicio") b.classList.add("active"); else b.classList.remove("active"); });
+  try{ window.scrollTo(0,0); }catch(e){}
+  document.body.classList.remove("v36-open");
+  var ov=document.querySelector(".v36-overlay"); if(ov) ov.classList.remove("v36-open");
+  var sd=document.querySelector(".v36-side"); if(sd) sd.classList.remove("v36-open");
+}
+var lastInicioClickAt=0;
+document.addEventListener("click", function(e){
+  var btn=e.target.closest("button,a,li,[data-v26id],[data-v56-key]");
+  if(!btn) return;
+  var v26=btn.getAttribute("data-v26id");
+  var v56=btn.getAttribute("data-v56-key");
+  var t=(btn.textContent||"").trim();
+  var isInicio=v26==="inicio" || v56==="inicio" || (/(^|\W)Inicio(\W|$)/.test(t) && t.length<25);
+  if(isInicio){
+    lastInicioClickAt=Date.now();
+    nuclearInicio();
+  }
+}, true);
+setInterval(function(){
+  if(Date.now()-lastInicioClickAt < 3000){ nuclearInicio(); }
+}, 100);
+})();
+</script>
 </body>
 </html>
 
