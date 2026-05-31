@@ -18500,6 +18500,50 @@ function sync(){
 sync(); setInterval(sync, 200);
 })();
 </script>
+<script>
+(function(){
+if(window.__v129loaded)return;window.__v129loaded=true;
+function dedupeFav(){
+  document.querySelectorAll(".v80-box").forEach(function(box){
+    var favs=box.querySelectorAll("[data-v123fav]");
+    if(favs.length>1){ for(var i=1;i<favs.length;i++) favs[i].remove(); }
+  });
+}
+dedupeFav(); setInterval(dedupeFav, 400);
+function fullResetToInicio(){
+  var pi=document.getElementById("panel-inicio"); if(!pi) return;
+  document.querySelectorAll(".tab-panel").forEach(function(p){
+    if(p.id==="panel-inicio"){ p.classList.add("active"); p.style.removeProperty("display"); }
+    else { p.classList.remove("active"); }
+  });
+  document.querySelectorAll("[id^=\"v87-page-\"]").forEach(function(v){ v.style.setProperty("display","none","important"); });
+  var nav=document.querySelector(".sport-nav-bar");
+  if(nav){ nav.classList.remove("v127-active"); nav.style.removeProperty("display"); }
+  var bcl=document.body.classList;
+  Array.from(bcl).forEach(function(c){ if(/^v32-view-/.test(c)) bcl.remove(c); });
+  bcl.add("v32-view-inicio");
+  document.querySelectorAll("[data-v26id]").forEach(function(b){ if(b.getAttribute("data-v26id")==="inicio") b.classList.add("active"); else b.classList.remove("active"); });
+  document.querySelectorAll("[data-v56-key]").forEach(function(b){ if(b.getAttribute("data-v56-key")==="inicio") b.classList.add("active"); else b.classList.remove("active"); });
+  try{ window.scrollTo({top:0,behavior:"instant"}); }catch(e){ window.scrollTo(0,0); }
+  document.body.classList.remove("v36-open");
+  var overlay=document.querySelector(".v36-overlay"); if(overlay) overlay.classList.remove("v36-open");
+  var side=document.querySelector(".v36-side"); if(side) side.classList.remove("v36-open");
+}
+document.addEventListener("click", function(e){
+  var btn=e.target.closest("button,a,li");
+  if(!btn) return;
+  var v26=btn.getAttribute("data-v26id");
+  var v56=btn.getAttribute("data-v56-key");
+  var t=(btn.textContent||"").trim();
+  var isInicio=v26==="inicio" || v56==="inicio" || (t.indexOf("Inicio")>=0 && t.length<15);
+  if(isInicio){
+    setTimeout(fullResetToInicio, 30);
+    setTimeout(fullResetToInicio, 250);
+    setTimeout(fullResetToInicio, 600);
+  }
+}, true);
+})();
+</script>
 </body>
 </html>
 
