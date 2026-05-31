@@ -18123,6 +18123,34 @@ setTimeout(setup,400); setTimeout(setup,1200); setInterval(setup,1500);
 reduceMarea();
 })();
 </script>
+<script>
+(function(){
+if(window.__v117loaded)return;window.__v117loaded=true;
+function hookCTA(){
+  document.querySelectorAll(".inicio-panel .v99-cta").forEach(function(cta){
+    if(cta.dataset.v117wired) return;
+    var t=(cta.textContent||"").trim().replace(/[\s→]+$/,"").trim();
+    if(t.indexOf("Explorar deportes")!==0) return;
+    cta.dataset.v117wired="1";
+    cta.addEventListener("click", function(e){
+      e.stopImmediatePropagation(); e.preventDefault();
+      var prof=document.querySelector("[data-v56-key=\"profesionales\"]");
+      if(prof) prof.click();
+      var tryFutbol=function(attempt){
+        var futbolBtn=Array.from(document.querySelectorAll(".sport-btn")).find(function(b){
+          var bt=(b.textContent||"").trim();
+          return /F[u\u00fa]tbol/.test(bt) && !/Americano/.test(bt) && b.offsetParent;
+        });
+        if(futbolBtn){ futbolBtn.click(); return; }
+        if(attempt<10) setTimeout(function(){tryFutbol(attempt+1)}, 100);
+      };
+      setTimeout(function(){tryFutbol(0)}, 150);
+    }, true);
+  });
+}
+setTimeout(hookCTA,400); setTimeout(hookCTA,1500); setInterval(hookCTA,3000);
+})();
+</script>
 </body>
 </html>
 
