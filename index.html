@@ -18379,6 +18379,44 @@ document.addEventListener("click", function(e){
 }, true);
 })();
 </script>
+<script>
+(function(){
+if(window.__v125loaded)return;window.__v125loaded=true;
+var st=document.createElement("style");
+st.textContent=".sport-nav-bar.v125-force{display:flex !important;visibility:visible !important;opacity:1 !important;height:auto !important}";
+document.head.appendChild(st);
+function showNavBar(){
+  var nav=document.querySelector(".sport-nav-bar");
+  if(nav){ nav.classList.add("v125-force"); }
+}
+function hideNavBar(){
+  var nav=document.querySelector(".sport-nav-bar");
+  if(nav){ nav.classList.remove("v125-force"); }
+}
+function syncNavBar(){
+  var soccer=document.getElementById("panel-soccer");
+  var inicio=document.getElementById("panel-inicio");
+  var isHomeShown=inicio && inicio.classList.contains("active") && getComputedStyle(inicio).display!=="none";
+  var isSportShown=false;
+  document.querySelectorAll(".tab-panel.active").forEach(function(p){
+    if(p.id!=="panel-inicio" && getComputedStyle(p).display!=="none") isSportShown=true;
+  });
+  if(isSportShown && !isHomeShown){ showNavBar(); }
+  else { hideNavBar(); }
+}
+syncNavBar();
+setInterval(syncNavBar, 400);
+document.querySelectorAll(".tab-panel").forEach(function(p){
+  new MutationObserver(syncNavBar).observe(p,{attributes:true,attributeFilter:["class","style"]});
+});
+document.addEventListener("click", function(e){
+  if(e.target.closest(".sport-btn,[data-v56-key],[data-v26id],[data-v36id]")){
+    setTimeout(syncNavBar, 50);
+    setTimeout(syncNavBar, 250);
+  }
+}, true);
+})();
+</script>
 </body>
 </html>
 
