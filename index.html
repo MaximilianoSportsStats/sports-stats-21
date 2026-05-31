@@ -18282,6 +18282,75 @@ fixFavLayout();
 setInterval(fixFavLayout, 600);
 })();
 </script>
+<script>
+(function(){
+if(window.__v123loaded)return;window.__v123loaded=true;
+function ensureFav(){
+  document.querySelectorAll(".v80-box").forEach(function(box){
+    var seguir=Array.from(box.querySelectorAll("button")).find(function(b){return /\+\s*Seguir/.test((b.textContent||"").trim()) && !b.dataset.v123fav});
+    if(!seguir) return;
+    var wrap=box.querySelector("[data-v123wrap=\"1\"]");
+    if(wrap && wrap.contains(seguir)) return;
+    box.querySelectorAll("[data-v116fav],[data-v115isfav]").forEach(function(e){ if(!e.dataset.v123fav) e.remove(); });
+    box.querySelectorAll("[data-v122wrap=\"1\"]").forEach(function(w){
+      while(w.firstChild) w.parentNode.insertBefore(w.firstChild, w);
+      w.remove();
+    });
+    var fav=document.createElement("button");
+    fav.dataset.v123fav="1";
+    fav.type="button";
+    fav.innerHTML="\u2606 Favoritos";
+    fav.style.cssText="background:#fff;color:#0f172a;border:2px solid #e2e8f0;cursor:pointer;padding:10px 18px;border-radius:999px;font-weight:600;font-size:14px;display:inline-flex;align-items:center;gap:6px;line-height:1;white-space:nowrap";
+    fav.addEventListener("click", function(){
+      var on=fav.dataset.v123state==="on";
+      if(on){ fav.dataset.v123state=""; fav.innerHTML="\u2606 Favoritos"; fav.style.color="#0f172a"; fav.style.borderColor="#e2e8f0"; }
+      else { fav.dataset.v123state="on"; fav.innerHTML="\u2b50 En Favoritos"; fav.style.color="#c8102e"; fav.style.borderColor="#c8102e"; }
+    });
+    wrap=document.createElement("div");
+    wrap.dataset.v123wrap="1";
+    wrap.style.cssText="display:inline-flex;align-items:center;gap:10px;margin-left:auto;flex-wrap:nowrap";
+    seguir.parentNode.insertBefore(wrap, seguir);
+    wrap.appendChild(fav); wrap.appendChild(seguir);
+  });
+}
+function quickSidebarSync(){
+  var sb=document.getElementById("sidebar"); if(!sb) return;
+  var isTennis=false, isSoccer=false;
+  document.querySelectorAll(".tab-panel.active").forEach(function(p){
+    if(p.id==="panel-tennis") isTennis=true;
+    if(p.id==="panel-soccer") isSoccer=true;
+  });
+  var tenisBar=sb.querySelector(".v114-tenis-sidebar");
+  var origChildren=Array.from(sb.children).filter(function(c){return !c.classList || !c.classList.contains("v114-tenis-sidebar")});
+  if(isTennis){
+    origChildren.forEach(function(c){ c.style && c.style.setProperty("display","none","important"); });
+    if(tenisBar) tenisBar.classList.add("v114-active");
+  } else if(isSoccer){
+    origChildren.forEach(function(c){ c.style && c.style.removeProperty("display"); });
+    if(tenisBar) tenisBar.classList.remove("v114-active");
+  } else {
+    origChildren.forEach(function(c){ c.style && c.style.setProperty("display","none","important"); });
+    if(tenisBar) tenisBar.classList.remove("v114-active");
+  }
+}
+function observePanels(){
+  document.querySelectorAll(".tab-panel").forEach(function(p){
+    if(p.dataset.v123obs) return; p.dataset.v123obs="1";
+    new MutationObserver(function(){ quickSidebarSync(); ensureFav(); }).observe(p,{attributes:true,attributeFilter:["class","style"]});
+  });
+}
+document.addEventListener("click", function(e){
+  if(e.target.closest(".sport-btn,[data-v56-key],[data-v26id],[data-v36id]")){
+    setTimeout(quickSidebarSync, 30);
+    setTimeout(quickSidebarSync, 200);
+    setTimeout(ensureFav, 100);
+  }
+}, true);
+setTimeout(function(){ ensureFav(); observePanels(); quickSidebarSync(); }, 400);
+setTimeout(function(){ ensureFav(); observePanels(); quickSidebarSync(); }, 1500);
+setInterval(function(){ ensureFav(); observePanels(); }, 2000);
+})();
+</script>
 </body>
 </html>
 
