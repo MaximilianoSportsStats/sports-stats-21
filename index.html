@@ -18745,6 +18745,25 @@ function render(){
 setTimeout(render,800); setTimeout(render,3000); setInterval(render,8000);
 })();
 </script>
+<script>
+(function(){
+if(window.__v135loaded)return;window.__v135loaded=true;
+var LIG2=[{n:"Eredivisie",f:"🇳🇱",d:"Pa\u00edses Bajos \u00b7 1956 \u00b7 18 equipos",h:"Ajax (36), PSV (25), Feyenoord (16). Casa hist\u00f3rica de Cruyff, Van Basten y Bergkamp"},{n:"Primeira Liga",f:"🇵🇹",d:"Portugal \u00b7 1934 \u00b7 18 equipos",h:"Benfica (38), Porto (30), Sporting (19). Cantera mundial: Figo, Ronaldo, Eusebio"},{n:"MLS",f:"🇺🇸",d:"Estados Unidos/Canad\u00e1 \u00b7 1996 \u00b7 29 equipos",h:"LA Galaxy (5), DC United (4). Casa actual de Messi (Inter Miami). Crece r\u00e1pido"},{n:"Liga MX",f:"🇲🇽",d:"M\u00e9xico \u00b7 1943 \u00b7 18 equipos",h:"Am\u00e9rica (14), Chivas (12), Cruz Azul (9), Tigres. M\u00e1s vista de Norteam\u00e9rica"},{n:"J.League",f:"🇯🇵",d:"Jap\u00f3n \u00b7 1992 \u00b7 20 equipos",h:"Kashima Antlers (8). Liga m\u00e1s competitiva de Asia. Profesionalizaci\u00f3n del f\u00fatbol nip\u00f3n"},{n:"K League 1",f:"🇰🇷",d:"Corea del Sur \u00b7 1983 \u00b7 12 equipos",h:"Jeonbuk (9), Seongnam (7), Ulsan. Park Ji-sung y Son nacieron aqu\u00ed"},{n:"Brasileir\u00e3o",f:"🇧🇷",d:"Brasil \u00b7 1959 \u00b7 20 equipos",h:"Palmeiras (12), Santos (8 + Pel\u00e9), Flamengo (8), Corinthians (7). Cuna de leyendas"},{n:"Liga Profesional Argentina",f:"🇦🇷",d:"Argentina \u00b7 1891 \u00b7 28 equipos",h:"River (38), Boca (35). Superclasico m\u00e1s famoso del mundo. Cuna de Maradona y Messi"},{n:"Saudi Pro League",f:"🇸🇦",d:"Arabia Saudita \u00b7 1976 \u00b7 18 equipos",h:"Al-Hilal (19), Al-Nassr (Cristiano), Al-Ittihad (Benzema). Inversi\u00f3n masiva 2023"},{n:"Copa Libertadores",f:"🇺🇦",d:"CONMEBOL \u00b7 1960 \u00b7 47 equipos",h:"Independiente (7), Boca (6), Pe\u00f1arol (5). Su Champions sudamericana"}];
+var OCE=[{n:"Nueva Zelanda",f:"🇳🇿",m:"Fase grupos 1982, 2010",ca:"5 Copa Naciones OFC",l:"Ryan Nelsen, Wynton Rufer, Chris Wood"},{n:"Fiji",f:"🇫🇯",m:"Sin clasificar",ca:"2da Copa OFC",l:"Roy Krishna, William Valentine, Bula"}];
+function render(){
+  var p=document.getElementById("panel-soccer"); if(!p) return;
+  if(p.querySelector("#v135-extra")) return;
+  var sec=document.createElement("section");
+  sec.id="v135-extra";
+  sec.style.cssText="margin:32px auto;max-width:1200px;padding:0 24px";
+  var ligC=LIG2.map(function(l){return '<div class="v115-card"><div style="display:flex;align-items:center;gap:14px;margin-bottom:12px"><span style="font-size:36px">'+l.f+'</span><div><strong style="font-size:18px;color:#c8102e">'+l.n+'</strong><div style="font-size:12px;color:#94a3b8">'+l.d+'</div></div></div><div style="font-size:13px;color:#475569;line-height:1.7">'+l.h+'</div></div>';}).join("");
+  var oceC=OCE.map(function(s){return '<div class="v115-card"><div style="display:flex;align-items:center;gap:14px;margin-bottom:12px"><span style="font-size:36px">'+s.f+'</span><strong style="font-size:18px;color:#c8102e">'+s.n+'</strong></div><div style="font-size:13px;color:#475569;line-height:1.7"><div><strong>Mundial:</strong> '+s.m+'</div><div><strong>OFC:</strong> '+s.ca+'</div><div style="margin-top:8px"><strong>Leyendas:</strong> '+s.l+'</div></div></div>';}).join("");
+  sec.innerHTML='<h2 style="color:#c8102e;margin:0 0 18px 0">\ud83c\udfdf\ufe0f Ligas Globales</h2><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-bottom:28px">'+ligC+'</div><h2 style="color:#c8102e;margin:28px 0 18px 0">\ud83c\udf0a Selecciones de Ocean\u00eda</h2><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px">'+oceC+'</div>';
+  p.appendChild(sec);
+}
+setTimeout(render,800); setTimeout(render,3000); setInterval(render,8000);
+})();
+</script>
 </body>
 </html>
 
