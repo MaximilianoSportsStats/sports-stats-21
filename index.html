@@ -18619,6 +18619,56 @@ setInterval(function(){
 }, 100);
 })();
 </script>
+<script>
+(function(){
+if(window.__v131loaded)return;window.__v131loaded=true;
+var st=document.createElement("style");
+st.textContent=".sport-nav-bar,div.sport-nav-bar{flex-wrap:nowrap !important;overflow-x:auto !important;overflow-y:hidden !important;max-width:100% !important}.sport-nav-bar > *{flex-shrink:0 !important}.sport-nav-bar .sport-btn{flex-shrink:0 !important;flex-grow:0 !important}.sport-nav-bar .sport-btn[data-v130split=\"1\"]{white-space:normal !important;max-width:80px !important;line-height:1.15 !important;text-align:center}";
+document.head.appendChild(st);
+function ensureFavGlobal(){
+  document.querySelectorAll("button").forEach(function(seguir){
+    var txt=(seguir.textContent||"").trim();
+    if(!/^\+\s*Seguir$/.test(txt)) return;
+    if(!seguir.offsetParent) return;
+    if(seguir.closest("[data-v123wrap=\"1\"]")) return;
+    var parent=seguir.parentElement; if(!parent) return;
+    var fav=document.createElement("button");
+    fav.dataset.v123fav="1"; fav.type="button";
+    fav.innerHTML="\u2606 Favoritos";
+    fav.style.cssText="background:#fff;color:#0f172a;border:2px solid #e2e8f0;cursor:pointer;padding:10px 18px;border-radius:999px;font-weight:600;font-size:14px;display:inline-flex;align-items:center;gap:6px;line-height:1;white-space:nowrap";
+    fav.addEventListener("click", function(){
+      var on=fav.dataset.v123state==="on";
+      if(on){ fav.dataset.v123state=""; fav.innerHTML="\u2606 Favoritos"; fav.style.color="#0f172a"; fav.style.borderColor="#e2e8f0"; }
+      else { fav.dataset.v123state="on"; fav.innerHTML="\u2b50 En Favoritos"; fav.style.color="#c8102e"; fav.style.borderColor="#c8102e"; }
+    });
+    var wrap=document.createElement("div");
+    wrap.dataset.v123wrap="1";
+    wrap.style.cssText="display:inline-flex;align-items:center;gap:10px;margin-left:auto;flex-wrap:nowrap";
+    parent.insertBefore(wrap, seguir);
+    wrap.appendChild(fav); wrap.appendChild(seguir);
+  });
+}
+ensureFavGlobal(); setInterval(ensureFavGlobal, 600);
+function setupSearch(){
+  var inputs=document.querySelectorAll("input[placeholder*=\"Buscar\"], input[type=search]");
+  inputs.forEach(function(input){
+    if(input.dataset.v131s) return; input.dataset.v131s="1";
+    input.addEventListener("keydown", function(e){
+      if(e.key!=="Enter") return;
+      var q=(input.value||"").trim().toLowerCase();
+      if(!q) return;
+      var match=Array.from(document.querySelectorAll(".sport-btn")).find(function(b){ return (b.textContent||"").toLowerCase().indexOf(q)>=0; });
+      if(match){
+        var dep=document.querySelector("[data-v26id=\"deportes\"]");
+        if(dep) dep.click();
+        setTimeout(function(){ match.click(); input.value=""; input.blur(); }, 200);
+      }
+    });
+  });
+}
+setupSearch(); setInterval(setupSearch, 1500);
+})();
+</script>
 </body>
 </html>
 
