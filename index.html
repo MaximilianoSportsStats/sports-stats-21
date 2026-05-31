@@ -18351,6 +18351,34 @@ setTimeout(function(){ ensureFav(); observePanels(); quickSidebarSync(); }, 1500
 setInterval(function(){ ensureFav(); observePanels(); }, 2000);
 })();
 </script>
+<script>
+(function(){
+if(window.__v124loaded)return;window.__v124loaded=true;
+function goToFutbol(){
+  document.body.classList.forEach(function(c){ if(/^v32-view-/.test(c)) document.body.classList.remove(c); });
+  document.body.classList.add("v32-view-deportes");
+  document.querySelectorAll(".tab-panel").forEach(function(p){
+    if(p.id==="panel-soccer"){ p.classList.add("active"); p.style.removeProperty("display"); }
+    else { p.classList.remove("active"); }
+  });
+  setTimeout(function(){
+    document.querySelectorAll(".sport-btn").forEach(function(b){
+      var t=(b.textContent||"").trim();
+      if(/F[u\u00fa]tbol/.test(t) && !/Americano/.test(t)){ b.classList.add("active"); }
+      else { b.classList.remove("active"); }
+    });
+  }, 80);
+}
+document.addEventListener("click", function(e){
+  var cta=e.target.closest(".inicio-panel .v99-cta");
+  if(!cta) return;
+  var t=(cta.textContent||"").trim().replace(/[\s→]+$/,"").trim();
+  if(t.indexOf("Explorar deportes")!==0) return;
+  e.stopImmediatePropagation(); e.preventDefault();
+  goToFutbol();
+}, true);
+})();
+</script>
 </body>
 </html>
 
