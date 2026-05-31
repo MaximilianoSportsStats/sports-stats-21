@@ -18688,6 +18688,25 @@ function render(){
 setTimeout(render,800); setTimeout(render,3000); setInterval(render,8000);
 })();
 </script>
+<script>
+(function(){
+if(window.__v133loaded)return;window.__v133loaded=true;
+var SEL=[{n:"Pa\u00edses Bajos",f:"🇳🇱",m:"0 Mundiales",y:"3 finales (1974,78,2010)",ca:"1 Euro (1988)",fifa:"#6",l:"Cruyff, Van Basten, Bergkamp, Van Nistelrooy, Robben, Van Dijk"},{n:"B\u00e9lgica",f:"🇧🇪",m:"0 Mundiales",y:"3ro 2018",ca:"0 Euros",fifa:"#3",l:"Hazard, De Bruyne, Lukaku, Courtois, Kompany"},{n:"Croacia",f:"🇭🇷",m:"0 Mundiales",y:"Final 2018, 3ro 2022",ca:"0 Euros",fifa:"#10",l:"Modric, Suker, Mandzukic, Boban, Kovacic"},{n:"Dinamarca",f:"🇩🇰",m:"0 Mundiales",y:"Cuartos 1998",ca:"1 Euro (1992)",fifa:"#21",l:"Laudrup, Schmeichel, Bendtner, Eriksen, Hojbjerg"},{n:"Suecia",f:"🇸🇪",m:"0 Mundiales",y:"Final 1958",ca:"0 Euros",fifa:"#28",l:"Ibrahimovic, Henrik Larsson, Ravelli, Brolin, Forsberg"},{n:"Suiza",f:"🇨🇭",m:"0 Mundiales",y:"Cuartos 3 veces",ca:"0 Euros",fifa:"#19",l:"Shaqiri, Xhaka, Sommer, Stielike, Vogts"},{n:"Polonia",f:"🇵🇱",m:"0 Mundiales",y:"3ro 1974, 1982",ca:"0 Euros",fifa:"#29",l:"Lewandowski, Boniek, Lato, Deyna, Szczesny"},{n:"Austria",f:"🇦🇹",m:"0 Mundiales",y:"3ro 1954",ca:"0 Euros",fifa:"#25",l:"Sindelar, Krankl, Prohaska, Polster, Alaba"},{n:"Serbia",f:"🇷🇸",m:"0 Mundiales",y:"Cuartos 1962 (Yugoslavia)",ca:"0 Euros",fifa:"#33",l:"Stojkovic, Vidic, Stankovic, Mitrovic, Tadic"},{n:"Chequia",f:"🇨🇿",m:"0 Mundiales",y:"Final 1934, 1962 (Checoslovaquia)",ca:"1 Euro 1976 (Checoslovaquia)",fifa:"#43",l:"Nedved, Cech, Rosicky, Baros, Schick"},{n:"Turqu\u00eda",f:"🇹🇷",m:"0 Mundiales",y:"3ro 2002",ca:"0 Euros",fifa:"#41",l:"Hakan Sukur, Emre, Arda Turan, Calhanoglu, Cenk Tosun"},{n:"Ucrania",f:"🇺🇦",m:"0 Mundiales",y:"Cuartos 2006",ca:"0 Euros",fifa:"#26",l:"Shevchenko, Blokhin, Belanov, Yarmolenko, Zinchenko"}];
+var LIG=[{n:"Premier League",f:"🇬🇧",d:"Inglaterra \u00b7 1888 \u00b7 20 equipos",h:"Liga m\u00e1s vista del mundo. Manchester City, Liverpool, Arsenal, Chelsea, Tottenham, Manchester United"},{n:"La Liga",f:"🇪🇸",d:"Espa\u00f1a \u00b7 1929 \u00b7 20 equipos",h:"Real Madrid (36 t\u00edtulos), Barcelona (27), Atl\u00e9tico Madrid (11). Casa de Messi por 17 a\u00f1os"},{n:"Bundesliga",f:"🇩🇪",d:"Alemania \u00b7 1963 \u00b7 18 equipos",h:"Bayern Munich domina (33 t\u00edtulos). Estadios llenos, m\u00e1s alta asistencia promedio del mundo"},{n:"Serie A",f:"🇮🇹",d:"Italia \u00b7 1898 \u00b7 20 equipos",h:"Juventus (36 Scudettos), Inter, Milan, Roma, Napoli (Maradona). Era dorada en los 90s"},{n:"Ligue 1",f:"🇫🇷",d:"Francia \u00b7 1932 \u00b7 18 equipos",h:"PSG ha ganado 12 de los \u00faltimos 14 t\u00edtulos. Marsella, Lyon (7 seguidos femenino), Monaco"}];
+function render(){
+  var p=document.getElementById("panel-soccer"); if(!p) return;
+  if(p.querySelector("#v133-europa")) return;
+  var sec=document.createElement("section");
+  sec.id="v133-europa";
+  sec.style.cssText="margin:32px auto;max-width:1200px;padding:0 24px";
+  var selCards=SEL.map(function(s){return '<div class="v115-card"><div style="display:flex;align-items:center;gap:14px;margin-bottom:12px"><span style="font-size:36px">'+s.f+'</span><div><strong style="font-size:18px;color:#c8102e">'+s.n+'</strong><div style="font-size:12px;color:#94a3b8">FIFA '+s.fifa+'</div></div></div><div style="font-size:13px;color:#475569;line-height:1.7"><div><strong>Mundiales:</strong> '+s.m+" · "+s.y+'</div><div><strong>Euro:</strong> '+s.ca+'</div><div style="margin-top:8px"><strong>Leyendas:</strong> '+s.l+'</div></div></div>';}).join("");
+  var ligCards=LIG.map(function(l){return '<div class="v115-card"><div style="display:flex;align-items:center;gap:14px;margin-bottom:12px"><span style="font-size:36px">'+l.f+'</span><div><strong style="font-size:18px;color:#c8102e">'+l.n+'</strong><div style="font-size:12px;color:#94a3b8">'+l.d+'</div></div></div><div style="font-size:13px;color:#475569;line-height:1.7">'+l.h+'</div></div>';}).join("");
+  sec.innerHTML='<h2 style="color:#c8102e;margin:0 0 18px 0">\ud83c\uddea\ud83c\uddfa Selecciones de Europa</h2><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-bottom:28px">'+selCards+'</div><h2 style="color:#c8102e;margin:28px 0 18px 0">\ud83c\udfc6 Top Ligas Europeas</h2><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px">'+ligCards+'</div>';
+  p.appendChild(sec);
+}
+setTimeout(render,800); setTimeout(render,3000); setInterval(render,8000);
+})();
+</script>
 </body>
 </html>
 
