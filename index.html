@@ -18764,6 +18764,23 @@ function render(){
 setTimeout(render,800); setTimeout(render,3000); setInterval(render,8000);
 })();
 </script>
+<script>
+(function(){
+if(window.__v136loaded)return;window.__v136loaded=true;
+var FEM=[{n:"Estados Unidos",f:"🇺🇸",m:"4 Mundiales (m\u00e1s ganados)",y:"1991, 1999, 2015, 2019",jjoo:"4 Oros",l:"Mia Hamm, Abby Wambach, Megan Rapinoe, Carli Lloyd, Alex Morgan, Trinity Rodman"},{n:"Alemania",f:"🇩🇪",m:"2 Mundiales",y:"2003, 2007",jjoo:"1 Oro (2016)",l:"Birgit Prinz, Renate Lingor, Nadine Angerer, Alex Popp, Marozsan"},{n:"Noruega",f:"🇳🇴",m:"1 Mundial",y:"1995",jjoo:"1 Oro (2000)",l:"Hege Riise, Heidi Mohr, Linda Medalen, Caroline Graham Hansen, Ada Hegerberg"},{n:"Espa\u00f1a",f:"🇪🇸",m:"1 Mundial",y:"2023",jjoo:"",l:"Aitana Bonmati (2 Balones de Oro 2023-24), Alexia Putellas (2 Balones 2021-22), Jenni Hermoso"},{n:"Jap\u00f3n",f:"🇯🇵",m:"1 Mundial",y:"2011",jjoo:"Plata 2012",l:"Homare Sawa, Saki Kumagai, Nahomi Kawasumi, Yuki Nagasato"},{n:"Brasil",f:"🇧🇷",m:"0 Mundiales",y:"Final 2007",jjoo:"3 Platas",l:"Marta (6x FIFA Best, GOAT), Sissi, Cristiane, Formiga, Tamires, Debinha"},{n:"Suecia",f:"🇸🇪",m:"0 Mundiales",y:"Final 2003 + 3 podios",jjoo:"Plata 2016, 2020",l:"Lotta Schelin, Pia Sundhage (DT), Caroline Seger, Fridolina Rolfo"},{n:"Inglaterra",f:"🇬🇧",m:"0 Mundiales",y:"Final 2023",jjoo:"",l:"Beth Mead (Euro 2022 MVP), Lucy Bronze, Mary Earps, Lauren James, Russo"},{n:"Pa\u00edses Bajos",f:"🇳🇱",m:"0 Mundiales",y:"Final 2019",jjoo:"",l:"Lieke Martens, Vivianne Miedema (m\u00e1xima goleadora WSL), Sherida Spitse"},{n:"Francia",f:"🇫🇷",m:"0 Mundiales",y:"Semis 2011",jjoo:"",l:"Wendie Renard, Eug\u00e9nie Le Sommer, Marie-Antoinette Katoto, Sakina Karchaoui"},{n:"Canad\u00e1",f:"🇨🇦",m:"0 Mundiales",y:"Cuartos 2003",jjoo:"Oro 2020 + Bronces",l:"Christine Sinclair (190 goles, m\u00e1xima hist\u00f3rica), Kadeisha Buchanan, Janine Beckie"},{n:"Australia",f:"🇦🇺",m:"0 Mundiales",y:"4to 2023 (anfitri\u00f3n)",jjoo:"",l:"Sam Kerr, Caitlin Foord, Steph Catley, Mary Fowler"},{n:"China",f:"🇨🇳",m:"0 Mundiales",y:"Final 1999 (perdi\u00f3 vs USA)",jjoo:"Plata 1996",l:"Sun Wen, Liu Ailing, Wang Shuang, Li Jie"},{n:"Dinamarca",f:"🇩🇰",m:"0 Mundiales",y:"Cuartos 2007",jjoo:"",l:"Pernille Harder (m\u00e1xima goleadora hist\u00f3rica DK), Janni Arnth"},{n:"Nigeria",f:"🇳🇬",m:"0 Mundiales",y:"Octavos 2019",jjoo:"11 Copas \u00c1frica (m\u00e1s ganadas)",l:"Asisat Oshoala (5x African Player of the Year), Onome Ebi, Desire Oparanozie"},{n:"Argentina",f:"🇦🇷",m:"0 Mundiales",y:"Mejor: 3 mundiales jugados",jjoo:"",l:"Estefan\u00eda Banini, Florencia Bonsegundo, Yamila Rodr\u00edguez"}];
+function render(){
+  var p=document.getElementById("panel-soccer"); if(!p) return;
+  if(p.querySelector("#v136-femeninas")) return;
+  var sec=document.createElement("section");
+  sec.id="v136-femeninas";
+  sec.style.cssText="margin:32px auto;max-width:1200px;padding:0 24px";
+  var cards=FEM.map(function(s){return '<div class="v115-card"><div style="display:flex;align-items:center;gap:14px;margin-bottom:12px"><span style="font-size:36px">'+s.f+'</span><strong style="font-size:18px;color:#c8102e">'+s.n+'</strong></div><div style="font-size:13px;color:#475569;line-height:1.7"><div><strong>Mundial:</strong> '+s.m+(s.y?" · "+s.y:"")+'</div>'+(s.jjoo?'<div><strong>JJOO:</strong> '+s.jjoo+'</div>':"")+'<div style="margin-top:8px"><strong>Leyendas:</strong> '+s.l+'</div></div></div>';}).join("");
+  sec.innerHTML='<h2 style="color:#c8102e;margin:0 0 18px 0">\u26bd Selecciones Femeninas de F\u00fatbol</h2><p style="color:#475569;font-size:14px;margin-bottom:18px">Top selecciones del f\u00fatbol femenino mundial \u00b7 16 pa\u00edses con historia, t\u00edtulos y leyendas</p><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px">'+cards+'</div>';
+  p.appendChild(sec);
+}
+setTimeout(render,800); setTimeout(render,3000); setInterval(render,8000);
+})();
+</script>
 </body>
 </html>
 
