@@ -18151,6 +18151,25 @@ function hookCTA(){
 setTimeout(hookCTA,400); setTimeout(hookCTA,1500); setInterval(hookCTA,3000);
 })();
 </script>
+<script>
+(function(){
+if(window.__v118loaded)return;window.__v118loaded=true;
+function hookCTA(){
+  document.querySelectorAll(".inicio-panel .v99-cta").forEach(function(cta){
+    if(cta.dataset.v118wired) return;
+    var t=(cta.textContent||"").trim().replace(/[\s→]+$/,"").trim();
+    if(t.indexOf("Explorar deportes")!==0) return;
+    cta.dataset.v118wired="1";
+    cta.addEventListener("click", function(e){
+      e.stopImmediatePropagation(); e.preventDefault();
+      var dep=document.querySelector("[data-v26id=\"deportes\"]");
+      if(dep){ dep.click(); }
+    }, true);
+  });
+}
+setTimeout(hookCTA,400); setTimeout(hookCTA,1500); setInterval(hookCTA,3000);
+})();
+</script>
 </body>
 </html>
 
