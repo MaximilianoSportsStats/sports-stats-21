@@ -18076,6 +18076,53 @@ function runAll(){ hookMF(); hookTorneos(); hookFav(); ensureTenisContent(); }
 setTimeout(runAll,600); setTimeout(runAll,2500); setInterval(runAll,5000);
 })();
 </script>
+<script>
+(function(){
+if(window.__v116loaded)return;window.__v116loaded=true;
+function redirectExplorarDeportes(){
+  document.querySelectorAll(".inicio-panel .v99-cta").forEach(function(cta){
+    var t=(cta.textContent||"").trim().replace(/[\s→]+$/,"").trim();
+    if(t.indexOf("Explorar deportes")===0){
+      if(cta.dataset.v116redir=="1") return;
+      cta.dataset.v116redir="1";
+      cta.addEventListener("click", function(e){
+        e.stopImmediatePropagation(); e.preventDefault();
+        var prof=document.querySelector("[data-v56-key=\"profesionales\"]");
+        if(prof){ prof.click(); return; }
+        var dep=document.querySelector("[data-v26id=\"deportes\"]");
+        if(dep){ dep.click(); }
+      }, true);
+    }
+  });
+}
+function hookFavFast(){
+  document.querySelectorAll(".v80-box").forEach(function(box){
+    if(box.querySelector("[data-v116fav]")) return;
+    var seguir=Array.from(box.querySelectorAll("button")).find(function(b){return /\+\s*Seguir/.test((b.textContent||"").trim())});
+    if(!seguir) return;
+    var fav=document.createElement("button");
+    fav.dataset.v116fav="1";
+    fav.innerHTML="☆ Favoritos";
+    fav.style.cssText="background:#fff !important;color:#0f172a !important;border:2px solid #e2e8f0 !important;margin-right:10px;cursor:pointer;padding:10px 18px;border-radius:999px;font-weight:600;font-size:14px;display:inline-flex;align-items:center;gap:6px;line-height:1";
+    fav.addEventListener("click", function(){
+      var on=fav.dataset.v116state==="on";
+      if(on){ fav.dataset.v116state=""; fav.innerHTML="☆ Favoritos"; fav.style.color="#0f172a"; fav.style.borderColor="#e2e8f0"; }
+      else { fav.dataset.v116state="on"; fav.innerHTML="⭐ En Favoritos"; fav.style.color="#c8102e"; fav.style.borderColor="#c8102e"; }
+    });
+    seguir.parentNode.insertBefore(fav, seguir);
+    var oldFav=box.querySelector("[data-v115isfav]"); if(oldFav) oldFav.remove();
+  });
+}
+function reduceMarea(){
+  var st=document.createElement("style");
+  st.textContent=".v114-tenis-sidebar,#sidebar > div, #sidebar > section{transition:opacity 0.12s ease}";
+  document.head.appendChild(st);
+}
+function setup(){ redirectExplorarDeportes(); hookFavFast(); }
+setTimeout(setup,400); setTimeout(setup,1200); setInterval(setup,1500);
+reduceMarea();
+})();
+</script>
 </body>
 </html>
 
