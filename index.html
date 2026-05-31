@@ -18205,6 +18205,83 @@ document.addEventListener("click", function(e){
 }, true);
 })();
 </script>
+<script>
+(function(){
+if(window.__v121loaded)return;window.__v121loaded=true;
+function findCardWithTitle(scope,kw){
+  var cards=scope.querySelectorAll(".v115-card");
+  for(var i=0;i<cards.length;i++){
+    var h=cards[i].querySelector("h2,h3");
+    if(h && new RegExp(kw,"i").test(h.textContent||"")) return cards[i];
+  }
+  return null;
+}
+function scrollToEl(el){ if(!el) return; var r=el.getBoundingClientRect(); window.scrollTo({top:window.scrollY+r.top-100, behavior:"smooth"}); }
+var SCROLL_MAP={
+  "Reglas": function(){ var pg=document.getElementById("panel-tennis");if(!pg) return; scrollToEl(findCardWithTitle(pg,"Reglas")); },
+  "Historia": function(){ var pg=document.getElementById("panel-tennis");if(!pg) return; scrollToEl(findCardWithTitle(pg,"Historia")); },
+  "Records": function(){ scrollToEl(document.getElementById("v115-tenis-leyendas")); },
+  "¿Qué es el Tenis?": function(){ scrollToEl(document.getElementById("v115-tenis-acerca")); },
+  "Ranking": function(){ var pg=document.getElementById("panel-tennis"); if(!pg) return; var rank=pg.querySelector("[id*=ranking],[class*=ranking]"); if(rank) scrollToEl(rank); else scrollToEl(pg); },
+  "Copa Davis": function(){ scrollToTournament("Davis"); },
+  "Grand Slams": function(){ scrollToTournament("Grand Slam|Australian|Roland|Wimbledon|US Open"); },
+  "Master 1000": function(){ scrollToTournament("Master"); },
+  "ATP 500": function(){ scrollToTournament("ATP 500"); },
+  "ATP 250": function(){ scrollToTournament("ATP 250"); },
+  "Challenger": function(){ scrollToTournament("Challenger"); },
+  "Calendario": function(){ var pg=document.getElementById("panel-tennis"); if(!pg) return; var cal=pg.querySelector("[id*=calendario],[class*=calendar],[id*=schedule]"); if(cal) scrollToEl(cal); else scrollToEl(pg); }
+};
+function scrollToTournament(kw){
+  var pg=document.getElementById("panel-tennis"); if(!pg) return;
+  var all=pg.querySelectorAll("h1,h2,h3,h4,strong,b");
+  for(var i=0;i<all.length;i++){
+    if(new RegExp(kw,"i").test(all[i].textContent||"")){ scrollToEl(all[i]); return; }
+  }
+  scrollToEl(pg);
+}
+function hookSidebar(){
+  var sb=document.querySelector(".v114-tenis-sidebar"); if(!sb) return;
+  sb.querySelectorAll(".v114-question, .v114-section-title, .v114-submenu li, .v114-with-arrow").forEach(function(el){
+    if(el.dataset.v121wired) return;
+    if(el.classList.contains("v114-with-arrow")) return;
+    var t=(el.textContent||"").trim().replace(/^[^A-Za-z¿]+/,"").trim();
+    var key=null;
+    Object.keys(SCROLL_MAP).forEach(function(k){ if(t===k || t.indexOf(k)===0 || k.indexOf(t)===0){ key=k; }});
+    if(!key) return;
+    el.dataset.v121wired="1";
+    el.style.cursor="pointer";
+    el.addEventListener("click", function(e){
+      e.preventDefault(); e.stopPropagation();
+      var fn=SCROLL_MAP[key]; if(fn) fn();
+    });
+  });
+}
+setTimeout(hookSidebar,500); setTimeout(hookSidebar,2000); setInterval(hookSidebar,3000);
+})();
+</script>
+<script>
+(function(){
+if(window.__v122loaded)return;window.__v122loaded=true;
+function fixFavLayout(){
+  document.querySelectorAll(".v80-box").forEach(function(box){
+    var seguir=Array.from(box.querySelectorAll("button")).find(function(b){return /\+\s*Seguir/.test((b.textContent||"").trim())});
+    if(!seguir) return;
+    var fav=box.querySelector("[data-v116fav]") || box.querySelector("[data-v115isfav]");
+    if(!fav) return;
+    var existingWrap=fav.parentElement;
+    if(existingWrap && existingWrap.dataset && existingWrap.dataset.v122wrap==="1" && existingWrap.contains(seguir)) return;
+    var wrap=document.createElement("div");
+    wrap.dataset.v122wrap="1";
+    wrap.style.cssText="display:inline-flex;align-items:center;gap:10px;flex-wrap:nowrap";
+    seguir.parentNode.insertBefore(wrap, seguir);
+    wrap.appendChild(fav);
+    wrap.appendChild(seguir);
+  });
+}
+fixFavLayout();
+setInterval(fixFavLayout, 600);
+})();
+</script>
 </body>
 </html>
 
