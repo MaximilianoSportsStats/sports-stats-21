@@ -18669,6 +18669,25 @@ function setupSearch(){
 setupSearch(); setInterval(setupSearch, 1500);
 })();
 </script>
+<script>
+(function(){
+if(window.__v132loaded)return;window.__v132loaded=true;
+var SELECCIONES=[{n:"Uruguay",f:"🇺🇾",m:"2 Mundiales",y:"1930, 1950",ca:"15 Copas América (más ganadas)",fifa:"#14",l:"Suarez, Cavani, Forlán, Recoba, Schiaffino"},{n:"Colombia",f:"🇨🇴",m:"0 Mundiales",y:"Mejor: Cuartos 2014",ca:"1 Copa América (2001)",fifa:"#15",l:"Valdérrama, James, Falcao, Higuita, Asprilla"},{n:"Chile",f:"🇨🇱",m:"0 Mundiales",y:"Mejor: 3ro 1962",ca:"2 Copas América (2015, 2016)",fifa:"#42",l:"Vidal, Alexis Sánchez, Bravo, Zamorano, Salas"},{n:"Perú",f:"🇵🇪",m:"0 Mundiales",y:"Mejor: Cuartos 1970",ca:"2 Copas América (1939, 1975)",fifa:"#34",l:"Cubillas, Sotil, Pizarro, Guerrero, Farfán"},{n:"Ecuador",f:"🇪🇨",m:"0 Mundiales",y:"Mejor: Octavos 2006",ca:"0 Copas América",fifa:"#44",l:"Antonio Valencia, Enner Valencia, Caicedo, Alex Aguinaga"},{n:"Paraguay",f:"🇵🇾",m:"0 Mundiales",y:"Mejor: Cuartos 2010",ca:"2 Copas América (1953, 1979)",fifa:"#48",l:"Romerito, Chilavert, Cardozo, Santa Cruz, Gamarra"},{n:"Bolivia",f:"🇧🇴",m:"0 Mundiales",y:"Mejor: Fase grupos",ca:"1 Copa América (1963)",fifa:"#85",l:"Etcheverry, Sanchez, Erwin, Borja, V\u00e1ldez"},{n:"Venezuela",f:"🇻🇪",m:"0 Mundiales",y:"Nunca clasificó",ca:"Mejor: 4to 2011",fifa:"#56",l:"Salomón Rondón, Tomás Rincón, Rey Vargas, Arango"}];
+function render(){
+  var panel=document.getElementById("panel-soccer"); if(!panel) return;
+  if(panel.querySelector("#v132-sudamerica-sel")) return;
+  var sec=document.createElement("section");
+  sec.id="v132-sudamerica-sel";
+  sec.style.cssText="margin:32px auto;max-width:1200px;padding:0 24px";
+  var cards=SELECCIONES.map(function(s){
+    return '<div class="v115-card"><div style="display:flex;align-items:center;gap:14px;margin-bottom:12px"><span style="font-size:36px">'+s.f+'</span><div><strong style="font-size:18px;color:#c8102e">'+s.n+'</strong><div style="font-size:12px;color:#94a3b8">FIFA '+s.fifa+'</div></div></div><div style="font-size:13px;color:#475569;line-height:1.7"><div><strong>Mundiales:</strong> '+s.m+(s.y?" · "+s.y:"")+'</div><div><strong>Copa América:</strong> '+s.ca+'</div><div style="margin-top:8px"><strong>Leyendas:</strong> '+s.l+'</div></div></div>';
+  }).join("");
+  sec.innerHTML='<h2 style="color:#c8102e;margin:0 0 18px 0">\ud83c\udf0e Selecciones de Sudam\u00e9rica</h2><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px">'+cards+'</div>';
+  panel.appendChild(sec);
+}
+setTimeout(render,800); setTimeout(render,3000); setInterval(render,8000);
+})();
+</script>
 </body>
 </html>
 
