@@ -18184,6 +18184,27 @@ document.addEventListener("click", function(e){
 }, true);
 })();
 </script>
+<script>
+(function(){
+if(window.__v120loaded)return;window.__v120loaded=true;
+var st=document.createElement("style");
+st.textContent="#v29-todos-page{display:none !important;visibility:hidden !important;height:0 !important;overflow:hidden !important}";
+document.head.appendChild(st);
+function killTodos(){
+  var t=document.getElementById("v29-todos-page");
+  if(t){ t.style.setProperty("display","none","important"); t.classList.remove("active"); }
+}
+killTodos();
+setInterval(killTodos, 200);
+document.addEventListener("click", function(e){
+  var btn=e.target.closest("[data-v56-key=\"profesionales\"]");
+  if(!btn) return;
+  e.stopImmediatePropagation(); e.preventDefault();
+  var dep=document.querySelector("[data-v26id=\"deportes\"]");
+  if(dep){ dep.click(); }
+}, true);
+})();
+</script>
 </body>
 </html>
 
