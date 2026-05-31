@@ -18417,6 +18417,30 @@ document.addEventListener("click", function(e){
 }, true);
 })();
 </script>
+<script>
+(function(){
+if(window.__v126loaded)return;window.__v126loaded=true;
+function syncNav(){
+  var nav=document.querySelector(".sport-nav-bar"); if(!nav) return;
+  var hasSportPanel=false;
+  document.querySelectorAll(".tab-panel.active").forEach(function(p){
+    if(p.id!=="panel-inicio" && getComputedStyle(p).display!=="none") hasSportPanel=true;
+  });
+  if(hasSportPanel){ nav.style.setProperty("display","flex","important"); }
+  else { nav.style.removeProperty("display"); }
+}
+syncNav();
+setInterval(syncNav, 300);
+document.querySelectorAll(".tab-panel").forEach(function(p){
+  new MutationObserver(syncNav).observe(p,{attributes:true,attributeFilter:["class","style"]});
+});
+document.addEventListener("click", function(e){
+  if(e.target.closest(".sport-btn,[data-v56-key],[data-v26id],[data-v36id],.v99-cta")){
+    setTimeout(syncNav, 50); setTimeout(syncNav, 250); setTimeout(syncNav, 600);
+  }
+}, true);
+})();
+</script>
 </body>
 </html>
 
