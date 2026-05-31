@@ -18441,6 +18441,45 @@ document.addEventListener("click", function(e){
 }, true);
 })();
 </script>
+<script>
+(function(){
+if(window.__v127loaded)return;window.__v127loaded=true;
+var st=document.createElement("style");
+st.textContent=".sport-nav-bar.v127-active{display:flex !important;visibility:visible !important;opacity:1 !important;height:auto !important;overflow:visible !important}body .sport-nav-bar.v127-active{display:flex !important}";
+document.head.appendChild(st);
+function needsShow(){
+  var actives=document.querySelectorAll(".tab-panel.active");
+  for(var i=0;i<actives.length;i++){
+    if(actives[i].id!=="panel-inicio" && getComputedStyle(actives[i]).display!=="none") return true;
+  }
+  return false;
+}
+function syncNav(){
+  var nav=document.querySelector(".sport-nav-bar"); if(!nav) return;
+  if(needsShow()){
+    nav.classList.add("v127-active");
+    nav.style.setProperty("display","flex","important");
+  } else {
+    nav.classList.remove("v127-active");
+    nav.style.removeProperty("display");
+  }
+}
+function observeNav(){
+  var nav=document.querySelector(".sport-nav-bar"); if(!nav) return;
+  if(nav.dataset.v127obs) return; nav.dataset.v127obs="1";
+  new MutationObserver(function(){
+    if(needsShow() && nav.style.display!=="flex"){
+      nav.style.setProperty("display","flex","important");
+    }
+  }).observe(nav,{attributes:true,attributeFilter:["style","class"]});
+}
+syncNav(); observeNav();
+setInterval(function(){ syncNav(); observeNav(); }, 200);
+document.querySelectorAll(".tab-panel").forEach(function(p){
+  new MutationObserver(syncNav).observe(p,{attributes:true,attributeFilter:["class","style"]});
+});
+})();
+</script>
 </body>
 </html>
 
