@@ -18726,6 +18726,25 @@ function render(){
 setTimeout(render,800); setTimeout(render,3000); setInterval(render,8000);
 })();
 </script>
+<script>
+(function(){
+if(window.__v134loaded)return;window.__v134loaded=true;
+var AFR=[{n:"Marruecos",f:"🇲🇦",m:"4to Mundial 2022",ca:"1 Copa \u00c1frica (1976)",l:"Hakimi, Ziyech, Bounou, Benzia, Belhanda"},{n:"Senegal",f:"🇸🇳",m:"Cuartos 2002",ca:"1 Copa \u00c1frica (2021)",l:"Mane, Koulibaly, Mendy, Diouf"},{n:"Egipto",f:"🇪🇬",m:"Fase grupos",ca:"7 Copas \u00c1frica (m\u00e1s ganadas)",l:"Salah, Aboutrika, Mido, Hassan, Zaki"},{n:"Argelia",f:"🇩🇿",m:"Octavos 2014",ca:"2 Copas \u00c1frica (1990, 2019)",l:"Mahrez, Belmadi, Madjer, Belloumi"},{n:"Nigeria",f:"🇳🇬",m:"Octavos 4 veces",ca:"3 Copas \u00c1frica",l:"Okocha, Kanu, Yekini, Osimhen, Mikel"},{n:"Ghana",f:"🇬🇭",m:"Cuartos 2010",ca:"4 Copas \u00c1frica",l:"Essien, Gyan, Ayew, Pele Ghan\u00e9s (Abedi)"},{n:"Costa de Marfil",f:"🇨🇮",m:"Fase grupos",ca:"3 Copas \u00c1frica (2023)",l:"Drogba, Yaya Tour\u00e9, Eboue, Zaha"},{n:"Camer\u00fan",f:"🇨🇲",m:"Cuartos 1990",ca:"5 Copas \u00c1frica",l:"Eto\u2019o, Milla, Song, Onana"},{n:"Sud\u00e1frica",f:"🇿🇦",m:"Anfitri\u00f3n 2010",ca:"1 Copa \u00c1frica (1996)",l:"Lucas Radebe, Doctor Khumalo, Mokoena"},{n:"T\u00fanez",f:"🇹🇳",m:"Fase grupos",ca:"1 Copa \u00c1frica (2004)",l:"Khazri, Jaziri, Ben Yahia"},{n:"Mali",f:"🇲🇱",m:"Sin clasificar",ca:"4 finales Copa \u00c1frica",l:"Seydou Keita, Bissouma, Salif Keita"}];
+var ASI=[{n:"Jap\u00f3n",f:"🇯🇵",m:"Octavos 4 veces",ca:"4 Copa Asia (m\u00e1s ganadas)",l:"Honda, Kagawa, Mitoma, Kubo, Nakata"},{n:"Corea del Sur",f:"🇰🇷",m:"4to 2002 (anfitri\u00f3n)",ca:"2 Copas Asia",l:"Son Heung-min, Park Ji-sung, Hong Myung-bo, Cha Bum-kun"},{n:"Australia",f:"🇦🇺",m:"Octavos 3 veces",ca:"1 Copa Asia (2015)",l:"Cahill, Schwarzer, Kewell, Bresciano, Maclaren"},{n:"Ir\u00e1n",f:"🇮🇷",m:"Fase grupos",ca:"3 Copas Asia",l:"Ali Daei, Azmoun, Taremi, Bagheri"},{n:"Arabia Saudita",f:"🇸🇦",m:"Octavos 1994",ca:"3 Copas Asia",l:"Owairan, Al-Jaber, Yasser Al-Qahtani"},{n:"Qatar",f:"🇶🇦",m:"Anfitri\u00f3n 2022",ca:"2 Copas Asia (2019, 2023)",l:"Almoez Ali, Akram Afif, Hassan Al-Haydos"}];
+var NOR=[{n:"M\u00e9xico",f:"🇲🇽",m:"Cuartos 1970, 1986",ca:"11 Copa Oro (m\u00e1s ganadas)",l:"Hugo S\u00e1nchez, Rafa M\u00e1rquez, Chicharito, Memo Ochoa"},{n:"Estados Unidos",f:"🇺🇸",m:"3ro 1930, Cuartos 2002",ca:"7 Copa Oro",l:"Donovan, Dempsey, Pulisic, Tim Howard, Reyna"},{n:"Canad\u00e1",f:"🇨🇦",m:"Fase grupos 1986, 2022",ca:"0 Copa Oro",l:"Alphonso Davies, Jonathan David, Atiba Hutchinson"},{n:"Costa Rica",f:"🇨🇷",m:"Cuartos 2014",ca:"3 Copa Oro",l:"Keylor Navas, Paulo Wanchope, Bryan Ruiz"}];
+function render(){
+  var p=document.getElementById("panel-soccer"); if(!p) return;
+  if(p.querySelector("#v134-regions")) return;
+  var sec=document.createElement("section");
+  sec.id="v134-regions";
+  sec.style.cssText="margin:32px auto;max-width:1200px;padding:0 24px";
+  function cards(arr,extraField){return arr.map(function(s){return '<div class="v115-card"><div style="display:flex;align-items:center;gap:14px;margin-bottom:12px"><span style="font-size:36px">'+s.f+'</span><strong style="font-size:18px;color:#c8102e">'+s.n+'</strong></div><div style="font-size:13px;color:#475569;line-height:1.7"><div><strong>Mundial:</strong> '+s.m+'</div><div><strong>'+extraField+':</strong> '+s.ca+'</div><div style="margin-top:8px"><strong>Leyendas:</strong> '+s.l+'</div></div></div>';}).join("");}
+  sec.innerHTML='<h2 style="color:#c8102e;margin:0 0 18px 0">\ud83c\udf0d Selecciones de \u00c1frica</h2><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-bottom:28px">'+cards(AFR,"Copa \u00c1frica")+'</div><h2 style="color:#c8102e;margin:28px 0 18px 0">\ud83c\udf0f Selecciones de Asia</h2><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-bottom:28px">'+cards(ASI,"Copa Asia")+'</div><h2 style="color:#c8102e;margin:28px 0 18px 0">\ud83c\uddfa\ud83c\uddf8 Selecciones de Am\u00e9rica del Norte</h2><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px">'+cards(NOR,"Copa Oro")+'</div>';
+  p.appendChild(sec);
+}
+setTimeout(render,800); setTimeout(render,3000); setInterval(render,8000);
+})();
+</script>
 </body>
 </html>
 
