@@ -19018,6 +19018,78 @@ function render(){
 setTimeout(render,1500); setInterval(render,8000);
 })();
 </script>
+<script>
+(function(){
+if(window.__v142loaded)return;window.__v142loaded=true;
+var HIDE_IDS=["v132-sudamerica-sel","v133-europa","v134-regions","v135-extra","v136-femeninas","v138-trofeos"];
+function hideSelecciones(){
+  HIDE_IDS.forEach(function(id){ var e=document.getElementById(id); if(e) e.style.setProperty("display","none","important"); });
+}
+hideSelecciones(); setInterval(hideSelecciones, 1000);
+function resetFutbolSidebar(){
+  var sb=document.getElementById("sidebar"); if(!sb) return;
+  var tenisBar=sb.querySelector(".v114-tenis-sidebar");
+  if(tenisBar && tenisBar.classList.contains("v114-active")) return;
+  sb.querySelectorAll("*").forEach(function(el){
+    if(el.children.length>0) return;
+    if(el.dataset.v113h==="1" || el.dataset.v112isheader==="1"){ if(el.textContent!=="F\u00fatbol") el.textContent="F\u00fatbol"; }
+    if(el.dataset.v113q==="1" || el.dataset.v112isquestion==="1"){ if(!/F[u\u00fa]tbol/.test(el.textContent)) el.textContent="\u2753 \u00bfQu\u00e9 es el F\u00fatbol?"; }
+  });
+}
+setInterval(resetFutbolSidebar, 400);
+var TENIS_TABS={
+  "acerca":["v115-tenis-acerca"],
+  "reglas":[],
+  "historia":[],
+  "records":["v115-tenis-leyendas"],
+  "leyendas":["v115-tenis-leyendas"],
+  "copadavis":["v141-copa-davis"],
+  "master1000":["v141-master-1000"],
+  "atp500":["v141-atp-500"],
+  "atp250":["v141-atp-250"],
+  "challenger":["v141-challenger"],
+  "ranking":["v141-ranking"],
+  "calendario":["v141-calendario"]
+};
+var ALL_TENIS_SECTIONS=["v115-tenis-acerca","v115-tenis-leyendas","v141-copa-davis","v141-master-1000","v141-atp-500","v141-atp-250","v141-challenger","v141-ranking","v141-calendario"];
+function showOnly(ids){
+  var pg=document.getElementById("panel-tennis"); if(!pg) return;
+  ALL_TENIS_SECTIONS.forEach(function(id){ var e=document.getElementById(id); if(!e) return; if(ids.indexOf(id)>=0){ e.style.removeProperty("display"); } else { e.style.setProperty("display","none","important"); } });
+  pg.querySelectorAll("#v115-tenis-acerca .v115-card").forEach(function(c){
+    var h=c.querySelector("h3"); if(!h) return;
+    var ht=(h.textContent||"");
+    if(ids[0]==="v115-tenis-acerca-reglas"){ if(/Reglas/i.test(ht)){ c.style.removeProperty("display"); document.getElementById("v115-tenis-acerca").style.removeProperty("display"); } else { c.style.setProperty("display","none","important"); } }
+    else if(ids[0]==="v115-tenis-acerca-historia"){ if(/Historia/i.test(ht)){ c.style.removeProperty("display"); document.getElementById("v115-tenis-acerca").style.removeProperty("display"); } else { c.style.setProperty("display","none","important"); } }
+    else { c.style.removeProperty("display"); }
+  });
+}
+function defaultTab(){ showOnly(["v115-tenis-acerca"]); var pg=document.getElementById("panel-tennis"); if(pg && pg.querySelector("#v115-tenis-acerca")){ var a=document.getElementById("v115-tenis-acerca"); a.querySelectorAll(".v115-card").forEach(function(c){ c.style.removeProperty("display"); }); } }
+function onTenisClick(e){
+  var sb=e.target.closest(".v114-tenis-sidebar"); if(!sb) return;
+  if(e.target.closest(".v114-mf-toggle")) return;
+  if(e.target.classList && e.target.classList.contains("v114-with-arrow")) return;
+  var el=e.target;
+  var t=(el.textContent||"").trim();
+  if(t.length>50){ var pp=el.closest("li,button,div"); if(pp) t=(pp.textContent||"").trim().slice(0,50); }
+  if(/Qu.+es.+Tenis/i.test(t)){ defaultTab(); }
+  else if(/^.{0,3}Reglas$/i.test(t)||/Reglas$/i.test(t)){ showOnly(["v115-tenis-acerca-reglas"]); }
+  else if(/^.{0,3}Historia$/i.test(t)||/Historia$/i.test(t)){ showOnly(["v115-tenis-acerca-historia"]); }
+  else if(/Records|Leyendas/i.test(t)){ showOnly(["v115-tenis-leyendas"]); }
+  else if(/Copa Davis/i.test(t)){ showOnly(["v141-copa-davis"]); }
+  else if(/Master 1000/i.test(t)){ showOnly(["v141-master-1000"]); }
+  else if(/ATP 500/i.test(t)){ showOnly(["v141-atp-500"]); }
+  else if(/ATP 250/i.test(t)){ showOnly(["v141-atp-250"]); }
+  else if(/Challenger/i.test(t)){ showOnly(["v141-challenger"]); }
+  else if(/Ranking/i.test(t)){ showOnly(["v141-ranking"]); }
+  else if(/Calendario/i.test(t)){ showOnly(["v141-calendario"]); }
+  else if(/Grand Slam|Australian|Roland|Wimbledon|US Open/i.test(t)){ var pg=document.getElementById("panel-tennis"); if(pg){ var all=pg.querySelectorAll("h1,h2,h3"); for(var i=0;i<all.length;i++){ if(/Grand Slam/i.test(all[i].textContent)){ var r=all[i].getBoundingClientRect(); window.scrollTo({top:window.scrollY+r.top-100,behavior:"smooth"}); break; } } } }
+  else if(/Torneos/i.test(t)){ showOnly(["v141-copa-davis"]); }
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+document.addEventListener("click", onTenisClick, true);
+setTimeout(defaultTab, 2200);
+})();
+</script>
 </body>
 </html>
 
