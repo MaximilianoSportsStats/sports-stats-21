@@ -18809,6 +18809,74 @@ function keepNav(){
 setInterval(keepNav, 150);
 })();
 </script>
+<script>
+(function(){
+if(window.__v138loaded)return;window.__v138loaded=true;
+function fixSplit(){
+  document.querySelectorAll(".sport-nav-bar .sport-btn").forEach(function(b){
+    var raw=(b.textContent||"").trim();
+    if(/EventosGlobales|Eventos Globales/i.test(raw)){
+      if(!b.querySelector("[data-v138line]")){
+        var emoji=(raw.match(/^[^A-Za-z]+/)||[""])[0];
+        b.innerHTML=emoji+'<span data-v138line="1">Eventos</span><br><span data-v138line="1">Globales</span>';
+        b.dataset.v130split="1";
+      }
+    } else if(/OtrosDeportes|Otros Deportes/i.test(raw)){
+      if(!b.querySelector("[data-v138line]")){
+        var emoji=(raw.match(/^[^A-Za-z]+/)||[""])[0];
+        b.innerHTML=emoji+'<span data-v138line="1">Otros</span><br><span data-v138line="1">Deportes</span>';
+        b.dataset.v130split="1";
+      }
+    }
+  });
+}
+fixSplit(); setInterval(fixSplit, 800);
+function tenisSidebarClick(e){
+  var li=e.target.closest(".v114-tenis-sidebar li, .v114-tenis-sidebar .v114-question, .v114-tenis-sidebar .v114-section-title");
+  if(!li) return;
+  var t=(li.textContent||"").trim();
+  var pg=document.getElementById("panel-tennis"); if(!pg) return;
+  function scrollMatch(kws){
+    var all=pg.querySelectorAll("h1,h2,h3,h4,strong");
+    for(var i=0;i<all.length;i++){
+      var txt=(all[i].textContent||"").trim();
+      for(var j=0;j<kws.length;j++){ if(new RegExp(kws[j],"i").test(txt)){ var r=all[i].getBoundingClientRect(); window.scrollTo({top:window.scrollY+r.top-100,behavior:"smooth"}); return true; } }
+    }
+    return false;
+  }
+  if(/Reglas/.test(t)){ scrollMatch(["Reglas del Tenis","Reglas"]); }
+  else if(/Historia/.test(t)){ scrollMatch(["Historia del Tenis","Historia"]); }
+  else if(/Records|Leyendas/.test(t)){ scrollMatch(["Leyendas del Tenis","Leyendas"]); }
+  else if(/Qu.+\bes\b.+Tenis/i.test(t)){ scrollMatch(["Reglas del Tenis","Acerca"]); }
+  else if(/Copa Davis/.test(t)){ scrollMatch(["Copa Davis"]); }
+  else if(/Grand Slams|Australian|Roland|Wimbledon|US Open/.test(t)){ scrollMatch(["Grand Slams","Australian","Roland","Wimbledon"]); }
+  else if(/Master 1000/.test(t)){ scrollMatch(["Master 1000","Masters"]); }
+  else if(/ATP 500/.test(t)){ scrollMatch(["ATP 500"]); }
+  else if(/ATP 250/.test(t)){ scrollMatch(["ATP 250"]); }
+  else if(/Challenger/.test(t)){ scrollMatch(["Challenger"]); }
+  else if(/Ranking/.test(t)){ scrollMatch(["Ranking"]); }
+  else if(/Calendario/.test(t)){ scrollMatch(["Calendario"]); }
+  else if(/Torneos/.test(t)){ scrollMatch(["Grand Slams","Torneos"]); }
+}
+document.addEventListener("click", tenisSidebarClick, false);
+var TROFEOS=[{cat:"\u26bd Mundiales (FIFA)",items:[{n:"Brasil",f:"\ud83c\udde7\ud83c\uddf7",v:"5 (1958,62,70,94,2002)"},{n:"Alemania",f:"\ud83c\udde9\ud83c\uddea",v:"4 (1954,74,90,2014)"},{n:"Italia",f:"\ud83c\uddee\ud83c\uddf9",v:"4 (1934,38,82,2006)"},{n:"Argentina",f:"\ud83c\udde6\ud83c\uddf7",v:"3 (1978,86,2022)"},{n:"Francia",f:"\ud83c\uddeb\ud83c\uddf7",v:"2 (1998,2018)"},{n:"Uruguay",f:"\ud83c\uddfa\ud83c\uddfe",v:"2 (1930,50)"},{n:"Espa\u00f1a",f:"\ud83c\uddea\ud83c\uddf8",v:"1 (2010)"},{n:"Inglaterra",f:"\ud83c\uddec\ud83c\udde7",v:"1 (1966)"}]},{cat:"\ud83c\udfc6 UEFA Champions League",items:[{n:"Real Madrid",f:"\ud83c\uddea\ud83c\uddf8",v:"15 (\u00faltima 2024)"},{n:"AC Milan",f:"\ud83c\uddee\ud83c\uddf9",v:"7"},{n:"Bayern Munich",f:"\ud83c\udde9\ud83c\uddea",v:"6"},{n:"Liverpool",f:"\ud83c\uddec\ud83c\udde7",v:"6"},{n:"Barcelona",f:"\ud83c\uddea\ud83c\uddf8",v:"5"},{n:"Ajax",f:"\ud83c\uddf3\ud83c\uddf1",v:"4"},{n:"Inter",f:"\ud83c\uddee\ud83c\uddf9",v:"3"},{n:"Manchester United",f:"\ud83c\uddec\ud83c\udde7",v:"3"}]},{cat:"\u2728 Europa League",items:[{n:"Sevilla",f:"\ud83c\uddea\ud83c\uddf8",v:"7 (rey de la copa)"},{n:"Inter",f:"\ud83c\uddee\ud83c\uddf9",v:"3"},{n:"Juventus",f:"\ud83c\uddee\ud83c\uddf9",v:"3"},{n:"Liverpool",f:"\ud83c\uddec\ud83c\udde7",v:"3"},{n:"Atl\u00e9tico Madrid",f:"\ud83c\uddea\ud83c\uddf8",v:"3"}]},{cat:"\ud83c\udfc6 Copa Libertadores",items:[{n:"Independiente",f:"\ud83c\udde6\ud83c\uddf7",v:"7 (rey de copas)"},{n:"Boca Juniors",f:"\ud83c\udde6\ud83c\uddf7",v:"6"},{n:"Pe\u00f1arol",f:"\ud83c\uddfa\ud83c\uddfe",v:"5"},{n:"River Plate",f:"\ud83c\udde6\ud83c\uddf7",v:"4"},{n:"S\u00e3o Paulo",f:"\ud83c\udde7\ud83c\uddf7",v:"3"},{n:"Estudiantes",f:"\ud83c\udde6\ud83c\uddf7",v:"4"},{n:"Santos",f:"\ud83c\udde7\ud83c\uddf7",v:"3 (con Pel\u00e9)"},{n:"Gr\u00eamio",f:"\ud83c\udde7\ud83c\uddf7",v:"3"}]},{cat:"\u2b50 Copa Sudamericana",items:[{n:"Independiente",f:"\ud83c\udde6\ud83c\uddf7",v:"2"},{n:"LDU Quito",f:"\ud83c\uddea\ud83c\udde8",v:"2"},{n:"Boca Juniors",f:"\ud83c\udde6\ud83c\uddf7",v:"2"},{n:"Chapecoense",f:"\ud83c\udde7\ud83c\uddf7",v:"1 (tras tragedia)"}]},{cat:"\ud83c\udfc6 Copa Am\u00e9rica",items:[{n:"Uruguay",f:"\ud83c\uddfa\ud83c\uddfe",v:"15 (m\u00e1s ganadas)"},{n:"Argentina",f:"\ud83c\udde6\ud83c\uddf7",v:"16 (rey actual)"},{n:"Brasil",f:"\ud83c\udde7\ud83c\uddf7",v:"9"},{n:"Paraguay",f:"\ud83c\uddf5\ud83c\uddfe",v:"2"},{n:"Per\u00fa",f:"\ud83c\uddf5\ud83c\uddea",v:"2"},{n:"Chile",f:"\ud83c\udde8\ud83c\uddf1",v:"2"},{n:"Bolivia",f:"\ud83c\udde7\ud83c\uddf4",v:"1"},{n:"Colombia",f:"\ud83c\udde8\ud83c\uddf4",v:"1"}]},{cat:"\ud83c\udfc6 Eurocopa (UEFA Euro)",items:[{n:"Alemania",f:"\ud83c\udde9\ud83c\uddea",v:"3 (1972,80,96)"},{n:"Espa\u00f1a",f:"\ud83c\uddea\ud83c\uddf8",v:"4 (1964,2008,12,2024)"},{n:"Italia",f:"\ud83c\uddee\ud83c\uddf9",v:"2 (1968,2020)"},{n:"Francia",f:"\ud83c\uddeb\ud83c\uddf7",v:"2 (1984,2000)"},{n:"Portugal",f:"\ud83c\uddf5\ud83c\uddf9",v:"1 (2016)"}]},{cat:"\ud83c\udf0d Otros Trofeos",items:[{n:"Mundial de Clubes",f:"\ud83c\udfc6",v:"Real Madrid (8), Bar\u00e7a (3)"},{n:"FIFA Confederaciones",f:"\ud83c\udfc6",v:"Brasil (4 - m\u00e1s ganadas)"},{n:"Copa de Oro CONCACAF",f:"\u2b50",v:"M\u00e9xico (11), USA (7)"},{n:"Copa Asia",f:"\u2b50",v:"Jap\u00f3n (4), Arabia/Ir\u00e1n (3)"},{n:"Copa \u00c1frica",f:"\u2b50",v:"Egipto (7), Camer\u00fan (5)"}]}];
+function renderTrofeos(){
+  var p=document.getElementById("panel-soccer"); if(!p) return;
+  if(p.querySelector("#v138-trofeos")) return;
+  var sec=document.createElement("section");
+  sec.id="v138-trofeos";
+  sec.style.cssText="margin:32px auto;max-width:1200px;padding:0 24px";
+  var html='<h2 style="color:#c8102e;margin:0 0 18px 0">\ud83c\udfc6 Grandes Trofeos del F\u00fatbol</h2>';
+  TROFEOS.forEach(function(t){
+    var cards=t.items.map(function(i){return '<div class="v115-card" style="padding:14px"><div style="display:flex;align-items:center;gap:10px"><span style="font-size:24px">'+i.f+'</span><div style="flex:1"><strong style="font-size:14px;color:#c8102e">'+i.n+'</strong><div style="font-size:12px;color:#475569;margin-top:2px">'+i.v+'</div></div></div></div>';}).join("");
+    html+='<h3 style="color:#0f172a;margin:24px 0 12px 0;font-size:16px">'+t.cat+'</h3><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px">'+cards+'</div>';
+  });
+  sec.innerHTML=html;
+  p.appendChild(sec);
+}
+setTimeout(renderTrofeos,1500); setInterval(renderTrofeos,8000);
+})();
+</script>
 </body>
 </html>
 
