@@ -19277,6 +19277,150 @@ document.addEventListener('click', function(e){
 
 })();
 </script>
+
+<script>
+(function(){
+if(window.__v146loaded)return;window.__v146loaded=true;
+
+// CSS for v146 dropdown
+var st=document.createElement('style');
+st.textContent='.v146-acerca-wrap{position:relative}'+
+  '.v146-acerca-btn{display:block;width:100%;text-align:left;padding:12px 14px;background:#fef2f2;border:1px solid #fee2e2;border-radius:10px;color:#c8102e;font-weight:700;cursor:pointer;font-size:14px;margin:6px 0}'+
+  '.v146-acerca-sub{list-style:none;padding:6px 0 8px 24px;margin:0 0 8px 0;display:none}'+
+  '.v146-acerca-sub.v146-open{display:block}'+
+  '.v146-acerca-sub li{padding:9px 12px;cursor:pointer;color:#475569;font-size:13.5px;border-radius:6px;margin-bottom:2px;line-height:1.4}'+
+  '.v146-acerca-sub li:hover{background:#fef2f2;color:#c8102e}'+
+  '.v146-acerca-sub li.v146-active{background:#fef2f2;color:#c8102e;font-weight:600}'+
+  '.v146-newsletter{margin:24px auto;max-width:1100px;padding:0 24px}'+
+  '.v146-newsletter .body{background:linear-gradient(135deg,#0ea5e9,#0369a1);color:#fff;padding:32px;border-radius:18px;box-shadow:0 4px 20px rgba(2,132,199,0.25);display:flex;flex-direction:column;gap:14px}'+
+  '.v146-newsletter h3{margin:0;font-size:22px;color:#fff}'+
+  '.v146-newsletter p{margin:0;color:rgba(255,255,255,0.92);line-height:1.5}'+
+  '.v146-newsletter form{display:flex;gap:10px;flex-wrap:wrap;margin-top:6px}'+
+  '.v146-newsletter input[type=email]{flex:1 1 240px;padding:12px 16px;border-radius:10px;border:0;font-size:15px;color:#0f172a}'+
+  '.v146-newsletter button{padding:12px 22px;border-radius:10px;border:0;background:#fff;color:#0369a1;font-weight:700;cursor:pointer;font-size:15px}'+
+  '.v146-newsletter button:hover{background:#f8fafc}'+
+  '.v146-newsletter .ok{background:rgba(34,197,94,0.18);border:1px solid rgba(255,255,255,0.3);padding:10px 14px;border-radius:8px;font-size:14px;display:none}'+
+  '.v146-newsletter .ok.v146-show{display:block}';
+document.head.appendChild(st);
+
+// 1. Replace existing '¿Qué es el Fútbol?' button in sidebar with dropdown
+function patchAcercaSidebar(){
+  var sb=document.getElementById('sidebar'); if(!sb) return;
+  var sec=sb.querySelector('.sidebar-section'); if(!sec) return;
+  if(sec.querySelector('.v146-acerca-wrap')) return;
+  var target=null;
+  var allDivs=sec.querySelectorAll('div');
+  for(var i=0;i<allDivs.length;i++){
+    var d=allDivs[i];
+    if(d.children.length===0){
+      var t=(d.textContent||'').trim();
+      if(/^❓?\s*¿Qué es el Fútbol\?$/.test(t)){ target=d; break; }
+    }
+  }
+  if(!target) return;
+  var wrap=document.createElement('div');
+  wrap.className='v146-acerca-wrap';
+  wrap.innerHTML='<button class="v146-acerca-btn" data-v146-toggle="acerca">❓ ¿Qué es el Fútbol? ▾</button>'+
+    '<ul class="v146-acerca-sub">'+
+    '<li data-v146-tab="acerca">📖 Resumen general</li>'+
+    '<li data-v146-tab="historia">📚 Historia</li>'+
+    '<li data-v146-tab="reglas">📋 Reglas FIFA</li>'+
+    '<li data-v146-tab="competiciones">🏆 Competiciones</li>'+
+    '<li data-v146-tab="leyendas">🌟 Leyendas del Fútbol</li>'+
+    '<li data-v146-tab="records">🏅 Records Históricos</li>'+
+    '</ul>';
+  target.parentNode.insertBefore(wrap, target);
+  target.style.display='none';
+}
+setInterval(patchAcercaSidebar, 800);
+setTimeout(patchAcercaSidebar, 600);
+
+// 2. Toggle dropdown + show slides
+document.addEventListener('click', function(e){
+  var t=e.target.closest('[data-v146-toggle]');
+  if(t){
+    var sub=t.parentElement.querySelector('.v146-acerca-sub');
+    if(sub) sub.classList.toggle('v146-open');
+    return;
+  }
+  var tab=e.target.closest('[data-v146-tab]');
+  if(!tab) return;
+  var name=tab.dataset.v146Tab;
+  var pg=document.getElementById('panel-soccer');
+  if(!pg) return;
+  var v145ids=['v145-historia','v145-reglas','v145-competiciones','v145-leyendas','v145-records'];
+  if(name==='acerca'){
+    // Show default Fútbol content: hide v145 slides, show original sections
+    v145ids.forEach(function(id){var el=document.getElementById(id); if(el) el.style.display='none';});
+    Array.from(pg.children).forEach(function(c){
+      if(!c.id || c.id.indexOf('v145-')!==0) c.style.removeProperty('display');
+    });
+  } else {
+    var targetId='v145-'+name;
+    v145ids.forEach(function(id){
+      var el=document.getElementById(id);
+      if(el) el.style.display=(id===targetId?'block':'none');
+    });
+    Array.from(pg.children).forEach(function(c){
+      if(!c.id || c.id.indexOf('v145-')!==0) c.style.setProperty('display','none','important');
+    });
+  }
+  document.querySelectorAll('.v146-acerca-sub li').forEach(function(li){li.classList.remove('v146-active');});
+  tab.classList.add('v146-active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}, true);
+
+// 3. Rename 'Estadísticas Deportes' to 'Deportes'
+function renameEstad(){
+  document.querySelectorAll('h1,h2,h3,h4,h5,h6,span,div,button').forEach(function(el){
+    if(el.children.length>0) return;
+    var t=(el.textContent||'').trim();
+    if(t==='Estadísticas Deportes'){
+      el.textContent='Deportes';
+    }
+  });
+}
+setInterval(renameEstad, 1000);
+setTimeout(renameEstad, 400);
+
+// 4. Newsletter widget after Reto Diario
+function addNewsletter(){
+  if(document.getElementById('v146-newsletter')) return;
+  var reto=document.getElementById('v99-retos');
+  if(!reto) return;
+  var nl=document.createElement('section');
+  nl.id='v146-newsletter';
+  nl.className='v146-newsletter';
+  nl.innerHTML='<div class="body">'+
+    '<h3>📧 Suscribite al Newsletter de Sports Stats 21</h3>'+
+    '<p>Recibí cada lunes lo mejor de la semana en deportes: análisis, datos exclusivos, próximos eventos y los récords que se rompieron. <strong>Sin spam</strong>, podés cancelar cuando quieras.</p>'+
+    '<form id="v146-nl-form">'+
+      '<input type="email" placeholder="tu@email.com" required aria-label="Email">'+
+      '<button type="submit">Suscribirme</button>'+
+    '</form>'+
+    '<div class="ok" id="v146-nl-ok">✅ ¡Gracias! Te suscribiste correctamente. Pronto vas a recibir el primer newsletter.</div>'+
+    '</div>';
+  reto.parentNode.insertBefore(nl, reto.nextSibling);
+  var form=nl.querySelector('#v146-nl-form');
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    var ok=document.getElementById('v146-nl-ok');
+    if(ok){ ok.classList.add('v146-show'); }
+    form.style.display='none';
+    try{ localStorage.setItem('v146-newsletter-subscribed','1'); }catch(_){}
+  });
+  try{
+    if(localStorage.getItem('v146-newsletter-subscribed')==='1'){
+      form.style.display='none';
+      var ok=document.getElementById('v146-nl-ok');
+      if(ok){ ok.textContent='✅ Ya estás suscripto. ¡Gracias por seguirnos!'; ok.classList.add('v146-show'); }
+    }
+  }catch(_){}
+}
+setInterval(addNewsletter, 1500); setTimeout(addNewsletter, 1000);
+
+})();
+</script>
 </body>
 </html>
 
