@@ -19119,6 +19119,46 @@ function renderGS(){
 setTimeout(renderGS,1500); setInterval(renderGS,8000);
 })();
 </script>
+<script>
+(function(){
+if(window.__v144loaded)return;window.__v144loaded=true;
+function killTenisOnFutbol(){
+  var soccer=document.getElementById("panel-soccer");
+  var soccerActive=soccer && soccer.classList.contains("active") && getComputedStyle(soccer).display!=="none";
+  var tennis=document.getElementById("panel-tennis");
+  var tennisActive=tennis && tennis.classList.contains("active") && getComputedStyle(tennis).display!=="none";
+  var sb=document.getElementById("sidebar"); if(!sb) return;
+  var tenisBar=sb.querySelector(".v114-tenis-sidebar");
+  if(tenisBar){
+    if(tennisActive){ tenisBar.classList.add("v114-active"); tenisBar.style.removeProperty("display"); }
+    else { tenisBar.classList.remove("v114-active"); tenisBar.style.setProperty("display","none","important"); }
+  }
+  var origChildren=Array.from(sb.children).filter(function(c){return !c.classList || !c.classList.contains("v114-tenis-sidebar")});
+  origChildren.forEach(function(c){
+    if(tennisActive){ c.style.setProperty("display","none","important"); }
+    else if(soccerActive){ c.style.removeProperty("display"); }
+  });
+}
+setInterval(killTenisOnFutbol, 200);
+function rebuildTenisSidebar(){
+  var bar=document.querySelector(".v114-tenis-sidebar"); if(!bar) return;
+  if(bar.dataset.v144built==="1") return;
+  bar.dataset.v144built="1";
+  bar.innerHTML='<div class="v114-section-header"><span>TENIS</span><span class="v114-mf-toggle"><button class="v114-mf v114-mfactive">M</button><button class="v114-mf">F</button></span></div><div class="v144-group"><button class="v114-question v144-question" data-v144-tab="acerca">\u2753 \u00bfQu\u00e9 es el Tenis? \u25be</button><ul class="v114-submenu v144-sub-acerca"><li data-v144-tab="reglas">\ud83d\udccb Reglas</li><li data-v144-tab="historia">\ud83d\udcda Historia</li><li data-v144-tab="records">\ud83c\udfc5 Records</li></ul></div><button class="v114-section-title" data-v144-tab="calendario">\ud83d\udcc5 Calendario</button><div class="v144-group"><button class="v114-section-title v144-torneos-head" data-v144-torneos-toggle="1">\ud83c\udfbe Torneos <span style="float:right">\u25be</span></button><ul class="v114-submenu v144-sub-torneos"><li data-v144-tab="copadavis">\ud83c\udfc6 Copa Davis</li><li data-v144-tab="grandslams">\ud83d\udc51 Grand Slams</li><li data-v144-tab="master1000">\u2b50 Master 1000</li><li data-v144-tab="atp500">\ud83c\udfaf ATP 500</li><li data-v144-tab="atp250">\ud83c\udfbe ATP 250</li><li data-v144-tab="challenger">\ud83e\udd4e Challenger</li></ul></div><button class="v114-section-title" data-v144-tab="ranking">\ud83c\udfc6 Ranking</button>';
+}
+setTimeout(rebuildTenisSidebar, 1500); setInterval(rebuildTenisSidebar, 3000);
+function renderTenisMain(){
+  var pg=document.getElementById("panel-tennis"); if(!pg) return;
+  if(document.getElementById("v144-tenis-header")) return;
+  var sec=document.createElement("section");
+  sec.id="v144-tenis-header";
+  sec.style.cssText="margin:24px auto;max-width:1200px;padding:0 24px";
+  sec.innerHTML='<div style="background:linear-gradient(135deg,#c8102e,#9b0d22);border-radius:16px;padding:28px;color:#fff;box-shadow:0 4px 12px rgba(200,16,46,0.25)"><div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px;margin-bottom:18px"><div><div style="font-size:28px;font-weight:700;margin-bottom:6px">\ud83c\udfbe Tenis Masculino</div><div style="font-size:14px;opacity:0.9">El deporte rey del raqueta \u00b7 1.000M de fans \u00b7 Tours ATP y WTA</div></div><div style="display:flex;gap:8px"><button style="background:#fff;color:#0f172a;border:0;cursor:pointer;padding:10px 18px;border-radius:999px;font-weight:600;font-size:14px">\u2606 Favoritos</button><button style="background:rgba(255,255,255,0.18);color:#fff;border:0;cursor:pointer;padding:10px 18px;border-radius:999px;font-weight:600;font-size:14px">+ Seguir</button></div></div><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px"><div style="background:rgba(255,255,255,0.15);border-radius:10px;padding:18px;text-align:center"><div style="font-size:28px;font-weight:700">1877</div><div style="font-size:11px;opacity:0.85;letter-spacing:0.5px">PRIMER WIMBLEDON</div></div><div style="background:rgba(255,255,255,0.15);border-radius:10px;padding:18px;text-align:center"><div style="font-size:28px;font-weight:700">1972</div><div style="font-size:11px;opacity:0.85;letter-spacing:0.5px">FUNDACI\u00d3N ATP</div></div><div style="background:rgba(255,255,255,0.15);border-radius:10px;padding:18px;text-align:center"><div style="font-size:28px;font-weight:700">4</div><div style="font-size:11px;opacity:0.85;letter-spacing:0.5px">GRAND SLAMS</div></div><div style="background:rgba(255,255,255,0.15);border-radius:10px;padding:18px;text-align:center"><div style="font-size:28px;font-weight:700">1B+</div><div style="font-size:11px;opacity:0.85;letter-spacing:0.5px">FANS GLOBAL</div></div></div></div>';
+  if(pg.firstChild) pg.insertBefore(sec, pg.firstChild); else pg.appendChild(sec);
+}
+setTimeout(renderTenisMain, 1500); setInterval(renderTenisMain, 5000);
+})();
+</script>
 </body>
 </html>
 
