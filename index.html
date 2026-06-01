@@ -18944,6 +18944,58 @@ document.addEventListener("click", function(e){
 }, true);
 })();
 </script>
+<script>
+(function(){
+if(window.__v140loaded)return;window.__v140loaded=true;
+var st=document.createElement("style");
+st.textContent=".v140-split{display:inline-flex !important;flex-direction:column !important;line-height:1.05 !important;font-size:11px !important;text-align:center !important;gap:2px}.sport-nav-bar .sport-btn:has(.v140-split){max-width:65px !important;padding:6px 4px !important;white-space:normal !important}";
+document.head.appendChild(st);
+function fixLabels(){
+  document.querySelectorAll(".sport-nav-bar .sport-btn").forEach(function(b){
+    if(b.querySelector(".v140-split")) return;
+    var raw=(b.textContent||"").trim().replace(/\s+/g," ");
+    if(/^[^A-Za-z]*Eventos\s*Globales$/i.test(raw) || /^[^A-Za-z]*EventosGlobales$/i.test(raw)){
+      var emoji=(raw.match(/^[^A-Za-z]+/)||[""])[0].trim();
+      b.innerHTML=(emoji?'<span style="font-size:18px;margin-bottom:2px">'+emoji+'</span>':"")+'<span class="v140-split"><span>Eventos</span><span>Globales</span></span>';
+      b.style.maxWidth="68px"; b.style.padding="6px 4px"; b.style.whiteSpace="normal";
+    } else if(/^[^A-Za-z]*Otros\s*Deportes$/i.test(raw) || /^[^A-Za-z]*OtrosDeportes$/i.test(raw)){
+      var emoji=(raw.match(/^[^A-Za-z]+/)||[""])[0].trim();
+      b.innerHTML=(emoji?'<span style="font-size:18px;margin-bottom:2px">'+emoji+'</span>':"")+'<span class="v140-split"><span>Otros</span><span>Deportes</span></span>';
+      b.style.maxWidth="68px"; b.style.padding="6px 4px"; b.style.whiteSpace="normal";
+    }
+  });
+}
+fixLabels(); setInterval(fixLabels, 800);
+var startTime=Date.now();
+var curtainGoneAt=0;
+function forceInicio(){
+  var pi=document.getElementById("panel-inicio"); if(!pi) return;
+  document.querySelectorAll(".tab-panel").forEach(function(p){
+    if(p.id==="panel-inicio"){ p.classList.add("active"); p.style.setProperty("display","block","important"); }
+    else { p.classList.remove("active"); p.style.setProperty("display","none","important"); }
+  });
+  document.querySelectorAll("[id^=\"v87-page-\"]").forEach(function(v){ v.style.setProperty("display","none","important"); });
+}
+var iv=setInterval(function(){
+  var elapsed=Date.now()-startTime;
+  if(elapsed > 1800){
+    clearInterval(iv);
+    return;
+  }
+  var c=document.getElementById("v137-curtain");
+  if(c) forceInicio();
+}, 100);
+setTimeout(function(){
+  var c=document.getElementById("v137-curtain");
+  if(c){
+    forceInicio();
+    c.style.transition="opacity 0.3s";
+    c.style.opacity="0";
+    setTimeout(function(){ if(c.parentNode) c.remove(); }, 350);
+  }
+}, 1700);
+})();
+</script>
 </body>
 </html>
 
