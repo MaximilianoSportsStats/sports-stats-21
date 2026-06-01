@@ -18877,6 +18877,73 @@ function renderTrofeos(){
 setTimeout(renderTrofeos,1500); setInterval(renderTrofeos,8000);
 })();
 </script>
+<script>
+(function(){
+if(window.__v139loaded)return;window.__v139loaded=true;
+function forceInicioNow(){
+  var pi=document.getElementById("panel-inicio"); if(!pi) return;
+  document.querySelectorAll(".tab-panel").forEach(function(p){
+    if(p.id==="panel-inicio"){ p.classList.add("active"); p.style.setProperty("display","block","important"); }
+    else { p.classList.remove("active"); p.style.setProperty("display","none","important"); }
+  });
+  document.querySelectorAll("[id^=\"v87-page-\"]").forEach(function(v){ v.style.setProperty("display","none","important"); });
+  var nav=document.querySelector(".sport-nav-bar");
+  if(nav){ nav.style.setProperty("display","none","important"); }
+}
+var c=document.getElementById("v137-curtain");
+if(c){
+  c.style.opacity="1";
+  if(c.firstChild){ var ld=c.querySelector("div div:last-child"); if(ld) ld.textContent="Cargando..."; }
+}
+var tries=0;
+var inicioInterval=setInterval(function(){
+  forceInicioNow();
+  tries++;
+  if(tries>30){ clearInterval(inicioInterval); }
+}, 100);
+setTimeout(function(){
+  var c=document.getElementById("v137-curtain");
+  if(c){ c.style.transition="opacity 0.4s"; c.style.opacity="0"; setTimeout(function(){ if(c.parentNode) c.remove(); }, 450); }
+  forceInicioNow();
+  setTimeout(forceInicioNow, 200);
+  setTimeout(forceInicioNow, 500);
+}, 3000);
+document.addEventListener("click", function(e){
+  var sb=e.target.closest(".v114-tenis-sidebar");
+  if(!sb) return;
+  if(e.target.closest(".v114-mf-toggle")) return;
+  if(e.target.classList && e.target.classList.contains("v114-with-arrow")) return;
+  var el=e.target;
+  var t=(el.textContent||"").trim();
+  if(t.length>50){ var parent=el.closest("li,button,div"); if(parent) t=(parent.textContent||"").trim(); }
+  if(t.length>50) t=t.slice(0,50);
+  var pg=document.getElementById("panel-tennis"); if(!pg) return;
+  function scrollMatch(kws){
+    var all=pg.querySelectorAll("h1,h2,h3,h4,strong,b");
+    for(var i=0;i<all.length;i++){
+      var txt=(all[i].textContent||"");
+      for(var j=0;j<kws.length;j++){ if(new RegExp(kws[j],"i").test(txt)){ var r=all[i].getBoundingClientRect(); window.scrollTo({top:window.scrollY+r.top-100,behavior:"smooth"}); return true; } }
+    }
+    var pr=pg.getBoundingClientRect();
+    window.scrollTo({top:window.scrollY+pr.top-50,behavior:"smooth"});
+    return false;
+  }
+  if(/Reglas/i.test(t)){ scrollMatch(["Reglas del Tenis","Reglas"]); }
+  else if(/Historia/i.test(t)){ scrollMatch(["Historia del Tenis","Historia"]); }
+  else if(/Records|Leyendas/i.test(t)){ scrollMatch(["Leyendas del Tenis","Leyendas"]); }
+  else if(/Qu.+es.+Tenis/i.test(t)){ scrollMatch(["Reglas del Tenis","Acerca"]); }
+  else if(/Copa Davis/i.test(t)){ scrollMatch(["Copa Davis","Davis"]); }
+  else if(/Grand Slam|Australian|Roland|Wimbledon|US Open/i.test(t)){ scrollMatch(["Grand Slam","Australian","Roland","Wimbledon"]); }
+  else if(/Master 1000/i.test(t)){ scrollMatch(["Master 1000","Masters"]); }
+  else if(/ATP 500/i.test(t)){ scrollMatch(["ATP 500"]); }
+  else if(/ATP 250/i.test(t)){ scrollMatch(["ATP 250"]); }
+  else if(/Challenger/i.test(t)){ scrollMatch(["Challenger"]); }
+  else if(/Ranking/i.test(t)){ scrollMatch(["Ranking","Acerca"]); }
+  else if(/Calendario/i.test(t)){ scrollMatch(["Calendario"]); }
+  else if(/Torneos/i.test(t)){ scrollMatch(["Grand Slam","Torneos"]); }
+}, true);
+})();
+</script>
 </body>
 </html>
 
