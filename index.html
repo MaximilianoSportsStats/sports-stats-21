@@ -19090,6 +19090,35 @@ document.addEventListener("click", onTenisClick, true);
 setTimeout(defaultTab, 2200);
 })();
 </script>
+<script>
+(function(){
+if(window.__v143loaded)return;window.__v143loaded=true;
+function hideNativeTennis(){
+  var pg=document.getElementById("panel-tennis"); if(!pg) return;
+  var main=pg.querySelector("#tennis-main");
+  if(main){
+    Array.from(main.children).forEach(function(c){
+      if(c.id && (c.id.indexOf("v115-")===0 || c.id.indexOf("v141-")===0 || c.id.indexOf("v143-")===0)) return;
+      c.style.setProperty("display","none","important");
+    });
+  }
+  var srcs=pg.querySelector(".v20-sources"); if(srcs) srcs.style.setProperty("display","none","important");
+}
+hideNativeTennis(); setInterval(hideNativeTennis, 500);
+var GS=[{n:"Australian Open 2025",f:"🇦🇺",color:"#1d4ed8",loc:"Melbourne",sup:"Dura (Plexicushion)",when:"Enero-Febrero",h:{c:"Jannik Sinner",sc:"Novak Djokovic",r:"6-3, 7-6(2), 6-3"},m:{c:"Madison Keys",sc:"Aryna Sabalenka",r:"6-3, 2-6, 7-5"}},{n:"Roland Garros 2025",f:"🇫🇷",color:"#dc2626",loc:"Par\u00eds",sup:"Tierra batida",when:"Mayo-Junio",h:{c:"Carlos Alcaraz",sc:"Jannik Sinner",r:"4-6, 6-7(4), 6-4, 7-6(3), 7-6(2)"},m:{c:"Iga Swiatek",sc:"Coco Gauff",r:"6-3, 6-2"}},{n:"Wimbledon 2025",f:"🇬🇧",color:"#16a34a",loc:"Londres",sup:"Hierba",when:"Junio-Julio",h:{c:"Jannik Sinner",sc:"Carlos Alcaraz",r:"4-6, 6-4, 6-4, 6-4"},m:{c:"Barbora Krej\u010d\u00edkov\u00e1",sc:"Elena Rybakina",r:"6-4, 6-2"}},{n:"US Open 2025",f:"🇺🇸",color:"#7c3aed",loc:"Nueva York",sup:"Dura (DecoTurf)",when:"Agosto-Septiembre",h:{c:"Carlos Alcaraz",sc:"Jannik Sinner",r:"6-2, 3-6, 6-1, 6-4"},m:{c:"Aryna Sabalenka",sc:"Madison Keys",r:"6-3, 7-5"}}];
+function renderGS(){
+  var pg=document.getElementById("panel-tennis"); if(!pg) return;
+  if(document.getElementById("v143-grand-slams")) return;
+  var sec=document.createElement("section");
+  sec.id="v143-grand-slams";
+  sec.style.cssText="margin:32px auto;max-width:1200px;padding:0 24px";
+  var cards=GS.map(function(g){return '<div style="background:#fff;border-radius:12px;padding:18px;box-shadow:0 1px 3px rgba(0,0,0,0.08);border-top:4px solid '+g.color+'"><div style="font-size:16px;color:'+g.color+';font-weight:700;margin-bottom:6px">'+g.f+" "+g.n.toUpperCase()+'</div><div style="font-size:13px;color:#475569;margin-bottom:14px">\ud83d\udccd '+g.loc+" \u00b7 \ud83c\udfbe "+g.sup+" \u00b7 \ud83d\udcc5 "+g.when+'</div><table style="width:100%;font-size:13px;border-collapse:collapse"><thead><tr style="color:#94a3b8;text-transform:uppercase;font-size:11px"><th style="text-align:left;padding:8px;border-bottom:1px solid #e2e8f0"></th><th style="text-align:left;padding:8px;border-bottom:1px solid #e2e8f0">Campe\u00f3n/a</th><th style="text-align:left;padding:8px;border-bottom:1px solid #e2e8f0">Subcampe\u00f3n/a</th><th style="text-align:left;padding:8px;border-bottom:1px solid #e2e8f0">Resultado</th></tr></thead><tbody><tr><td style="padding:8px;color:#0ea5e9;font-weight:600">Hombres</td><td style="padding:8px;font-weight:600">'+g.h.c+'</td><td style="padding:8px;color:#475569">'+g.h.sc+'</td><td style="padding:8px;color:#475569">'+g.h.r+'</td></tr><tr><td style="padding:8px;color:#ec4899;font-weight:600">Mujeres</td><td style="padding:8px;font-weight:600">'+g.m.c+'</td><td style="padding:8px;color:#475569">'+g.m.sc+'</td><td style="padding:8px;color:#475569">'+g.m.r+'</td></tr></tbody></table></div>';}).join("");
+  sec.innerHTML='<h2 style="color:#c8102e;margin:0 0 8px 0">\ud83d\udc51 Grand Slams 2025</h2><p style="color:#475569;font-size:14px;margin:0 0 18px 0">Los 4 torneos m\u00e1s prestigiosos del tenis mundial</p><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(420px,1fr));gap:16px">'+cards+'</div>';
+  pg.appendChild(sec);
+}
+setTimeout(renderGS,1500); setInterval(renderGS,8000);
+})();
+</script>
 </body>
 </html>
 
