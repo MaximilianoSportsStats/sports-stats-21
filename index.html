@@ -20844,6 +20844,72 @@ setInterval(pinWelcomeSlide, 50);
 
 })();
 </script>
+
+<script>
+(function(){
+if(window.__v163loaded)return;window.__v163loaded=true;
+
+// === STEP 1: replace heroCarousel with STATIC welcome snapshot ===
+function buildStaticHero(){
+  var hc=document.getElementById('heroCarousel');
+  if(!hc) return;
+  if(hc.dataset.v163built==='1') return;
+  // Find welcome slide (containing 'Bienvenido')
+  var welcomeSlide=null;
+  Array.from(hc.children).forEach(function(c){
+    if(welcomeSlide) return;
+    if(/Bienvenido/.test(c.textContent||'')) welcomeSlide=c;
+  });
+  if(!welcomeSlide) return;
+  // Clone deep and replace
+  var snap=welcomeSlide.cloneNode(true);
+  snap.classList.add('active');
+  snap.style.cssText='opacity:1 !important;visibility:visible !important;display:block !important;position:relative !important';
+  hc.innerHTML='';
+  hc.appendChild(snap);
+  hc.dataset.v163built='1';
+}
+setInterval(buildStaticHero, 200); setTimeout(buildStaticHero, 300); setTimeout(buildStaticHero, 1500);
+
+// === STEP 2: widget hide list for masss21 (correct complete list) ===
+var WIDGETS=['v32-news-grid-sec','v100-noticias-wrap','v100-blogs-wrap','v100-podcast-wrap','v100-podcast','v99-retos','v146-newsletter'];
+
+function handleMasss21(){
+  var mas=document.getElementById('v87-page-masss21');
+  var masVis=mas && mas.offsetParent!==null && getComputedStyle(mas).display!=='none';
+  if(masVis){
+    WIDGETS.forEach(function(id){
+      var e=document.getElementById(id); if(e) e.style.setProperty('display','none','important');
+    });
+  } else {
+    // Restore by stripping display from inline style
+    WIDGETS.forEach(function(id){
+      var e=document.getElementById(id); if(!e) return;
+      var st=e.getAttribute('style')||'';
+      if(/display\s*:\s*none/i.test(st)){
+        st=st.replace(/display\s*:[^;]+;?/gi,'');
+        e.setAttribute('style', st);
+      }
+    });
+  }
+}
+setInterval(handleMasss21, 200);
+
+// === STEP 3: nuclear unstick — clear display !important from non-active panels ===
+function unstickPanels(){
+  document.querySelectorAll('[id^=panel-]').forEach(function(p){
+    var st=p.getAttribute('style')||'';
+    // If panel has display:!important, strip it (let CSS via .active govern)
+    if(/display\s*:[^;]+!important/i.test(st)){
+      st=st.replace(/display\s*:[^;]+;?/gi,'');
+      p.setAttribute('style', st);
+    }
+  });
+}
+setInterval(unstickPanels, 150);
+
+})();
+</script>
 </body>
 </html>
 
