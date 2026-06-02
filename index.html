@@ -20316,6 +20316,46 @@ setInterval(updateSubItems, 600);
 
 })();
 </script>
+
+<script>
+(function(){
+if(window.__v156loaded)return;window.__v156loaded=true;
+
+// === DEFINITIVE rule: widgets visible only when panel-inicio is the active panel AND Mas-Sobre-SS21 NOT active ===
+var WIDGET_IDS=['v32-news-grid-sec','v100-blogs-wrap','v100-podcast-wrap','v100-podcast','v99-retos'];
+
+function syncWidgetsV156(){
+  var ini=document.getElementById('panel-inicio');
+  var iniActive=ini && ini.classList.contains('active') && getComputedStyle(ini).display!=='none';
+  // Detect masss21 visible
+  var masVisible=false;
+  ['masss21','mas-sobre-ss21'].forEach(function(id){
+    var e=document.getElementById(id);
+    if(e && e.offsetParent && getComputedStyle(e).display!=='none') masVisible=true;
+  });
+  document.querySelectorAll('[id*=masss21]').forEach(function(e){
+    if(e.offsetParent && getComputedStyle(e).display!=='none') masVisible=true;
+  });
+  var shouldShow=iniActive && !masVisible;
+  WIDGET_IDS.forEach(function(id){
+    var e=document.getElementById(id); if(!e) return;
+    if(shouldShow){
+      e.style.setProperty('display','','important');
+      e.style.removeProperty('display');
+    } else {
+      e.style.setProperty('display','none','important');
+    }
+  });
+}
+setInterval(syncWidgetsV156, 180); setTimeout(syncWidgetsV156, 100);
+
+// === Override v148/v152/v154/v155 CSS rules with stronger specificity ===
+var st=document.createElement('style');
+st.textContent='html body #v32-news-grid-sec,html body #v100-blogs-wrap,html body #v100-podcast-wrap,html body #v100-podcast,html body #v99-retos{display:revert}';
+document.head.appendChild(st);
+
+})();
+</script>
 </body>
 </html>
 
