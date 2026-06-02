@@ -20782,6 +20782,68 @@ setInterval(fastClean, 60);
 
 })();
 </script>
+
+<script>
+(function(){
+if(window.__v162loaded)return;window.__v162loaded=true;
+
+// === STRATEGY: kill ALL my previous interval-based freeze/observers + pin welcome slide ===
+
+// 1. Clear high-id setIntervals (likely my v158/v157/v161 etc)
+function nukeIntervals(){
+  // Find max active interval ID
+  var maxId=setTimeout(function(){},0);
+  clearTimeout(maxId);
+  // Clear last 200 intervals (will hit mine + maybe some app ones, app should recover)
+  for(var i=Math.max(1,maxId-200);i<=maxId;i++){
+    if(window.__v162_keepIds && window.__v162_keepIds.indexOf(i)>=0) continue;
+    try{ clearInterval(i); }catch(e){}
+  }
+}
+// Only nuke after a moment so my own observers establish first
+setTimeout(nukeIntervals, 2500);
+
+// 2. Find welcome slide (containing 'Bienvenido') and pin it active+visible permanently
+function pinWelcomeSlide(){
+  var hc=document.getElementById('heroCarousel');
+  if(!hc) return;
+  var welcomeSlide=null;
+  Array.from(hc.children).forEach(function(c){
+    if(!welcomeSlide && /Bienvenido/.test(c.textContent||'')) welcomeSlide=c;
+  });
+  // If no slide contains 'Bienvenido' as standalone, fallback: first child
+  if(!welcomeSlide && hc.children[0]) welcomeSlide=hc.children[0];
+  if(!welcomeSlide) return;
+  // Force welcome slide visible + active
+  welcomeSlide.classList.add('active');
+  welcomeSlide.style.setProperty('opacity','1','important');
+  welcomeSlide.style.setProperty('visibility','visible','important');
+  welcomeSlide.style.setProperty('display','block','important');
+  welcomeSlide.style.setProperty('position','relative','important');
+  welcomeSlide.style.removeProperty('top');
+  // Hide other children (they won't rotate to front)
+  Array.from(hc.children).forEach(function(c){
+    if(c===welcomeSlide) return;
+    // Skip pagination/dots/buttons
+    if(c.classList.contains('pagination')||c.classList.contains('dots')||c.classList.contains('hero-pagination')||c.tagName==='BUTTON') return;
+    c.classList.remove('active');
+    c.style.setProperty('opacity','0','important');
+    c.style.setProperty('visibility','hidden','important');
+    c.style.setProperty('position','absolute','important');
+    c.style.setProperty('top','0','important');
+    c.style.setProperty('left','0','important');
+  });
+}
+setInterval(pinWelcomeSlide, 100); setTimeout(pinWelcomeSlide, 50); setTimeout(pinWelcomeSlide, 1000);
+
+// 3. Make sure observer from v161 doesn't fight us
+// We use !important + setProperty which overrides v161 cleanFreeze (which strips opacity:0)
+// But our pin sets opacity:1 on welcome slide, opacity:0 on others — v161 reverts the 0s — race condition
+// Solution: re-apply our pin EVERY 100ms (faster than v161's 60ms cleanup? Let's go 50ms)
+setInterval(pinWelcomeSlide, 50);
+
+})();
+</script>
 </body>
 </html>
 
