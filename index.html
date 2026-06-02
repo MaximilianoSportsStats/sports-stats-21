@@ -19807,6 +19807,130 @@ window.__v150showMercado=showMercadoPanel;
 
 })();
 </script>
+
+<script>
+(function(){
+if(window.__v151loaded)return;window.__v151loaded=true;
+
+// === FIX 1: Cleanup v150 menu items and re-insert Mercado correctly ===
+function fixMenu(){
+  // Remove all v150 mercado items (duplicates)
+  document.querySelectorAll('.v150-mercado-menu-item, .v151-mercado-menu-item').forEach(function(el){el.remove();});
+  // Find Amateur and Comparar LI elements in v56-sub-list
+  var amateurLi=null, comparLi=null, sharedUl=null;
+  document.querySelectorAll('li.v56-sub-item').forEach(function(li){
+    var t=(li.textContent||'').trim();
+    if(/Amateur/.test(t) && !amateurLi) amateurLi=li;
+    if(/Comparar/.test(t) && !comparLi) comparLi=li;
+  });
+  if(!amateurLi) return;
+  var ul=amateurLi.parentElement;
+  // If comparLi exists but not in same ul, move it back
+  if(comparLi && comparLi.parentElement!==ul){
+    ul.appendChild(comparLi);
+  }
+  if(document.querySelector('.v151-mercado-menu-item')) return;
+  // Build Mercado li by cloning Amateur structure
+  var newLi=amateurLi.cloneNode(true);
+  newLi.classList.add('v151-mercado-menu-item');
+  // Replace text and emoji
+  function rep(el){
+    if(el.nodeType===3){
+      el.textContent=el.textContent.replace(/Amateur/g,'Mercado').replace(/🎰/g,'🤵').replace(/🎯/g,'🤵');
+      return;
+    }
+    Array.from(el.childNodes).forEach(rep);
+  }
+  rep(newLi);
+  // Also replace any innerHTML emojis that didn't catch
+  newLi.innerHTML=newLi.innerHTML.replace(/🎰/g,'🤵');
+  // Insert between Amateur and Comparar (if Comparar exists) or after Amateur
+  if(comparLi && comparLi.parentElement===ul){
+    ul.insertBefore(newLi, comparLi);
+  } else {
+    if(amateurLi.nextSibling) ul.insertBefore(newLi, amateurLi.nextSibling);
+    else ul.appendChild(newLi);
+  }
+  // Click handler
+  newLi.addEventListener('click', function(e){
+    e.preventDefault(); e.stopPropagation();
+    if(window.__v150showMercado) window.__v150showMercado();
+    // Try to close drawer
+    var drawerClose=document.querySelector('.drawer-close, [aria-label*=Cerrar], [aria-label*=Close]');
+    if(drawerClose) drawerClose.click();
+  }, true);
+}
+setInterval(fixMenu, 800); setTimeout(fixMenu, 600);
+
+// === FIX 2: Sport-btn style for Mercado panel ===
+var st2=document.createElement('style');
+st2.textContent='#v150-mercado-panel .v150-sport-pills{gap:16px;padding:12px 0;border-bottom:2px solid #fee2e2;margin-bottom:18px;overflow-x:auto;flex-wrap:nowrap}'+
+  '#v150-mercado-panel .v150-sport-pills button{flex:0 0 auto;display:flex;flex-direction:column;align-items:center;gap:6px;background:#fff;border:1px solid #e2e8f0;color:#475569;padding:14px 18px;border-radius:14px;min-width:88px;font-size:13px;font-weight:500}'+
+  '#v150-mercado-panel .v150-sport-pills button .v151-emoji{font-size:32px;line-height:1}'+
+  '#v150-mercado-panel .v150-sport-pills button.v150-sport-active{background:#c8102e;color:#fff;border-color:#c8102e;box-shadow:0 4px 12px rgba(200,16,46,0.25)}';
+document.head.appendChild(st2);
+
+// Patch renderSports to use sport-btn style with bigger emojis
+function v151patchRender(){
+  var c=document.getElementById('v150-sports'); if(!c) return;
+  if(c.dataset.v151patched==='1') return;
+  // Override rendering: rebuild with new style
+  var SPORTS=[{k:'futbol',l:'Fútbol',e:'⚽'},{k:'tenis',l:'Tenis',e:'🎾'},{k:'f1',l:'Carreras',e:'🏎️'},{k:'nba',l:'Basketball',e:'🏀'},{k:'ufc',l:'Combate',e:'🥊'},{k:'mlb',l:'Baseball',e:'⚾'},{k:'nhl',l:'Hockey',e:'🏒'},{k:'nfl',l:'Fútbol Americano',e:'🏈'},{k:'rugby',l:'Rugby',e:'🏉'},{k:'golf',l:'Golf',e:'⛳'},{k:'athletics',l:'Atletismo',e:'🏃'},{k:'acuaticos',l:'Natación',e:'🏊'},{k:'cycling',l:'Ciclismo',e:'🚴'},{k:'volley',l:'Volleyball',e:'🏐'},{k:'padel',l:'Pádel',e:'🎾'},{k:'cricket',l:'Cricket',e:'🏏'}];
+  c.innerHTML='';
+  SPORTS.forEach(function(s){
+    var b=document.createElement('button');
+    b.innerHTML='<span class="v151-emoji">'+s.e+'</span><span>'+s.l+'</span>';
+    if(typeof CURRENT_SPORT==='undefined' || s.k===window.__v150currentSport) b.classList.add('v150-sport-active');
+    b.addEventListener('click', function(){
+      window.__v150currentSport=s.k;
+      Array.from(c.children).forEach(function(ch){ch.classList.remove('v150-sport-active');});
+      b.classList.add('v150-sport-active');
+      // If v150 has SPORT_TABS for this key, render tabs; else clear
+      if(window.SPORT_TABS && window.SPORT_TABS[s.k]){
+        window.CURRENT_SPORT=s.k;
+        window.CURRENT_TAB=window.SPORT_TABS[s.k][0].k;
+        if(window.renderTabs) window.renderTabs();
+        if(window.renderContent) window.renderContent();
+      } else {
+        var tabs=document.getElementById('v150-tabs'); if(tabs) tabs.innerHTML='';
+        var ct=document.getElementById('v150-content'); if(ct) ct.innerHTML='<div style="text-align:center;color:#94a3b8;padding:40px 20px">Próximamente: lo iremos completando deporte por deporte.</div>';
+      }
+    });
+    c.appendChild(b);
+  });
+  c.dataset.v151patched='1';
+}
+setInterval(v151patchRender, 1000); setTimeout(v151patchRender, 1200);
+
+// === FIX 3: Collapsible dropdown + Leyendas (sin del Fútbol) ===
+var st3=document.createElement('style');
+st3.textContent='.v149-acerca-sub{display:none !important}'+
+  '.v149-acerca-wrap.v151-open .v149-acerca-sub{display:block !important}';
+document.head.appendChild(st3);
+
+function v151fixSidebar(){
+  // Toggle behavior: click on the button toggles v151-open
+  document.querySelectorAll('.v149-acerca-wrap').forEach(function(wrap){
+    var btn=wrap.querySelector('.v149-acerca-btn');
+    if(btn && !btn.dataset.v151bound){
+      btn.dataset.v151bound='1';
+      btn.addEventListener('click', function(e){
+        e.preventDefault(); e.stopPropagation();
+        wrap.classList.toggle('v151-open');
+      }, true);
+    }
+    // Rename 'Leyendas del Fútbol' to 'Leyendas'
+    wrap.querySelectorAll('li').forEach(function(li){
+      if(/Leyendas del Fútbol/.test(li.textContent)){
+        li.innerHTML=li.innerHTML.replace(/Leyendas del Fútbol/g,'Leyendas');
+      }
+    });
+  });
+}
+setInterval(v151fixSidebar, 600); setTimeout(v151fixSidebar, 500);
+
+})();
+</script>
 </body>
 </html>
 
