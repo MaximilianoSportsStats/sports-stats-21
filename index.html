@@ -20356,6 +20356,92 @@ document.head.appendChild(st);
 
 })();
 </script>
+
+<script>
+(function(){
+if(window.__v157loaded)return;window.__v157loaded=true;
+
+// === A. Sidebar gap fix: hide empty 'Ligas' placeholder ===
+function killGap(){
+  var sb=document.getElementById('sidebar'); if(!sb) return;
+  var sec=sb.querySelector('.sidebar-section'); if(!sec) return;
+  var inner=sec.children[sec.children.length-1]; if(!inner) return;
+  Array.from(inner.children).forEach(function(c){
+    var t=(c.textContent||'').trim();
+    if(t==='Ligas' && c.children.length===0){
+      c.style.setProperty('display','none','important');
+    }
+  });
+  // Remove margin-bottom on v149-acerca-wrap, remove margin-top on first continent-header
+  var wrap=inner.querySelector('.v149-acerca-wrap');
+  if(wrap){
+    wrap.style.setProperty('margin-bottom','0','important');
+    var ul=wrap.querySelector('.v149-acerca-sub');
+    if(ul && getComputedStyle(ul).display==='none'){
+      // wrap has no extra padding when collapsed
+      wrap.style.setProperty('padding-bottom','0','important');
+    }
+  }
+}
+setInterval(killGap, 300); setTimeout(killGap, 200);
+
+// === B. Stronger restore widgets on Inicio: kill all leftover hides ===
+function restoreWidgets(){
+  var ini=document.getElementById('panel-inicio');
+  var iniActive=ini && ini.classList.contains('active') && getComputedStyle(ini).display!=='none';
+  if(!iniActive) return;
+  // Check masss21 visible
+  var masVisible=false;
+  document.querySelectorAll('[id*=masss21]').forEach(function(e){
+    if(e.offsetParent && getComputedStyle(e).display!=='none' && e.id!=='panel-inicio') masVisible=true;
+  });
+  if(masVisible) return;
+  // Force show ALL widgets
+  ['v32-news-grid-sec','v100-blogs-wrap','v100-podcast-wrap','v100-podcast','v99-retos'].forEach(function(id){
+    var e=document.getElementById(id); if(!e) return;
+    e.style.removeProperty('display');
+    e.style.setProperty('display','','important');
+    // remove !important display:none if any
+    if(getComputedStyle(e).display==='none'){
+      e.setAttribute('style',(e.getAttribute('style')||'').replace(/display\s*:\s*none[^;]*;?/gi,''));
+    }
+  });
+}
+setInterval(restoreWidgets, 200); setTimeout(restoreWidgets, 100);
+
+// === C. Stronger CSS override: when panel-inicio active, force widgets visible ===
+var st=document.createElement('style');
+st.textContent='html body #panel-inicio.active #v32-news-grid-sec,'+
+  'html body #panel-inicio.active #v100-blogs-wrap,'+
+  'html body #panel-inicio.active #v100-podcast-wrap,'+
+  'html body #panel-inicio.active #v100-podcast,'+
+  'html body #panel-inicio.active #v99-retos{display:block !important}';
+document.head.appendChild(st);
+
+// === D. Freeze ALL carousels on the page (hero + news + anything) ===
+function freezeAllCarousels(){
+  document.querySelectorAll('[class*=carousel],[class*=slider],[class*=swiper-container]').forEach(function(car){
+    Array.from(car.children).forEach(function(c,i){
+      if(c.classList.contains('swiper-pagination') || c.classList.contains('pagination') || c.classList.contains('dots') || c.tagName==='BUTTON') return;
+      if(i===0){
+        c.style.removeProperty('opacity');
+        c.style.removeProperty('visibility');
+        c.style.removeProperty('transform');
+        c.classList.add('active');
+      } else {
+        c.style.setProperty('opacity','0','important');
+        c.style.setProperty('visibility','hidden','important');
+        c.style.setProperty('position','absolute','important');
+        c.style.setProperty('top','-99999px','important');
+        c.classList.remove('active');
+      }
+    });
+  });
+}
+setInterval(freezeAllCarousels, 200); setTimeout(freezeAllCarousels, 100);
+
+})();
+</script>
 </body>
 </html>
 
