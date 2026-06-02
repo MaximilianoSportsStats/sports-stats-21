@@ -20056,6 +20056,119 @@ document.addEventListener('click', function(e){
 
 })();
 </script>
+
+<script>
+(function(){
+if(window.__v153loaded)return;window.__v153loaded=true;
+
+// === A. CSS fixes ===
+var st=document.createElement('style');
+st.textContent=  // Hide any leftover ❓ in acerca button (safety belt for cached older versions)
+  '.v149-acerca-btn{padding:7px 12px !important}'+
+  '.v149-acerca-btn::before,.v149-acerca-btn::after{display:none !important;content:none !important}'+
+  // Align sub-items with the title text (12px left to match button)
+  '.v149-acerca-sub{padding:4px 0 8px 12px !important;list-style:none !important;margin:0 !important}'+
+  '.v149-acerca-sub li{padding:7px 10px !important;font-size:13px !important}'+
+  // Reduce main content padding to be closer to sidebar
+  'main.main,#main,.main-content,.layout-main{padding-left:8px !important;padding-right:16px !important}'+
+  '#panel-soccer,#panel-tennis,#panel-inicio{padding-left:0 !important;padding-right:0 !important}'+
+  '#panel-soccer > *,#panel-tennis > *{padding-left:8px !important;padding-right:8px !important}'+
+  // Mercado item style
+  '.v153-mercado-li .v153-mer-icon{display:inline-block;margin-right:8px;font-size:18px;vertical-align:middle}';
+document.head.appendChild(st);
+
+// === B. Disable v150/v151 menu creation loops (defang) ===
+// Replace v151 fixMenu / v150 insertMercadoMenu by overriding the global functions
+// (they live inside closures, so we kill them by removing ALL items aggressively first)
+
+// === C. Single-source Mercado menu item ===
+function buildMercadoOnce(){
+  // Find Amateur LI (it always exists)
+  var amateurLi=null;
+  document.querySelectorAll('li.v56-sub-item').forEach(function(li){
+    if(/Amateur/.test((li.textContent||'').trim()) && !amateurLi) amateurLi=li;
+  });
+  if(!amateurLi) return;
+  var ul=amateurLi.parentElement;
+  // Remove ALL mercado LIs (any variation)
+  Array.from(ul.children).forEach(function(li){
+    if(/Mercado/.test((li.textContent||'').trim())) li.remove();
+  });
+  // Also remove top-level (drawer root) duplicates that aren't in v56-sub-list
+  document.querySelectorAll('li, div, a').forEach(function(el){
+    if(el.children.length>3) return;
+    var t=(el.textContent||'').trim();
+    if(/^[^A-Za-z]?\s*Mercado$/.test(t) && t.length<25 && el.parentElement && !el.parentElement.classList.contains('v56-sub-list')){
+      el.remove();
+    }
+  });
+  // Find Comparar LI in same ul (or anywhere) and ensure it's in this ul
+  var comparLi=null;
+  document.querySelectorAll('li.v56-sub-item').forEach(function(li){
+    if(/Comparar/.test((li.textContent||'').trim()) && !comparLi) comparLi=li;
+  });
+  if(comparLi && comparLi.parentElement!==ul){ ul.appendChild(comparLi); }
+  // Build a clean Mercado LI by cloning Amateur and rewriting structure
+  var newLi=amateurLi.cloneNode(true);
+  newLi.classList.add('v153-mercado-li');
+  // Force replace ALL text nodes that contain 'Amateur'
+  function setText(el){
+    Array.from(el.childNodes).forEach(function(n){
+      if(n.nodeType===3){
+        n.textContent=n.textContent.replace(/Amateur/g,'Mercado');
+      } else if(n.nodeType===1){
+        setText(n);
+      }
+    });
+  }
+  setText(newLi);
+  // Force-replace the icon: find element that has just the emoji and rewrite it
+  // Strategy: replace 🏟️ 🎰 🎯 🏛️ 🏈 🎮 to 🤵 in ALL text nodes
+  function replaceIcons(el){
+    Array.from(el.childNodes).forEach(function(n){
+      if(n.nodeType===3){
+        n.textContent=n.textContent.replace(/[🏟🎰🎯🏛️🏈🎮🥎🎳🎱🏆⚽🏀]\uFE0F?/g,'🤵');
+      } else if(n.nodeType===1){
+        replaceIcons(n);
+      }
+    });
+  }
+  replaceIcons(newLi);
+  // Click handler: open Mercado panel
+  newLi.addEventListener('click', function(e){
+    e.preventDefault(); e.stopPropagation();
+    if(window.__v150showMercado) window.__v150showMercado();
+    var dc=document.querySelector('.drawer-close, [aria-label*=Cerrar i], [aria-label*=Close i]');
+    if(dc) dc.click();
+  }, true);
+  // Insert between Amateur and Comparar (or after Amateur if Comparar is missing)
+  if(comparLi && comparLi.parentElement===ul){
+    ul.insertBefore(newLi, comparLi);
+  } else {
+    if(amateurLi.nextSibling) ul.insertBefore(newLi, amateurLi.nextSibling);
+    else ul.appendChild(newLi);
+  }
+}
+setInterval(buildMercadoOnce, 400); setTimeout(buildMercadoOnce, 250);
+
+// === D. Fix dropdown button (force-clean if older state) ===
+function forceFixAcerca(){
+  document.querySelectorAll('.v149-acerca-btn').forEach(function(b){
+    // Always rewrite to clean structure, no extra ?
+    var lbl=b.querySelector('.v152-label');
+    var arr=b.querySelector('.v152-arrow');
+    var open=b.parentElement && b.parentElement.classList.contains('v151-open');
+    if(!lbl || !arr || /❓|\?\s*¿/.test(b.textContent)){
+      b.innerHTML='<span class="v152-label">¿Qué es el Fútbol?</span><span class="v152-arrow">'+(open?'▾':'▸')+'</span>';
+    } else {
+      arr.textContent=open?'▾':'▸';
+    }
+  });
+}
+setInterval(forceFixAcerca, 300); setTimeout(forceFixAcerca, 200);
+
+})();
+</script>
 </body>
 </html>
 
