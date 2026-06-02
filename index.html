@@ -20558,6 +20558,97 @@ setInterval(showInicioCards, 300); setTimeout(showInicioCards, 150);
 
 })();
 </script>
+
+<script>
+(function(){
+if(window.__v159loaded)return;window.__v159loaded=true;
+
+// === A. UNSTUCK navigation: remove inline !important display on panels ===
+// Continuously clean panel inline styles that block native navigation
+function unstickPanels(){
+  document.querySelectorAll('[id^=panel-]').forEach(function(p){
+    // If panel has inline display:block/none set with !important, strip it.
+    // Let app's natural CSS govern visibility via .active class.
+    var st=p.getAttribute('style')||'';
+    if(/display\s*:\s*[^;]+!important/i.test(st)){
+      var cleaned=st.replace(/display\s*:[^;]+;?/gi,'');
+      p.setAttribute('style', cleaned);
+    }
+  });
+}
+setInterval(unstickPanels, 200); setTimeout(unstickPanels, 100);
+
+// === B. CORRECT panel-inicio handling: when on Inicio, hide masss21 + show widgets ===
+//      When masss21 is the visible section, hide other widgets ===
+function handleInicioContent(){
+  var ini=document.getElementById('panel-inicio');
+  if(!ini || !ini.classList.contains('active')) return;
+  // Find masss21 element
+  var mas=null;
+  document.querySelectorAll('[id*=masss21]').forEach(function(e){
+    if(e.id==='panel-inicio') return;
+    if(!mas) mas=e;
+  });
+  var masVisible=mas && mas.offsetParent!==null && getComputedStyle(mas).display!=='none';
+  var WIDGETS=['v32-news-grid-sec','v100-blogs-wrap','v100-podcast-wrap','v100-podcast','v99-retos'];
+  if(masVisible){
+    // Hide widgets when on MasSS21
+    WIDGETS.forEach(function(id){
+      var e=document.getElementById(id); if(e) e.style.setProperty('display','none','important');
+    });
+  } else {
+    // Restore widgets visibility (strip display from inline)
+    WIDGETS.forEach(function(id){
+      var e=document.getElementById(id); if(!e) return;
+      var st=e.getAttribute('style')||'';
+      var cleaned=st.replace(/display\s*:[^;]+;?/gi,'');
+      e.setAttribute('style', cleaned);
+    });
+  }
+}
+setInterval(handleInicioContent, 200); setTimeout(handleInicioContent, 100);
+
+// === C. STOP all my previous freezeAllCarousels side-effects on non-hero ===
+function fullRestoreNonHero(){
+  // Clean all carousel-named elements except #heroCarousel
+  document.querySelectorAll('[class*=carousel],[class*=slider]').forEach(function(car){
+    if(car.id==='heroCarousel') return;
+    Array.from(car.children).forEach(function(c){
+      var st=c.getAttribute('style')||'';
+      // Aggressively strip the freeze pattern
+      st=st.replace(/opacity\s*:\s*0[^;]*;?/gi,'');
+      st=st.replace(/visibility\s*:\s*hidden[^;]*;?/gi,'');
+      st=st.replace(/position\s*:\s*absolute[^;]*;?/gi,'');
+      st=st.replace(/top\s*:\s*-99999px[^;]*;?/gi,'');
+      c.setAttribute('style', st);
+    });
+  });
+  // Also clean panel-inicio direct children
+  var ini=document.getElementById('panel-inicio');
+  if(ini){
+    Array.from(ini.children).forEach(function(c){
+      var st=c.getAttribute('style')||'';
+      st=st.replace(/opacity\s*:\s*0[^;]*;?/gi,'');
+      st=st.replace(/visibility\s*:\s*hidden[^;]*;?/gi,'');
+      st=st.replace(/position\s*:\s*absolute[^;]*;?/gi,'');
+      st=st.replace(/top\s*:\s*-99999px[^;]*;?/gi,'');
+      c.setAttribute('style', st);
+    });
+  }
+}
+setInterval(fullRestoreNonHero, 200); setTimeout(fullRestoreNonHero, 80);
+
+// === D. CSS override: hide widgets when masss21 visible ===
+var st=document.createElement('style');
+st.textContent='html body.v32-view-masss21 #v32-news-grid-sec,'+
+  'html body.v32-view-masss21 #v100-blogs-wrap,'+
+  'html body.v32-view-masss21 #v100-podcast-wrap,'+
+  'html body.v32-view-masss21 #v100-podcast,'+
+  'html body.v32-view-masss21 #v99-retos{display:none !important}';
+document.head.appendChild(st);
+
+})();
+</script>
 </body>
 </html>
 
