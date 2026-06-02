@@ -19931,6 +19931,131 @@ setInterval(v151fixSidebar, 600); setTimeout(v151fixSidebar, 500);
 
 })();
 </script>
+
+<script>
+(function(){
+if(window.__v152loaded)return;window.__v152loaded=true;
+
+// CSS
+var st=document.createElement('style');
+st.textContent='.v149-acerca-btn{background:transparent !important;border:0 !important;color:#94a3b8 !important;font-size:11.2px !important;font-weight:800 !important;text-transform:uppercase !important;padding:7px 12px !important;display:flex !important;align-items:center !important;justify-content:space-between !important;width:100% !important;letter-spacing:0.3px !important}'+
+  '.v149-acerca-btn:hover{color:#475569 !important}'+
+  '.v149-acerca-wrap.v151-open .v149-acerca-btn{color:#c8102e !important}'+
+  '.v149-acerca-sub{padding:4px 0 8px 18px !important;list-style:none !important;margin:0 !important}'+
+  '.v149-acerca-sub li{padding:8px 12px !important;cursor:pointer !important;color:#475569 !important;font-size:13.5px !important;border-radius:6px !important}'+
+  '.v149-acerca-sub li:hover{background:#fef2f2 !important;color:#c8102e !important}'+
+  '.v149-acerca-sub li.v152-active-li{background:#fef2f2 !important;color:#c8102e !important;font-weight:600 !important}';
+document.head.appendChild(st);
+
+// 1. Hard-prevent Mercado from auto-showing on load
+function ensureMercadoHidden(){
+  var p=document.getElementById('v150-mercado-panel');
+  if(!p) return;
+  // Only force hide if v150-mercado-mode body class is NOT set
+  if(!document.body.classList.contains('v150-mercado-mode')){
+    p.style.setProperty('display','none','important');
+  }
+}
+setInterval(ensureMercadoHidden, 200); setTimeout(ensureMercadoHidden, 100);
+
+// 2. Cleanup duplicate Mercado menu items (keep only one inside v56-sub-list)
+function cleanupMercadoMenu(){
+  // Find ALL Mercado items in DOM
+  var allMercado=[];
+  document.querySelectorAll('li.v56-sub-item, li, div').forEach(function(el){
+    if(el.children.length>3) return;
+    var t=(el.textContent||'').trim();
+    if(/^🤵\s*Mercado$|^Mercado$/.test(t) && t.length<25){
+      allMercado.push(el);
+    }
+  });
+  // Keep one inside v56-sub-list (next to Amateur), remove others
+  var keptInList=false;
+  allMercado.forEach(function(el){
+    var inList=el.tagName==='LI' && el.classList.contains('v56-sub-item') && el.parentElement && el.parentElement.classList.contains('v56-sub-list');
+    if(inList){
+      // Check if there's an Amateur in the same ul
+      var amateurFound=false;
+      Array.from(el.parentElement.children).forEach(function(sib){
+        if(/Amateur/.test((sib.textContent||'').trim())) amateurFound=true;
+      });
+      if(amateurFound && !keptInList){ keptInList=true; return; }
+      el.remove();
+    } else {
+      el.remove();
+    }
+  });
+}
+setInterval(cleanupMercadoMenu, 500); setTimeout(cleanupMercadoMenu, 300);
+
+// 3. Remove ❓ from acerca button text + restyle
+function fixAcercaText(){
+  document.querySelectorAll('.v149-acerca-btn').forEach(function(b){
+    if(b.dataset.v152fixed==='1') return;
+    b.dataset.v152fixed='1';
+    // Build new HTML with left label + right arrow
+    b.innerHTML='<span class="v152-label">¿Qué es el Fútbol?</span><span class="v152-arrow">▸</span>';
+  });
+  // Sync arrow rotation when open
+  document.querySelectorAll('.v149-acerca-wrap').forEach(function(w){
+    var arr=w.querySelector('.v152-arrow');
+    if(arr){
+      arr.textContent = w.classList.contains('v151-open') ? '▾' : '▸';
+    }
+  });
+}
+setInterval(fixAcercaText, 500); setTimeout(fixAcercaText, 600);
+
+// 4. Wire Profesionales click → activate Fútbol + show Resumen general
+function wireProfesionales(){
+  document.querySelectorAll('li.v56-sub-item').forEach(function(li){
+    if(li.dataset.v152profwired==='1') return;
+    var t=(li.textContent||'').trim();
+    if(/^🏆\s*Profesionales$|^Profesionales$/.test(t)){
+      li.dataset.v152profwired='1';
+      li.addEventListener('click', function(e){
+        e.preventDefault(); e.stopPropagation();
+        // Set body classes for Fútbol view
+        document.body.classList.remove('v32-view-inicio');
+        document.body.classList.add('v32-view-soccer');
+        document.body.classList.add('v29-show-bar');
+        // Activate panel-soccer
+        var soc=document.getElementById('panel-soccer');
+        var ini=document.getElementById('panel-inicio');
+        if(soc){ soc.classList.add('active'); soc.style.setProperty('display','block','important'); }
+        if(ini){ ini.classList.remove('active'); ini.style.setProperty('display','none','important'); }
+        // Hide v145 slides → show Resumen general (default)
+        ['v145-historia','v145-reglas','v145-competiciones','v145-leyendas','v145-records'].forEach(function(id){
+          var el=document.getElementById(id); if(el) el.style.display='none';
+        });
+        if(soc){
+          Array.from(soc.children).forEach(function(c){
+            if(!c.id || c.id.indexOf('v145-')!==0) c.style.removeProperty('display');
+          });
+        }
+        // Close drawer
+        var dc=document.querySelector('.drawer-close, [aria-label*=Cerrar i], [aria-label*=Close i]');
+        if(dc) dc.click();
+        // Hide mercado overlay if open
+        var mp=document.getElementById('v150-mercado-panel');
+        if(mp){ mp.style.setProperty('display','none','important'); document.body.classList.remove('v150-mercado-mode'); }
+        window.scrollTo({top:0, behavior:'smooth'});
+      }, true);
+    }
+  });
+}
+setInterval(wireProfesionales, 700); setTimeout(wireProfesionales, 500);
+
+// 5. Track active sub-item highlight
+document.addEventListener('click', function(e){
+  var li=e.target.closest('.v149-acerca-sub li');
+  if(!li) return;
+  document.querySelectorAll('.v149-acerca-sub li').forEach(function(x){x.classList.remove('v152-active-li');});
+  li.classList.add('v152-active-li');
+}, false);
+
+})();
+</script>
 </body>
 </html>
 
