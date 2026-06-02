@@ -20442,6 +20442,122 @@ setInterval(freezeAllCarousels, 200); setTimeout(freezeAllCarousels, 100);
 
 })();
 </script>
+
+<script>
+(function(){
+if(window.__v158loaded)return;window.__v158loaded=true;
+
+// === A. RESTRICT freezing to #heroCarousel ONLY (v157 was too aggressive) ===
+// First, undo any side-effects from v157 freezeAllCarousels on non-hero elements
+function unfreezeOthers(){
+  document.querySelectorAll('[class*=carousel],[class*=slider]').forEach(function(car){
+    if(car.id==='heroCarousel') return;
+    Array.from(car.children).forEach(function(c){
+      var s=c.style;
+      // Remove styles v157 may have set
+      if(s.opacity==='0' && s.visibility==='hidden' && s.position==='absolute' && s.top==='-99999px'){
+        s.removeProperty('opacity'); s.removeProperty('visibility'); s.removeProperty('position'); s.removeProperty('top');
+      }
+    });
+  });
+}
+setInterval(unfreezeOthers, 250); setTimeout(unfreezeOthers, 50);
+
+// Refined freeze: only #heroCarousel slides
+function freezeHeroOnly(){
+  var hc=document.getElementById('heroCarousel');
+  if(!hc) return;
+  Array.from(hc.children).forEach(function(c,i){
+    if(c.classList.contains('pagination') || c.classList.contains('dots') || c.tagName==='BUTTON') return;
+    if(i===0){
+      c.style.removeProperty('opacity'); c.style.removeProperty('visibility');
+      c.style.removeProperty('position'); c.style.removeProperty('top');
+      c.classList.add('active');
+    } else {
+      c.style.setProperty('opacity','0','important');
+      c.style.setProperty('visibility','hidden','important');
+      c.style.setProperty('position','absolute','important');
+      c.style.setProperty('top','-99999px','important');
+      c.classList.remove('active');
+    }
+  });
+}
+setInterval(freezeHeroOnly, 250); setTimeout(freezeHeroOnly, 100);
+
+// === B. Click 'Deportes' top-level button → activate Fútbol with Resumen general ===
+function activateFutbolV158(){
+  document.body.classList.remove('v32-view-inicio');
+  document.body.classList.add('v32-view-soccer');
+  document.body.classList.add('v29-show-bar');
+  var soc=document.getElementById('panel-soccer');
+  var ini=document.getElementById('panel-inicio');
+  if(soc){ soc.classList.add('active'); soc.style.setProperty('display','block','important'); }
+  if(ini){ ini.classList.remove('active'); ini.style.setProperty('display','none','important'); }
+  ['v145-historia','v145-reglas','v145-competiciones','v145-leyendas','v145-records'].forEach(function(id){
+    var el=document.getElementById(id); if(el) el.style.display='none';
+  });
+  if(soc){
+    Array.from(soc.children).forEach(function(c){
+      if(!c.id || c.id.indexOf('v145-')!==0) c.style.removeProperty('display');
+    });
+  }
+  document.querySelectorAll('.sport-btn').forEach(function(b){
+    var t=(b.textContent||'').trim();
+    if(/^Fútbol$/.test(t)) b.classList.add('active');
+    else b.classList.remove('active');
+  });
+  var mp=document.getElementById('v150-mercado-panel');
+  if(mp){ mp.style.setProperty('display','none','important'); document.body.classList.remove('v150-mercado-mode'); }
+}
+
+// Intercept clicks on 'Deportes' top-level button (v26-has-dropdown)
+document.addEventListener('click', function(e){
+  var btn=e.target.closest('button.v26-has-dropdown, .v26-section-head, button');
+  if(!btn) return;
+  var t=(btn.textContent||'').trim();
+  // Match 'Deportes' top-level (with or without emoji)
+  if(/^🏆?\s*Deportes\s*▾?$/.test(t) && t.length<25){
+    // Don't preventDefault — let dropdown expand. But ALSO activate Fútbol.
+    setTimeout(activateFutbolV158, 50);
+  }
+}, true);
+
+// === C. Even stronger widget restore on Inicio ===
+function nuclearRestoreWidgets(){
+  var ini=document.getElementById('panel-inicio');
+  var iniActive=ini && ini.classList.contains('active') && getComputedStyle(ini).display!=='none';
+  if(!iniActive) return;
+  // Check masss21 visible
+  var masVisible=false;
+  document.querySelectorAll('[id*=masss21]').forEach(function(e){
+    if(e.id==='panel-inicio') return;
+    if(e.offsetParent && getComputedStyle(e).display!=='none') masVisible=true;
+  });
+  if(masVisible) return;
+  ['v32-news-grid-sec','v100-blogs-wrap','v100-podcast-wrap','v100-podcast','v99-retos'].forEach(function(id){
+    var e=document.getElementById(id); if(!e) return;
+    var st=e.getAttribute('style')||'';
+    st=st.replace(/display\s*:\s*[^;]+;?/gi,'');
+    e.setAttribute('style', st);
+  });
+}
+setInterval(nuclearRestoreWidgets, 200); setTimeout(nuclearRestoreWidgets, 80);
+
+// === D. Ensure cards/features sections show on Inicio (anything hidden by v157 mistake) ===
+function showInicioCards(){
+  var ini=document.getElementById('panel-inicio');
+  if(!ini || !ini.classList.contains('active')) return;
+  Array.from(ini.children).forEach(function(c){
+    var st=c.style;
+    if(st.opacity==='0' && st.visibility==='hidden' && st.position==='absolute' && st.top==='-99999px'){
+      st.removeProperty('opacity'); st.removeProperty('visibility'); st.removeProperty('position'); st.removeProperty('top');
+    }
+  });
+}
+setInterval(showInicioCards, 300); setTimeout(showInicioCards, 150);
+
+})();
+</script>
 </body>
 </html>
 
