@@ -20716,6 +20716,72 @@ setInterval(handleMasSS21, 200); setTimeout(handleMasSS21, 80);
 
 })();
 </script>
+
+<script>
+(function(){
+if(window.__v161loaded)return;window.__v161loaded=true;
+
+// === MutationObserver: instant freeze-revert on heroCarousel + panel-inicio ===
+function cleanFreeze(el){
+  var st=el.getAttribute('style')||''; var orig=st;
+  st=st.replace(/opacity\s*:\s*0[^;]*;?/gi,'');
+  st=st.replace(/visibility\s*:\s*hidden[^;]*;?/gi,'');
+  st=st.replace(/position\s*:\s*absolute[^;]*;?/gi,'');
+  st=st.replace(/top\s*:\s*-9{4,}px[^;]*;?/gi,'');
+  if(st!==orig) el.setAttribute('style', st);
+}
+
+function observeContainer(container){
+  if(!container || container.__v161observed) return;
+  container.__v161observed=true;
+  var obs=new MutationObserver(function(mutations){
+    mutations.forEach(function(m){
+      if(m.type==='attributes' && m.attributeName==='style' && m.target){
+        cleanFreeze(m.target);
+      }
+    });
+  });
+  Array.from(container.children).forEach(function(c){
+    cleanFreeze(c); // initial cleanup
+    obs.observe(c, {attributes:true, attributeFilter:['style']});
+  });
+  // Also observe new children added
+  var bigObs=new MutationObserver(function(mutations){
+    mutations.forEach(function(m){
+      m.addedNodes.forEach(function(n){
+        if(n.nodeType===1){
+          cleanFreeze(n);
+          obs.observe(n, {attributes:true, attributeFilter:['style']});
+        }
+      });
+    });
+  });
+  bigObs.observe(container, {childList:true});
+}
+
+function setupObservers(){
+  observeContainer(document.getElementById('heroCarousel'));
+  observeContainer(document.getElementById('panel-inicio'));
+  document.querySelectorAll('[class*=carousel],[class*=slider]').forEach(function(c){
+    if(c.id!=='heroCarousel') observeContainer(c);
+  });
+}
+setTimeout(setupObservers, 50);
+setTimeout(setupObservers, 500);
+setTimeout(setupObservers, 1500);
+setInterval(setupObservers, 3000);
+
+// Belt-and-suspenders: also poll fast
+function fastClean(){
+  var hc=document.getElementById('heroCarousel');
+  if(hc) Array.from(hc.children).forEach(cleanFreeze);
+  var ini=document.getElementById('panel-inicio');
+  if(ini) Array.from(ini.children).forEach(cleanFreeze);
+}
+setInterval(fastClean, 60);
+
+})();
+</script>
 </body>
 </html>
 
