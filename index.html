@@ -20357,6 +20357,42 @@ document.head.appendChild(st);
 })();
 </script>
 
+
+<script>
+(function(){
+// === v165: NUCLEAR DISABLE of v157-v164 ===
+window.__v157loaded=true;
+window.__v158loaded=true;
+window.__v159loaded=true;
+window.__v160loaded=true;
+window.__v161loaded=true;
+window.__v162loaded=true;
+window.__v163loaded=true;
+window.__v164loaded=true;
+
+// Only: hide widgets when MasSS21 visible
+var WIDGETS=["v32-news-grid-sec","v100-noticias-wrap","v100-blogs-wrap","v100-podcast-wrap","v100-podcast","v99-retos","v146-newsletter"];
+function syncMasss21(){
+  var mas=document.getElementById("v87-page-masss21");
+  var masVis=mas && mas.offsetParent!==null && getComputedStyle(mas).display!=="none";
+  if(masVis){
+    WIDGETS.forEach(function(id){
+      var e=document.getElementById(id); if(e) e.style.setProperty("display","none","important");
+    });
+  } else {
+    WIDGETS.forEach(function(id){
+      var e=document.getElementById(id); if(!e) return;
+      var st=e.getAttribute("style")||"";
+      if(/display\s*:\s*none/i.test(st)){
+        st=st.replace(/display\s*:[^;]+;?/gi,"");
+        e.setAttribute("style",st);
+      }
+    });
+  }
+}
+setInterval(syncMasss21, 200);
+})();
+</script>
 <script>
 (function(){
 if(window.__v157loaded)return;window.__v157loaded=true;
