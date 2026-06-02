@@ -19421,6 +19421,72 @@ setInterval(addNewsletter, 1500); setTimeout(addNewsletter, 1000);
 
 })();
 </script>
+
+<script>
+(function(){
+if(window.__v147loaded)return;window.__v147loaded=true;
+
+var st=document.createElement('style');
+st.textContent='#v146-newsletter{display:none !important}'+
+  '.v147-footer-nl{padding:28px 24px 22px 24px;border-bottom:1px solid rgba(255,255,255,0.08);margin-bottom:18px}'+
+  '.v147-footer-nl h3{color:#fff;margin:0 0 8px 0;font-size:17px;font-weight:600;letter-spacing:0.2px}'+
+  '.v147-footer-nl p{color:rgba(255,255,255,0.62);margin:0 0 14px 0;font-size:13.5px;line-height:1.55;max-width:580px}'+
+  '.v147-footer-nl form{display:flex;gap:8px;flex-wrap:wrap;max-width:520px;margin:0}'+
+  '.v147-footer-nl input[type=email]{flex:1 1 220px;padding:10px 14px;border-radius:8px;border:1px solid rgba(255,255,255,0.18);background:rgba(255,255,255,0.05);color:#fff;font-size:14px;outline:none}'+
+  '.v147-footer-nl input[type=email]::placeholder{color:rgba(255,255,255,0.4)}'+
+  '.v147-footer-nl input[type=email]:focus{border-color:rgba(255,255,255,0.4);background:rgba(255,255,255,0.08)}'+
+  '.v147-footer-nl button{padding:10px 22px;border-radius:8px;border:0;background:#fff;color:#0f172a;font-weight:600;cursor:pointer;font-size:14px;transition:background 0.15s}'+
+  '.v147-footer-nl button:hover{background:#e2e8f0}'+
+  '.v147-footer-nl .ok{color:#86efac;font-size:13.5px;margin-top:10px;display:none}'+
+  '.v147-footer-nl .ok.v147-show{display:block}'+
+  'body:not(.v147-on-inicio) #v32-news-grid-sec,'+
+  'body:not(.v147-on-inicio) #v100-blogs-wrap,'+
+  'body:not(.v147-on-inicio) #v100-podcast-wrap,'+
+  'body:not(.v147-on-inicio) #v100-podcast,'+
+  'body:not(.v147-on-inicio) #v99-retos { display:none !important }';
+document.head.appendChild(st);
+
+function syncInicio(){
+  var ini=document.getElementById('panel-inicio');
+  var act=ini && ini.classList.contains('active') && getComputedStyle(ini).display!=='none';
+  if(act) document.body.classList.add('v147-on-inicio'); else document.body.classList.remove('v147-on-inicio');
+}
+setInterval(syncInicio, 200); syncInicio();
+
+function buildFooterNL(){
+  var foot=document.getElementById('v12-footer');
+  if(!foot) return;
+  if(foot.querySelector('.v147-footer-nl')) return;
+  var nl=document.createElement('div');
+  nl.className='v147-footer-nl';
+  nl.innerHTML='<h3>📧 Newsletter Sports Stats 21</h3>'+
+    '<p>Recibí cada lunes lo mejor de la semana en deportes: análisis, datos exclusivos y los récords que se rompieron. Sin spam, podés cancelar cuando quieras.</p>'+
+    '<form id="v147-nl-form">'+
+      '<input type="email" placeholder="tu@email.com" required aria-label="Email">'+
+      '<button type="submit">Suscribirme</button>'+
+    '</form>'+
+    '<div class="ok" id="v147-nl-ok">✓ Te suscribiste correctamente. Pronto recibís el primer newsletter.</div>';
+  foot.insertBefore(nl, foot.firstChild);
+  var form=nl.querySelector('#v147-nl-form');
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    var ok=document.getElementById('v147-nl-ok');
+    if(ok) ok.classList.add('v147-show');
+    form.style.display='none';
+    try{ localStorage.setItem('v147-nl-sub','1'); }catch(_){}
+  });
+  try{
+    if(localStorage.getItem('v147-nl-sub')==='1'){
+      form.style.display='none';
+      var ok=document.getElementById('v147-nl-ok');
+      if(ok){ ok.textContent='✓ Ya estás suscripto. ¡Gracias!'; ok.classList.add('v147-show'); }
+    }
+  }catch(_){}
+}
+setInterval(buildFooterNL, 1500); setTimeout(buildFooterNL, 800);
+
+})();
+</script>
 </body>
 </html>
 
