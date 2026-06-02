@@ -20169,6 +20169,153 @@ setInterval(forceFixAcerca, 300); setTimeout(forceFixAcerca, 200);
 
 })();
 </script>
+
+<script>
+(function(){
+if(window.__v154loaded)return;window.__v154loaded=true;
+
+// === A. STOP hero carousel rotation (the moving page-inicio issue) ===
+var st=document.createElement('style');
+st.textContent=  '.hero-carousel > .hero-slide:not(:first-of-type),'+
+  '.hero-carousel > .slide:not(:first-of-type),'+
+  '#heroCarousel > div:not(:first-of-type){opacity:0 !important;visibility:hidden !important;pointer-events:none !important;position:absolute !important;top:-9999px !important}'+
+  '.hero-carousel,#heroCarousel{animation:none !important}'+
+  // Hard rule: hide noticias/blogs/podcast/retos whenever sport-nav-bar visible OR view not pure-inicio
+  'body.v29-show-bar #v32-news-grid-sec,'+
+  'body.v29-show-bar #v100-blogs-wrap,'+
+  'body.v29-show-bar #v100-podcast-wrap,'+
+  'body.v29-show-bar #v100-podcast,'+
+  'body.v29-show-bar #v99-retos{display:none !important}';
+document.head.appendChild(st);
+
+// === B. Kill any interval that toggles classes on hero-carousel ===
+function freezeHero(){
+  var hc=document.getElementById('heroCarousel') || document.querySelector('.hero-carousel');
+  if(!hc) return;
+  // Keep only first slide visible
+  var slides=Array.from(hc.children);
+  slides.forEach(function(c,i){
+    if(i===0){
+      c.style.removeProperty('opacity');
+      c.style.removeProperty('visibility');
+      c.classList.add('active');
+    } else {
+      c.style.setProperty('opacity','0','important');
+      c.style.setProperty('visibility','hidden','important');
+      c.style.setProperty('position','absolute','important');
+      c.classList.remove('active');
+    }
+  });
+}
+setInterval(freezeHero, 300); setTimeout(freezeHero, 200);
+
+// === C. Fix Profesionales click (very lenient + capture + stopImmediate) ===
+function activateFutbol(){
+  document.body.classList.remove('v32-view-inicio');
+  document.body.classList.add('v32-view-soccer');
+  document.body.classList.add('v29-show-bar');
+  var soc=document.getElementById('panel-soccer');
+  var ini=document.getElementById('panel-inicio');
+  if(soc){ soc.classList.add('active'); soc.style.setProperty('display','block','important'); }
+  if(ini){ ini.classList.remove('active'); ini.style.setProperty('display','none','important'); }
+  // Hide all sub-slides → show default Resumen general
+  ['v145-historia','v145-reglas','v145-competiciones','v145-leyendas','v145-records'].forEach(function(id){
+    var el=document.getElementById(id); if(el) el.style.display='none';
+  });
+  if(soc){
+    Array.from(soc.children).forEach(function(c){
+      if(!c.id || c.id.indexOf('v145-')!==0) c.style.removeProperty('display');
+    });
+  }
+  // Highlight Fútbol in sport-nav-bar
+  document.querySelectorAll('.sport-btn').forEach(function(b){
+    var t=(b.textContent||'').trim();
+    if(/^Fútbol$/.test(t)) b.classList.add('active');
+    else b.classList.remove('active');
+  });
+  // Close drawer
+  var dc=document.querySelector('.drawer-close, [aria-label*=Cerrar i], [aria-label*=Close i]');
+  if(dc) dc.click();
+  // Hide mercado overlay
+  var mp=document.getElementById('v150-mercado-panel');
+  if(mp){ mp.style.setProperty('display','none','important'); document.body.classList.remove('v150-mercado-mode'); }
+  window.scrollTo({top:0, behavior:'auto'});
+}
+window.__v154activateFutbol=activateFutbol;
+
+// Document-level capture listener with stopImmediatePropagation
+document.addEventListener('click', function(e){
+  var li=e.target.closest('li.v56-sub-item, li');
+  if(!li) return;
+  var t=(li.textContent||'').trim();
+  if(/Profesionales/.test(t) && t.length<30){
+    e.preventDefault(); e.stopPropagation(); e.stopImmediatePropagation();
+    activateFutbol();
+    return false;
+  }
+}, true);
+
+})();
+</script>
+
+<script>
+(function(){
+if(window.__v155loaded)return;window.__v155loaded=true;
+
+var st=document.createElement('style');
+st.textContent=  // Sticky FÚTBOL M/F label
+  '#sidebar{position:relative}'+
+  '.sidebar-label{position:sticky !important;top:0 !important;background:#fff !important;z-index:20 !important;padding:10px 12px !important;border-bottom:1px solid #f1f5f9 !important;margin:0 !important}'+
+  // Wrap and sub-list: no margins
+  '.v149-acerca-wrap{margin:0 !important;padding:0 !important}'+
+  '.v149-acerca-sub{margin:0 !important;padding:0 !important;list-style:none !important}'+
+  // Sub-items styled like .continent-header (uppercase grey)
+  '.v149-acerca-sub li{color:#94a3b8 !important;font-size:11.2px !important;font-weight:800 !important;text-transform:uppercase !important;padding:7px 12px !important;letter-spacing:0.3px !important;display:flex !important;align-items:center !important;border-radius:0 !important;background:transparent !important;cursor:pointer !important;margin:0 !important}'+
+  '.v149-acerca-sub li:hover{color:#475569 !important;background:transparent !important}'+
+  '.v149-acerca-sub li.v152-active-li,.v149-acerca-sub li.v155-active{color:#c8102e !important;background:#fef2f2 !important;font-weight:800 !important}'+
+  // Hide noticias on Más Sobre SS21 view
+  'body[class*=masss21] #v32-news-grid-sec,'+
+  'body[class*=masss21] #v100-blogs-wrap,'+
+  'body[class*=masss21] #v100-podcast-wrap,'+
+  'body[class*=masss21] #v100-podcast,'+
+  'body[class*=masss21] #v99-retos,'+
+  'body.v147-masss21-mode #v32-news-grid-sec,'+
+  'body.v147-masss21-mode #v100-blogs-wrap,'+
+  'body.v147-masss21-mode #v100-podcast-wrap,'+
+  'body.v147-masss21-mode #v100-podcast,'+
+  'body.v147-masss21-mode #v99-retos{display:none !important}';
+document.head.appendChild(st);
+
+// Detect Más Sobre SS21 visible -> add body class + hide widgets
+function syncMasss21(){
+  // Common IDs for MasSS21
+  var els=[document.getElementById('masss21'),document.getElementById('mas-sobre-ss21'),document.querySelector('[data-view=masss21]'),document.querySelector('[id*=masss21]')];
+  var visible=false;
+  els.forEach(function(e){ if(e && e.offsetParent && getComputedStyle(e).display!=='none') visible=true; });
+  if(visible){
+    document.body.classList.add('v147-masss21-mode');
+    ['v32-news-grid-sec','v100-blogs-wrap','v100-podcast-wrap','v100-podcast','v99-retos'].forEach(function(id){
+      var e=document.getElementById(id); if(e) e.style.setProperty('display','none','important');
+    });
+  } else {
+    document.body.classList.remove('v147-masss21-mode');
+  }
+}
+setInterval(syncMasss21, 250);
+
+// Update sub-items text format: keep emoji + capitalize
+function updateSubItems(){
+  // Already styled by CSS. Just ensure no extra padding around
+  var sub=document.querySelector('.v149-acerca-sub');
+  if(sub){
+    sub.style.setProperty('padding','0','important');
+    sub.style.setProperty('margin','0','important');
+  }
+}
+setInterval(updateSubItems, 600);
+
+})();
+</script>
 </body>
 </html>
 
