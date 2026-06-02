@@ -20649,6 +20649,73 @@ document.head.appendChild(st);
 
 })();
 </script>
+
+<script>
+(function(){
+if(window.__v160loaded)return;window.__v160loaded=true;
+
+// === A. NUCLEAR RESET: undo ALL freeze effects from v154/v157/v158/v159 ===
+// Strip my injected styles from anywhere I touched
+function resetEverything(){
+  // Hero carousel: REMOVE all freeze styles, let it rotate freely
+  var hc=document.getElementById('heroCarousel');
+  if(hc){
+    Array.from(hc.children).forEach(function(c){
+      var st=c.getAttribute('style')||'';
+      st=st.replace(/opacity\s*:\s*0[^;]*;?/gi,'');
+      st=st.replace(/visibility\s*:\s*hidden[^;]*;?/gi,'');
+      st=st.replace(/position\s*:\s*absolute[^;]*;?/gi,'');
+      st=st.replace(/top\s*:\s*-9{4,}px[^;]*;?/gi,'');
+      c.setAttribute('style', st);
+    });
+  }
+  // ALL carousels and panel-inicio children: strip freeze styles
+  document.querySelectorAll('[class*=carousel] > *,[class*=slider] > *,#panel-inicio > *').forEach(function(c){
+    var st=c.getAttribute('style')||'';
+    var orig=st;
+    st=st.replace(/opacity\s*:\s*0[^;]*;?/gi,'');
+    st=st.replace(/visibility\s*:\s*hidden[^;]*;?/gi,'');
+    st=st.replace(/position\s*:\s*absolute[^;]*;?/gi,'');
+    st=st.replace(/top\s*:\s*-9{4,}px[^;]*;?/gi,'');
+    if(st!==orig) c.setAttribute('style', st);
+  });
+  // Panels: strip inline display !important so navigation works
+  document.querySelectorAll('[id^=panel-]').forEach(function(p){
+    var st=p.getAttribute('style')||'';
+    if(/display\s*:[^;]+!important/i.test(st)){
+      st=st.replace(/display\s*:[^;]+;?/gi,'');
+      p.setAttribute('style', st);
+    }
+  });
+}
+setInterval(resetEverything, 200); setTimeout(resetEverything, 50);
+
+// === B. COMPLETE widget hide list for MasSS21 ===
+// IMPORTANT: discovered v100-noticias-wrap that was NEVER in my list
+var WIDGETS_TO_HIDE=['v32-news-grid-sec','v100-noticias-wrap','v100-blogs-wrap','v100-podcast-wrap','v100-podcast','v99-retos','v146-newsletter'];
+
+function handleMasSS21(){
+  // Detect masss21 visible (real ID is v87-page-masss21)
+  var mas=document.getElementById('v87-page-masss21');
+  var masVisible=mas && mas.offsetParent!==null && getComputedStyle(mas).display!=='none';
+  if(masVisible){
+    WIDGETS_TO_HIDE.forEach(function(id){
+      var e=document.getElementById(id); if(e) e.style.setProperty('display','none','important');
+    });
+  } else {
+    // Restore: strip display from inline
+    WIDGETS_TO_HIDE.forEach(function(id){
+      var e=document.getElementById(id); if(!e) return;
+      var st=e.getAttribute('style')||'';
+      st=st.replace(/display\s*:[^;]+;?/gi,'');
+      e.setAttribute('style', st);
+    });
+  }
+}
+setInterval(handleMasSS21, 200); setTimeout(handleMasSS21, 80);
+
+})();
+</script>
 </body>
 </html>
 
