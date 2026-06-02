@@ -20910,6 +20910,108 @@ setInterval(unstickPanels, 150);
 
 })();
 </script>
+
+<script>
+(function(){
+if(window.__v164loaded)return;window.__v164loaded=true;
+
+// === A. MutationObserver on EACH panel to instantly strip inline display ===
+function setupPanelObserver(){
+  document.querySelectorAll('[id^=panel-]').forEach(function(p){
+    if(p.__v164obs) return; p.__v164obs=true;
+    var obs=new MutationObserver(function(){
+      var st=p.getAttribute('style')||'';
+      if(/display\s*:[^;]+!important/i.test(st)){
+        st=st.replace(/display\s*:[^;]+;?/gi,'');
+        p.setAttribute('style', st);
+      }
+    });
+    obs.observe(p, {attributes:true, attributeFilter:['style']});
+    // Initial strip
+    var st=p.getAttribute('style')||'';
+    if(/display\s*:[^;]+!important/i.test(st)){
+      st=st.replace(/display\s*:[^;]+;?/gi,'');
+      p.setAttribute('style', st);
+    }
+  });
+}
+setTimeout(setupPanelObserver, 50); setTimeout(setupPanelObserver, 500); setInterval(setupPanelObserver, 1000);
+
+// === B. Re-wire hero buttons (v163 cloned them, lost listeners) ===
+function wireHeroButtons(){
+  var hc=document.getElementById('heroCarousel'); if(!hc) return;
+  hc.querySelectorAll('button,a').forEach(function(b){
+    if(b.__v164wired) return;
+    var t=(b.textContent||'').trim();
+    if(/Más\s+Sobre\s+SS/i.test(t)){
+      b.__v164wired=true;
+      b.addEventListener('click', function(e){
+        e.preventDefault();
+        var mas=document.getElementById('v87-page-masss21');
+        if(mas){
+          mas.style.removeProperty('display');
+          mas.scrollIntoView({behavior:'smooth', block:'start'});
+        }
+      });
+    } else if(/Empezar\s+a\s+explorar/i.test(t)){
+      b.__v164wired=true;
+      b.addEventListener('click', function(e){
+        e.preventDefault();
+        document.body.classList.remove('v32-view-inicio');
+        document.body.classList.add('v32-view-soccer');
+        document.body.classList.add('v29-show-bar');
+        var soc=document.getElementById('panel-soccer');
+        var ini=document.getElementById('panel-inicio');
+        if(soc) soc.classList.add('active');
+        if(ini) ini.classList.remove('active');
+        window.scrollTo({top:0});
+      });
+    } else if(/Crear\s+cuenta/i.test(t)){
+      b.__v164wired=true;
+      b.addEventListener('click', function(e){
+        e.preventDefault();
+        var login=document.querySelector('button.iniciar-sesion, button[class*=login]');
+        if(login) login.click();
+      });
+    }
+  });
+}
+setInterval(wireHeroButtons, 300); setTimeout(wireHeroButtons, 200);
+
+// === C. Inicio menu item click → reset to Inicio ===
+document.addEventListener('click', function(e){
+  var el=e.target.closest('a,button,li,div');
+  if(!el || el.children.length>3) return;
+  var t=(el.textContent||'').trim();
+  if(t==='🏠 Inicio' || t==='🏠Inicio' || (t==='Inicio' && el.tagName!=='H1' && el.tagName!=='H2')){
+    // Set inicio state
+    setTimeout(function(){
+      document.body.classList.remove('v32-view-soccer','v32-view-tennis','v32-view-nba','v32-view-baseball','v32-view-hockey','v32-view-f1','v32-view-nfl','v32-view-ufc','v32-view-golf','v32-view-rugby','v32-view-volley','v32-view-padel','v32-view-cycling','v32-view-cricket','v32-view-athletics','v32-view-chess','v32-view-acuaticos','v32-view-olympics','v32-view-mlb','v32-view-nhl','v32-view-mercado','v32-view-masss21');
+      document.body.classList.add('v32-view-inicio');
+      // Activate panel-inicio, deactivate others
+      document.querySelectorAll('[id^=panel-]').forEach(function(p){
+        p.classList.remove('active');
+        // Strip inline display
+        var st=p.getAttribute('style')||'';
+        st=st.replace(/display\s*:[^;]+;?/gi,'');
+        p.setAttribute('style', st);
+      });
+      var ini=document.getElementById('panel-inicio');
+      if(ini) ini.classList.add('active');
+      // Hide masss21
+      var mas=document.getElementById('v87-page-masss21');
+      if(mas) mas.style.setProperty('display','none','important');
+      // Hide mercado overlay
+      var merc=document.getElementById('v150-mercado-panel');
+      if(merc) merc.style.setProperty('display','none','important');
+      document.body.classList.remove('v150-mercado-mode');
+      window.scrollTo({top:0});
+    }, 50);
+  }
+}, false);
+
+})();
+</script>
 </body>
 </html>
 
