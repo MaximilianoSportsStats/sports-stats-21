@@ -19159,6 +19159,210 @@ function renderTenisMain(){
 setTimeout(renderTenisMain, 1500); setInterval(renderTenisMain, 5000);
 })();
 </script>
+
+<script>
+(function(){
+if(window.__v200loaded)return;window.__v200loaded=true;
+
+// CSS
+var st=document.createElement('style');
+st.textContent='#v200-mercado-panel{display:none;padding:24px;max-width:1400px;margin:0 auto}'+
+  '#v200-mercado-panel.v200-active{display:block}'+
+  '.v200-mer-header{background:linear-gradient(135deg,#0f172a,#1e293b);color:#fff;padding:28px;border-radius:16px;margin-bottom:20px}'+
+  '.v200-mer-header h2{margin:0 0 8px 0;font-size:26px}'+
+  '.v200-mer-header p{margin:0;color:rgba(255,255,255,0.75);line-height:1.5}'+
+  '.v200-sports{display:flex;flex-wrap:nowrap;overflow-x:auto;gap:16px;padding:12px 0;border-bottom:2px solid #fee2e2;margin-bottom:18px}'+
+  '.v200-sports button{flex:0 0 auto;display:flex;flex-direction:column;align-items:center;gap:6px;background:#fff;border:1px solid #e2e8f0;color:#475569;padding:14px 18px;border-radius:14px;min-width:88px;font-size:13px;font-weight:500;cursor:pointer}'+
+  '.v200-sports button .v200-emoji{font-size:32px;line-height:1}'+
+  '.v200-sports button.v200-active-sport{background:#c8102e;color:#fff;border-color:#c8102e;box-shadow:0 4px 12px rgba(200,16,46,0.25)}'+
+  '.v200-tabs{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0 24px 0;border-bottom:2px solid #fee2e2;padding-bottom:8px}'+
+  '.v200-tabs button{padding:9px 14px;border:1px solid #fee2e2;background:#fff;color:#475569;border-radius:8px;cursor:pointer;font-size:14px;font-weight:500;display:flex;align-items:center;gap:6px}'+
+  '.v200-tabs button:hover{background:#fef2f2;color:#c8102e}'+
+  '.v200-tabs button.v200-active-tab{background:#c8102e;color:#fff;border-color:#c8102e}'+
+  '.v200-content{background:#fff;padding:24px;border-radius:14px;box-shadow:0 1px 4px rgba(0,0,0,0.05);min-height:300px}'+
+  '.v200-card{padding:16px;border:1px solid #e2e8f0;border-radius:10px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}'+
+  '.v200-card .player{font-weight:600;color:#0f172a}'+
+  '.v200-card .move{color:#475569;font-size:14px}'+
+  '.v200-card .amount{font-weight:700;color:#16a34a;white-space:nowrap}'+
+  '.v200-card .status{padding:4px 10px;border-radius:999px;font-size:12px;font-weight:600}'+
+  '.v200-card .st-cerrado{background:#dcfce7;color:#15803d}'+
+  '.v200-card .st-progreso{background:#fef3c7;color:#a16207}'+
+  '.v200-card .st-rumor{background:#dbeafe;color:#1e40af}'+
+  '.v200-card .st-libre{background:#fee2e2;color:#b91c1c}';
+document.head.appendChild(st);
+
+// Insert Mercado menu item between Amateur and Comparar
+function insertMercadoMenu(){
+  if(document.querySelector('.v200-mercado-li')) return;
+  var amateurLi=null, comparLi=null;
+  document.querySelectorAll('li.v56-sub-item').forEach(function(li){
+    var t=(li.textContent||'').trim();
+    if(/Amateur/.test(t) && !amateurLi) amateurLi=li;
+    if(/Comparar/.test(t) && !comparLi) comparLi=li;
+  });
+  if(!amateurLi) return;
+  var ul=amateurLi.parentElement;
+  var newLi=amateurLi.cloneNode(true);
+  newLi.classList.add('v200-mercado-li');
+  function setText(el){
+    Array.from(el.childNodes).forEach(function(n){
+      if(n.nodeType===3) n.textContent=n.textContent.replace(/Amateur/g,'Mercado');
+      else if(n.nodeType===1) setText(n);
+    });
+  }
+  setText(newLi);
+  // Replace any non-letter prefix emoji with 🤵
+  newLi.innerHTML=newLi.innerHTML.replace(/[\u{1F000}-\u{1FFFF}]\uFE0F?/gu, '🤵');
+  newLi.addEventListener('click', function(e){
+    e.preventDefault(); e.stopPropagation();
+    showMercado();
+  }, true);
+  if(comparLi && comparLi.parentElement===ul) ul.insertBefore(newLi, comparLi);
+  else if(amateurLi.nextSibling) ul.insertBefore(newLi, amateurLi.nextSibling);
+  else ul.appendChild(newLi);
+}
+setTimeout(insertMercadoMenu, 500); setInterval(insertMercadoMenu, 2000);
+
+// Data
+var SPORTS=[{k:'futbol',l:'Fútbol',e:'⚽'},{k:'tenis',l:'Tenis',e:'🎾'},{k:'f1',l:'Carreras',e:'🏎️'},{k:'nba',l:'Basketball',e:'🏀'},{k:'ufc',l:'Combate',e:'🥊'},{k:'mlb',l:'Baseball',e:'⚾'},{k:'nhl',l:'Hockey',e:'🏒'},{k:'nfl',l:'Fútbol Americano',e:'🏈'},{k:'rugby',l:'Rugby',e:'🏉'},{k:'golf',l:'Golf',e:'⛳'},{k:'athletics',l:'Atletismo',e:'🏃'},{k:'acuaticos',l:'Natación',e:'🏊'},{k:'cycling',l:'Ciclismo',e:'🚴'},{k:'volley',l:'Volleyball',e:'🏐'},{k:'padel',l:'Pádel',e:'🎾'},{k:'cricket',l:'Cricket',e:'🏏'}];
+
+var TABS_BY_SPORT={
+  futbol:[{k:'fichajes',l:'🔄 Fichajes'},{k:'prestamos',l:'🤝 Préstamos'},{k:'libres',l:'🆓 Agentes Libres'},{k:'contratos',l:'📝 Contratos'},{k:'rumores',l:'💬 Rumores'},{k:'valores',l:'📈 Valores de Mercado'},{k:'historial',l:'📚 Historial de Transferencias'}],
+  nba:[{k:'trades',l:'🔄 Trades'},{k:'libres',l:'🆓 Free Agency'},{k:'contratos',l:'📝 Contratos'},{k:'draft',l:'🎓 Draft'},{k:'rumores',l:'💬 Rumores'},{k:'historial',l:'📚 Historial'}],
+  mlb:[{k:'trades',l:'🔄 Trades'},{k:'libres',l:'🆓 Free Agents'},{k:'contratos',l:'📝 Contratos'},{k:'draft',l:'🎓 Draft'},{k:'rumores',l:'💬 Rumores'}],
+  nfl:[{k:'trades',l:'🔄 Trades'},{k:'libres',l:'🆓 Free Agency'},{k:'contratos',l:'📝 Contratos'},{k:'draft',l:'🎓 NFL Draft'},{k:'rumores',l:'💬 Rumores'}],
+  tenis:[{k:'rankings',l:'📊 Ranking ATP/WTA'},{k:'sponsors',l:'💼 Sponsors'},{k:'rumores',l:'💬 Rumores'},{k:'retiros',l:'🏁 Retiros'}]
+};
+
+var DATA={
+  futbol:{
+    fichajes:[{p:'Florian Wirtz',from:'Bayer Leverkusen',to:'Liverpool',amt:'€125M',st:'cerrado'},{p:'Jamal Musiala',from:'Bayern Múnich',to:'Real Madrid',amt:'€180M',st:'progreso'},{p:'Bruno Guimarães',from:'Newcastle',to:'PSG',amt:'€90M',st:'cerrado'},{p:'Victor Osimhen',from:'Napoli',to:'Chelsea',amt:'€110M',st:'cerrado'},{p:'Nico Williams',from:'Athletic Club',to:'Barcelona',amt:'€58M',st:'progreso'}],
+    prestamos:[{p:'Joao Felix',from:'Atlético Madrid',to:'Milan',amt:'cesión 1 año',st:'cerrado'},{p:'Marcus Rashford',from:'Manchester United',to:'Borussia Dortmund',amt:'cesión + opción',st:'cerrado'},{p:'Antony',from:'Manchester United',to:'Real Betis',amt:'cesión 1 año',st:'cerrado'}],
+    libres:[{p:'Jonathan Tah',from:'Bayer Leverkusen',to:'Bayern Múnich',amt:'libre',st:'libre'},{p:'Memphis Depay',from:'Corinthians',to:'AC Milan',amt:'libre',st:'libre'},{p:'Lukaku',from:'Napoli',to:'Galatasaray',amt:'libre',st:'libre'}],
+    contratos:[{p:'Vinicius Jr',from:'',to:'Real Madrid hasta 2030',amt:'€20M/año',st:'cerrado'},{p:'Erling Haaland',from:'',to:'Manchester City hasta 2034',amt:'€25M/año',st:'cerrado'},{p:'Pedri',from:'',to:'Barcelona hasta 2028',amt:'€12M/año',st:'cerrado'}],
+    rumores:[{p:'Mbappé al City',from:'Real Madrid',to:'Manchester City',amt:'Verano 2027',st:'rumor'},{p:'Cole Palmer al Real',from:'Chelsea',to:'Real Madrid',amt:'€150M aprox.',st:'rumor'},{p:'Toni Kroos saldría del retiro',from:'',to:'Bayern Múnich',amt:'1 año',st:'rumor'}],
+    valores:[{p:'Jude Bellingham',from:'',to:'Real Madrid',amt:'€200M',st:'cerrado'},{p:'Lamine Yamal',from:'',to:'Barcelona',amt:'€180M',st:'cerrado'},{p:'Erling Haaland',from:'',to:'Manchester City',amt:'€175M',st:'cerrado'},{p:'Vinicius Jr',from:'',to:'Real Madrid',amt:'€170M',st:'cerrado'}],
+    historial:[{p:'Neymar',from:'Barcelona',to:'PSG',amt:'€222M (2017) récord histórico',st:'cerrado'},{p:'Mbappé',from:'Mónaco',to:'PSG',amt:'€180M (2017)',st:'cerrado'},{p:'Joao Felix',from:'Benfica',to:'Atlético Madrid',amt:'€126M (2019)',st:'cerrado'},{p:'Coutinho',from:'Liverpool',to:'Barcelona',amt:'€135M (2018)',st:'cerrado'}]
+  },
+  nba:{trades:[{p:'Jimmy Butler',from:'Miami Heat',to:'Golden State Warriors',amt:'Trade + 2 firsts',st:'cerrado'},{p:"De Aaron Fox",from:'Sacramento',to:'San Antonio',amt:'Trade + Zach LaVine',st:'cerrado'}],libres:[{p:'James Harden',from:'',to:'Clippers (re-firmó)',amt:'$71M / 2 años',st:'cerrado'}],contratos:[{p:'Luka Doncic',from:'',to:'LA Lakers Supermax',amt:'$345M / 5 años',st:'cerrado'}],draft:[{p:'Cooper Flagg',from:'Duke',to:'Dallas Mavericks #1',amt:'Draft 2025',st:'cerrado'}],rumores:[{p:'Giannis pediría salida',from:'Milwaukee',to:'?',amt:'verano 2026',st:'rumor'}],historial:[{p:'LeBron James',from:'Cleveland',to:'Lakers',amt:'$153M (2018)',st:'cerrado'}]},
+  mlb:{trades:[{p:'Juan Soto',from:'Padres',to:'Yankees → Mets',amt:'$765M / 15 años (2024)',st:'cerrado'}],libres:[{p:'Roki Sasaki',from:'NPB',to:'LA Dodgers',amt:'bono $6.5M (2025)',st:'cerrado'}],contratos:[{p:'Shohei Ohtani',from:'Angels',to:'Dodgers',amt:'$700M / 10 años',st:'cerrado'}],draft:[{p:'Travis Bazzana',from:'Oregon State',to:'Cleveland Guardians #1',amt:'2024 Draft',st:'cerrado'}],rumores:[{p:'Vladimir Guerrero Jr extension',from:'Toronto',to:'Toronto (renueva)',amt:'$500M+',st:'rumor'}]},
+  nfl:{trades:[{p:'Stefon Diggs',from:'Bills',to:'Texans',amt:'1ra ronda + cambios',st:'cerrado'}],libres:[{p:'Saquon Barkley',from:'Giants',to:'Eagles',amt:'$37.75M / 3 años',st:'cerrado'}],contratos:[{p:'Patrick Mahomes',from:'',to:'Chiefs',amt:'$450M / 10 años',st:'cerrado'}],draft:[{p:'Caleb Williams',from:'USC',to:'Chicago Bears #1',amt:'2024 Draft',st:'cerrado'}],rumores:[{p:'Aaron Rodgers retiro',from:'Jets',to:'?',amt:'fin 2026',st:'rumor'}]},
+  tenis:{rankings:[{p:'Jannik Sinner',from:'#2',to:'#1 ATP',amt:'10.500 pts',st:'cerrado'},{p:'Carlos Alcaraz',from:'#3',to:'#2 ATP',amt:'9.200 pts',st:'cerrado'},{p:'Aryna Sabalenka',from:'#2',to:'#1 WTA',amt:'9.806 pts',st:'cerrado'}],sponsors:[{p:'Alcaraz',from:'',to:'Nike + Babolat hasta 2030',amt:'$25M/año',st:'cerrado'},{p:'Sinner',from:'',to:'Nike + Head extensión',amt:'$20M/año',st:'cerrado'}],rumores:[{p:'Djokovic retiro',from:'',to:'Wimbledon 2026 último',amt:'?',st:'rumor'}],retiros:[{p:'Rafael Nadal',from:'ATP Tour',to:'Retiro confirmado',amt:'Nov 2024',st:'cerrado'},{p:'Andy Murray',from:'ATP Tour',to:'Retiro',amt:'Agosto 2024',st:'cerrado'}]}
+};
+
+var CURRENT_SPORT='futbol', CURRENT_TAB='fichajes';
+
+// Panel build + show/hide
+function buildPanel(){
+  if(document.getElementById('v200-mercado-panel')) return;
+  var main=document.querySelector('main, .main') || document.body;
+  var panel=document.createElement('section');
+  panel.id='v200-mercado-panel';
+  panel.innerHTML='<div class="v200-mer-header"><h2>🤵 Mercado</h2><p>Todos los traspasos, contratos, transferencias, agentes libres, préstamos y rumores del mundo deportivo. Cambiá entre deportes con los filtros.</p></div><div class="v200-sports" id="v200-sports-row"></div><div class="v200-tabs" id="v200-tabs-row"></div><div class="v200-content" id="v200-content"></div>';
+  main.appendChild(panel);
+}
+
+function showMercado(){
+  buildPanel();
+  var panel=document.getElementById('v200-mercado-panel');
+  if(!panel) return;
+  // Hide all panel-* (set inline display:none temporarily)
+  document.querySelectorAll('[id^=panel-]').forEach(function(p){
+    p.dataset.v200wasActive=p.classList.contains('active')?'1':'0';
+    p.classList.remove('active');
+    p.style.setProperty('display','none','important');
+  });
+  panel.classList.add('v200-active');
+  document.body.classList.add('v200-mercado-mode');
+  renderSports(); renderTabs(); renderContent();
+  window.scrollTo({top:0});
+  var dc=document.querySelector('.drawer-close, [aria-label*=Cerrar i]');
+  if(dc) dc.click();
+}
+
+function hideMercado(){
+  var panel=document.getElementById('v200-mercado-panel');
+  if(panel) panel.classList.remove('v200-active');
+  document.body.classList.remove('v200-mercado-mode');
+  // Restore panels: strip our inline display:none
+  document.querySelectorAll('[id^=panel-]').forEach(function(p){
+    var st=p.getAttribute('style')||'';
+    if(/display\s*:\s*none\s*!important/i.test(st)){
+      st=st.replace(/display\s*:[^;]+;?/gi,'');
+      p.setAttribute('style', st);
+    }
+  });
+}
+
+// When user clicks ANY other nav item, hide mercado
+document.addEventListener('click', function(e){
+  var clicked=e.target.closest('li.v56-sub-item, li.v56-item, button.sport-btn, button.v26-has-dropdown, a, button');
+  if(!clicked) return;
+  if(clicked.classList.contains('v200-mercado-li')) return;
+  if(!document.body.classList.contains('v200-mercado-mode')) return;
+  var t=(clicked.textContent||'').trim();
+  // Only hide on real navigation (Inicio, Favoritos, En Vivo, sport-btn, Profesionales, etc.)
+  if(/Inicio|Favoritos|En Vivo|Profesionales|Universitarios|Escolares|Amateur|Comparar|Noticias|Blogs|Podcast|Fútbol|Tenis|Basketball|Carreras|Combate|Baseball|Hockey|Rugby|Golf|Atletismo|Natación|Ciclismo|Volleyball|Pádel|Cricket|Otros Deportes|Eventos Globales/i.test(t) && t.length<40){
+    setTimeout(hideMercado, 50);
+  }
+}, false);
+
+// Render functions
+function renderSports(){
+  var c=document.getElementById('v200-sports-row'); if(!c) return;
+  c.innerHTML='';
+  SPORTS.forEach(function(s){
+    var b=document.createElement('button');
+    b.innerHTML='<span class="v200-emoji">'+s.e+'</span><span>'+s.l+'</span>';
+    if(s.k===CURRENT_SPORT) b.classList.add('v200-active-sport');
+    b.addEventListener('click', function(){
+      CURRENT_SPORT=s.k;
+      if(TABS_BY_SPORT[s.k]) CURRENT_TAB=TABS_BY_SPORT[s.k][0].k;
+      else CURRENT_TAB=null;
+      renderSports(); renderTabs(); renderContent();
+    });
+    c.appendChild(b);
+  });
+}
+
+function renderTabs(){
+  var c=document.getElementById('v200-tabs-row'); if(!c) return;
+  c.innerHTML='';
+  var tabs=TABS_BY_SPORT[CURRENT_SPORT]||[];
+  tabs.forEach(function(t){
+    var b=document.createElement('button');
+    b.textContent=t.l;
+    if(t.k===CURRENT_TAB) b.classList.add('v200-active-tab');
+    b.addEventListener('click', function(){
+      CURRENT_TAB=t.k;
+      renderTabs(); renderContent();
+    });
+    c.appendChild(b);
+  });
+}
+
+function renderContent(){
+  var c=document.getElementById('v200-content'); if(!c) return;
+  var data=(DATA[CURRENT_SPORT]||{})[CURRENT_TAB]||[];
+  if(data.length===0){
+    c.innerHTML='<div style="text-align:center;color:#94a3b8;padding:40px 20px">Próximamente: lo iremos completando deporte por deporte.</div>';
+    return;
+  }
+  var stMap={cerrado:'CERRADO',progreso:'EN PROGRESO',rumor:'RUMOR',libre:'LIBRE'};
+  c.innerHTML=data.map(function(it){
+    return '<div class="v200-card">'+
+      '<div style="flex:1 1 auto;min-width:200px">'+
+        '<div class="player">'+(it.p||'')+'</div>'+
+        '<div class="move">'+(it.from?it.from+' → ':'')+(it.to||'')+'</div>'+
+      '</div>'+
+      '<div class="amount">'+(it.amt||'')+'</div>'+
+      '<span class="status st-'+(it.st||'cerrado')+'">'+(stMap[it.st]||'CERRADO')+'</span>'+
+    '</div>';
+  }).join('');
+}
+
+})();
+</script>
 </body>
 </html>
 
