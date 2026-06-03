@@ -21048,6 +21048,48 @@ document.addEventListener('click', function(e){
 
 })();
 </script>
+
+<script>
+(function(){
+if(window.__v166loaded)return;window.__v166loaded=true;
+
+// === v166: simple safety-net — verified to work via live testing ===
+
+var WIDGETS=['v32-news-grid-sec','v100-noticias-wrap','v100-blogs-wrap','v100-podcast-wrap','v100-podcast','v99-retos','v146-newsletter'];
+
+// Hide widgets when masss21 visible. Restore otherwise.
+setInterval(function(){
+  var mas=document.getElementById('v87-page-masss21');
+  var masVis=mas && mas.offsetParent!==null && getComputedStyle(mas).display!=='none';
+  if(masVis){
+    WIDGETS.forEach(function(id){
+      var e=document.getElementById(id); if(e) e.style.setProperty('display','none','important');
+    });
+  } else {
+    WIDGETS.forEach(function(id){
+      var e=document.getElementById(id); if(!e) return;
+      var st=e.getAttribute('style')||'';
+      if(/display\s*:\s*none/i.test(st)){
+        st=st.replace(/display\s*:[^;]+;?/gi,'');
+        e.setAttribute('style', st);
+      }
+    });
+  }
+}, 200);
+
+// Strip inline display !important from all panels every 150ms (unstuck navigation)
+setInterval(function(){
+  document.querySelectorAll('[id^=panel-]').forEach(function(p){
+    var st=p.getAttribute('style')||'';
+    if(/display\s*:[^;]+!important/i.test(st)){
+      st=st.replace(/display\s*:[^;]+;?/gi,'');
+      p.setAttribute('style', st);
+    }
+  });
+}, 150);
+
+})();
+</script>
 </body>
 </html>
 
