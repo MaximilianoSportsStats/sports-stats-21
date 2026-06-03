@@ -21101,6 +21101,68 @@ setInterval(function(){
 
 })();
 </script>
+
+<script>
+(function(){
+if(window.__v169loaded)return;window.__v169loaded=true;
+
+var WIDGETS=['v32-news-grid-sec','v100-noticias-wrap','v100-blogs-wrap','v100-podcast-wrap','v100-podcast','v99-retos','v146-newsletter'];
+
+function hideWidgets(){
+  WIDGETS.forEach(function(id){
+    var e=document.getElementById(id); if(e) e.style.setProperty('display','none','important');
+  });
+}
+function showWidgets(){
+  WIDGETS.forEach(function(id){
+    var e=document.getElementById(id); if(!e) return;
+    var st=e.getAttribute('style')||'';
+    if(/display\s*:\s*none/i.test(st)){
+      st=st.replace(/display\s*:[^;]+;?/gi,'');
+      e.setAttribute('style', st);
+    }
+  });
+}
+
+function evaluate(){
+  var hc=document.getElementById('heroCarousel');
+  if(!hc) return;
+  var hcHidden=getComputedStyle(hc).display==='none';
+  var mas=document.getElementById('v87-page-masss21');
+  var masVis=mas && getComputedStyle(mas).display!=='none';
+  if(hcHidden && masVis) hideWidgets(); else showWidgets();
+}
+
+// Observe DOM mutations on body subtree (style attribute changes anywhere)
+function setupObservers(){
+  var hc=document.getElementById('heroCarousel');
+  if(!hc) return;
+  if(hc.__v169obs) return; hc.__v169obs=true;
+  var obs=new MutationObserver(evaluate);
+  obs.observe(hc, {attributes:true, attributeFilter:['style','class']});
+  var mas=document.getElementById('v87-page-masss21');
+  if(mas){
+    var obs2=new MutationObserver(evaluate);
+    obs2.observe(mas, {attributes:true, attributeFilter:['style','class']});
+  }
+  evaluate();
+}
+setTimeout(setupObservers, 100); setTimeout(setupObservers, 500); setTimeout(setupObservers, 2000); setTimeout(setupObservers, 5000);
+
+// Also listen for clicks on Más Sobre SS21 button to trigger evaluation
+document.addEventListener('click', function(e){
+  var btn=e.target.closest('button,a');
+  if(!btn) return;
+  var t=(btn.textContent||'').trim();
+  if(/Más\s+Sobre\s+SS/i.test(t) || t==='🏠 Inicio' || t==='🏠Inicio' || /^[^A-Za-z]?\s*Inicio$/.test(t)){
+    setTimeout(evaluate, 300);
+    setTimeout(evaluate, 800);
+    setTimeout(evaluate, 1500);
+  }
+}, true);
+
+})();
+</script>
 </body>
 </html>
 
