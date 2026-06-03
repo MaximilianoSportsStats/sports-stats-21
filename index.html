@@ -21090,6 +21090,65 @@ setInterval(function(){
 
 })();
 </script>
+
+
+<script>
+(function(){
+if(window.__v167loaded)return;window.__v167loaded=true;
+
+var WIDGETS=['v32-news-grid-sec','v100-noticias-wrap','v100-blogs-wrap','v100-podcast-wrap','v100-podcast','v99-retos','v146-newsletter'];
+
+function inMasss21Mode(){
+  var hc=document.getElementById('heroCarousel');
+  var hcHidden=hc && getComputedStyle(hc).display==='none';
+  var mas=document.getElementById('v87-page-masss21');
+  var masVis=mas && getComputedStyle(mas).display!=='none' && mas.offsetParent!==null;
+  return hcHidden && masVis;
+}
+
+function cleanIfInicio(el){
+  if(inMasss21Mode()) return;
+  var st=el.getAttribute('style')||'';
+  if(/display\s*:\s*none/i.test(st)){
+    st=st.replace(/display\s*:[^;]+;?/gi,'');
+    el.setAttribute('style', st);
+  }
+}
+
+function setupWidgetObservers(){
+  WIDGETS.forEach(function(id){
+    var e=document.getElementById(id); if(!e || e.__v167obs) return;
+    e.__v167obs=true;
+    cleanIfInicio(e);
+    var obs=new MutationObserver(function(){ cleanIfInicio(e); });
+    obs.observe(e, {attributes:true, attributeFilter:['style']});
+  });
+}
+setTimeout(setupWidgetObservers, 50);
+setInterval(setupWidgetObservers, 1000);
+
+// When in MasSS21 mode: hide widgets explicitly
+setInterval(function(){
+  if(!inMasss21Mode()) return;
+  WIDGETS.forEach(function(id){
+    var e=document.getElementById(id); if(e) e.style.setProperty('display','none','important');
+  });
+}, 150);
+
+// Panel unstuck
+setInterval(function(){
+  document.querySelectorAll('[id^=panel-]').forEach(function(p){
+    var st=p.getAttribute('style')||'';
+    if(/display\s*:[^;]+!important/i.test(st)){
+      st=st.replace(/display\s*:[^;]+;?/gi,'');
+      p.setAttribute('style', st);
+    }
+  });
+}, 150);
+
+})();
+</script>
+
 </body>
 </html>
 
