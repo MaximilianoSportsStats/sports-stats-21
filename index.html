@@ -21240,6 +21240,54 @@ document.addEventListener('click', function(e){
 
 })();
 </script>
+
+<script>
+(function(){
+if(window.__v172loaded)return;window.__v172loaded=true;
+
+function restoreInicio(){
+  var mas=document.getElementById('v87-page-masss21');
+  if(mas) mas.style.setProperty('display','none','important');
+  var ini=document.getElementById('panel-inicio');
+  if(ini){
+    Array.from(ini.children).forEach(function(c){
+      if(c===mas) return;
+      var st=c.getAttribute('style')||'';
+      if(/display\s*:\s*none/i.test(st)){
+        st=st.replace(/display\s*:[^;]+;?/gi,'');
+        c.setAttribute('style', st);
+      }
+    });
+  }
+}
+
+// Attach DIRECTLY to LI.v56-item Inicio - find and attach
+function attachInicioHandler(){
+  document.querySelectorAll('LI.v56-item').forEach(function(li){
+    if(li.__v172attached) return;
+    var t=(li.textContent||'').trim();
+    if(/Inicio/.test(t) && t.length<15){
+      li.__v172attached=true;
+      li.addEventListener('click', function(e){
+        restoreInicio();
+        setTimeout(restoreInicio, 100);
+        setTimeout(restoreInicio, 500);
+      }, true);
+      // Also attach to its children just in case
+      Array.from(li.children).forEach(function(c){
+        c.addEventListener('click', function(){
+          restoreInicio();
+          setTimeout(restoreInicio, 100);
+          setTimeout(restoreInicio, 500);
+        }, true);
+      });
+    }
+  });
+}
+setTimeout(attachInicioHandler, 300); setInterval(attachInicioHandler, 1000);
+
+})();
+</script>
 </body>
 </html>
 
