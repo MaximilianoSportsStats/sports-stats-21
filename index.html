@@ -19414,6 +19414,95 @@ window.showMercado=function(){
 
 })();
 </script>
+
+<script>
+(function(){
+if(window.__v146loaded)return;window.__v146loaded=true;
+
+// === 1. Override v145b overlay style — make Mercado a normal inline panel ===
+var st=document.createElement('style');
+st.textContent='html body #v200-mercado-panel{display:none !important;position:static !important;top:auto !important;left:auto !important;right:auto !important;bottom:auto !important;background:transparent !important;z-index:auto !important;overflow-y:visible !important;padding:24px !important;max-width:1400px !important;margin:0 auto !important}'+
+  'html body #v200-mercado-panel.v200-active{display:block !important}'+
+  'html body #v200-close-btn{display:none !important}'+
+  // Mercado mode: hide panel-inicio and hero ticker
+  'html body.v200-mercado-mode #panel-inicio{display:none !important}'+
+  'html body.v200-mercado-mode #v100-ticker{display:none !important}'+
+  // === 4. MasSS21 mode: hide widgets ===
+  'html body.v146-masss21-mode #v32-news-grid-sec,'+
+  'html body.v146-masss21-mode #v100-noticias-wrap,'+
+  'html body.v146-masss21-mode #v100-blogs-wrap,'+
+  'html body.v146-masss21-mode #v100-podcast-wrap,'+
+  'html body.v146-masss21-mode #v100-podcast,'+
+  'html body.v146-masss21-mode #v99-retos,'+
+  'html body.v146-masss21-mode #v146-newsletter{display:none !important}'+
+  // === 3. Newsletter footer style ===
+  '#v146-footer-newsletter{padding:28px 24px 22px;border-bottom:1px solid rgba(255,255,255,0.08);margin-bottom:18px}'+
+  '#v146-footer-newsletter h3{color:#fff;margin:0 0 8px;font-size:17px;font-weight:600}'+
+  '#v146-footer-newsletter p{color:rgba(255,255,255,0.62);margin:0 0 14px;font-size:13.5px;line-height:1.55;max-width:580px}'+
+  '#v146-footer-newsletter form{display:flex;gap:8px;flex-wrap:wrap;max-width:520px;margin:0}'+
+  '#v146-footer-newsletter input[type=email]{flex:1 1 220px;padding:10px 14px;border-radius:8px;border:1px solid rgba(255,255,255,0.18);background:rgba(255,255,255,0.05);color:#fff;font-size:14px;outline:none}'+
+  '#v146-footer-newsletter input[type=email]::placeholder{color:rgba(255,255,255,0.4)}'+
+  '#v146-footer-newsletter button{padding:10px 22px;border-radius:8px;border:0;background:#fff;color:#0f172a;font-weight:600;cursor:pointer;font-size:14px}'+
+  '#v146-footer-newsletter button:hover{background:#e2e8f0}'+
+  '#v146-footer-newsletter .ok{color:#86efac;font-size:13.5px;margin-top:10px;display:none}'+
+  '#v146-footer-newsletter .ok.v146-show{display:block}';
+document.head.appendChild(st);
+
+// === 2. Rename 'Estadísticas Deportes' → 'Deportes' ===
+function renameDeportes(){
+  document.querySelectorAll('h1,h2,h3,h4,h5,h6,span,div,button,a').forEach(function(el){
+    if(el.children.length>0) return;
+    var t=(el.textContent||'').trim();
+    if(t==='Estadísticas Deportes') el.textContent='Deportes';
+  });
+}
+setInterval(renameDeportes,1000); setTimeout(renameDeportes,400);
+
+// === 3. Newsletter en footer ===
+function buildFooterNewsletter(){
+  var foot=document.getElementById('v12-footer');
+  if(!foot) return;
+  if(document.getElementById('v146-footer-newsletter')) return;
+  var nl=document.createElement('div');
+  nl.id='v146-footer-newsletter';
+  nl.innerHTML='<h3>📧 Newsletter Sports Stats 21</h3>'+
+    '<p>Recibí cada lunes lo mejor de la semana en deportes: análisis, datos exclusivos y los récords que se rompieron. Sin spam, podés cancelar cuando quieras.</p>'+
+    '<form id="v146-nl-form">'+
+      '<input type="email" placeholder="tu@email.com" required aria-label="Email">'+
+      '<button type="submit">Suscribirme</button>'+
+    '</form>'+
+    '<div class="ok" id="v146-nl-ok">✓ Te suscribiste correctamente. Pronto recibís el primer newsletter.</div>';
+  foot.insertBefore(nl, foot.firstChild);
+  var form=nl.querySelector('#v146-nl-form');
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    var ok=document.getElementById('v146-nl-ok');
+    if(ok) ok.classList.add('v146-show');
+    form.style.display='none';
+    try{ localStorage.setItem('v146-nl-sub','1'); }catch(_){}
+  });
+  try{
+    if(localStorage.getItem('v146-nl-sub')==='1'){
+      form.style.display='none';
+      var ok=document.getElementById('v146-nl-ok');
+      if(ok){ ok.textContent='✓ Ya estás suscripto. ¡Gracias!'; ok.classList.add('v146-show'); }
+    }
+  }catch(_){}
+}
+setInterval(buildFooterNewsletter, 1500); setTimeout(buildFooterNewsletter, 800);
+
+// === 4. MasSS21 mode detection ===
+function syncMasss21Mode(){
+  var mas=document.getElementById('v87-page-masss21');
+  var hc=document.getElementById('heroCarousel');
+  var inMode = mas && hc && getComputedStyle(mas).display!=='none' && getComputedStyle(hc).display==='none';
+  if(inMode) document.body.classList.add('v146-masss21-mode');
+  else document.body.classList.remove('v146-masss21-mode');
+}
+setInterval(syncMasss21Mode, 200);
+
+})();
+</script>
 </body>
 </html>
 
