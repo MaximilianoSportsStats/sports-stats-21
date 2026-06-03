@@ -19363,6 +19363,57 @@ function renderContent(){
 
 })();
 </script>
+
+<script>
+(function(){
+if(window.__v145bloaded)return;window.__v145bloaded=true;
+
+var st=document.createElement('style');
+st.textContent='html body #v200-mercado-panel{display:none}'+
+  'html body #v200-mercado-panel.v200-active{display:block !important;position:fixed !important;top:0 !important;left:0 !important;right:0 !important;bottom:0 !important;background:#f8fafc !important;z-index:9000 !important;overflow-y:auto !important;padding:20px !important;max-width:none !important}'+
+  'html body #v200-mercado-panel.v200-active::before{content:"";display:block;position:sticky;top:0;height:8px;background:transparent}'+
+  // Close button
+  '#v200-close-btn{position:fixed !important;top:14px;right:14px;z-index:9100;background:#0f172a;color:#fff;border:0;width:40px;height:40px;border-radius:50%;font-size:20px;cursor:pointer;box-shadow:0 4px 12px rgba(0,0,0,0.3)}'+
+  '#v200-close-btn:hover{background:#1e293b}';
+document.head.appendChild(st);
+
+// Add close button when panel created
+function ensureCloseBtn(){
+  var panel=document.getElementById('v200-mercado-panel');
+  if(!panel) return;
+  if(document.getElementById('v200-close-btn')) return;
+  var btn=document.createElement('button');
+  btn.id='v200-close-btn';
+  btn.textContent='✕';
+  btn.title='Cerrar Mercado';
+  btn.addEventListener('click', function(e){
+    e.preventDefault(); e.stopPropagation();
+    panel.classList.remove('v200-active');
+    document.body.classList.remove('v200-mercado-mode');
+  });
+  panel.appendChild(btn);
+}
+setInterval(ensureCloseBtn, 600);
+
+// DON'T touch panel-inicio. The fixed overlay covers everything.
+// Restore by overriding showMercado: just toggle the panel class
+// Override existing showMercado from v145 to NOT touch panels
+var origShow=window.showMercado;
+window.showMercado=function(){
+  var panel=document.getElementById('v200-mercado-panel');
+  if(!panel){
+    if(origShow) origShow();
+    panel=document.getElementById('v200-mercado-panel');
+  }
+  if(!panel) return;
+  panel.classList.add('v200-active');
+  document.body.classList.add('v200-mercado-mode');
+  ensureCloseBtn();
+  window.scrollTo({top:0});
+};
+
+})();
+</script>
 </body>
 </html>
 
