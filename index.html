@@ -21202,6 +21202,44 @@ document.addEventListener('click', function(e){
 
 })();
 </script>
+
+<script>
+(function(){
+if(window.__v171loaded)return;window.__v171loaded=true;
+
+function restoreInicio(){
+  var mas=document.getElementById('v87-page-masss21');
+  if(mas) mas.style.setProperty('display','none','important');
+  var ini=document.getElementById('panel-inicio');
+  if(ini){
+    Array.from(ini.children).forEach(function(c){
+      if(c===mas) return;
+      var st=c.getAttribute('style')||'';
+      if(/display\s*:\s*none/i.test(st)){
+        st=st.replace(/display\s*:[^;]+;?/gi,'');
+        c.setAttribute('style', st);
+      }
+    });
+  }
+  window.scrollTo({top:0, behavior:'auto'});
+}
+
+// CAPTURE phase listener — fires BEFORE any other handler
+document.addEventListener('click', function(e){
+  var el=e.target.closest('li.v56-item,button,a');
+  if(!el) return;
+  var t=(el.textContent||'').trim();
+  if(/^🏠?\s*Inicio$|^Inicio$/.test(t) && t.length<20){
+    // Fire immediately + after delays to override any other reverts
+    restoreInicio();
+    setTimeout(restoreInicio, 100);
+    setTimeout(restoreInicio, 500);
+    setTimeout(restoreInicio, 1500);
+  }
+}, true);
+
+})();
+</script>
 </body>
 </html>
 
