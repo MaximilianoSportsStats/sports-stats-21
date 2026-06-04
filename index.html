@@ -19683,6 +19683,58 @@ setInterval(openDefault, 600); setTimeout(openDefault, 700);
 
 })();
 </script>
+
+<script>
+(function(){
+if(window.__v149loaded)return;window.__v149loaded=true;
+
+// === CSS overrides v147/v148 ===
+var st=document.createElement('style');
+st.textContent=  // Kill button blue outline + focus border
+  '.v147-acerca-btn{outline:none !important;border:none !important;box-shadow:none !important;border-radius:0 !important}'+
+  '.v147-acerca-btn:focus,.v147-acerca-btn:focus-visible{outline:none !important;border:none !important;box-shadow:none !important}'+
+  // Sub-items style: like sub-leagues (Champions/La Liga/Premier) — mixed case regular
+  '.v147-acerca-sub li{color:#475569 !important;font-size:13.5px !important;font-weight:500 !important;text-transform:none !important;padding:6px 12px 6px 24px !important;letter-spacing:normal !important;border-radius:0 !important;margin:0 !important;background:transparent !important;border:none !important}'+
+  '.v147-acerca-sub li:hover{background:#fef2f2 !important;color:#c8102e !important}'+
+  '.v147-acerca-sub li.v147-active{background:#fef2f2 !important;color:#c8102e !important;font-weight:700 !important;border:1px solid #fee2e2;border-radius:8px;margin:1px 8px 1px 8px !important}'+
+  // No extra gap below sub-items
+  '.v147-acerca-sub{padding:2px 0 !important;margin:0 !important}'+
+  '.v147-acerca-wrap{margin:0 !important;padding:0 !important}'+
+  // Hide any remaining old ¿Qué es el Fútbol? element by attribute selector
+  '.v148-killed,[data-v149-kill]{display:none !important}';
+document.head.appendChild(st);
+
+// === NUKE original ¿Qué es el Fútbol? element ===
+function nukeOldAcerca(){
+  var sb=document.getElementById('sidebar'); if(!sb) return;
+  var sec=sb.querySelector('.sidebar-section'); if(!sec) return;
+  // Walk all descendants and find any element whose trimmed text contains 'Qué es el Fútbol'
+  // and is NOT inside .v147-acerca-wrap
+  var walker=document.createTreeWalker(sec, NodeFilter.SHOW_ELEMENT, null, false);
+  var node;
+  while(node=walker.nextNode()){
+    if(node.closest('.v147-acerca-wrap')) continue;
+    var t=(node.textContent||'').trim();
+    // Only consider 'leaf-ish' elements (max depth 2)
+    if(node.children.length>3) continue;
+    if(t.length>40) continue;
+    if(/¿\s*Qué es el Fútbol\?/.test(t)){
+      node.setAttribute('data-v149-kill','1');
+      node.style.setProperty('display','none','important');
+      node.style.setProperty('visibility','hidden','important');
+      // Also try to clear text content
+      try{
+        Array.from(node.childNodes).forEach(function(n){
+          if(n.nodeType===3) n.textContent='';
+        });
+      }catch(e){}
+    }
+  }
+}
+setInterval(nukeOldAcerca, 300); setTimeout(nukeOldAcerca, 200);
+
+})();
+</script>
 </body>
 </html>
 
