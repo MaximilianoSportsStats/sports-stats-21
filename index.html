@@ -19867,6 +19867,40 @@ setInterval(rebuildWrap, 500); setTimeout(rebuildWrap, 300);
 
 })();
 </script>
+
+<script>
+(function(){
+if(window.__v152loaded)return;window.__v152loaded=true;
+
+// CSS: sub-items smaller + less indent (match continent-leagues)
+var st=document.createElement('style');
+st.textContent=  '.v147-acerca-sub li{padding:5px 12px 5px 14px !important;font-size:12px !important;font-weight:500 !important;color:#475569 !important;text-transform:none !important;letter-spacing:normal !important;margin:0 !important;background:transparent !important;border:none !important;border-radius:0 !important;line-height:1.45 !important}'+
+  '.v147-acerca-sub li:hover{background:#fef2f2 !important;color:#c8102e !important}'+
+  '.v147-acerca-sub li.v147-active{background:#fef2f2 !important;color:#c8102e !important;font-weight:700 !important;border-radius:6px;margin:0 8px !important;padding:5px 12px 5px 14px !important}'+
+  '.v147-acerca-sub{padding:0 !important;margin:0 !important}';
+document.head.appendChild(st);
+
+// REMOVE original ❓ ¿Qué es el Fútbol? entirely from DOM
+function removeOriginal(){
+  var sb=document.getElementById('sidebar'); if(!sb) return;
+  var sec=sb.querySelector('.sidebar-section'); if(!sec) return;
+  // Search for any direct element (DIV/SPAN/BUTTON) containing the original ❓ emoji
+  sec.querySelectorAll('*').forEach(function(el){
+    // Skip our wrap and descendants
+    if(el.closest('.v147-acerca-wrap')) return;
+    if(el.children.length>2) return;
+    var txt=(el.textContent||'').trim();
+    if(txt.length>30) return;
+    // Match patterns: '❓ ¿Qué es el Fútbol?', '¿Qué es el Fútbol?', '❓' alone
+    if(txt==='❓ ¿Qué es el Fútbol?' || txt==='¿Qué es el Fútbol?' || txt==='❓'){
+      el.remove();
+    }
+  });
+}
+setInterval(removeOriginal, 300); setTimeout(removeOriginal, 200);
+
+})();
+</script>
 </body>
 </html>
 
