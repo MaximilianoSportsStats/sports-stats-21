@@ -20016,6 +20016,43 @@ document.head.appendChild(st);
 
 })();
 </script>
+
+<script>
+(function(){
+if(window.__v155loaded)return;window.__v155loaded=true;
+
+// Click Profesionales in menu drawer → navigate to Fútbol main view
+function isProfesionales(el){
+  if(!el || el.children.length>3) return false;
+  var t=(el.textContent||'').trim();
+  return /^🏆?\s*Profesionales$/.test(t) && t.length<20;
+}
+
+function goToFutbol(){
+  // Click sport-btn Fútbol
+  var futBtn=null;
+  document.querySelectorAll('.sport-btn').forEach(function(b){
+    if(/^Fútbol$/.test((b.textContent||'').trim()) && !futBtn) futBtn=b;
+  });
+  if(futBtn){ futBtn.click(); }
+  // Close drawer if open
+  var dc=document.querySelector('.drawer-close, [aria-label*=Cerrar i], [aria-label*=Close i]');
+  if(dc) dc.click();
+  // Scroll to top
+  window.scrollTo({top:0});
+}
+
+// Document-level capture listener
+document.addEventListener('click', function(e){
+  var li=e.target.closest('li.v56-sub-item, li');
+  if(!li) return;
+  if(!isProfesionales(li)) return;
+  e.preventDefault(); e.stopPropagation(); e.stopImmediatePropagation();
+  setTimeout(goToFutbol, 50);
+}, true);
+
+})();
+</script>
 </body>
 </html>
 
