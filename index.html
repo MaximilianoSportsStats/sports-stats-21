@@ -19901,6 +19901,66 @@ setInterval(removeOriginal, 300); setTimeout(removeOriginal, 200);
 
 })();
 </script>
+
+<script>
+(function(){
+if(window.__v153loaded)return;window.__v153loaded=true;
+
+// === 1. Resumen general aligned with Historia (no extra margin) ===
+var st=document.createElement('style');
+st.textContent=  '.v147-acerca-sub li.v147-active{background:#fef2f2 !important;color:#c8102e !important;font-weight:700 !important;margin:0 !important;padding:5px 12px 5px 14px !important;border-radius:0 !important}'+
+  // Hide ANY element containing ❓ inside sidebar (very aggressive)
+  'html body #sidebar [data-v153-killed]{display:none !important;visibility:hidden !important;width:0 !important;height:0 !important;overflow:hidden !important;position:absolute !important;top:-9999px !important}';
+document.head.appendChild(st);
+
+// === 2. NUKE anything with ❓ in sidebar (not in our wrap) ===
+function nukeQuestion(){
+  var sb=document.getElementById('sidebar'); if(!sb) return;
+  sb.querySelectorAll('*').forEach(function(el){
+    if(el.closest('.v147-acerca-wrap')) return;
+    if(el.children.length>3) return;
+    var txt=(el.textContent||'').trim();
+    if(txt.length>40) return;
+    if(txt.indexOf('❓')>=0){
+      el.setAttribute('data-v153-killed','1');
+      // Also clean its text and children
+      try{el.textContent='';}catch(e){}
+      el.style.setProperty('display','none','important');
+    }
+  });
+}
+setInterval(nukeQuestion, 250); setTimeout(nukeQuestion, 150);
+
+// === 3. Click Resumen general → navigate to Fútbol main view ===
+function navigateToFutbolMain(){
+  // Find any element that's the natural 'back to Fútbol home' navigation
+  // Option A: trigger sport-btn Fútbol click
+  var futBtn=null;
+  document.querySelectorAll('.sport-btn').forEach(function(b){
+    if(futBtn) return;
+    if(/^Fútbol$/.test((b.textContent||'').trim())) futBtn=b;
+  });
+  if(futBtn){ futBtn.click(); return; }
+  // Option B: scroll panel-soccer to top
+  var soc=document.getElementById('panel-soccer');
+  if(soc){
+    soc.scrollIntoView({behavior:'auto'});
+    window.scrollTo({top:0});
+  }
+}
+
+document.addEventListener('click', function(e){
+  var li=e.target.closest('.v147-acerca-sub li[data-v147-tab]');
+  if(!li) return;
+  var tab=li.dataset.v147Tab;
+  if(tab==='resumen'){
+    // Defer slightly so v147 handler runs first to clear slides
+    setTimeout(navigateToFutbolMain, 100);
+  }
+}, false);
+
+})();
+</script>
 </body>
 </html>
 
