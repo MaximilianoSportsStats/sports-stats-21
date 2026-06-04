@@ -20103,6 +20103,62 @@ document.addEventListener('click', function(e){
 
 })();
 </script>
+
+<script>
+(function(){
+if(window.__v158loaded)return;window.__v158loaded=true;
+
+// === 1. Dedupe Favoritos: keep ONLY the rightmost visible Favoritos button ===
+function dedupeFavoritos(){
+  // Find all visible Favoritos buttons in main content area (not sidebar)
+  var favs=[];
+  document.querySelectorAll('button,a,div').forEach(function(b){
+    if(b.children.length>3) return;
+    if(b.closest('#sidebar')) return;
+    var t=(b.textContent||'').trim();
+    if(/^[☆⭐]?\s*Favoritos$/.test(t) && t.length<20 && b.offsetParent){
+      var rect=b.getBoundingClientRect();
+      favs.push({el:b, x:rect.x});
+    }
+  });
+  if(favs.length<2) return;
+  // Sort by x: rightmost is keep
+  favs.sort(function(a,b){return b.x-a.x;});
+  // Keep first (rightmost), hide the rest
+  for(var i=1;i<favs.length;i++){
+    favs[i].el.style.setProperty('display','none','important');
+    favs[i].el.setAttribute('data-v158-deduped','1');
+  }
+}
+setInterval(dedupeFavoritos, 400); setTimeout(dedupeFavoritos, 300);
+
+// === 2. Resumen general click → go to Inicio then back to Fútbol (force reset) ===
+function forceFutbolReset(){
+  var iniBtn=null;
+  document.querySelectorAll('li.v56-item').forEach(function(li){
+    if(iniBtn) return;
+    var t=(li.textContent||'').trim();
+    if(/^🏠?\s*Inicio$/.test(t) && t.length<15) iniBtn=li;
+  });
+  if(iniBtn) iniBtn.click();
+  setTimeout(function(){
+    var futBtn=null;
+    document.querySelectorAll('.sport-btn').forEach(function(b){
+      if(/^Fútbol$/.test((b.textContent||'').trim()) && !futBtn) futBtn=b;
+    });
+    if(futBtn) futBtn.click();
+    window.scrollTo({top:0});
+  }, 300);
+}
+
+document.addEventListener('click', function(e){
+  var li=e.target.closest('.v147-acerca-sub li[data-v147-tab="resumen"]');
+  if(!li) return;
+  setTimeout(forceFutbolReset, 100);
+}, false);
+
+})();
+</script>
 </body>
 </html>
 
