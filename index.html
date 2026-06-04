@@ -19961,6 +19961,61 @@ document.addEventListener('click', function(e){
 
 })();
 </script>
+
+<script>
+(function(){
+if(window.__v154loaded)return;window.__v154loaded=true;
+
+// MutationObserver brute force on sidebar to kill anything with ❓ or '? ¿' pattern
+function isOurContent(el){
+  while(el){
+    if(el.classList && el.classList.contains('v147-acerca-wrap')) return true;
+    el=el.parentElement;
+  }
+  return false;
+}
+
+function killNode(el){
+  if(isOurContent(el)) return;
+  try{
+    el.style.setProperty('display','none','important');
+    el.style.setProperty('visibility','hidden','important');
+    el.setAttribute('aria-hidden','true');
+    el.textContent='';
+  }catch(e){}
+}
+
+function scan(){
+  var sb=document.getElementById('sidebar'); if(!sb) return;
+  var walker=document.createTreeWalker(sb, NodeFilter.SHOW_ELEMENT, null, false);
+  var n;
+  while(n=walker.nextNode()){
+    if(isOurContent(n)) continue;
+    if(n.children.length>3) continue;
+    var t=(n.textContent||'').trim();
+    if(t.length>40) continue;
+    if(/❓/.test(t) || /^\?\s+/.test(t) || /\?\s+¿/.test(t)){
+      killNode(n);
+    }
+  }
+}
+
+function setupObserver(){
+  var sb=document.getElementById('sidebar'); if(!sb || sb.__v154obs) return;
+  sb.__v154obs=true;
+  var obs=new MutationObserver(function(){scan();});
+  obs.observe(sb, {childList:true, subtree:true, characterData:true, attributes:true});
+  scan();
+}
+setInterval(setupObserver, 500); setTimeout(setupObserver, 300);
+
+// Also CSS belt: hide any pseudo-element with content '?' or '❓'
+var st=document.createElement('style');
+st.textContent='#sidebar :not(.v147-acerca-wrap):not(.v147-acerca-wrap *)::before,#sidebar :not(.v147-acerca-wrap):not(.v147-acerca-wrap *)::after{}';
+document.head.appendChild(st);
+
+})();
+</script>
 </body>
 </html>
 
