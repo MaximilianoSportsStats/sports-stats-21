@@ -20159,6 +20159,49 @@ document.addEventListener('click', function(e){
 
 })();
 </script>
+
+<script>
+(function(){
+if(window.__v159loaded)return;window.__v159loaded=true;
+
+// Force panel-soccer to reset by cycling through Tenis → Fútbol
+function deepResetFutbol(){
+  var tenisBtn=null, futBtn=null;
+  document.querySelectorAll('.sport-btn').forEach(function(b){
+    var t=(b.textContent||'').trim();
+    if(/^Tenis$/.test(t) && !tenisBtn) tenisBtn=b;
+    if(/^Fútbol$/.test(t) && !futBtn) futBtn=b;
+  });
+  // Click Tenis (resets to Tenis panel)
+  if(tenisBtn) tenisBtn.click();
+  // Then click Fútbol (resets back to Fútbol main view)
+  setTimeout(function(){
+    if(futBtn) futBtn.click();
+    window.scrollTo({top:0});
+  }, 200);
+  // Belt: also try to hide Premier League / League content inside panel-soccer
+  setTimeout(function(){
+    var soc=document.getElementById('panel-soccer');
+    if(!soc) return;
+    Array.from(soc.querySelectorAll('section,div')).forEach(function(c){
+      if(c.children.length>20) return; // skip big containers
+      var ot='';
+      Array.from(c.childNodes).forEach(function(n){if(n.nodeType===3) ot+=n.textContent;});
+      ot=ot.trim();
+      // Just close any league-specific containers if they're top-level
+      // (heuristic)
+    });
+  }, 600);
+}
+
+document.addEventListener('click', function(e){
+  var li=e.target.closest('.v147-acerca-sub li[data-v147-tab="resumen"]');
+  if(!li) return;
+  setTimeout(deepResetFutbol, 100);
+}, false);
+
+})();
+</script>
 </body>
 </html>
 
