@@ -19632,6 +19632,57 @@ document.addEventListener('click', function(e){
 
 })();
 </script>
+
+<script>
+(function(){
+if(window.__v148loaded)return;window.__v148loaded=true;
+
+// Tighter CSS for sidebar dropdown
+var st=document.createElement('style');
+st.textContent=  // Remove gap between sub-items and MUNDIAL — match continent-header spacing
+  '.v147-acerca-wrap{margin:0 !important;padding:0 !important}'+
+  '.v147-acerca-sub{padding:0 0 0 12px !important;margin:0 !important}'+
+  '.v147-acerca-sub li{padding:7px 12px !important;margin:0 !important}'+
+  // Default open
+  '.v147-acerca-wrap .v147-acerca-sub{display:none}'+
+  '.v147-acerca-wrap.v147-open .v147-acerca-sub{display:block}'+
+  // Active sub-item style (pink bg + red text + bold, matching screenshot)
+  '.v147-acerca-sub li.v147-active{background:#fef2f2 !important;color:#c8102e !important;border:1px solid #fee2e2;border-radius:8px;margin:2px 8px 2px 0 !important;font-weight:800}';
+document.head.appendChild(st);
+
+// === Aggressive cleanup of original ❓ ¿Qué es el Fútbol? ===
+function killOldAcerca(){
+  var sb=document.getElementById('sidebar'); if(!sb) return;
+  var sec=sb.querySelector('.sidebar-section'); if(!sec) return;
+  // Find any div whose direct text content is '❓ ¿Qué es el Fútbol?' or '¿Qué es el Fútbol?'
+  // and that is NOT inside .v147-acerca-wrap
+  sec.querySelectorAll('div').forEach(function(d){
+    if(d.closest('.v147-acerca-wrap')) return;
+    var t=(d.textContent||'').trim();
+    if(/^❓?\s*¿Qué es el Fútbol\?\s*▾?$/.test(t) && t.length<25){
+      d.style.setProperty('display','none','important');
+      d.classList.add('v148-killed');
+    }
+  });
+}
+setInterval(killOldAcerca, 400); setTimeout(killOldAcerca, 300);
+
+// === Open dropdown by default + set Resumen general active ===
+function openDefault(){
+  var wrap=document.querySelector('.v147-acerca-wrap');
+  if(!wrap) return;
+  if(wrap.dataset.v148init==='1') return;
+  wrap.classList.add('v147-open');
+  var arr=wrap.querySelector('.v147-arrow');
+  if(arr) arr.textContent='▾';
+  var resumenLi=wrap.querySelector('li[data-v147-tab="resumen"]');
+  if(resumenLi) resumenLi.classList.add('v147-active');
+  wrap.dataset.v148init='1';
+}
+setInterval(openDefault, 600); setTimeout(openDefault, 700);
+
+})();
+</script>
 </body>
 </html>
 
