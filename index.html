@@ -19802,6 +19802,71 @@ setInterval(killOnlyOriginal, 400); setTimeout(killOnlyOriginal, 300);
 
 })();
 </script>
+
+<script>
+(function(){
+if(window.__v151loaded)return;window.__v151loaded=true;
+
+// === DISABLE v149's nuke by setting its flag BEFORE it runs (won't help if v149 already ran, but prevents fresh runs) ===
+// We instead rebuild the wrap when it's empty/broken
+
+function rebuildWrap(){
+  var sb=document.getElementById('sidebar'); if(!sb) return;
+  var sec=sb.querySelector('.sidebar-section'); if(!sec) return;
+  var existing=sec.querySelector('.v147-acerca-wrap');
+  if(existing){
+    // Check if it has proper content
+    var btnText=(existing.querySelector('.v147-acerca-btn')||{}).textContent||'';
+    var hasSubItems=existing.querySelectorAll('.v147-acerca-sub li').length>=6;
+    if(btnText.indexOf('Fútbol')>=0 && hasSubItems){
+      // Looks good — bail
+      return;
+    }
+    // Broken/empty — remove and rebuild
+    existing.remove();
+  }
+  // Find anchor: any old ¿Qué es el Fútbol? OR first continent-header (MUNDIAL)
+  var anchor=null;
+  // Try the existing original (might be hidden)
+  sec.querySelectorAll('div').forEach(function(d){
+    if(anchor) return;
+    if(d.children.length>1) return;
+    var t=(d.textContent||'').trim();
+    if(t==='❓ ¿Qué es el Fútbol?' || t==='¿Qué es el Fútbol?'){
+      anchor=d;
+    }
+  });
+  // Fallback: use first MUNDIAL continent-header
+  if(!anchor){
+    var firstCH=sec.querySelector('.continent-header');
+    if(firstCH) anchor=firstCH;
+  }
+  if(!anchor) return;
+  var wrap=document.createElement('div');
+  wrap.className='v147-acerca-wrap v147-open';
+  wrap.innerHTML='<button class="v147-acerca-btn" type="button"><span>¿Qué es el Fútbol?</span><span class="v147-arrow">▾</span></button>'+
+    '<ul class="v147-acerca-sub">'+
+    '<li data-v147-tab="resumen" class="v147-active">📖 Resumen general</li>'+
+    '<li data-v147-tab="historia">📚 Historia</li>'+
+    '<li data-v147-tab="reglas">📋 Reglas FIFA</li>'+
+    '<li data-v147-tab="competiciones">🏆 Competiciones</li>'+
+    '<li data-v147-tab="leyendas">🌟 Leyendas</li>'+
+    '<li data-v147-tab="records">🏅 Records Históricos</li>'+
+    '</ul>';
+  anchor.parentNode.insertBefore(wrap, anchor);
+  // Bind toggle
+  var btn=wrap.querySelector('.v147-acerca-btn');
+  btn.addEventListener('click', function(e){
+    e.preventDefault(); e.stopPropagation();
+    wrap.classList.toggle('v147-open');
+    var arr=wrap.querySelector('.v147-arrow');
+    if(arr) arr.textContent=wrap.classList.contains('v147-open')?'▾':'▸';
+  });
+}
+setInterval(rebuildWrap, 500); setTimeout(rebuildWrap, 300);
+
+})();
+</script>
 </body>
 </html>
 
