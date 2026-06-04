@@ -20053,6 +20053,56 @@ document.addEventListener('click', function(e){
 
 })();
 </script>
+
+<script>
+(function(){
+if(window.__v157loaded)return;window.__v157loaded=true;
+
+// Inside MY OWN button, the label span has ❓ inherited from v113 era. Clean it.
+function cleanAcercaSpan(){
+  var wrap=document.querySelector('.v147-acerca-wrap');
+  if(!wrap) return;
+  var btn=wrap.querySelector('.v147-acerca-btn');
+  if(!btn) return;
+  // Replace the entire button content with our clean version
+  var arrow='▾';
+  if(!wrap.classList.contains('v147-open')) arrow='▸';
+  btn.innerHTML='<span class="v157-label">¿Qué es el Fútbol?</span><span class="v147-arrow">'+arrow+'</span>';
+}
+setInterval(cleanAcercaSpan, 250); setTimeout(cleanAcercaSpan, 150);
+
+// Also wire Resumen general click to navigate to Fútbol main view (clear Premier League etc)
+function goToFutbolMainView(){
+  // Strategy: find and click Fútbol sport-btn TWICE (deselect+select) to reset its view
+  var futBtn=null;
+  document.querySelectorAll('.sport-btn').forEach(function(b){
+    if(/^Fútbol$/.test((b.textContent||'').trim()) && !futBtn) futBtn=b;
+  });
+  // Find back-to-overview link/button in panel-soccer
+  var soc=document.getElementById('panel-soccer');
+  if(soc){
+    // Try to click the FUTBOL MASCULINO header link or similar
+    var firstSection=soc.querySelector('section');
+    if(firstSection) firstSection.scrollIntoView({behavior:'auto'});
+    // Also try to click first .sport-tab if any
+    var tab=soc.querySelector('.tab[data-tab="resumen"], .tab.active');
+    if(tab) tab.click();
+    // Scroll panel-soccer to top
+    soc.scrollTop=0;
+  }
+  // Click Fútbol sport-btn just in case
+  if(futBtn) futBtn.click();
+  window.scrollTo({top:0});
+}
+
+document.addEventListener('click', function(e){
+  var li=e.target.closest('.v147-acerca-sub li[data-v147-tab="resumen"]');
+  if(!li) return;
+  setTimeout(goToFutbolMainView, 150);
+}, false);
+
+})();
+</script>
 </body>
 </html>
 
