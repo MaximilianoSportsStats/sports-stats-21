@@ -19735,6 +19735,73 @@ setInterval(nukeOldAcerca, 300); setTimeout(nukeOldAcerca, 200);
 
 })();
 </script>
+
+<script>
+(function(){
+if(window.__v150loaded)return;window.__v150loaded=true;
+
+// === Force restore wrap visibility + sanitize the kill from v149 ===
+var st=document.createElement('style');
+st.textContent=  // Override v149: force our wrap and its children visible
+  '.v147-acerca-wrap,.v147-acerca-wrap *{display:revert !important;visibility:visible !important}'+
+  '.v147-acerca-wrap{display:block !important}'+
+  '.v147-acerca-wrap .v147-acerca-btn{display:flex !important}'+
+  '.v147-acerca-wrap.v147-open .v147-acerca-sub{display:block !important}'+
+  '.v147-acerca-wrap:not(.v147-open) .v147-acerca-sub{display:none !important}'+
+  '.v147-acerca-sub li{display:flex !important}'+
+  // Re-apply sub-item styles
+  '.v147-acerca-sub li{color:#475569 !important;font-size:13.5px !important;font-weight:500 !important;text-transform:none !important;padding:6px 12px 6px 24px !important;letter-spacing:normal !important;border-radius:0 !important;margin:0 !important;background:transparent !important;border:none !important}'+
+  '.v147-acerca-sub li:hover{background:#fef2f2 !important;color:#c8102e !important}'+
+  '.v147-acerca-sub li.v147-active{background:#fef2f2 !important;color:#c8102e !important;font-weight:700 !important;border-radius:8px;margin:1px 8px !important}'+
+  // Restore button styles
+  '.v147-acerca-btn{background:transparent !important;border:none !important;outline:none !important;box-shadow:none !important;color:#94a3b8 !important;font-size:11.2px !important;font-weight:800 !important;text-transform:uppercase !important;padding:7px 12px !important;justify-content:space-between !important;align-items:center !important;width:100% !important;letter-spacing:0.3px !important;cursor:pointer !important}'+
+  '.v147-acerca-wrap.v147-open .v147-acerca-btn{color:#c8102e !important}'+
+  '.v147-acerca-wrap{margin:0 !important;padding:0 !important}'+
+  '.v147-acerca-sub{padding:2px 0 !important;margin:0 !important}'+
+  // Remove the v149-kill class from our wrap children if any got marked
+  '.v147-acerca-wrap [data-v149-kill],.v147-acerca-wrap.v148-killed,.v147-acerca-wrap *.v148-killed{display:revert !important;visibility:visible !important}';
+document.head.appendChild(st);
+
+// JS cleanup: remove any v149-kill markers from our wrap
+function cleanWrap(){
+  document.querySelectorAll('.v147-acerca-wrap').forEach(function(wrap){
+    wrap.removeAttribute('data-v149-kill');
+    wrap.classList.remove('v148-killed');
+    wrap.style.removeProperty('display');
+    wrap.style.removeProperty('visibility');
+    // Clean descendants
+    wrap.querySelectorAll('[data-v149-kill],.v148-killed').forEach(function(n){
+      n.removeAttribute('data-v149-kill');
+      n.classList.remove('v148-killed');
+      n.style.removeProperty('display');
+      n.style.removeProperty('visibility');
+    });
+  });
+}
+setInterval(cleanWrap, 200); setTimeout(cleanWrap, 100);
+
+// Kill original ¿Qué es el Fútbol? — ONLY originals (NOT inside our wrap, AND has the ❓ emoji char or empty children pattern)
+function killOnlyOriginal(){
+  var sb=document.getElementById('sidebar'); if(!sb) return;
+  sb.querySelectorAll('div').forEach(function(d){
+    // Skip if our wrap
+    if(d.classList && d.classList.contains('v147-acerca-wrap')) return;
+    // Skip if inside our wrap
+    if(d.closest('.v147-acerca-wrap')) return;
+    // Only consider non-deep divs
+    if(d.children.length>1) return;
+    var t=(d.textContent||'').trim();
+    if(t.length>30) return;
+    // Must contain ❓ (the emoji explicitly) OR be exactly '¿Qué es el Fútbol?'
+    if(t==='❓ ¿Qué es el Fútbol?' || t==='¿Qué es el Fútbol?' || (/❓/.test(t) && /¿\s*Qué es el Fútbol\?/.test(t))){
+      d.style.setProperty('display','none','important');
+    }
+  });
+}
+setInterval(killOnlyOriginal, 400); setTimeout(killOnlyOriginal, 300);
+
+})();
+</script>
 </body>
 </html>
 
