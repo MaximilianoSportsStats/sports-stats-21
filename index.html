@@ -20306,6 +20306,99 @@ document.addEventListener('click', function(e){
 
 })();
 </script>
+
+<script>
+(function(){
+if(window.__v161loaded)return;window.__v161loaded=true;
+
+function isFActive(){
+  var fA=false;
+  document.querySelectorAll('.sgt-btn').forEach(function(b){
+    if((b.textContent||'').trim()==='F' && b.classList.contains('sgt-active')) fA=true;
+  });
+  return fA;
+}
+
+function showResumenMasculino(){
+  var pg=document.getElementById('panel-soccer'); if(!pg) return;
+  if(!pg.classList.contains('active')) return;
+  var resumen=document.getElementById('v147-slide-resumen'); if(!resumen) return;
+  Array.from(pg.children).forEach(function(c){
+    if(c.id && c.id.indexOf('v147-slide-')===0){
+      c.style.display=(c.id==='v147-slide-resumen'?'block':'none');
+    } else {
+      c.style.setProperty('display','none','important');
+    }
+  });
+  resumen.style.setProperty('display','block','important');
+}
+
+function showFemenino(){
+  var pg=document.getElementById('panel-soccer'); if(!pg) return;
+  if(!pg.classList.contains('active')) return;
+  var fem=document.getElementById('v136-femeninas');
+  Array.from(pg.children).forEach(function(c){
+    if(c===fem){
+      c.style.setProperty('display','block','important');
+    } else {
+      c.style.setProperty('display','none','important');
+    }
+  });
+}
+
+function applyMF(){
+  if(isFActive()) showFemenino();
+  else showResumenMasculino();
+}
+
+// Fútbol sport-btn click → aggressive retries
+document.addEventListener('click', function(e){
+  var sb=e.target.closest('.sport-btn');
+  if(sb && /^Fútbol$/.test((sb.textContent||'').trim())){
+    [50,150,300,600,1000,1500].forEach(function(d){ setTimeout(applyMF, d); });
+  }
+  var mfBtn=e.target.closest('.sgt-btn');
+  if(mfBtn){
+    var t=(mfBtn.textContent||'').trim();
+    if(t==='M' || t==='F'){
+      [50,150,300,600].forEach(function(d){ setTimeout(applyMF, d); });
+    }
+  }
+}, false);
+
+// MutationObserver on panel-soccer to defeat the Premier League race
+function setupObs(){
+  var pg=document.getElementById('panel-soccer'); if(!pg || pg.__v161obs) return;
+  pg.__v161obs=true;
+  var ticks=0;
+  var obs=new MutationObserver(function(){
+    if(!window.__v161justEnteredFutbol) return;
+    if(++ticks>20) return; // limit
+    applyMF();
+  });
+  obs.observe(pg, {childList:true, subtree:true, attributes:true, attributeFilter:['style','class']});
+}
+setTimeout(setupObs, 500); setInterval(setupObs, 2000);
+
+// Track entry to Fútbol
+document.addEventListener('click', function(e){
+  var sb=e.target.closest('.sport-btn');
+  if(sb && /^Fútbol$/.test((sb.textContent||'').trim())){
+    window.__v161justEnteredFutbol=true;
+    setTimeout(function(){ window.__v161justEnteredFutbol=false; }, 3000);
+  }
+}, true);
+
+// Also override Resumen general click
+document.addEventListener('click', function(e){
+  var li=e.target.closest('.v147-acerca-sub li[data-v147-tab="resumen"]');
+  if(!li) return;
+  setTimeout(applyMF, 100);
+  setTimeout(applyMF, 400);
+}, false);
+
+})();
+</script>
 </body>
 </html>
 
