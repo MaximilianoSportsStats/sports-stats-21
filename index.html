@@ -20414,6 +20414,49 @@ if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded"
 setInterval(function(){addSidebarItem();buildSlide();},1500);
 })();
 </script>
+
+<script>
+(function(){
+if(window.__v163loaded)return;window.__v163loaded=true;
+function patchItem(){
+ var oldItem=document.querySelector(".v162-mundo-item");
+ if(oldItem && oldItem.tagName!=="LI") { try{ oldItem.parentNode.removeChild(oldItem); }catch(e){} }
+ var sub=document.querySelector("ul.v147-acerca-sub");
+ if(!sub) return;
+ if(sub.querySelector("li[data-v147-tab=\"mundo\"]")) return;
+ var li=document.createElement("li");
+ li.setAttribute("data-v147-tab","mundo");
+ li.className="v162-mundo-item";
+ li.textContent="🌍 Ligas, Copas y Selecciones";
+ sub.appendChild(li);
+}
+function showMundo(){
+ var pg=document.getElementById("panel-soccer");
+ if(!pg) return;
+ var mundo=document.getElementById("v162-slide-mundo");
+ if(!mundo) return;
+ Array.from(pg.children).forEach(function(c){
+  if(c.id && (c.id.indexOf("v147-slide-")===0 || c.id.indexOf("v162-slide-")===0)){
+   c.style.setProperty("display", c.id==="v162-slide-mundo"?"block":"none","important");
+  } else { c.style.setProperty("display","none","important"); }
+ });
+ mundo.style.setProperty("display","block","important");
+ var sub=document.querySelector("ul.v147-acerca-sub");
+ if(sub){ Array.from(sub.children).forEach(function(c){ c.classList.remove("v147-active"); }); var m=sub.querySelector("li[data-v147-tab=\"mundo\"]"); if(m) m.classList.add("v147-active"); }
+}
+document.addEventListener("click", function(e){
+ var t=e.target;
+ if(!t || t.nodeType!==1) return;
+ var li=t.closest && t.closest("li[data-v147-tab=\"mundo\"]");
+ if(!li) return;
+ e.preventDefault(); e.stopPropagation();
+ setTimeout(showMundo,30); setTimeout(showMundo,150); setTimeout(showMundo,400);
+}, true);
+function init(){ patchItem(); }
+if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",init);}else{init();}
+setInterval(patchItem,1500);
+})();
+</script>
 </body>
 </html>
 
