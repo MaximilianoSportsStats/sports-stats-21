@@ -21879,6 +21879,51 @@ if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded"
 setInterval(function(){ injectCSS(); expandMundo(); }, 2000);
 })();
 </script>
+
+<script>
+(function(){
+if(window.__v186loaded)return;window.__v186loaded=true;
+// Map sport emoji to twemoji CDN hex code
+var EMOJI_MAP={"⚽":"26bd","🎾":"1f3be","🏎":"1f3ce","🏎️":"1f3ce","🏀":"1f3c0","🥊":"1f94a","⚾":"26be","🏒":"1f3d2","🏈":"1f3c8","🏉":"1f3c9","⛳":"26f3","🏃":"1f3c3","🏊":"1f3ca","🚴":"1f6b4","🏐":"1f3d0","🏓":"1f3d3","🏏":"1f3cf","⭐":"2b50","🌟":"1f31f","🎯":"1f3af","🥇":"1f947","🏆":"1f3c6","🌍":"1f30d","🌎":"1f30e","🌏":"1f30f"};
+function injectCSS(){
+ if(document.getElementById("v186-style"))return;
+ var s=document.createElement("style"); s.id="v186-style";
+ s.textContent=""
+  +"/* Force emoji visibility - twemoji img replacement */"
+  +".ss-emoji-wrap{display:inline-flex !important;align-items:center !important;justify-content:center !important;min-width:26px !important;min-height:26px !important;}"
+  +".ss-emoji-wrap img.v186-twemoji{width:24px !important;height:24px !important;display:inline-block !important;vertical-align:middle !important;}"
+  +"html body .sport-btn{display:flex !important;flex-direction:column !important;align-items:center !important;justify-content:center !important;gap:4px !important;min-height:60px !important;padding:8px 6px !important;}"
+  +"/* Hide football-main always when in panel-soccer (Premier League native) */"
+  +"#football-main{display:none !important;}";
+ document.head.appendChild(s);
+}
+function replaceEmojis(){
+ var wraps=document.querySelectorAll(".ss-emoji-wrap");
+ wraps.forEach(function(w){
+  if(w.querySelector("img.v186-twemoji")) return;
+  var txt=(w.textContent||"").trim();
+  if(!txt) return;
+  // Find first emoji char
+  for(var ch in EMOJI_MAP){
+   if(txt.indexOf(ch)>=0){
+    var hex=EMOJI_MAP[ch];
+    var img=document.createElement("img");
+    img.src="https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/"+hex+".svg";
+    img.alt=ch;
+    img.className="v186-twemoji";
+    img.loading="eager";
+    w.innerHTML="";
+    w.appendChild(img);
+    break;
+   }
+  }
+ });
+}
+function init(){ injectCSS(); replaceEmojis(); }
+if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",init);}else{init();}
+setInterval(function(){ injectCSS(); replaceEmojis(); }, 1500);
+})();
+</script>
 </body>
 </html>
 
