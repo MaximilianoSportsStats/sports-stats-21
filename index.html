@@ -22719,6 +22719,84 @@ _origST(function(){injectCSS();killCortina();},5000);
 _origST(function(){injectCSS();killCortina();},10000);
 })();
 </script>
+
+<script>
+(function(){
+if(window.__v197loaded)return;window.__v197loaded=true;
+// === STEP 1: Restore NATIVE setTimeout/setInterval via iframe ===
+try{
+ var iframe=document.createElement("iframe");
+ iframe.style.cssText="display:none;width:0;height:0;border:0;position:absolute;";
+ iframe.src="about:blank";
+ document.documentElement.appendChild(iframe);
+ var natST=iframe.contentWindow.setTimeout.bind(window);
+ var natSI=iframe.contentWindow.setInterval.bind(window);
+ var natCT=iframe.contentWindow.clearTimeout.bind(window);
+ var natCI=iframe.contentWindow.clearInterval.bind(window);
+ window.setTimeout=natST;
+ window.setInterval=natSI;
+ window.clearTimeout=natCT;
+ window.clearInterval=natCI;
+ window.__v197nativeST=natST;
+}catch(e){console.error("v197 iframe restore failed",e);}
+// === STEP 2: Ensure menu drawer items ===
+var DEFAULT_ITEMS=[
+ {key:"inicio", emoji:"🏠", text:"Inicio"},
+ {key:"deportes", emoji:"🏆", text:"Deportes"},
+ {key:"noticias", emoji:"📰", text:"Noticias"},
+ {key:"blogs", emoji:"✍️", text:"Blogs"},
+ {key:"centros", emoji:"📍", text:"Centros Deportivos"},
+ {key:"ligas", emoji:"🎓", text:"Ligas Escolares"}
+];
+function fixMenuDrawer(){
+ var drawer=document.getElementById("v36-side");
+ if(!drawer) return;
+ var ul=drawer.querySelector("ul");
+ if(!ul){
+  ul=document.createElement("ul");
+  var head=drawer.querySelector(".v36-head, h3");
+  if(head && head.nextSibling){ drawer.insertBefore(ul, head.nextSibling); }
+  else { drawer.appendChild(ul); }
+ }
+ if(ul.children.length>=3) return; /* already populated */
+ /* Build/rebuild items */
+ DEFAULT_ITEMS.forEach(function(it){
+  if(ul.querySelector("button[data-v36id=\""+it.key+"\"]")) return;
+  var li=document.createElement("li");
+  var btn=document.createElement("button");
+  btn.setAttribute("data-v36id", it.key);
+  btn.setAttribute("type", "button");
+  var sp=document.createElement("span");
+  sp.className="v36-emoji";
+  sp.textContent=it.emoji;
+  btn.appendChild(sp);
+  btn.appendChild(document.createTextNode(it.text));
+  btn.addEventListener("click", function(){
+   /* Try to invoke native handler */
+   try{
+    if(typeof goInicio==="function" && it.key==="inicio") goInicio();
+   }catch(e){}
+   /* Trigger panel navigation */
+   var panel=document.getElementById("panel-"+it.key);
+   if(panel){
+    document.querySelectorAll(".tab-panel").forEach(function(p){ p.classList.remove("active"); p.style.display="none"; });
+    panel.classList.add("active");
+    panel.style.display="block";
+   }
+   /* Close drawer */
+   drawer.classList.remove("open");
+  });
+  li.appendChild(btn);
+  ul.appendChild(li);
+ });
+}
+function init(){ fixMenuDrawer(); }
+init();
+(window.__v197nativeST||window.setTimeout)(init, 500);
+(window.__v197nativeST||window.setTimeout)(init, 2000);
+(window.__v197nativeST||window.setTimeout)(init, 5000);
+})();
+</script>
 </body>
 </html>
 
