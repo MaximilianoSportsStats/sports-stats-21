@@ -22382,6 +22382,110 @@ setTimeout(tick, 10000);
 setInterval(tick, 6000);
 })();
 </script>
+
+<script>
+(function(){
+if(window.__v193loaded)return;window.__v193loaded=true;
+var EMOJI={
+ todos:"\u2B50",soccer:"\u26BD",tennis:"\uD83C\uDFBE",
+ f1:"\uD83C\uDFCE",nba:"\uD83C\uDFC0",ufc:"\uD83E\uDD4A",
+ baseball:"\u26BE",hockey:"\uD83C\uDFD2",nfl:"\uD83C\uDFC8",
+ rugby:"\uD83C\uDFC9",golf:"\u26F3",acuaticos:"\uD83C\uDFCA",
+ atletismo:"\uD83C\uDFC3",ciclismo:"\uD83D\uDEB4",
+ volleyball:"\uD83C\uDFD0",padel:"\uD83C\uDFD3",
+ cricket:"\uD83C\uDFCF",globales:"\uD83C\uDF0D",otros:"\uD83C\uDFAF"
+};
+function detectSport(b){
+ var sport=b.getAttribute("data-v190-sport");
+ if(sport && EMOJI[sport]) return sport;
+ var oc=b.getAttribute("onclick")||"";
+ var m=oc.match(/switchSport\([\\\'\\"]([^\\\'\\"]+)/);
+ if(m && EMOJI[m[1].toLowerCase()]) return m[1].toLowerCase();
+ if(oc.indexOf("goInicio")>=0) return "todos";
+ var name=((b.querySelector(".ss-name-wrap")||{}).textContent||b.textContent||"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").trim();
+ if(/atletismo|athletics/.test(name)) return "atletismo";
+ if(/ciclismo|cycling/.test(name)) return "ciclismo";
+ if(/volleyball|voley|pallavolo/.test(name)) return "volleyball";
+ if(/cricket/.test(name)) return "cricket";
+ if(/globales|global/.test(name)) return "globales";
+ if(/otros|other/.test(name)) return "otros";
+ return null;
+}
+function setEmojiText(wrap, emoji){
+ var cur=wrap.textContent;
+ if(cur===emoji && wrap.children.length===0) return false;
+ // Clear all children + text
+ while(wrap.firstChild) wrap.removeChild(wrap.firstChild);
+ wrap.appendChild(document.createTextNode(emoji));
+ return true;
+}
+function processBtn(b){
+ var sport=detectSport(b);
+ if(!sport) return;
+ var emoji=EMOJI[sport];
+ if(!emoji) return;
+ var w=b.querySelector(".ss-emoji-wrap");
+ if(!w) return;
+ setEmojiText(w, emoji);
+ // Attach MutationObserver to win against any script that adds imgs
+ if(!w.__v193observed){
+  w.__v193observed=true;
+  var obs=new MutationObserver(function(muts){
+   var hasUnwantedChild=false;
+   for(var i=0;i<muts.length;i++){
+    var added=muts[i].addedNodes;
+    for(var j=0;j<added.length;j++){
+     if(added[j].nodeType===1){ hasUnwantedChild=true; break; }
+    }
+    if(hasUnwantedChild) break;
+   }
+   if(hasUnwantedChild || w.textContent!==emoji){
+    setEmojiText(w, emoji);
+   }
+  });
+  obs.observe(w, {childList:true, characterData:true, subtree:true});
+ }
+}
+function injectCSS(){
+ if(document.getElementById("v193-style"))return;
+ var s=document.createElement("style"); s.id="v193-style";
+ s.textContent=""
+  +"html body .sport-btn{display:flex !important;flex-direction:column !important;align-items:center !important;justify-content:center !important;gap:6px !important;min-height:66px !important;padding:8px 6px !important;}"
+  +"html body .sport-btn .ss-emoji-wrap{"
+   +"font-family:\"Apple Color Emoji\",\"Segoe UI Emoji\",\"Noto Color Emoji\",\"Segoe UI Symbol\",sans-serif !important;"
+   +"font-style:normal !important;font-weight:normal !important;"
+   +"font-size:28px !important;line-height:1.1 !important;"
+   +"color:#000 !important;"
+   +"background:none !important;background-image:none !important;"
+   +"width:auto !important;height:auto !important;"
+   +"min-width:30px !important;min-height:30px !important;"
+   +"display:inline-flex !important;align-items:center !important;justify-content:center !important;"
+   +"opacity:1 !important;visibility:visible !important;"
+   +"filter:none !important;text-align:center !important;"
+  +"}"
+  +"html body .sport-btn .ss-emoji-wrap img{display:none !important;}"
+  +"html body .sport-btn .ss-name-wrap{display:block !important;font-size:12px !important;color:initial !important;}";
+ document.head.appendChild(s);
+}
+function tick(){
+ injectCSS();
+ document.querySelectorAll("button.sport-btn").forEach(processBtn);
+}
+tick();
+if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",tick);}
+// Multiple retries to outlast v191 kill at 8s and v191 setInterval at 5s
+setTimeout(tick, 200);
+setTimeout(tick, 800);
+setTimeout(tick, 2500);
+setTimeout(tick, 5500);
+setTimeout(tick, 9500);
+setTimeout(tick, 12000);
+setTimeout(tick, 16000);
+setTimeout(tick, 22000);
+// Long-lived interval after v191 kills - this one survives
+setTimeout(function(){ setInterval(tick, 10000); }, 12000);
+})();
+</script>
 </body>
 </html>
 
