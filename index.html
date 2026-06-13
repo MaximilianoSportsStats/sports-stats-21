@@ -21719,6 +21719,52 @@ if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded"
 setInterval(injectCSS, 2000);
 })();
 </script>
+
+<script>
+(function(){
+if(window.__v183loaded)return;window.__v183loaded=true;
+function isOnInicio(){
+ var b=document.body;
+ if(!b.classList.contains("v32-view-inicio")) return false;
+ // Also true MasSS21 modes - we still want the bar gone
+ var hero=document.getElementById("heroCarousel");
+ if(hero && getComputedStyle(hero).display==="none" && !b.classList.contains("v32-view-soccer") && !b.classList.contains("v32-view-tennis") && !b.classList.contains("v32-view-basketball")){
+  // MasSS21 or non-sport view
+  return true;
+ }
+ return true;
+}
+function isOnSport(){
+ // Sport view = body has v29-show-bar AND a sport panel is active
+ var b=document.body;
+ if(b.classList.contains("v32-view-soccer")||b.classList.contains("v32-view-tennis")||b.classList.contains("v32-view-basketball")||b.classList.contains("v32-view-baseball")||b.classList.contains("v32-view-american")||b.classList.contains("v32-view-hockey")||b.classList.contains("v32-view-combate")||b.classList.contains("v32-view-carreras")) return true;
+ return false;
+}
+function applyNavBar(){
+ var nav=document.querySelector(".sport-nav-bar");
+ if(!nav) return;
+ if(isOnSport()){
+  nav.style.removeProperty("display");
+  nav.style.removeProperty("height");
+  nav.style.removeProperty("margin");
+  nav.style.removeProperty("padding");
+ } else {
+  nav.style.setProperty("display","none","important");
+  nav.style.setProperty("height","0","important");
+  nav.style.setProperty("margin","0","important");
+  nav.style.setProperty("padding","0","important");
+ }
+}
+function setupObserver(){
+ if(window.__v183obs) return;
+ window.__v183obs=true;
+ new MutationObserver(applyNavBar).observe(document.body, {attributes:true, attributeFilter:["class"]});
+}
+function init(){ applyNavBar(); setupObserver(); }
+if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",init);}else{init();}
+setInterval(applyNavBar, 800);
+})();
+</script>
 </body>
 </html>
 
