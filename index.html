@@ -22146,6 +22146,84 @@ if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded"
 setInterval(function(){ wireOtros(); Object.keys(SLIDES).forEach(buildSlide); }, 1500);
 })();
 </script>
+
+<script>
+(function(){
+if(window.__v190loaded)return;window.__v190loaded=true;
+function injectCSS(){
+ if(document.getElementById("v190-style"))return;
+ var s=document.createElement("style"); s.id="v190-style";
+ s.textContent=""
+  +"html body .sport-btn{display:flex !important;flex-direction:column !important;align-items:center !important;justify-content:center !important;gap:4px !important;min-height:64px !important;padding:8px 6px !important;}"
+  +".sport-btn .ss-emoji-wrap{display:inline-block !important;width:32px !important;height:32px !important;min-width:32px !important;min-height:32px !important;background-size:28px 28px !important;background-position:center !important;background-repeat:no-repeat !important;font-size:0 !important;color:transparent !important;line-height:0 !important;visibility:visible !important;opacity:1 !important;}"
+  +".sport-btn .ss-emoji-wrap *{display:none !important;}"
+  +".sport-btn .ss-name-wrap{display:block !important;visibility:visible !important;font-size:12px !important;}"
+  +".sport-btn[data-v190-sport=\"todos\"] .ss-emoji-wrap{background-image:url(https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/2b50.svg);}.sport-btn[data-v190-sport=\"soccer\"] .ss-emoji-wrap{background-image:url(https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/26bd.svg);}.sport-btn[data-v190-sport=\"tennis\"] .ss-emoji-wrap{background-image:url(https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f3be.svg);}.sport-btn[data-v190-sport=\"f1\"] .ss-emoji-wrap{background-image:url(https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f3ce.svg);}.sport-btn[data-v190-sport=\"nba\"] .ss-emoji-wrap{background-image:url(https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f3c0.svg);}.sport-btn[data-v190-sport=\"ufc\"] .ss-emoji-wrap{background-image:url(https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f94a.svg);}.sport-btn[data-v190-sport=\"baseball\"] .ss-emoji-wrap{background-image:url(https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/26be.svg);}.sport-btn[data-v190-sport=\"hockey\"] .ss-emoji-wrap{background-image:url(https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f3d2.svg);}.sport-btn[data-v190-sport=\"nfl\"] .ss-emoji-wrap{background-image:url(https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f3c8.svg);}.sport-btn[data-v190-sport=\"rugby\"] .ss-emoji-wrap{background-image:url(https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f3c9.svg);}.sport-btn[data-v190-sport=\"golf\"] .ss-emoji-wrap{background-image:url(https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/26f3.svg);}.sport-btn[data-v190-sport=\"acuaticos\"] .ss-emoji-wrap{background-image:url(https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f3ca.svg);}.sport-btn[data-v190-sport=\"atletismo\"] .ss-emoji-wrap{background-image:url(https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f3c3.svg);}.sport-btn[data-v190-sport=\"ciclismo\"] .ss-emoji-wrap{background-image:url(https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f6b4.svg);}.sport-btn[data-v190-sport=\"volleyball\"] .ss-emoji-wrap{background-image:url(https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f3d0.svg);}.sport-btn[data-v190-sport=\"padel\"] .ss-emoji-wrap{background-image:url(https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f3d3.svg);}.sport-btn[data-v190-sport=\"cricket\"] .ss-emoji-wrap{background-image:url(https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f3cf.svg);}.sport-btn[data-v190-sport=\"globales\"] .ss-emoji-wrap{background-image:url(https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f30d.svg);}.sport-btn[data-v190-sport=\"otros\"] .ss-emoji-wrap{background-image:url(https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f3af.svg);}";
+ document.head.appendChild(s);
+}
+function tagSports(){
+ var btns=document.querySelectorAll("button.sport-btn");
+ btns.forEach(function(b){
+  if(b.hasAttribute("data-v190-sport")) return;
+  var oc=b.getAttribute("onclick")||"";
+  var m=oc.match(/switchSport\([\\\'\\"]([^\\\'\\"]+)/);
+  var sport=null;
+  if(m) sport=m[1].toLowerCase();
+  if(!sport && oc.indexOf("goInicio")>=0) sport="todos";
+  if(!sport){
+   var name=((b.querySelector(".ss-name-wrap")||{}).textContent||b.textContent||"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").trim();
+   if(/atletismo|athletics/.test(name)) sport="atletismo";
+   else if(/ciclismo|cycling/.test(name)) sport="ciclismo";
+   else if(/volleyball|voley|pallavolo/.test(name)) sport="volleyball";
+   else if(/cricket|criquete/.test(name)) sport="cricket";
+   else if(/futbol|soccer|calcio/.test(name)) sport="soccer";
+   else if(/tenis|tennis/.test(name)) sport="tennis";
+   else if(/carreras|racing/.test(name)) sport="f1";
+   else if(/basket|baloncesto/.test(name)) sport="nba";
+   else if(/combate|boxeo|ufc|mma/.test(name)) sport="ufc";
+   else if(/beisbol|baseball|beisebol/.test(name)) sport="baseball";
+   else if(/hockey|hoquei/.test(name)) sport="hockey";
+   else if(/americano|american/.test(name)) sport="nfl";
+   else if(/rugby/.test(name)) sport="rugby";
+   else if(/golf/.test(name)) sport="golf";
+   else if(/natacion|swimming/.test(name)) sport="acuaticos";
+   else if(/padel/.test(name)) sport="padel";
+   else if(/globales|global/.test(name)) sport="globales";
+   else if(/otros|other/.test(name)) sport="otros";
+   else if(/todos|all\b/.test(name)) sport="todos";
+  }
+  if(sport) b.setAttribute("data-v190-sport", sport);
+ });
+}
+var SLIDE_MAP={kings:"v189-slide-kings", futbolito:"v189-slide-futbolito", futsal:"v189-slide-futsal", playa:"v189-slide-beach", f5:"v189-slide-f579", f7:"v189-slide-f579", f9:"v189-slide-f579"};
+function showSlide(slideId){
+ var pg=document.getElementById("panel-soccer");
+ if(!pg) return;
+ Array.from(pg.children).forEach(function(c){
+  if(c.id===slideId){ c.style.setProperty("display","block","important"); }
+  else { c.style.setProperty("display","none","important"); }
+ });
+}
+function wireOtros(){
+ document.querySelectorAll("button.sub-btn[data-kx]").forEach(function(b){
+  if(b.__v190wired) return;
+  var kx=b.getAttribute("data-kx");
+  var slideId=SLIDE_MAP[kx];
+  if(!slideId) return;
+  b.__v190wired=true;
+  b.addEventListener("click",function(e){
+   e.preventDefault(); e.stopPropagation();
+   showSlide(slideId);
+   setTimeout(function(){showSlide(slideId);}, 200);
+   setTimeout(function(){showSlide(slideId);}, 600);
+  }, true);
+ });
+}
+function init(){ injectCSS(); tagSports(); wireOtros(); }
+if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",init);}else{init();}
+setInterval(function(){ injectCSS(); tagSports(); wireOtros(); }, 1000);
+})();
+</script>
 </body>
 </html>
 
