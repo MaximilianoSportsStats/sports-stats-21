@@ -23091,6 +23091,96 @@ setTimeout(buildSub,6000);
 setInterval(buildSub,15000);
 })();
 </script>
+
+<script>
+(function(){
+if(window.__v202loaded)return;window.__v202loaded=true;
+function injectCSS(){
+ if(document.getElementById("v202-style"))return;
+ var s=document.createElement("style"); s.id="v202-style";
+ s.textContent=""
+  +"/* HIDE Todos button - max wanted it gone */"
+  +"html body button.sport-btn[onclick*=\"goInicio\"]{display:none !important;}"
+  +"/* sport-nav SINGLE LINE - flex nowrap, wrap-into-2 lines per button name */"
+  +"html body .sport-nav,html body .sport-nav-bar > nav,html body .sport-nav-bar > div{display:flex !important;flex-direction:row !important;flex-wrap:nowrap !important;justify-content:space-around !important;align-items:flex-start !important;overflow-x:auto !important;}"
+  +"html body .sport-btn{flex:1 1 auto !important;min-width:80px !important;max-width:130px !important;}"
+  +"html body .sport-btn .ss-name-wrap{white-space:normal !important;text-align:center !important;line-height:1.2 !important;word-spacing:100vw !important;font-size:12px !important;}"
+  +"/* Inicio section titles clickable */"
+  +"#v100-noticias h2, #v100-blogs h2, #v100-podcast h2, #v164-mercado h2{cursor:pointer !important;}"
+  +"#v100-noticias h2:hover, #v100-blogs h2:hover, #v100-podcast h2:hover, #v164-mercado h2:hover{color:#dc2626 !important;}";
+ document.head.appendChild(s);
+}
+function killTodos(){
+ document.querySelectorAll("button.sport-btn").forEach(function(b){
+  var oc=b.getAttribute("onclick")||"";
+  var name=(b.querySelector(".ss-name-wrap")||{}).textContent||"";
+  if(oc.indexOf("goInicio")>=0 || /^(todos|all)\s*$/i.test(name.trim())){
+   b.style.setProperty("display","none","important");
+  }
+ });
+}
+function navigate(action){
+ var drawer=document.getElementById("v36-side");
+ if(drawer) drawer.classList.remove("open");
+ try{
+  if(action==="inicio" && typeof goInicio==="function"){ goInicio(); return; }
+  if(action==="mercado"){ var mli=document.querySelector(".v200-mercado-li"); if(mli){mli.click();return;} }
+ }catch(e){}
+ var panelIds={inicio:"panel-inicio",favoritos:"v56-page-favoritos",envivo:"v56-page-envivo",profesionales:"panel-soccer",universitarios:"v38-page-universitarias",escolares:"v38-page-escolares",amateur:"v38-page-amateur",comparar:"v38-page-comparar",centros:"v38-page-mapa",masss21:"v87-page-masss21",noticias:"v100-noticias-wrap",blogs:"v100-blogs-wrap",podcast:"v100-podcast-wrap",articulos:"v100-blogs-wrap",deportes:"panel-deportes"};
+ var pid=panelIds[action]; if(!pid) return;
+ var pg=document.getElementById(pid); if(!pg) return;
+ if(pg.classList && pg.classList.contains("tab-panel")){
+  document.querySelectorAll(".tab-panel").forEach(function(p){ p.classList.remove("active"); p.style.removeProperty("display"); });
+  pg.classList.add("active"); pg.style.setProperty("display","block","important");
+ } else { pg.scrollIntoView({behavior:"smooth",block:"start"}); }
+}
+window.__v202navigate=navigate;
+function rewireSidebar(){
+ var ul=document.querySelector("#v36-side .v199-list");
+ if(!ul) return;
+ /* Re-attach click handlers on all v199-btn (main items) */
+ ul.querySelectorAll("button.v199-btn").forEach(function(b){
+  if(b.__v202wired) return;
+  b.__v202wired=true;
+  var act=b.getAttribute("data-action");
+  var hasSub=!!b.parentElement.querySelector(".v199-sub");
+  b.addEventListener("click", function(e){
+   e.preventDefault(); e.stopPropagation();
+   if(hasSub){ b.parentElement.classList.toggle("open"); }
+   else { navigate(act); }
+  }, true);
+ });
+ ul.querySelectorAll("button.v199-sub-btn").forEach(function(b){
+  if(b.__v202wired) return;
+  b.__v202wired=true;
+  var act=b.getAttribute("data-action");
+  b.addEventListener("click", function(e){
+   e.preventDefault(); e.stopPropagation();
+   navigate(act);
+  }, true);
+ });
+}
+function wireInicioTitles(){
+ var map={"v100-noticias":"noticias","v100-blogs":"blogs","v100-podcast":"podcast","v164-mercado":"mercado"};
+ Object.keys(map).forEach(function(id){
+  var sec=document.getElementById(id); if(!sec) return;
+  var h2=sec.querySelector("h2"); if(!h2) return;
+  if(h2.__v202wired) return;
+  h2.__v202wired=true;
+  h2.style.cursor="pointer";
+  var act=map[id];
+  h2.addEventListener("click", function(e){
+   e.preventDefault(); e.stopPropagation();
+   navigate(act);
+  });
+ });
+}
+function tick(){ injectCSS(); killTodos(); rewireSidebar(); wireInicioTitles(); }
+tick();
+setTimeout(tick,300); setTimeout(tick,1500); setTimeout(tick,5000);
+setInterval(tick, 8000);
+})();
+</script>
 </body>
 </html>
 
