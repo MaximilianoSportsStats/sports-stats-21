@@ -21540,6 +21540,96 @@ if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded"
 setInterval(function(){ injectCSS(); ensureVisible(); }, 1000);
 })();
 </script>
+
+<script>
+(function(){
+if(window.__v179loaded)return;window.__v179loaded=true;
+var FLAGS={es:"🇪🇸",en:"🇬🇧",pt:"🇵🇹",fr:"🇫🇷",it:"🇮🇹",de:"🇩🇪"};
+var LABELS={es:"Español",en:"English",pt:"Português",fr:"Français",it:"Italiano",de:"Deutsch"};
+function injectCSS(){
+ if(document.getElementById("v179-style")) return;
+ var s=document.createElement("style"); s.id="v179-style";
+ s.textContent=""
+  +"/* AGGRESSIVE force topbar items */"
+  +"#v25-search-bar, #v30-lang{display:flex !important;visibility:visible !important;opacity:1 !important;flex-shrink:0 !important;}"
+  +"#v25-search-bar input{display:block !important;visibility:visible !important;}"
+  +"/* Fallback floating lang picker - always visible */"
+  +"#v179-fb{position:fixed;top:80px;right:20px;z-index:99998;display:flex;flex-direction:column;gap:6px;background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:8px;box-shadow:0 4px 16px rgba(0,0,0,0.12);}"
+  +"#v179-fb-toggle{cursor:pointer;background:linear-gradient(135deg,#dc2626,#991b1b);color:#fff;border:none;padding:6px 12px;border-radius:8px;font-size:14px;display:flex;align-items:center;gap:6px;font-weight:600;}"
+  +"#v179-fb-list{display:none;flex-direction:column;gap:4px;padding-top:6px;border-top:1px solid #f3f4f6;}"
+  +"#v179-fb.open #v179-fb-list{display:flex;}"
+  +".v179-fb-btn{cursor:pointer;background:none;border:none;padding:6px 10px;text-align:left;font-size:13px;color:#111;border-radius:6px;display:flex;align-items:center;gap:8px;}"
+  +".v179-fb-btn:hover{background:#fef2f2;color:#dc2626;}"
+  +".v179-fb-btn.active{background:#fef2f2;color:#dc2626;font-weight:700;}";
+ document.head.appendChild(s);
+}
+function getLang(){
+ try{ var s=localStorage.getItem("v174-lang"); if(s) return s; }catch(e){}
+ return "es";
+}
+function applyLang(code){
+ try{ localStorage.setItem("v174-lang", code); }catch(e){}
+ if(window.__v174apply){ window.__v174apply(code); }
+ // Force flag/label sync on topbar picker too
+ var flag=document.getElementById("v30-lang-flag");
+ var label=document.getElementById("v30-lang-label");
+ if(flag) flag.textContent=FLAGS[code];
+ if(label) label.textContent=LABELS[code];
+ document.querySelectorAll(".v30-lang-menu button[data-code]").forEach(function(b){
+  b.classList.toggle("active", b.getAttribute("data-code")===code);
+ });
+ // Update fallback active
+ document.querySelectorAll(".v179-fb-btn").forEach(function(b){
+  b.classList.toggle("active", b.getAttribute("data-code")===code);
+ });
+ var fbToggle=document.getElementById("v179-fb-toggle");
+ if(fbToggle) fbToggle.innerHTML=FLAGS[code]+" "+LABELS[code]+" ▾";
+ var fb=document.getElementById("v179-fb");
+ if(fb) fb.classList.remove("open");
+}
+function buildFallback(){
+ if(document.getElementById("v179-fb")) return;
+ var fb=document.createElement("div"); fb.id="v179-fb";
+ var cur=getLang();
+ var html="<button id=\"v179-fb-toggle\" type=\"button\">"+FLAGS[cur]+" "+LABELS[cur]+" ▾</button>";
+ html+="<div id=\"v179-fb-list\">";
+ Object.keys(FLAGS).forEach(function(code){
+  var active=code===cur?" active":"";
+  html+="<button type=\"button\" class=\"v179-fb-btn"+active+"\" data-code=\""+code+"\">"+FLAGS[code]+" "+LABELS[code]+"</button>";
+ });
+ html+="</div>";
+ fb.innerHTML=html;
+ document.body.appendChild(fb);
+ var toggle=document.getElementById("v179-fb-toggle");
+ toggle.addEventListener("click", function(e){ e.preventDefault(); e.stopPropagation(); fb.classList.toggle("open"); });
+ fb.querySelectorAll(".v179-fb-btn").forEach(function(b){
+  b.addEventListener("click", function(e){
+   e.preventDefault(); e.stopPropagation();
+   var code=b.getAttribute("data-code");
+   applyLang(code);
+  });
+ });
+ // Close on outside click
+ document.addEventListener("click", function(e){
+  if(!fb.contains(e.target)) fb.classList.remove("open");
+ });
+}
+function ensureVisible(){
+ var search=document.getElementById("v25-search-bar");
+ var lang=document.getElementById("v30-lang");
+ [search,lang].forEach(function(el){
+  if(!el) return;
+  el.style.setProperty("display","flex","important");
+  el.style.setProperty("visibility","visible","important");
+  el.style.setProperty("opacity","1","important");
+  el.style.setProperty("flex-shrink","0","important");
+ });
+}
+function init(){ injectCSS(); buildFallback(); ensureVisible(); }
+if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",init);}else{init();}
+setInterval(function(){ injectCSS(); buildFallback(); ensureVisible(); }, 1000);
+})();
+</script>
 </body>
 </html>
 
