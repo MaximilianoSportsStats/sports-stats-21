@@ -23482,6 +23482,126 @@ tick(); setTimeout(tick,300); setTimeout(tick,1500); setTimeout(tick,5000);
 setInterval(tick,8000);
 })();
 </script>
+
+<script>
+(function(){
+if(window.__v206loaded)return;window.__v206loaded=true;
+window.__v206activePage=null;
+window.__v206keepActive=null;
+var PAGE_MAP={favoritos:"v56-page-favoritos",envivo:"v56-page-envivo",universitarios:"v38-page-universitarias",escolares:"v38-page-escolares",amateur:"v38-page-amateur",comparar:"v38-page-comparar",centros:"v38-page-mapa",masss21:"v87-page-masss21"};
+var INICIO_KEEP=["v100-ticker"];
+function ensureActive(){
+ var pid=window.__v206keepActive;
+ if(!pid) return;
+ var target=document.getElementById(pid);
+ if(!target) return;
+ var pin=document.getElementById("panel-inicio");
+ if(!pin) return;
+ /* Force panel-inicio active and visible */
+ if(!pin.classList.contains("active")) pin.classList.add("active");
+ pin.style.setProperty("display","block","important");
+ /* Hide siblings, force show target */
+ Array.from(pin.children).forEach(function(c){
+  if(c.id===pid || INICIO_KEEP.indexOf(c.id)>=0){
+   c.style.setProperty("display","block","important");
+  } else {
+   c.style.setProperty("display","none","important");
+  }
+ });
+ /* Also hide heroCarousel if sub-page */
+ var hero=document.getElementById("heroCarousel");
+ if(hero) hero.style.setProperty("display","none","important");
+}
+function navigate(action){
+ var drawer=document.getElementById("v36-side");
+ if(drawer) drawer.classList.remove("open");
+ /* Inicio reset */
+ if(action==="inicio"){
+  window.__v206keepActive=null;
+  var b=document.body;
+  b.classList.remove("v200-mercado-mode","v146-masss21-mode");
+  var pin=document.getElementById("panel-inicio");
+  if(pin){
+   Array.from(pin.children).forEach(function(c){
+    var hideInInicio=["v56-page-favoritos","v56-page-envivo","v38-page-escolares","v38-page-universitarias","v38-page-amateur","v38-page-comparar","v38-page-mapa","v87-page-masss21","v29-todos-page","v25-intro","inicio-features"];
+    if(hideInInicio.indexOf(c.id)>=0){ c.style.setProperty("display","none","important"); }
+    else { c.style.removeProperty("display"); }
+   });
+  }
+  var hero=document.getElementById("heroCarousel"); if(hero) hero.style.removeProperty("display");
+  window.scrollTo(0,0);
+  return;
+ }
+ /* Mercado uses native click */
+ if(action==="mercado"){
+  window.__v206keepActive=null;
+  var mli=document.querySelector(".v200-mercado-li"); if(mli){mli.click();}
+  return;
+ }
+ /* Sport navigation */
+ if(action==="profesionales" || action==="deportes"){
+  window.__v206keepActive=null;
+  var sb=document.querySelector("button.sport-btn[onclick*=\"soccer\"]");
+  if(sb && typeof switchSport==="function"){switchSport("soccer",sb);}
+  return;
+ }
+ /* Inicio sub-pages with persistent show */
+ if(PAGE_MAP[action]){
+  window.__v206keepActive=PAGE_MAP[action];
+  ensureActive();
+  setTimeout(ensureActive,50);
+  setTimeout(ensureActive,200);
+  setTimeout(ensureActive,800);
+  setTimeout(ensureActive,2000);
+  window.scrollTo(0,0);
+  return;
+ }
+ /* Scroll-to in Inicio */
+ var scrollMap={noticias:"v100-noticias-wrap",blogs:"v100-blogs-wrap",podcast:"v100-podcast-wrap",articulos:"v100-blogs-wrap"};
+ if(scrollMap[action]){
+  window.__v206keepActive=null;
+  var pin=document.getElementById("panel-inicio");
+  if(pin){ Array.from(pin.children).forEach(function(c){ c.style.removeProperty("display"); }); }
+  var hero=document.getElementById("heroCarousel"); if(hero) hero.style.removeProperty("display");
+  setTimeout(function(){var el=document.getElementById(scrollMap[action]); if(el)el.scrollIntoView({behavior:"smooth",block:"start"});},200);
+  return;
+ }
+}
+window.__v206navigate=navigate;
+function rewire(){
+ var ul=document.querySelector("#v36-side .v199-list");
+ if(!ul) return;
+ ul.querySelectorAll("button.v199-btn").forEach(function(b){
+  if(b.__v206wired) return; b.__v206wired=true;
+  var newB=b.cloneNode(true);
+  b.parentNode.replaceChild(newB,b);
+  var li=newB.parentElement;
+  var act=newB.getAttribute("data-action");
+  newB.addEventListener("click", function(e){
+   e.preventDefault(); e.stopPropagation();
+   var sub=li.querySelector(".v199-sub");
+   if(sub){ li.classList.toggle("open"); return; }
+   navigate(act);
+  });
+ });
+ ul.querySelectorAll("button.v199-sub-btn").forEach(function(b){
+  if(b.__v206wired) return; b.__v206wired=true;
+  var newB=b.cloneNode(true);
+  b.parentNode.replaceChild(newB,b);
+  var act=newB.getAttribute("data-action");
+  newB.addEventListener("click", function(e){
+   e.preventDefault(); e.stopPropagation();
+   navigate(act);
+  });
+ });
+}
+function tick(){ rewire(); if(window.__v206keepActive) ensureActive(); }
+tick(); setTimeout(tick,300); setTimeout(tick,1500); setTimeout(tick,5000);
+/* Fast loop to beat v171/v183 setIntervals */
+setInterval(function(){ if(window.__v206keepActive) ensureActive(); }, 400);
+setInterval(rewire, 5000);
+})();
+</script>
 </body>
 </html>
 
