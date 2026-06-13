@@ -21434,6 +21434,32 @@ if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded"
 setInterval(function(){ hookButtons(); var cur=getCurrentLang(); if(cur!=="es") translateExtra(cur); }, 2000);
 })();
 </script>
+
+<script>
+(function(){
+if(window.__v209loaded)return;window.__v209loaded=true;
+function injectCSS(){
+ if(document.getElementById("v209-style"))return;
+ var s=document.createElement("style"); s.id="v209-style";
+ s.textContent="html body #v25-search-bar, html body #v30-lang{display:flex !important;visibility:visible !important;opacity:1 !important;flex-shrink:0 !important;}";
+ document.head.appendChild(s);
+}
+function ensureVisible(){
+ var search=document.getElementById("v25-search-bar");
+ var lang=document.getElementById("v30-lang");
+ [search,lang].forEach(function(el){
+  if(!el) return;
+  if(getComputedStyle(el).display==="none"){el.style.setProperty("display","flex","important");}
+  el.style.setProperty("visibility","visible","important");
+  el.style.setProperty("opacity","1","important");
+ });
+}
+injectCSS();ensureVisible();
+setTimeout(function(){injectCSS();ensureVisible();},500);
+setTimeout(function(){injectCSS();ensureVisible();},2000);
+setInterval(ensureVisible, 3000);
+})();
+</script>
 </body>
 </html>
 
