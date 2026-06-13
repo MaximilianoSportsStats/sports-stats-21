@@ -22584,6 +22584,78 @@ setTimeout(tick,5500);setTimeout(tick,9500);setTimeout(tick,12500);
 setTimeout(function(){ setInterval(tick,8000); },14000);
 })();
 </script>
+
+<script>
+(function(){
+if(window.__v195loaded)return;window.__v195loaded=true;
+// === KILL ALL prior scripts intervals/timeouts ===
+var maxId=window.setTimeout(function(){},0); window.clearTimeout(maxId);
+for(var i=1;i<=maxId+50;i++){ try{window.clearInterval(i);}catch(e){} try{window.clearTimeout(i);}catch(e){} }
+// === Throttle FUTURE setInterval/setTimeout calls ===
+var _si=window.setInterval.bind(window);
+window.setInterval=function(fn,ms){if(typeof ms==="number" && ms<10000) ms=10000; return _si(fn,ms);};
+var _st=window.setTimeout.bind(window);
+window.setTimeout=function(fn,ms){if(typeof ms==="number" && ms<3000) ms=3000; return _st(fn,ms);};
+// Use native setTimeout/setInterval to call our stuff
+// === Native emoji char approach - simple, no CDN ===
+var EMOJI={
+ todos:"\u2B50",soccer:"\u26BD",tennis:"\uD83C\uDFBE",f1:"\uD83C\uDFCE",nba:"\uD83C\uDFC0",
+ ufc:"\uD83E\uDD4A",baseball:"\u26BE",hockey:"\uD83C\uDFD2",nfl:"\uD83C\uDFC8",
+ rugby:"\uD83C\uDFC9",golf:"\u26F3",acuaticos:"\uD83C\uDFCA",atletismo:"\uD83C\uDFC3",
+ ciclismo:"\uD83D\uDEB4",volleyball:"\uD83C\uDFD0",padel:"\uD83C\uDFD3",
+ cricket:"\uD83C\uDFCF",globales:"\uD83C\uDF0D",otros:"\uD83C\uDFAF"
+};
+function detect(b){
+ var s=b.getAttribute("data-v190-sport");
+ if(s && EMOJI[s]) return s;
+ var oc=b.getAttribute("onclick")||"";
+ var m=oc.match(/switchSport\([\\\'\\"]([^\\\'\\"]+)/);
+ if(m && EMOJI[m[1].toLowerCase()]) return m[1].toLowerCase();
+ if(oc.indexOf("goInicio")>=0) return "todos";
+ var n=((b.querySelector(".ss-name-wrap")||{}).textContent||b.textContent||"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").trim();
+ if(/atletismo|athletics/.test(n)) return "atletismo";
+ if(/ciclismo|cycling/.test(n)) return "ciclismo";
+ if(/volleyball|voley/.test(n)) return "volleyball";
+ if(/cricket/.test(n)) return "cricket";
+ if(/globales|global/.test(n)) return "globales";
+ if(/otros|other/.test(n)) return "otros";
+ return null;
+}
+function injectCSS(){
+ if(document.getElementById("v195-style"))return;
+ var s=document.createElement("style"); s.id="v195-style";
+ s.textContent=""
+  +"html body .sport-btn{display:flex !important;flex-direction:column !important;align-items:center !important;justify-content:center !important;gap:4px !important;min-height:68px !important;padding:8px 6px !important;overflow:visible !important;}"
+  +"html body .sport-nav-bar, html body .sport-nav{overflow:visible !important;}"
+  +"html body .sport-btn .ss-emoji-wrap{"
+   +"font-family:\"Apple Color Emoji\",\"Segoe UI Emoji\",\"Noto Color Emoji\",sans-serif !important;"
+   +"font-size:28px !important;line-height:1 !important;color:#000 !important;"
+   +"background:none !important;background-image:none !important;"
+   +"display:inline-block !important;text-align:center !important;"
+   +"width:auto !important;height:auto !important;min-width:30px !important;min-height:32px !important;"
+   +"opacity:1 !important;visibility:visible !important;"
+  +"}"
+  +"html body .sport-btn .ss-emoji-wrap *{display:none !important;}"
+  +"html body .sport-btn .ss-name-wrap{display:block !important;font-size:12px !important;color:initial !important;}";
+ document.head.appendChild(s);
+}
+function setAll(){
+ document.querySelectorAll("button.sport-btn").forEach(function(b){
+  var s=detect(b); if(!s) return;
+  var e=EMOJI[s]; if(!e) return;
+  var w=b.querySelector(".ss-emoji-wrap"); if(!w) return;
+  if(w.textContent===e && w.children.length===0) return;
+  while(w.firstChild) w.removeChild(w.firstChild);
+  w.appendChild(document.createTextNode(e));
+ });
+}
+function tick(){ injectCSS(); setAll(); }
+// Run after kill at 8s and at 15s; then once every 30s
+_st(tick, 9000);
+_st(tick, 15000);
+_si(tick, 30000);
+})();
+</script>
 </body>
 </html>
 
