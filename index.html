@@ -21507,6 +21507,39 @@ if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded"
 setInterval(function(){ hookButtons(); translateAll(); }, 600);
 })();
 </script>
+
+<script>
+(function(){
+if(window.__v178loaded)return;window.__v178loaded=true;
+function injectCSS(){
+ if(document.getElementById("v178-style")) return;
+ var s=document.createElement("style"); s.id="v178-style";
+ s.textContent=""
+  +"/* Force topbar elements always visible regardless of viewport */"
+  +"#v25-search-bar{display:flex !important;visibility:visible !important;opacity:1 !important;}"
+  +"#v30-lang{display:flex !important;visibility:visible !important;opacity:1 !important;}"
+  +"#v25-search-bar input{display:block !important;visibility:visible !important;min-width:140px;}"
+  +"#v30-lang-flag, #v30-lang-label{display:inline-block !important;visibility:visible !important;}"
+  +"/* Mobile fallback - ensure not hidden by media queries */"
+  +"@media (max-width: 900px){#v25-search-bar{display:flex !important;}#v30-lang{display:flex !important;}}"
+  +"@media (max-width: 600px){#v25-search-bar{display:flex !important;}#v30-lang{display:flex !important;}}";
+ document.head.appendChild(s);
+}
+function ensureVisible(){
+ var search=document.getElementById("v25-search-bar");
+ var lang=document.getElementById("v30-lang");
+ [search,lang].forEach(function(el){
+  if(!el) return;
+  if(getComputedStyle(el).display==="none") el.style.setProperty("display","flex","important");
+  el.style.setProperty("visibility","visible","important");
+  el.style.setProperty("opacity","1","important");
+ });
+}
+function init(){ injectCSS(); ensureVisible(); }
+if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",init);}else{init();}
+setInterval(function(){ injectCSS(); ensureVisible(); }, 1000);
+})();
+</script>
 </body>
 </html>
 
