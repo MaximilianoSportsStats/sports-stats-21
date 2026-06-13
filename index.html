@@ -23208,6 +23208,134 @@ setTimeout(function(){injectCSS();killEl();},5000);
 setInterval(function(){injectCSS();killEl();},10000);
 })();
 </script>
+
+<script>
+(function(){
+if(window.__v204loaded)return;window.__v204loaded=true;
+function injectCSS(){
+ if(document.getElementById("v204-style"))return;
+ var s=document.createElement("style"); s.id="v204-style";
+ s.textContent=""
+  +"/* SPORT NAV - FORZAR SINGLE ROW con overflow-x scroll */"
+  +"html body .sport-nav-bar{overflow-x:auto !important;overflow-y:visible !important;white-space:nowrap !important;padding:8px 0 !important;}"
+  +"html body .sport-nav-bar > *{display:inline-flex !important;flex-wrap:nowrap !important;flex-direction:row !important;justify-content:flex-start !important;width:max-content !important;min-width:100% !important;}"
+  +"html body .sport-nav,html body .sport-nav-bar nav{display:inline-flex !important;flex-direction:row !important;flex-wrap:nowrap !important;align-items:flex-start !important;width:max-content !important;}"
+  +"html body .sport-btn{display:inline-flex !important;flex-direction:column !important;align-items:center !important;justify-content:flex-start !important;flex:0 0 auto !important;min-width:60px !important;max-width:90px !important;padding:6px 8px !important;}"
+  +"html body .sport-btn .ss-name-wrap{display:block !important;white-space:normal !important;text-align:center !important;line-height:1.15 !important;font-size:11px !important;word-break:keep-all !important;}"
+  +"/* Hide scrollbar */"
+  +"html body .sport-nav-bar::-webkit-scrollbar{height:4px;}"
+  +"html body .sport-nav-bar::-webkit-scrollbar-thumb{background:#e5e7eb;border-radius:2px;}";
+ document.head.appendChild(s);
+}
+function setBodyView(viewClass){
+ var b=document.body;
+ var classes=b.className.split(/\s+/);
+ classes=classes.filter(function(c){return c.indexOf("v32-view-")!==0;});
+ classes.push(viewClass);
+ b.className=classes.join(" ").trim();
+}
+function showPanel(pid){
+ var pg=document.getElementById(pid);
+ if(!pg) return false;
+ document.querySelectorAll(".tab-panel").forEach(function(p){ p.classList.remove("active"); p.style.removeProperty("display"); });
+ pg.classList.add("active");
+ pg.style.setProperty("display","block","important");
+ window.scrollTo(0,0);
+ return true;
+}
+function showInicio(){
+ /* Reset body class */
+ var b=document.body;
+ b.classList.remove("v200-mercado-mode","v146-masss21-mode");
+ setBodyView("v32-view-inicio");
+ showPanel("panel-inicio");
+ /* Show hero, hide masss21 */
+ var hero=document.getElementById("heroCarousel"); if(hero) hero.style.removeProperty("display");
+ var masss21=document.getElementById("v87-page-masss21"); if(masss21) masss21.style.setProperty("display","none","important");
+}
+function navigate(action){
+ var drawer=document.getElementById("v36-side");
+ if(drawer) drawer.classList.remove("open");
+ try{
+  if(action==="inicio"){ if(typeof goInicio==="function"){goInicio();} showInicio(); return; }
+  if(action==="mercado"){ var mli=document.querySelector(".v200-mercado-li"); if(mli){mli.click(); return;} }
+  if(action==="masss21"){
+   var hero=document.getElementById("heroCarousel"); if(hero) hero.style.setProperty("display","none","important");
+   var m=document.getElementById("v87-page-masss21"); if(m){m.style.setProperty("display","block","important"); m.scrollIntoView({behavior:"smooth"});}
+   return;
+  }
+  if(action==="deportes"){
+   var sb=document.querySelector("button.sport-btn[data-v190-sport=\"soccer\"], button.sport-btn[onclick*=\"soccer\"]");
+   if(sb && typeof switchSport==="function"){switchSport("soccer",sb); return;}
+  }
+  if(action==="profesionales"){
+   var sb=document.querySelector("button.sport-btn[onclick*=\"soccer\"]");
+   if(sb && typeof switchSport==="function"){switchSport("soccer",sb); return;}
+  }
+ }catch(e){console.error("nav",e);}
+ var panelMap={favoritos:"v56-page-favoritos",envivo:"v56-page-envivo",universitarios:"v38-page-universitarias",escolares:"v38-page-escolares",amateur:"v38-page-amateur",comparar:"v38-page-comparar",centros:"v38-page-mapa"};
+ var pid=panelMap[action];
+ if(pid && document.getElementById(pid)){
+  setBodyView("v32-view-"+action);
+  var pg=document.getElementById(pid);
+  pg.style.setProperty("display","block","important");
+  pg.scrollIntoView({behavior:"smooth",block:"start"});
+  return;
+ }
+ var scrollMap={noticias:"v100-noticias-wrap",blogs:"v100-blogs-wrap",podcast:"v100-podcast-wrap",articulos:"v100-blogs-wrap"};
+ if(scrollMap[action]){
+  showInicio();
+  setTimeout(function(){
+   var el=document.getElementById(scrollMap[action]);
+   if(el) el.scrollIntoView({behavior:"smooth",block:"start"});
+  },200);
+ }
+}
+window.__v204navigate=navigate;
+function rewireSidebar(){
+ var ul=document.querySelector("#v36-side .v199-list");
+ if(!ul) return;
+ ul.querySelectorAll("button.v199-btn").forEach(function(b){
+  if(b.__v204wired) return;
+  b.__v204wired=true;
+  var act=b.getAttribute("data-action");
+  var li=b.parentElement;
+  b.addEventListener("click", function(e){
+   e.preventDefault(); e.stopPropagation();
+   var sub=li.querySelector(".v199-sub");
+   if(sub){ li.classList.toggle("open"); return; }
+   navigate(act);
+  }, true);
+ });
+ ul.querySelectorAll("button.v199-sub-btn").forEach(function(b){
+  if(b.__v204wired) return;
+  b.__v204wired=true;
+  var act=b.getAttribute("data-action");
+  b.addEventListener("click", function(e){
+   e.preventDefault(); e.stopPropagation();
+   navigate(act);
+  }, true);
+ });
+}
+function wireTitles(){
+ var map={"v100-noticias":"noticias","v100-blogs":"blogs","v100-podcast":"podcast","v164-mercado":"mercado"};
+ Object.keys(map).forEach(function(id){
+  var sec=document.getElementById(id); if(!sec) return;
+  var h2=sec.querySelector("h2"); if(!h2) return;
+  if(h2.__v204wired) return;
+  h2.__v204wired=true;
+  h2.style.cursor="pointer";
+  var act=map[id];
+  h2.addEventListener("click", function(e){
+   e.preventDefault();
+   navigate(act);
+  });
+ });
+}
+function tick(){ injectCSS(); rewireSidebar(); wireTitles(); }
+tick(); setTimeout(tick,300); setTimeout(tick,1500); setTimeout(tick,5000); setInterval(tick,8000);
+})();
+</script>
 </body>
 </html>
 
