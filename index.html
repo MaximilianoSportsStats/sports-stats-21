@@ -21630,6 +21630,54 @@ if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded"
 setInterval(function(){ injectCSS(); buildFallback(); ensureVisible(); }, 1000);
 })();
 </script>
+
+<script>
+(function(){
+if(window.__v180loaded)return;window.__v180loaded=true;
+function injectCSS(){
+ if(document.getElementById("v180-style")) return;
+ var s=document.createElement("style"); s.id="v180-style";
+ s.textContent=""
+  +"/* Kill ugly v179 floating fallback */"
+  +"#v179-fb{display:none !important;}"
+  +"/* MAX specificity force topbar items visible */"
+  +"html body #v25-search-bar, html body #v30-lang{display:flex !important;visibility:visible !important;opacity:1 !important;flex-shrink:0 !important;position:relative !important;width:auto !important;height:auto !important;max-height:none !important;max-width:none !important;overflow:visible !important;}"
+  +"html body #v25-search-bar input{display:block !important;visibility:visible !important;}"
+  +"html body #v30-lang button, html body #v30-lang span{display:inline-block !important;visibility:visible !important;}"
+  +"html body #v30-lang-flag, html body #v30-lang-label{display:inline-block !important;visibility:visible !important;opacity:1 !important;}"
+  +"/* Ensure meta-nav parent wraps if needed */"
+  +".meta-nav{flex-wrap:wrap !important;align-items:center !important;}";
+ document.head.appendChild(s);
+}
+var topbarIds=["v25-search-bar","v30-lang","v30-lang-flag","v30-lang-label"];
+function ensureAll(){
+ topbarIds.forEach(function(id){
+  var el=document.getElementById(id);
+  if(!el) return;
+  // Clear hiding inline styles
+  if(el.style.display==="none") el.style.removeProperty("display");
+  if(el.style.visibility==="hidden") el.style.removeProperty("visibility");
+  if(el.style.opacity==="0") el.style.removeProperty("opacity");
+  el.style.setProperty("visibility","visible","important");
+  el.style.setProperty("opacity","1","important");
+  if(id==="v25-search-bar"||id==="v30-lang"){ el.style.setProperty("display","flex","important"); }
+  else { el.style.setProperty("display","inline-block","important"); }
+ });
+}
+function setupObserver(){
+ if(window.__v180obs) return;
+ window.__v180obs=true;
+ topbarIds.forEach(function(id){
+  var el=document.getElementById(id);
+  if(!el) return;
+  new MutationObserver(function(){ ensureAll(); }).observe(el, {attributes:true, attributeFilter:["style","class"]});
+ });
+}
+function init(){ injectCSS(); ensureAll(); setupObserver(); }
+if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",init);}else{init();}
+setInterval(function(){ injectCSS(); ensureAll(); setupObserver(); }, 800);
+})();
+</script>
 </body>
 </html>
 
