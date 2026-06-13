@@ -22000,6 +22000,89 @@ if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded"
 setInterval(function(){ injectCSS(); processAll(); }, 1000);
 })();
 </script>
+
+<script>
+(function(){
+if(window.__v188loaded)return;window.__v188loaded=true;
+var TW="https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/";
+var KEY_HEX={
+ soccer:"26bd",tennis:"1f3be",f1:"1f3ce",racing:"1f3ce",nba:"1f3c0",
+ basketball:"1f3c0",ufc:"1f94a",mma:"1f94a",boxing:"1f94a",
+ baseball:"26be",mlb:"26be",hockey:"1f3d2",nhl:"1f3d2",
+ nfl:"1f3c8",american:"1f3c8",rugby:"1f3c9",golf:"26f3",
+ acuaticos:"1f3ca",swimming:"1f3ca",natacion:"1f3ca",
+ athletics:"1f3c3",atletismo:"1f3c3",cycling:"1f6b4",ciclismo:"1f6b4",
+ volleyball:"1f3d0",voley:"1f3d0",pallavolo:"1f3d0",
+ padel:"1f3d3",cricket:"1f3cf",todos:"2b50",all:"2b50",
+ globales:"1f30d",eventos:"1f30d",otros:"1f3af",other:"1f3af",
+ jjoo:"1f947",olimpicos:"1f947"
+};
+function findHex(btn){
+ // Try onclick first
+ var oc=btn.getAttribute("onclick")||"";
+ var m=oc.match(/switchSport\([\\\'\\"]([^\\\'\\"]+)/);
+ if(m){
+  var k=m[1].toLowerCase();
+  if(KEY_HEX[k]) return KEY_HEX[k];
+ }
+ // Try button text/name
+ var name=((btn.querySelector(".ss-name-wrap")||{}).textContent||"").toLowerCase().trim();
+ if(!name) name=(btn.textContent||"").toLowerCase().trim();
+ // Normalize accents
+ name=name.normalize("NFD").replace(/[\u0300-\u036f]/g,"");
+ if(/futbol\s*americano|american\s*foot/i.test(name)) return KEY_HEX.nfl;
+ if(/futbol|soccer|calcio|fussball/i.test(name)) return KEY_HEX.soccer;
+ if(/tenis|tennis/i.test(name)) return KEY_HEX.tennis;
+ if(/carreras|racing|f1|formula/i.test(name)) return KEY_HEX.f1;
+ if(/basket|baloncesto|pallacanestro/i.test(name)) return KEY_HEX.basketball;
+ if(/combate|combat|boxing|boxeo|mma|ufc|pugilato/i.test(name)) return KEY_HEX.ufc;
+ if(/beisbol|baseball|beisebol/i.test(name)) return KEY_HEX.baseball;
+ if(/hockey|hoquei/i.test(name)) return KEY_HEX.hockey;
+ if(/rugby/i.test(name)) return KEY_HEX.rugby;
+ if(/golf/i.test(name)) return KEY_HEX.golf;
+ if(/atletismo|athletics|leichtathletik/i.test(name)) return KEY_HEX.atletismo;
+ if(/natacion|swimming|nuoto|schwimmen|natation/i.test(name)) return KEY_HEX.natacion;
+ if(/ciclismo|cycling|cyclisme|radsport/i.test(name)) return KEY_HEX.ciclismo;
+ if(/volleyball|voley|volei|pallavolo/i.test(name)) return KEY_HEX.volleyball;
+ if(/padel|pádel/i.test(name)) return KEY_HEX.padel;
+ if(/cricket|criquete/i.test(name)) return KEY_HEX.cricket;
+ if(/todos|all sports|tous|alle/i.test(name)) return KEY_HEX.todos;
+ if(/globales|global|eventos|events|eventi|ereignisse/i.test(name)) return KEY_HEX.globales;
+ if(/otros|other|altri|andere|autres/i.test(name)) return KEY_HEX.otros;
+ if(/jjoo|olimpic|olympic|olympi/i.test(name)) return KEY_HEX.jjoo;
+ return null;
+}
+function setEmojiImg(btn){
+ var wrap=btn.querySelector(".ss-emoji-wrap");
+ if(!wrap) return;
+ var existing=wrap.querySelector("img.v188-twemoji");
+ if(existing && existing.naturalWidth>0) return;
+ var hex=findHex(btn);
+ if(!hex) return;
+ while(wrap.firstChild) wrap.removeChild(wrap.firstChild);
+ var img=document.createElement("img");
+ img.className="v188-twemoji";
+ img.src=TW+hex+".svg";
+ img.alt="";
+ img.loading="eager";
+ img.style.cssText="width:26px !important;height:26px !important;display:inline-block !important;vertical-align:middle !important;flex-shrink:0 !important;";
+ wrap.appendChild(img);
+}
+function processAll(){ document.querySelectorAll("button.sport-btn").forEach(setEmojiImg); }
+function injectCSS(){
+ if(document.getElementById("v188-style"))return;
+ var s=document.createElement("style"); s.id="v188-style";
+ s.textContent=""
+  +".ss-emoji-wrap{display:inline-flex !important;align-items:center !important;justify-content:center !important;min-width:28px !important;min-height:28px !important;}"
+  +"html body .sport-btn{display:flex !important;flex-direction:column !important;align-items:center !important;justify-content:center !important;gap:4px !important;min-height:64px !important;padding:8px 6px !important;}"
+  +".v188-twemoji{width:26px !important;height:26px !important;display:inline-block !important;flex-shrink:0 !important;}";
+ document.head.appendChild(s);
+}
+function init(){ injectCSS(); processAll(); }
+if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",init);}else{init();}
+setInterval(function(){ injectCSS(); processAll(); }, 800);
+})();
+</script>
 </body>
 </html>
 
