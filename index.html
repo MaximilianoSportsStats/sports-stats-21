@@ -22486,6 +22486,104 @@ setTimeout(tick, 22000);
 setTimeout(function(){ setInterval(tick, 10000); }, 12000);
 })();
 </script>
+
+<script>
+(function(){
+if(window.__v194loaded)return;window.__v194loaded=true;
+var TW="https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/";
+var HEX={
+ todos:"2b50",soccer:"26bd",tennis:"1f3be",f1:"1f3ce",nba:"1f3c0",
+ ufc:"1f94a",baseball:"26be",hockey:"1f3d2",nfl:"1f3c8",
+ rugby:"1f3c9",golf:"26f3",acuaticos:"1f3ca",atletismo:"1f3c3",
+ ciclismo:"1f6b4",volleyball:"1f3d0",padel:"1f3d3",
+ cricket:"1f3cf",globales:"1f30d",otros:"1f3af"
+};
+function detectSport(b){
+ var sport=b.getAttribute("data-v190-sport");
+ if(sport && HEX[sport]) return sport;
+ var oc=b.getAttribute("onclick")||"";
+ var m=oc.match(/switchSport\([\\\'\\"]([^\\\'\\"]+)/);
+ if(m && HEX[m[1].toLowerCase()]) return m[1].toLowerCase();
+ if(oc.indexOf("goInicio")>=0) return "todos";
+ var name=((b.querySelector(".ss-name-wrap")||{}).textContent||b.textContent||"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").trim();
+ if(/atletismo|athletics/.test(name)) return "atletismo";
+ if(/ciclismo|cycling/.test(name)) return "ciclismo";
+ if(/volleyball|voley|pallavolo/.test(name)) return "volleyball";
+ if(/cricket/.test(name)) return "cricket";
+ if(/globales|global/.test(name)) return "globales";
+ if(/otros|other/.test(name)) return "otros";
+ return null;
+}
+function injectCSS(){
+ if(document.getElementById("v194-style"))return;
+ var s=document.createElement("style"); s.id="v194-style";
+ s.textContent=""
+  +"/* OVERRIDE v193 hidden img + force img visible */"
+  +"html body .sport-btn{display:flex !important;flex-direction:column !important;align-items:center !important;justify-content:center !important;gap:6px !important;min-height:70px !important;padding:8px 6px !important;overflow:visible !important;}"
+  +"html body .sport-nav-bar{overflow:visible !important;}"
+  +"html body .sport-nav{overflow:visible !important;}"
+  +"html body .sport-btn .ss-emoji-wrap{"
+   +"position:relative !important;"
+   +"display:inline-flex !important;align-items:center !important;justify-content:center !important;"
+   +"width:32px !important;height:32px !important;min-width:32px !important;min-height:32px !important;"
+   +"font-size:0 !important;color:transparent !important;"
+   +"background:none !important;background-image:none !important;"
+   +"opacity:1 !important;visibility:visible !important;overflow:visible !important;"
+  +"}"
+  +"html body .sport-btn .ss-emoji-wrap img.v194-emoji{"
+   +"display:block !important;width:30px !important;height:30px !important;"
+   +"opacity:1 !important;visibility:visible !important;pointer-events:none;"
+  +"}"
+  +"html body .sport-btn .ss-name-wrap{display:block !important;font-size:12px !important;color:initial !important;}";
+ document.head.appendChild(s);
+}
+function processBtn(b){
+ var sport=detectSport(b);
+ if(!sport){ return; }
+ var hex=HEX[sport];
+ if(!hex) return;
+ var w=b.querySelector(".ss-emoji-wrap");
+ if(!w) return;
+ var img=w.querySelector("img.v194-emoji");
+ if(img && img.src.indexOf(hex)>=0) return; /* already correct */
+ /* clear everything */
+ while(w.firstChild) w.removeChild(w.firstChild);
+ /* create our img */
+ img=document.createElement("img");
+ img.className="v194-emoji";
+ img.src=TW+hex+".svg";
+ img.alt=sport;
+ img.loading="eager";
+ img.decoding="sync";
+ img.style.cssText="width:30px;height:30px;display:block;";
+ w.appendChild(img);
+ /* Observer to defend the img */
+ if(!w.__v194obs){
+  w.__v194obs=true;
+  var obs=new MutationObserver(function(){
+   var cur=w.querySelector("img.v194-emoji");
+   if(!cur || cur.src.indexOf(hex)<0){
+    /* Restore */
+    while(w.firstChild) w.removeChild(w.firstChild);
+    var newImg=document.createElement("img");
+    newImg.className="v194-emoji";
+    newImg.src=TW+hex+".svg";
+    newImg.alt=sport;
+    newImg.style.cssText="width:30px;height:30px;display:block;";
+    w.appendChild(newImg);
+   }
+  });
+  obs.observe(w, {childList:true, subtree:false, characterData:true});
+ }
+}
+function tick(){ injectCSS(); document.querySelectorAll("button.sport-btn").forEach(processBtn); }
+tick();
+if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",tick);}
+setTimeout(tick,200);setTimeout(tick,600);setTimeout(tick,1500);setTimeout(tick,3000);
+setTimeout(tick,5500);setTimeout(tick,9500);setTimeout(tick,12500);
+setTimeout(function(){ setInterval(tick,8000); },14000);
+})();
+</script>
 </body>
 </html>
 
