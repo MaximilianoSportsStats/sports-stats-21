@@ -20499,6 +20499,48 @@ if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded"
 setInterval(function(){ buildMercado(); ensureOrder(); applyMercadoVisibility(); },1500);
 })();
 </script>
+
+<script>
+(function(){
+if(window.__v165loaded)return;window.__v165loaded=true;
+function goToMercado(){
+ var li=document.querySelector(".v200-mercado-li");
+ if(li){ li.click(); return true; }
+ return false;
+}
+function makeClickable(){
+ var sec=document.getElementById("v164-mercado");
+ if(!sec) return;
+ var h2=sec.querySelector("h2");
+ if(h2 && !h2.__v165wired){
+  h2.__v165wired=true;
+  h2.style.cursor="pointer";
+  h2.title="Ir a Mercado";
+  h2.addEventListener("click",function(e){ e.preventDefault(); e.stopPropagation(); goToMercado(); });
+ }
+ // Whole big card clickable
+ var big=sec.querySelector(".v100-news-big");
+ if(big && !big.__v165wired){
+  big.__v165wired=true;
+  big.style.cursor="pointer";
+  big.title="Ir a Mercado";
+  big.addEventListener("click",function(e){ e.preventDefault(); e.stopPropagation(); goToMercado(); });
+ }
+ // Mini cards clickable
+ var minis=sec.querySelectorAll(".v100-news-mini");
+ Array.prototype.forEach.call(minis,function(m){
+  if(m.__v165wired) return;
+  m.__v165wired=true;
+  m.style.cursor="pointer";
+  m.title="Ir a Mercado";
+  m.addEventListener("click",function(e){ e.preventDefault(); e.stopPropagation(); goToMercado(); });
+ });
+}
+function init(){ makeClickable(); }
+if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",init);}else{init();}
+setInterval(makeClickable, 1500);
+})();
+</script>
 </body>
 </html>
 
