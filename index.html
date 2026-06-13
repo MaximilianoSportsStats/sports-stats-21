@@ -20716,6 +20716,84 @@ if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded"
 setInterval(function(){ setupSearch(); buildChatbox(); },2000);
 })();
 </script>
+
+<script>
+(function(){
+if(window.__v167loaded)return;window.__v167loaded=true;
+// === FIX 1: SEARCH ACCENT NORMALIZE ===
+function norm(s){return (s||"").toString().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");}
+function patchSearch(){
+ var input=document.querySelector("#v25-search-bar input");
+ if(!input || input.__v167wired) return;
+ input.__v167wired=true;
+ var DICT=window.__v166dict || [];
+ if(DICT.length===0){
+  // dict not exposed - extract from v166 closure is impossible; rebuild quickly
+  return;
+ }
+}
+// Patch the existing showSuggestions by hooking into the input event with capture
+function rebuildSearch(){
+ var bar=document.getElementById("v25-search-bar");
+ if(!bar) return;
+ var input=bar.querySelector("input");
+ if(!input) return;
+ var sug=document.getElementById("v166-suggest");
+ if(!sug) return;
+ if(input.__v167rebuilt) return;
+ input.__v167rebuilt=true;
+ // Override DICT access for filter
+ var DICT=null;
+ try { DICT = JSON.parse(JSON.stringify(window.__v166dictExposed||[])); } catch(e){}
+ if(!DICT || DICT.length===0){
+  // Read script source for DICT extraction is overkill - inject our own filter using fresh DICT
+  DICT = window.__v167dict;
+ }
+ if(!DICT) return;
+ function showSug(q){
+  var nq=norm(q).trim();
+  if(!nq){ sug.style.display="none"; return; }
+  var matches=DICT.filter(function(d){return norm(d.t).indexOf(nq)>=0;}).slice(0,10);
+  if(matches.length===0){ sug.style.display="none"; return; }
+  sug.innerHTML="";
+  matches.forEach(function(m){
+   var it=document.createElement("div");
+   it.className="v166-sug-item";
+   it.innerHTML="<span class=\"v166-sug-em\">"+m.e+"</span><span class=\"v166-sug-term\">"+m.t+"</span><span class=\"v166-sug-cat\">"+m.c+"</span>";
+   it.addEventListener("mousedown",function(ev){ ev.preventDefault(); input.value=m.t; sug.style.display="none"; if(window.__v166execAction) window.__v166execAction(m.a); });
+   sug.appendChild(it);
+  });
+  sug.style.display="block";
+ }
+ // Use capture to intercept BEFORE v166 handler
+ input.addEventListener("input",function(e){ showSug(input.value); },true);
+ input.addEventListener("focus",function(){ if(input.value) showSug(input.value); },true);
+}
+// === FIX 2: HIDE INICIO-ONLY SECTIONS WHEN NOT v32-view-inicio ===
+var INICIO_IDS=["v100-noticias-wrap","v164-mercado-wrap","v100-blogs-wrap","v100-podcast-wrap","v99-retos"];
+function isInicio(){
+ return document.body.classList.contains("v32-view-inicio") && !document.body.classList.contains("v200-mercado-mode");
+}
+function applyInicioVisibility(){
+ var hide = !isInicio();
+ INICIO_IDS.forEach(function(id){
+  var el=document.getElementById(id);
+  if(!el) return;
+  if(hide){ el.style.setProperty("display","none","important"); }
+  else { el.style.removeProperty("display"); }
+ });
+}
+function setupBodyObserver(){
+ if(window.__v167bodyObs) return;
+ var obs=new MutationObserver(function(){ applyInicioVisibility(); });
+ obs.observe(document.body, {attributes:true, attributeFilter:["class"]});
+ window.__v167bodyObs=obs;
+}
+function init(){ rebuildSearch(); applyInicioVisibility(); setupBodyObserver(); }
+if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",init);}else{init();}
+setInterval(function(){ rebuildSearch(); applyInicioVisibility(); },1500);
+})();
+</script>
 </body>
 </html>
 
