@@ -21765,6 +21765,91 @@ if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded"
 setInterval(applyNavBar, 800);
 })();
 </script>
+
+<script>
+(function(){
+if(window.__v184loaded)return;window.__v184loaded=true;
+// === FIX 1: BRAND NEVER TRANSLATES ===
+function fixBrand(){
+ var logos=document.querySelectorAll(".logo, .v36-logo-clickable");
+ logos.forEach(function(el){
+  // Walk text nodes and force Sports Stats 21 originals
+  var walker=document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
+  var node;
+  while(node=walker.nextNode()){
+   var t=node.textContent;
+   var fixed=t.replace(/Deportes/g,"Sports").replace(/Esportes/g,"Sports").replace(/Sportarten/g,"Sports").replace(/Sport(?![s])/g,"Sports");
+   if(fixed!==t) node.textContent=fixed;
+  }
+  el.setAttribute("data-v184-skip","1");
+ });
+}
+// === FIX 2: SPORTS PANEL TAB NAVIGATION ===
+var TAB_MAP={
+ "resumen":"v147-slide-resumen",
+ "historia":"v147-slide-historia",
+ "reglas":"v147-slide-reglas",
+ "competiciones":"v147-slide-competiciones",
+ "leyendas":"v147-slide-leyendas",
+ "records":"v147-slide-records",
+ "mundo":"v162-slide-mundo"
+};
+window.__v184currentTab="resumen";
+function showTab(tabKey){
+ var targetId=TAB_MAP[tabKey];
+ if(!targetId) return;
+ var pg=document.getElementById("panel-soccer");
+ if(!pg) return;
+ window.__v184currentTab=tabKey;
+ // Hide all slides + native football-main + other sections
+ Array.from(pg.children).forEach(function(c){
+  if(c.id===targetId){
+   c.style.setProperty("display","block","important");
+  } else {
+   // football-main is the native Premier League view - hide unless explicitly shown
+   c.style.setProperty("display","none","important");
+  }
+ });
+ // Sidebar active state
+ var sub=document.querySelector("ul.v147-acerca-sub");
+ if(sub){
+  Array.from(sub.children).forEach(function(li){
+   li.classList.toggle("v147-active", li.getAttribute("data-v147-tab")===tabKey);
+  });
+ }
+}
+function wireTabClicks(){
+ var sub=document.querySelector("ul.v147-acerca-sub");
+ if(!sub) return;
+ Array.from(sub.children).forEach(function(li){
+  if(li.__v184wired) return;
+  li.__v184wired=true;
+  li.addEventListener("click",function(e){
+   e.preventDefault(); e.stopPropagation();
+   var tab=li.getAttribute("data-v147-tab");
+   if(!tab) return;
+   showTab(tab);
+   setTimeout(function(){ showTab(tab); }, 200);
+   setTimeout(function(){ showTab(tab); }, 500);
+  }, true);
+ });
+}
+// On Fútbol sport-btn click, default to resumen
+function wireFutbolDefault(){
+ var fb=document.querySelector("button.sport-btn[data-sport=\"soccer\"]");
+ if(!fb || fb.__v184wired) return;
+ fb.__v184wired=true;
+ fb.addEventListener("click", function(){
+  setTimeout(function(){ showTab("resumen"); }, 200);
+  setTimeout(function(){ showTab("resumen"); }, 500);
+  setTimeout(function(){ showTab("resumen"); }, 1000);
+ }, true);
+}
+function init(){ fixBrand(); wireTabClicks(); wireFutbolDefault(); }
+if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",init);}else{init();}
+setInterval(function(){ fixBrand(); wireTabClicks(); wireFutbolDefault(); }, 600);
+})();
+</script>
 </body>
 </html>
 
