@@ -21186,6 +21186,34 @@ if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded"
 setInterval(buildSidebar, 2000);
 })();
 </script>
+
+<script>
+(function(){
+if(window.__v173loaded)return;window.__v173loaded=true;
+function injectCSS(){
+ if(document.getElementById("v173-style")) return;
+ var s=document.createElement("style"); s.id="v173-style";
+ s.textContent=""
+  +"/* Hide v172 nav sidebar */"
+  +"#v172-right-sidebar{display:none !important;}"
+  +"/* Custom page scrollbar - pill style on dark track */"
+  +"html{scrollbar-width:thin;scrollbar-color:rgba(160,160,160,0.55) #0d0d0d;}"
+  +"html::-webkit-scrollbar{width:14px;background:#0d0d0d;}"
+  +"html::-webkit-scrollbar-track{background:#0d0d0d;}"
+  +"html::-webkit-scrollbar-thumb{background:rgba(160,160,160,0.55);border-radius:10px;border:3px solid #0d0d0d;min-height:60px;}"
+  +"html::-webkit-scrollbar-thumb:hover{background:rgba(200,200,200,0.75);}"
+  +"html::-webkit-scrollbar-corner{background:#0d0d0d;}"
+  +"body::-webkit-scrollbar{width:14px;background:#0d0d0d;}"
+  +"body::-webkit-scrollbar-track{background:#0d0d0d;}"
+  +"body::-webkit-scrollbar-thumb{background:rgba(160,160,160,0.55);border-radius:10px;border:3px solid #0d0d0d;min-height:60px;}"
+  +"body::-webkit-scrollbar-thumb:hover{background:rgba(200,200,200,0.75);}";
+ document.head.appendChild(s);
+}
+function init(){ injectCSS(); }
+if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",init);}else{init();}
+setInterval(injectCSS, 2000);
+})();
+</script>
 </body>
 </html>
 
