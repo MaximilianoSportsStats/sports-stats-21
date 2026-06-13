@@ -20975,6 +20975,83 @@ if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded"
 setInterval(applyVis,800);
 })();
 </script>
+
+<script>
+(function(){
+if(window.__v171loaded)return;window.__v171loaded=true;
+var STRICT_HIDE=["v100-noticias-wrap","v164-mercado-wrap","v100-blogs-wrap","v100-podcast-wrap","v99-retos","v25-intro","inicio-hero","inicio-features","inicio-panels","v16-news-section","v25-blogs-section","v32-blogs-grid-sec","v32-news-grid-sec","v29-todos-page","v27-noticias-header","v71-wrap","v27-blogs-header","v16-novedades-header","v17-updates-widget","v56-page-favoritos","v56-page-envivo","v38-page-escolares","v38-page-universitarias","v38-page-amateur","v38-page-comparar","v38-page-mapa","v35-nb-page","v146-footer-newsletter"];
+var KEEP_IN_MASSS21=["v100-ticker","v87-page-masss21"];
+function isStrictInicio(){
+ var b=document.body;
+ if(!b.classList.contains("v32-view-inicio")) return false;
+ if(b.classList.contains("v200-mercado-mode")) return false;
+ var pin=document.getElementById("panel-inicio");
+ if(!pin||!pin.classList.contains("active")) return false;
+ var others=document.querySelectorAll(".tab-panel.active");
+ for(var i=0;i<others.length;i++){ if(others[i].id && others[i].id!=="panel-inicio") return false; }
+ var hero=document.getElementById("heroCarousel");
+ if(hero && getComputedStyle(hero).display==="none") return false;
+ return true;
+}
+function isMasSS21(){
+ var hero=document.getElementById("heroCarousel");
+ var pin=document.getElementById("panel-inicio");
+ var masss21=document.getElementById("v87-page-masss21");
+ if(!hero||!pin||!masss21) return false;
+ if(getComputedStyle(hero).display!=="none") return false;
+ if(!pin.classList.contains("active")) return false;
+ if(getComputedStyle(masss21).display==="none") return false;
+ return true;
+}
+function applyVis(){
+ var strict=isStrictInicio();
+ var masss21=isMasSS21();
+ var pin=document.getElementById("panel-inicio");
+ if(!pin) return;
+ // If strict inicio, restore all (remove any inline display:none set by us)
+ if(strict){
+  Array.from(pin.children).forEach(function(c){
+   if(c.__v171hid){ c.style.removeProperty("display"); c.__v171hid=false; }
+  });
+  STRICT_HIDE.forEach(function(id){
+   var el=document.getElementById(id);
+   if(el && el.__v171hid){ el.style.removeProperty("display"); el.__v171hid=false; }
+  });
+  return;
+ }
+ // If MasSS21 mode, hide all panel-inicio children except keep list
+ if(masss21){
+  Array.from(pin.children).forEach(function(c){
+   var keep = KEEP_IN_MASSS21.indexOf(c.id)>=0;
+   if(!keep){
+    c.style.setProperty("display","none","important");
+    c.__v171hid=true;
+   } else {
+    if(c.__v171hid){ c.style.removeProperty("display"); c.__v171hid=false; }
+   }
+  });
+  return;
+ }
+ // Else (Deportes, Profesionales, Mercado overlay, etc) - hide all Inicio-only ids
+ STRICT_HIDE.forEach(function(id){
+  var el=document.getElementById(id);
+  if(el){ el.style.setProperty("display","none","important"); el.__v171hid=true; }
+ });
+}
+function setupObservers(){
+ if(window.__v171obs) return; window.__v171obs=true;
+ new MutationObserver(applyVis).observe(document.body,{attributes:true,attributeFilter:["class"]});
+ document.querySelectorAll(".tab-panel").forEach(function(p){ new MutationObserver(applyVis).observe(p,{attributes:true,attributeFilter:["class","style"]}); });
+ var hero=document.getElementById("heroCarousel");
+ if(hero) new MutationObserver(applyVis).observe(hero,{attributes:true,attributeFilter:["style","class"]});
+ var m=document.getElementById("v87-page-masss21");
+ if(m) new MutationObserver(applyVis).observe(m,{attributes:true,attributeFilter:["style","class"]});
+}
+function init(){ applyVis(); setupObservers(); }
+if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",init);}else{init();}
+setInterval(applyVis,700);
+})();
+</script>
 </body>
 </html>
 
