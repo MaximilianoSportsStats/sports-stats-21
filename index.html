@@ -21052,6 +21052,140 @@ if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded"
 setInterval(applyVis,700);
 })();
 </script>
+
+<script>
+(function(){
+if(window.__v172loaded)return;window.__v172loaded=true;
+function injectCSS(){
+ if(document.getElementById("v172-style")) return;
+ var s=document.createElement("style"); s.id="v172-style";
+ s.textContent=""
+  +"#v172-right-sidebar{position:fixed;right:0;top:140px;width:230px;max-height:calc(100vh - 170px);overflow-y:auto;background:#fff;border:1px solid #e5e7eb;border-right:none;border-radius:14px 0 0 14px;box-shadow:-6px 0 18px rgba(0,0,0,0.08);padding:14px 0;z-index:90;font-size:14px;}"
+  +"#v172-right-sidebar::-webkit-scrollbar{width:6px;}"
+  +"#v172-right-sidebar::-webkit-scrollbar-thumb{background:#e5e7eb;border-radius:3px;}"
+  +".v172-rs-title{font-size:11px;color:#9ca3af;text-transform:uppercase;letter-spacing:1px;padding:6px 18px 10px;font-weight:700;}"
+  +".v172-rs-item{padding:10px 18px;cursor:pointer;display:flex;align-items:center;gap:10px;color:#111;transition:background .15s,color .15s;border-left:3px solid transparent;}"
+  +".v172-rs-item:hover{background:#fef2f2;color:#dc2626;border-left-color:#dc2626;}"
+  +".v172-rs-item-emoji{font-size:18px;width:22px;text-align:center;flex-shrink:0;}"
+  +".v172-rs-item-label{flex:1;font-weight:500;}"
+  +".v172-rs-arrow{color:#9ca3af;font-size:11px;transition:transform .2s;}"
+  +".v172-rs-sub-list{display:none;background:#f9fafb;padding:4px 0;}"
+  +".v172-rs-sub-list.open{display:block;}"
+  +".v172-rs-sub-item{padding:7px 18px 7px 50px;cursor:pointer;display:flex;align-items:center;gap:8px;color:#6b7280;font-size:13px;border-left:3px solid transparent;}"
+  +".v172-rs-sub-item:hover{background:#fef2f2;color:#dc2626;border-left-color:#dc2626;}"
+  +".v172-rs-sub-item-emoji{font-size:14px;width:18px;text-align:center;}"
+  +".v172-rs-divider{height:1px;background:#e5e7eb;margin:8px 14px;}"
+  +"#v172-rs-toggle{position:fixed;right:0;top:60%;background:linear-gradient(135deg,#dc2626,#991b1b);color:#fff;border:none;width:36px;height:80px;border-radius:14px 0 0 14px;cursor:pointer;font-size:16px;display:none;z-index:91;box-shadow:-4px 4px 12px rgba(0,0,0,0.15);}"
+  +"#v172-right-sidebar.collapsed{display:none;}"
+  +"@media (max-width: 1280px){#v172-right-sidebar{display:none;}}"
+  +".v172-rs-item.v172-active{background:#fef2f2;color:#dc2626;border-left-color:#dc2626;font-weight:700;}";
+ document.head.appendChild(s);
+}
+// Define menu structure (mirror of v56-ul)
+var MENU=[
+ {key:"inicio", e:"🏠", t:"Inicio"},
+ {key:"favoritos", e:"⭐", t:"Favoritos"},
+ {key:"envivo", e:"🔴", t:"En Vivo"},
+ {key:"deportes", e:"🏆", t:"Deportes", sub:[
+   {e:"🏆", t:"Profesionales"},
+   {e:"🎓", t:"Universitarios"},
+   {e:"🏫", t:"Escolares"},
+   {e:"🏟️", t:"Amateur"},
+   {e:"🤵", t:"Mercado", mercadoLi:true},
+   {e:"⚖️", t:"Comparar"},
+   {e:"📍", t:"Centros Deportivos"}
+ ]},
+ {key:"contenido", e:"📚", t:"Contenido y Comunidad", sub:[
+   {e:"📰", t:"Noticias"},
+   {e:"📝", t:"Blogs"},
+   {e:"🎙️", t:"Podcast"},
+   {e:"📝", t:"Artículos"}
+ ]},
+ {key:"masss21", e:"🌟", t:"Más Sobre SS 21"}
+];
+function findLeftItem(label){
+ // Try by data-v56-key first if applicable
+ var keymap={"Inicio":"inicio","Favoritos":"favoritos","En Vivo":"envivo","Deportes":"deportes"};
+ if(keymap[label]){
+  var byKey=document.querySelector(".v56-item[data-v56-key=\""+keymap[label]+"\"]");
+  if(byKey) return byKey;
+ }
+ // Otherwise find by text (top-level then sub-items)
+ var matches=Array.from(document.querySelectorAll(".v56-item, .v56-sub-item, li.v56-item, li.v56-sub-item")).filter(function(li){
+  return (li.textContent||"").trim().toLowerCase()===label.toLowerCase() || (li.textContent||"").trim().indexOf(label)>=0 && (li.textContent||"").trim().length < label.length+5;
+ });
+ return matches[0];
+}
+function navigate(label, mercadoLi){
+ if(mercadoLi){
+  var li=document.querySelector(".v200-mercado-li");
+  if(li){ li.click(); return; }
+ }
+ var el=findLeftItem(label);
+ if(el){ el.click(); return; }
+}
+function buildSidebar(){
+ if(document.getElementById("v172-right-sidebar")) return;
+ var sb=document.createElement("div");
+ sb.id="v172-right-sidebar";
+ var html="<div class=\"v172-rs-title\">Navegación</div>";
+ MENU.forEach(function(m, mi){
+  if(m.sub){
+   html += "<div class=\"v172-rs-item v172-rs-expandable\" data-key=\""+m.key+"\" data-label=\""+m.t+"\">"
+    +"<span class=\"v172-rs-item-emoji\">"+m.e+"</span>"
+    +"<span class=\"v172-rs-item-label\">"+m.t+"</span>"
+    +"<span class=\"v172-rs-arrow\">▾</span>"
+    +"</div>";
+   html += "<div class=\"v172-rs-sub-list\" data-parent=\""+m.key+"\">";
+   m.sub.forEach(function(s){
+    html += "<div class=\"v172-rs-sub-item\" data-label=\""+s.t+"\""+(s.mercadoLi?" data-mercado=\"1\"":"")+">"
+     +"<span class=\"v172-rs-sub-item-emoji\">"+s.e+"</span>"
+     +"<span>"+s.t+"</span>"
+     +"</div>";
+   });
+   html += "</div>";
+  } else {
+   html += "<div class=\"v172-rs-item\" data-label=\""+m.t+"\">"
+    +"<span class=\"v172-rs-item-emoji\">"+m.e+"</span>"
+    +"<span class=\"v172-rs-item-label\">"+m.t+"</span>"
+    +"</div>";
+  }
+ });
+ sb.innerHTML=html;
+ document.body.appendChild(sb);
+ // Wire click handlers
+ sb.querySelectorAll(".v172-rs-expandable").forEach(function(el){
+  el.addEventListener("click",function(e){
+   e.preventDefault();
+   var key=el.getAttribute("data-key");
+   var sub=sb.querySelector(".v172-rs-sub-list[data-parent=\""+key+"\"]");
+   if(sub) sub.classList.toggle("open");
+   var arrow=el.querySelector(".v172-rs-arrow");
+   if(arrow) arrow.style.transform = sub.classList.contains("open") ? "rotate(180deg)" : "";
+   // Also navigate to top-level (for Deportes click)
+   navigate(el.getAttribute("data-label"));
+  });
+ });
+ sb.querySelectorAll(".v172-rs-item:not(.v172-rs-expandable)").forEach(function(el){
+  el.addEventListener("click",function(e){
+   e.preventDefault();
+   navigate(el.getAttribute("data-label"));
+  });
+ });
+ sb.querySelectorAll(".v172-rs-sub-item").forEach(function(el){
+  el.addEventListener("click",function(e){
+   e.preventDefault();
+   var label=el.getAttribute("data-label");
+   var mercadoLi=el.getAttribute("data-mercado")==="1";
+   navigate(label, mercadoLi);
+  });
+ });
+}
+function init(){ injectCSS(); buildSidebar(); }
+if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",init);}else{init();}
+setInterval(buildSidebar, 2000);
+})();
+</script>
 </body>
 </html>
 
