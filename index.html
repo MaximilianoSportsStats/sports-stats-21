@@ -22968,6 +22968,73 @@ setTimeout(init,500); setTimeout(init,2000); setTimeout(init,5000);
 setInterval(function(){ if(!document.querySelector("#v36-side .v199-list")) buildMenu(); }, 10000);
 })();
 </script>
+
+<script>
+(function(){
+if(window.__v200loaded)return;window.__v200loaded=true;
+// Sub items for Deportes (no variant selector emojis to avoid serialization issues)
+var DEPORTES_SUB=[
+ {emoji:"\u{1F3C6}", text:"Profesionales", action:"profesionales"},
+ {emoji:"\u{1F393}", text:"Universitarios", action:"universitarios"},
+ {emoji:"\u{1F3EB}", text:"Escolares", action:"escolares"},
+ {emoji:"\u{1F3DF}", text:"Amateur", action:"amateur"},
+ {emoji:"\u{1F935}", text:"Mercado", action:"mercado"},
+ {emoji:"\u{2696}", text:"Comparar", action:"comparar"},
+ {emoji:"\u{1F4CD}", text:"Centros Deportivos", action:"centros"}
+];
+function navigate(action){
+ var drawer=document.getElementById("v36-side");
+ if(drawer) drawer.classList.remove("open");
+ try{ if(action==="mercado"){var mli=document.querySelector(".v200-mercado-li"); if(mli){mli.click(); return;}} }catch(e){}
+ var panelIds={profesionales:"panel-soccer",universitarios:"v38-page-universitarias",escolares:"v38-page-escolares",amateur:"v38-page-amateur",comparar:"v38-page-comparar",centros:"v38-page-mapa"};
+ var pid=panelIds[action]; if(!pid) return;
+ var pg=document.getElementById(pid); if(!pg) return;
+ if(pg.classList && pg.classList.contains("tab-panel")){
+  document.querySelectorAll(".tab-panel").forEach(function(p){ p.classList.remove("active"); p.style.display="none"; });
+  pg.classList.add("active"); pg.style.setProperty("display","block","important");
+ } else { pg.scrollIntoView({behavior:"smooth",block:"start"}); }
+}
+function buildDeportesSub(){
+ var drawer=document.getElementById("v36-side");
+ if(!drawer) return;
+ var ul=drawer.querySelector(".v199-list");
+ if(!ul) return;
+ /* Find Deportes item by data-action="deportes" */
+ var depBtn=ul.querySelector("button.v199-btn[data-action=\"deportes\"]");
+ if(!depBtn) return;
+ var depLi=depBtn.parentElement;
+ /* Check if sub already exists */
+ if(depLi.querySelector(".v199-sub")) return;
+ /* Build sub-list */
+ var subUl=document.createElement("ul");
+ subUl.className="v199-sub";
+ DEPORTES_SUB.forEach(function(s){
+  try{
+   var sli=document.createElement("li");
+   var sb=document.createElement("button");
+   sb.className="v199-sub-btn";
+   sb.setAttribute("type","button");
+   sb.setAttribute("data-action", s.action);
+   var emSpan=document.createElement("span");
+   emSpan.className="v199-emoji";
+   emSpan.textContent=s.emoji;
+   var txtSpan=document.createElement("span");
+   txtSpan.textContent=s.text;
+   sb.appendChild(emSpan); sb.appendChild(txtSpan);
+   var act=s.action;
+   sb.addEventListener("click",function(e){ e.preventDefault(); navigate(act); });
+   sli.appendChild(sb);
+   subUl.appendChild(sli);
+  }catch(err){ console.error("v200 sub item",s,err); }
+ });
+ depLi.appendChild(subUl);
+}
+function init(){ buildDeportesSub(); }
+init();
+setTimeout(init,300); setTimeout(init,1000); setTimeout(init,3000); setTimeout(init,6000);
+setInterval(buildDeportesSub, 10000);
+})();
+</script>
 </body>
 </html>
 
