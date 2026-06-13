@@ -21700,6 +21700,25 @@ if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded"
 setInterval(injectCSS, 2000);
 })();
 </script>
+
+<script>
+(function(){
+if(window.__v182loaded)return;window.__v182loaded=true;
+function injectCSS(){
+ if(document.getElementById("v182-style")) return;
+ var s=document.createElement("style"); s.id="v182-style";
+ s.textContent=""
+  +"/* Tighten dropdown - narrower + more flag/text gap */"
+  +".v30-lang-menu{padding:5px !important;min-width:140px !important;max-width:170px !important;width:auto !important;}"
+  +".v30-lang-menu button[data-code]{padding:7px 10px 7px 8px !important;gap:12px !important;}"
+  +".v30-lang-menu button[data-code] .v30-flag{margin-right:8px !important;}";
+ document.head.appendChild(s);
+}
+function init(){ injectCSS(); }
+if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",init);}else{init();}
+setInterval(injectCSS, 2000);
+})();
+</script>
 </body>
 </html>
 
