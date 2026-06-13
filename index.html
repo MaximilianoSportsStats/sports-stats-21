@@ -22656,6 +22656,69 @@ _st(tick, 15000);
 _si(tick, 30000);
 })();
 </script>
+
+<script>
+(function(){
+if(window.__v196loaded)return;window.__v196loaded=true;
+// ROLLBACK: v195 killed site init scripts so the "Cargando..." curtain never dismisses
+function killCortina(){
+ var sels=[".cortina",".v139-cortina","#v139-cortina",".loading-screen","#loading",".v137-cortina","[class*=cortina i]","[id*=cortina i]","[class*=loading-screen]","[id*=loading-screen]"];
+ sels.forEach(function(sel){
+  try{
+   document.querySelectorAll(sel).forEach(function(el){
+    el.style.setProperty("display","none","important");
+    el.style.setProperty("visibility","hidden","important");
+    el.style.setProperty("opacity","0","important");
+    try{el.remove();}catch(e){}
+   });
+  }catch(e){}
+ });
+ // Find any fullscreen overlay with "Cargando" text
+ var all=document.querySelectorAll("div, section, aside");
+ for(var i=0;i<all.length;i++){
+  var el=all[i];
+  var t=(el.textContent||"").trim();
+  if(t==="Cargando..." || t==="Loading..." || t==="Cargando"){
+   // Walk up to find the fullscreen overlay
+   var p=el;
+   for(var k=0;k<5;k++){
+    if(!p) break;
+    var st=getComputedStyle(p);
+    if(st.position==="fixed" || p.offsetHeight>500){
+     p.style.setProperty("display","none","important");
+     try{p.remove();}catch(e){}
+     break;
+    }
+    p=p.parentElement;
+   }
+  }
+ }
+ // Restore body classes
+ document.body.classList.remove("v139-loading","loading");
+ document.body.classList.add("v139-loaded","loaded");
+}
+function injectCSS(){
+ if(document.getElementById("v196-style"))return;
+ var s=document.createElement("style"); s.id="v196-style";
+ s.textContent=""
+  +".cortina,#cortina,.v139-cortina,#v139-cortina,.v137-cortina,#v137-cortina,.loading-screen,#loading-screen,#loading,.v139-loading-screen{display:none !important;visibility:hidden !important;opacity:0 !important;pointer-events:none !important;}"
+  +"body{display:block !important;visibility:visible !important;opacity:1 !important;}"
+  +".layout,.header,main,#panel-inicio,#panel-soccer,.tab-panel{visibility:visible !important;opacity:1 !important;}";
+ document.head.appendChild(s);
+}
+// Run multiple times via NATIVE setTimeout (v195 throttle still active but >3000ms is OK)
+injectCSS();
+killCortina();
+// Use native by accessing constructor
+var _origST=window.setTimeout;
+// Direct call - if throttled to 3000+ that is fine for cortina cleanup
+_origST(function(){injectCSS();killCortina();},100);
+_origST(function(){injectCSS();killCortina();},500);
+_origST(function(){injectCSS();killCortina();},2000);
+_origST(function(){injectCSS();killCortina();},5000);
+_origST(function(){injectCSS();killCortina();},10000);
+})();
+</script>
 </body>
 </html>
 
