@@ -23035,6 +23035,62 @@ setTimeout(init,300); setTimeout(init,1000); setTimeout(init,3000); setTimeout(i
 setInterval(buildDeportesSub, 10000);
 })();
 </script>
+
+<script>
+(function(){
+if(window.__v201loaded)return;window.__v201loaded=true;
+var SUB=[{"emoji":"🏆","text":"Profesionales","action":"profesionales"},{"emoji":"🎓","text":"Universitarios","action":"universitarios"},{"emoji":"🏫","text":"Escolares","action":"escolares"},{"emoji":"🏟","text":"Amateur","action":"amateur"},{"emoji":"🤵","text":"Mercado","action":"mercado"},{"emoji":"⚖","text":"Comparar","action":"comparar"},{"emoji":"📍","text":"Centros Deportivos","action":"centros"}];
+function navigate(action){
+ var drawer=document.getElementById("v36-side");
+ if(drawer) drawer.classList.remove("open");
+ try{ if(action==="mercado"){var mli=document.querySelector(".v200-mercado-li"); if(mli){mli.click(); return;}} }catch(e){}
+ var panelIds={profesionales:"panel-soccer",universitarios:"v38-page-universitarias",escolares:"v38-page-escolares",amateur:"v38-page-amateur",comparar:"v38-page-comparar",centros:"v38-page-mapa"};
+ var pid=panelIds[action]; if(!pid) return;
+ var pg=document.getElementById(pid); if(!pg) return;
+ if(pg.classList && pg.classList.contains("tab-panel")){
+  document.querySelectorAll(".tab-panel").forEach(function(p){ p.classList.remove("active"); p.style.display="none"; });
+  pg.classList.add("active"); pg.style.setProperty("display","block","important");
+ } else { pg.scrollIntoView({behavior:"smooth",block:"start"}); }
+}
+function buildSub(){
+ var drawer=document.getElementById("v36-side");
+ if(!drawer) return;
+ var ul=drawer.querySelector(".v199-list");
+ if(!ul) return;
+ var depBtn=ul.querySelector('button.v199-btn[data-action="deportes"]');
+ if(!depBtn) return;
+ var depLi=depBtn.parentElement;
+ if(depLi.querySelector(".v199-sub")) return;
+ var subUl=document.createElement("ul");
+ subUl.className="v199-sub";
+ for(var i=0;i<SUB.length;i++){
+  var s=SUB[i];
+  var sli=document.createElement("li");
+  var sb=document.createElement("button");
+  sb.className="v199-sub-btn";
+  sb.setAttribute("type","button");
+  sb.setAttribute("data-action", s.action);
+  var emSpan=document.createElement("span");
+  emSpan.className="v199-emoji";
+  emSpan.textContent=s.emoji;
+  var txtSpan=document.createElement("span");
+  txtSpan.textContent=s.text;
+  sb.appendChild(emSpan);
+  sb.appendChild(txtSpan);
+  var act=s.action;
+  (function(a){ sb.addEventListener("click",function(e){ e.preventDefault(); navigate(a); }); })(s.action);
+  sli.appendChild(sb);
+  subUl.appendChild(sli);
+ }
+ depLi.appendChild(subUl);
+}
+buildSub();
+setTimeout(buildSub,500);
+setTimeout(buildSub,2000);
+setTimeout(buildSub,6000);
+setInterval(buildSub,15000);
+})();
+</script>
 </body>
 </html>
 
