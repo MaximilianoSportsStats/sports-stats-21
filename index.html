@@ -22837,6 +22837,137 @@ setTimeout(init,200); setTimeout(init,1000); setTimeout(init,3000); setTimeout(i
 setInterval(ensureVisible, 5000);
 })();
 </script>
+
+<script>
+(function(){
+if(window.__v199loaded)return;window.__v199loaded=true;
+var MENU=[
+ {emoji:"🏠", text:"Inicio", action:"inicio"},
+ {emoji:"⭐", text:"Favoritos", action:"favoritos"},
+ {emoji:"🔴", text:"En Vivo", action:"envivo"},
+ {emoji:"🏆", text:"Deportes", action:"deportes", sub:[
+   {emoji:"🏆", text:"Profesionales", action:"profesionales"},
+   {emoji:"🎓", text:"Universitarios", action:"universitarios"},
+   {emoji:"🏫", text:"Escolares", action:"escolares"},
+   {emoji:"🏟️", text:"Amateur", action:"amateur"},
+   {emoji:"🤵", text:"Mercado", action:"mercado"},
+   {emoji:"⚖️", text:"Comparar", action:"comparar"},
+   {emoji:"📍", text:"Centros Deportivos", action:"centros"}
+ ]},
+ {emoji:"📚", text:"Contenido y Comunidad", action:"contenido", sub:[
+   {emoji:"📰", text:"Noticias", action:"noticias"},
+   {emoji:"📝", text:"Blogs", action:"blogs"},
+   {emoji:"🎙️", text:"Podcast", action:"podcast"},
+   {emoji:"📝", text:"Artículos", action:"articulos"}
+ ]},
+ {emoji:"🌟", text:"Más Sobre SS 21", action:"masss21"}
+];
+function injectCSS(){
+ if(document.getElementById("v199-style"))return;
+ var s=document.createElement("style"); s.id="v199-style";
+ s.textContent=""
+  +"html body #v36-side .v199-list{list-style:none !important;padding:0 !important;margin:0 !important;}"
+  +"html body #v36-side .v199-item{padding:0 !important;margin:0 !important;border-bottom:1px solid #f3f4f6 !important;}"
+  +"html body #v36-side .v199-btn{display:flex !important;align-items:center !important;gap:14px !important;width:100% !important;background:transparent !important;border:none !important;padding:14px 20px !important;cursor:pointer !important;font-size:15px !important;font-weight:700 !important;color:#0f172a !important;text-align:left !important;transition:background .15s,color .15s !important;}"
+  +"html body #v36-side .v199-btn:hover{background:#fef2f2 !important;color:#dc2626 !important;}"
+  +"html body #v36-side .v199-btn .v199-emoji{font-size:20px !important;display:inline-block !important;flex-shrink:0 !important;line-height:1 !important;width:24px !important;text-align:center !important;}"
+  +"html body #v36-side .v199-btn .v199-label{flex:1 !important;}"
+  +"html body #v36-side .v199-btn .v199-arrow{font-size:11px !important;color:#9ca3af !important;transition:transform .2s !important;}"
+  +"html body #v36-side .v199-item.open .v199-arrow{transform:rotate(180deg) !important;}"
+  +"html body #v36-side .v199-sub{list-style:none !important;padding:0 !important;margin:0 !important;background:#f9fafb !important;display:none !important;}"
+  +"html body #v36-side .v199-item.open .v199-sub{display:block !important;}"
+  +"html body #v36-side .v199-sub .v199-sub-btn{display:flex !important;align-items:center !important;gap:12px !important;width:100% !important;background:transparent !important;border:none !important;padding:10px 20px 10px 50px !important;cursor:pointer !important;font-size:13px !important;font-weight:500 !important;color:#6b7280 !important;text-align:left !important;}"
+  +"html body #v36-side .v199-sub .v199-sub-btn:hover{background:#fef2f2 !important;color:#dc2626 !important;}"
+  +"html body #v36-side .v199-sub .v199-sub-btn .v199-emoji{font-size:14px !important;width:18px !important;text-align:center !important;}";
+ document.head.appendChild(s);
+}
+function navigate(action){
+ /* Close drawer */
+ var drawer=document.getElementById("v36-side");
+ if(drawer) drawer.classList.remove("open");
+ /* Try native handlers */
+ try{
+  if(action==="inicio"){
+   if(typeof goInicio==="function"){ goInicio(); return; }
+  }
+  if(action==="mercado"){
+   var mli=document.querySelector(".v200-mercado-li"); if(mli){ mli.click(); return; }
+  }
+ }catch(e){}
+ /* Show corresponding panel */
+ var panelIds={inicio:"panel-inicio",deportes:"panel-deportes",favoritos:"v56-page-favoritos",envivo:"v56-page-envivo",profesionales:"panel-soccer",universitarios:"v38-page-universitarias",escolares:"v38-page-escolares",amateur:"v38-page-amateur",comparar:"v38-page-comparar",centros:"v38-page-mapa",masss21:"v87-page-masss21",noticias:"v100-noticias-wrap",blogs:"v100-blogs-wrap",podcast:"v100-podcast-wrap",articulos:"v100-blogs-wrap"};
+ var pid=panelIds[action];
+ if(!pid) return;
+ var pg=document.getElementById(pid);
+ if(!pg) return;
+ /* Hide other panels first */
+ if(pg.classList && pg.classList.contains("tab-panel")){
+  document.querySelectorAll(".tab-panel").forEach(function(p){ p.classList.remove("active"); p.style.display="none"; });
+  pg.classList.add("active");
+  pg.style.setProperty("display","block","important");
+ } else {
+  /* Scroll into view if not a tab-panel */
+  pg.scrollIntoView({behavior:"smooth",block:"start"});
+ }
+}
+function buildMenu(){
+ var drawer=document.getElementById("v36-side");
+ if(!drawer) return;
+ /* Remove old UL */
+ var oldUl=drawer.querySelector("ul:not(.v199-list)");
+ if(oldUl) oldUl.remove();
+ if(drawer.querySelector(".v199-list")) return; /* already built */
+ var head=drawer.querySelector(".v36-head, h3");
+ var foot=drawer.querySelector(".v36-foot");
+ var ul=document.createElement("ul");
+ ul.className="v199-list";
+ MENU.forEach(function(m){
+  var li=document.createElement("li");
+  li.className="v199-item";
+  var btn=document.createElement("button");
+  btn.className="v199-btn";
+  btn.setAttribute("type","button");
+  btn.setAttribute("data-action", m.action);
+  btn.innerHTML="<span class=\"v199-emoji\">"+m.emoji+"</span><span class=\"v199-label\">"+m.text+"</span>"+(m.sub?"<span class=\"v199-arrow\">▾</span>":"");
+  btn.addEventListener("click", function(e){
+   e.preventDefault();
+   if(m.sub){
+    li.classList.toggle("open");
+   } else {
+    navigate(m.action);
+   }
+  });
+  li.appendChild(btn);
+  if(m.sub){
+   var subUl=document.createElement("ul");
+   subUl.className="v199-sub";
+   m.sub.forEach(function(s){
+    var sli=document.createElement("li");
+    var sb=document.createElement("button");
+    sb.className="v199-sub-btn";
+    sb.setAttribute("type","button");
+    sb.setAttribute("data-action", s.action);
+    sb.innerHTML="<span class=\"v199-emoji\">"+s.emoji+"</span><span>"+s.text+"</span>";
+    sb.addEventListener("click", function(e){
+     e.preventDefault();
+     navigate(s.action);
+    });
+    sli.appendChild(sb);
+    subUl.appendChild(sli);
+   });
+   li.appendChild(subUl);
+  }
+  ul.appendChild(li);
+ });
+ if(foot) drawer.insertBefore(ul, foot);
+ else drawer.appendChild(ul);
+}
+function init(){ injectCSS(); buildMenu(); }
+init();
+setTimeout(init,500); setTimeout(init,2000); setTimeout(init,5000);
+setInterval(function(){ if(!document.querySelector("#v36-side .v199-list")) buildMenu(); }, 10000);
+})();
+</script>
 </body>
 </html>
 
