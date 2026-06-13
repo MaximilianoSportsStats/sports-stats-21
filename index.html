@@ -20457,6 +20457,48 @@ if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded"
 setInterval(patchItem,1500);
 })();
 </script>
+
+<script>
+(function(){
+if(window.__v164loaded)return;window.__v164loaded=true;
+var HTML="<section class=\"v100-news-sec\" id=\"v164-mercado\"><h2>🤵 MERCADO</h2><div class=\"v100-news-sub\">Fichajes, rumores y valores en el mercado de pases</div><div class=\"v100-news-grid\"><article class=\"v100-news-big\"><span class=\"v100-news-tag\">FÚTBOL</span><div>⚽</div><div><strong>Mbappé renueva con Real Madrid hasta 2030</strong><br>El francés extiende su contrato por 5 temporadas más con cláusula de €1B. Floretino Pérez asegura su continuidad como bandera del proyecto galáctico.</div></article><div class=\"v100-news-mini-col\"><article class=\"v100-news-mini\"><span class=\"v100-news-tag-mini\">Fútbol</span><div>⚽</div><h4>Vinícius descarta Arabia</h4><p>Rechaza oferta de €1B por temporada del Al-Hilal y prioriza ganar el Balón de Oro en Madrid.</p></article><article class=\"v100-news-mini\"><span class=\"v100-news-tag-mini\">NBA</span><div>🏀</div><h4>Dončić firma extensión millonaria</h4><p>5 años / $345M con los Lakers. El esloveno se convierte en el contrato más alto de la historia NBA.</p></article><article class=\"v100-news-mini\"><span class=\"v100-news-tag-mini\">F1</span><div>🏎</div><h4>Verstappen rumbo a Mercedes</h4><p>Tras la salida de Hamilton, Toto Wolff seduce al campeón con un proyecto a largo plazo desde 2026.</p></article></div></div></section>";
+function buildMercado(){
+ if(document.getElementById("v164-mercado-wrap")) return;
+ var noticias=document.getElementById("v100-noticias-wrap");
+ var blogs=document.getElementById("v100-blogs-wrap");
+ if(!noticias||!blogs) return;
+ if(noticias.parentElement!==blogs.parentElement) return;
+ var wrap=document.createElement("div");
+ wrap.id="v164-mercado-wrap";
+ wrap.innerHTML=HTML;
+ blogs.parentElement.insertBefore(wrap, blogs);
+}
+function ensureOrder(){
+ var n=document.getElementById("v100-noticias-wrap");
+ var m=document.getElementById("v164-mercado-wrap");
+ var b=document.getElementById("v100-blogs-wrap");
+ if(!n||!m||!b) return;
+ if(n.parentElement!==m.parentElement || m.parentElement!==b.parentElement) return;
+ var parent=n.parentElement;
+ // Ensure: Noticias -> Mercado -> Blogs -> Podcast
+ if(n.nextElementSibling!==m){ parent.insertBefore(m, n.nextElementSibling); }
+ if(m.nextElementSibling!==b){ parent.insertBefore(b, m.nextElementSibling); }
+}
+function applyMercadoVisibility(){
+ var wrap=document.getElementById("v164-mercado-wrap");
+ if(!wrap) return;
+ // Hide in MasSS21 / non-Inicio modes - mirror v100-noticias-wrap visibility
+ var noticias=document.getElementById("v100-noticias-wrap");
+ if(!noticias) return;
+ var ndisp=getComputedStyle(noticias).display;
+ if(ndisp==="none"){ wrap.style.setProperty("display","none","important"); }
+ else { wrap.style.removeProperty("display"); }
+}
+function init(){ buildMercado(); ensureOrder(); applyMercadoVisibility(); }
+if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",init);}else{init();}
+setInterval(function(){ buildMercado(); ensureOrder(); applyMercadoVisibility(); },1500);
+})();
+</script>
 </body>
 </html>
 
