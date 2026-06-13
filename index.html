@@ -22797,6 +22797,46 @@ init();
 (window.__v197nativeST||window.setTimeout)(init, 5000);
 })();
 </script>
+
+<script>
+(function(){
+if(window.__v198loaded)return;window.__v198loaded=true;
+function injectCSS(){
+ if(document.getElementById("v198-style"))return;
+ var s=document.createElement("style"); s.id="v198-style";
+ s.textContent=""
+  +"/* Force v36-side drawer items visible */"
+  +"html body #v36-side ul{display:block !important;visibility:visible !important;opacity:1 !important;list-style:none !important;padding:0 !important;margin:0 !important;height:auto !important;width:auto !important;}"
+  +"html body #v36-side ul li{display:list-item !important;visibility:visible !important;height:auto !important;width:auto !important;list-style:none !important;}"
+  +"html body #v36-side ul li button{display:flex !important;align-items:center !important;visibility:visible !important;height:auto !important;width:100% !important;min-height:48px !important;padding:12px 18px !important;gap:14px !important;background:transparent !important;border:none !important;color:#0f172a !important;font-size:15px !important;font-weight:600 !important;cursor:pointer !important;text-align:left !important;transition:background .15s !important;}"
+  +"html body #v36-side ul li button:hover{background:#fef2f2 !important;color:#dc2626 !important;}"
+  +"html body #v36-side ul li button .v36-emoji{font-size:20px !important;display:inline-block !important;flex-shrink:0 !important;}"
+  +"html body #v36-side{width:300px !important;background:#fff !important;}";
+ document.head.appendChild(s);
+}
+function ensureVisible(){
+ var drawer=document.getElementById("v36-side");
+ if(!drawer) return;
+ var ul=drawer.querySelector("ul");
+ if(ul){
+  ul.style.setProperty("display","block","important");
+  ul.style.setProperty("visibility","visible","important");
+  Array.from(ul.children).forEach(function(li){
+   li.style.setProperty("display","list-item","important");
+   var btn=li.querySelector("button");
+   if(btn){
+    btn.style.setProperty("display","flex","important");
+    btn.style.setProperty("min-height","48px","important");
+   }
+  });
+ }
+}
+function init(){ injectCSS(); ensureVisible(); }
+init();
+setTimeout(init,200); setTimeout(init,1000); setTimeout(init,3000); setTimeout(init,8000);
+setInterval(ensureVisible, 5000);
+})();
+</script>
 </body>
 </html>
 
