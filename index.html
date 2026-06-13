@@ -22302,6 +22302,86 @@ setTimeout(tick, 9000);
 __origSetInterval(tick, 5000);
 })();
 </script>
+
+<script>
+(function(){
+if(window.__v192loaded)return;window.__v192loaded=true;
+// SOLUCION DEFINITIVA: UNICODE EMOJI TEXT con font nativo del SO
+// Sin CDN, sin img, sin background-image - solo texto + font-family
+var EMOJI={
+ todos:"\u2B50",soccer:"\u26BD",tennis:"\uD83C\uDFBE",
+ f1:"\uD83C\uDFCE",nba:"\uD83C\uDFC0",ufc:"\uD83E\uDD4A",
+ baseball:"\u26BE",hockey:"\uD83C\uDFD2",nfl:"\uD83C\uDFC8",
+ rugby:"\uD83C\uDFC9",golf:"\u26F3",acuaticos:"\uD83C\uDFCA",
+ atletismo:"\uD83C\uDFC3",ciclismo:"\uD83D\uDEB4",
+ volleyball:"\uD83C\uDFD0",padel:"\uD83C\uDFD3",
+ cricket:"\uD83C\uDFCF",globales:"\uD83C\uDF0D",otros:"\uD83C\uDFAF"
+};
+function injectCSS(){
+ var existing=document.getElementById("v192-style");
+ if(existing) return;
+ var s=document.createElement("style"); s.id="v192-style";
+ s.textContent=""
+  +"/* OVERRIDE v190/v191 hiding - restore native emoji text */"
+  +"html body .sport-btn{display:flex !important;flex-direction:column !important;align-items:center !important;justify-content:center !important;gap:6px !important;min-height:66px !important;padding:8px 6px !important;}"
+  +"html body .sport-btn .ss-emoji-wrap{"
+   +"font-family:\"Apple Color Emoji\",\"Segoe UI Emoji\",\"Noto Color Emoji\",\"Segoe UI Symbol\",\"EmojiOne Color\",sans-serif !important;"
+   +"font-style:normal !important;font-weight:normal !important;"
+   +"font-size:26px !important;line-height:1.2 !important;"
+   +"color:initial !important;color:#000 !important;"
+   +"background:none !important;background-image:none !important;"
+   +"width:auto !important;height:auto !important;"
+   +"min-width:28px !important;min-height:28px !important;"
+   +"display:inline-flex !important;align-items:center !important;justify-content:center !important;"
+   +"opacity:1 !important;visibility:visible !important;"
+   +"filter:none !important;"
+  +"}"
+  +"html body .sport-btn .ss-emoji-wrap img{display:none !important;}"
+  +"html body .sport-btn .ss-name-wrap{display:block !important;font-size:12px !important;color:initial !important;}";
+ document.head.appendChild(s);
+}
+function setEmoji(){
+ document.querySelectorAll("button.sport-btn").forEach(function(b){
+  var sport=b.getAttribute("data-v190-sport");
+  if(!sport){
+   var oc=b.getAttribute("onclick")||"";
+   var m=oc.match(/switchSport\([\\\'\\"]([^\\\'\\"]+)/);
+   if(m) sport=m[1].toLowerCase();
+   else if(oc.indexOf("goInicio")>=0) sport="todos";
+   else{
+    var name=((b.querySelector(".ss-name-wrap")||{}).textContent||b.textContent||"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").trim();
+    if(/atletismo|athletics/.test(name)) sport="atletismo";
+    else if(/ciclismo|cycling/.test(name)) sport="ciclismo";
+    else if(/volleyball|voley|pallavolo/.test(name)) sport="volleyball";
+    else if(/cricket/.test(name)) sport="cricket";
+    else if(/globales|global/.test(name)) sport="globales";
+    else if(/otros|other/.test(name)) sport="otros";
+   }
+   if(sport) b.setAttribute("data-v190-sport", sport);
+  }
+  if(!sport || !EMOJI[sport]) return;
+  var w=b.querySelector(".ss-emoji-wrap");
+  if(!w) return;
+  var emoji=EMOJI[sport];
+  // Check if wrap has the right emoji as text
+  if(w.textContent.indexOf(emoji)>=0) return;
+  // Clear all children (imgs from v188/v191)
+  while(w.firstChild) w.removeChild(w.firstChild);
+  // Set as plain text - browser will render with font-family
+  w.textContent=emoji;
+ });
+}
+function tick(){ injectCSS(); setEmoji(); }
+tick();
+if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",tick);}
+setTimeout(tick, 500);
+setTimeout(tick, 1500);
+setTimeout(tick, 4000);
+setTimeout(tick, 10000);
+// Slow loop - 6 seconds (already throttled by v191)
+setInterval(tick, 6000);
+})();
+</script>
 </body>
 </html>
 
