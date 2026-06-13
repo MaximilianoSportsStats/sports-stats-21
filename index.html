@@ -20923,6 +20923,58 @@ if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded"
 setInterval(function(){ injectCSS(); fixHeaderAvatarInline(); },1500);
 })();
 </script>
+
+<script>
+(function(){
+if(window.__v170loaded)return;window.__v170loaded=true;
+var INICIO_IDS=["v100-noticias-wrap","v164-mercado-wrap","v100-blogs-wrap","v100-podcast-wrap","v99-retos"];
+function isStrictlyInicio(){
+ var b=document.body;
+ // Must have v32-view-inicio body class
+ if(!b.classList.contains("v32-view-inicio")) return false;
+ // Must NOT be in Mercado overlay mode
+ if(b.classList.contains("v200-mercado-mode")) return false;
+ // panel-inicio must be active AND no other sport panel active
+ var pin=document.getElementById("panel-inicio");
+ if(!pin) return false;
+ if(!pin.classList.contains("active")) return false;
+ // Other panels - check any .tab-panel.active besides panel-inicio
+ var others=document.querySelectorAll(".tab-panel.active");
+ for(var i=0;i<others.length;i++){
+  if(others[i].id && others[i].id!=="panel-inicio") return false;
+ }
+ // heroCarousel must be visible (real Inicio)
+ var hero=document.getElementById("heroCarousel");
+ if(hero && getComputedStyle(hero).display==="none") return false;
+ return true;
+}
+function applyVis(){
+ var hide = !isStrictlyInicio();
+ INICIO_IDS.forEach(function(id){
+  var el=document.getElementById(id);
+  if(!el) return;
+  if(hide){ el.style.setProperty("display","none","important"); }
+  else { el.style.removeProperty("display"); }
+ });
+}
+function setupObservers(){
+ if(window.__v170obsSetup) return;
+ window.__v170obsSetup=true;
+ // Body class observer
+ new MutationObserver(applyVis).observe(document.body,{attributes:true,attributeFilter:["class"]});
+ // Watch each tab-panel for class changes
+ document.querySelectorAll(".tab-panel").forEach(function(p){
+  new MutationObserver(applyVis).observe(p,{attributes:true,attributeFilter:["class","style"]});
+ });
+ // Watch heroCarousel
+ var hero=document.getElementById("heroCarousel");
+ if(hero) new MutationObserver(applyVis).observe(hero,{attributes:true,attributeFilter:["style","class"]});
+}
+function init(){ applyVis(); setupObservers(); }
+if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",init);}else{init();}
+setInterval(applyVis,800);
+})();
+</script>
 </body>
 </html>
 
