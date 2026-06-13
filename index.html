@@ -21924,6 +21924,82 @@ if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded"
 setInterval(function(){ injectCSS(); replaceEmojis(); }, 1500);
 })();
 </script>
+
+<script>
+(function(){
+if(window.__v187loaded)return;window.__v187loaded=true;
+var TW="https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/";
+// Map of sport key (from onclick switchSport call) to Twemoji hex
+var SPORT_HEX={
+ "soccer":"26bd","tennis":"1f3be","carreras":"1f3ce","basketball":"1f3c0",
+ "combate":"1f94a","baseball":"26be","hockey":"1f3d2","american":"1f3c8",
+ "rugby":"1f3c9","golf":"26f3","atletismo":"1f3c3","natacion":"1f3ca",
+ "ciclismo":"1f6b4","voley":"1f3d0","padel":"1f3d3","cricket":"1f3cf",
+ "todos":"2b50","eventos":"1f30d","globales":"1f30d","otros":"1f3af"
+};
+function setEmojiImg(btn){
+ var wrap=btn.querySelector(".ss-emoji-wrap");
+ if(!wrap) return;
+ // Check if already has img
+ var existing=wrap.querySelector("img.v187-twemoji");
+ if(existing) return;
+ // Extract sport key from onclick
+ var oc=btn.getAttribute("onclick")||"";
+ var match=oc.match(/switchSport\([\"\\']([^\"\\']+)[\"\\']/);
+ var key=match?match[1].toLowerCase():null;
+ // Or extract from text
+ if(!key){
+  var name=(btn.querySelector(".ss-name-wrap")||{}).textContent||"";
+  name=name.toLowerCase().trim();
+  if(/fútbol\s*americano|football/i.test(name)) key="american";
+  else if(/fútbol|soccer|calcio|fußball/i.test(name)) key="soccer";
+  else if(/tenis|tennis/i.test(name)) key="tennis";
+  else if(/carreras|racing|f1/i.test(name)) key="carreras";
+  else if(/basket|baloncesto/i.test(name)) key="basketball";
+  else if(/combate|combat|boxing/i.test(name)) key="combate";
+  else if(/béisbol|baseball|beisbol/i.test(name)) key="baseball";
+  else if(/hockey/i.test(name)) key="hockey";
+  else if(/rugby/i.test(name)) key="rugby";
+  else if(/golf/i.test(name)) key="golf";
+  else if(/atletismo|athletics/i.test(name)) key="atletismo";
+  else if(/natación|swimming/i.test(name)) key="natacion";
+  else if(/ciclismo|cycling/i.test(name)) key="ciclismo";
+  else if(/volleyball|vóley|pallavolo/i.test(name)) key="voley";
+  else if(/pádel|padel/i.test(name)) key="padel";
+  else if(/cricket/i.test(name)) key="cricket";
+  else if(/todos|all/i.test(name)) key="todos";
+  else if(/eventos|global/i.test(name)) key="globales";
+  else if(/otros|other/i.test(name)) key="otros";
+ }
+ if(!key || !SPORT_HEX[key]) return;
+ var hex=SPORT_HEX[key];
+ // Remove any existing children (empty wrap or text), add img
+ while(wrap.firstChild) wrap.removeChild(wrap.firstChild);
+ var img=document.createElement("img");
+ img.className="v187-twemoji";
+ img.src=TW+hex+".svg";
+ img.alt="";
+ img.loading="eager";
+ img.style.cssText="width:26px !important;height:26px !important;display:inline-block !important;vertical-align:middle !important;";
+ wrap.appendChild(img);
+}
+function processAll(){
+ document.querySelectorAll("button.sport-btn").forEach(setEmojiImg);
+}
+function injectCSS(){
+ if(document.getElementById("v187-style"))return;
+ var s=document.createElement("style"); s.id="v187-style";
+ s.textContent=""
+  +".ss-emoji-wrap{display:inline-flex !important;align-items:center !important;justify-content:center !important;min-width:28px !important;min-height:28px !important;}"
+  +"html body .sport-btn{display:flex !important;flex-direction:column !important;align-items:center !important;justify-content:center !important;gap:4px !important;min-height:64px !important;padding:8px 6px !important;}"
+  +".v187-twemoji{flex-shrink:0;}";
+ document.head.appendChild(s);
+}
+function init(){ injectCSS(); processAll(); }
+if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",init);}else{init();}
+setInterval(function(){ injectCSS(); processAll(); }, 1000);
+})();
+</script>
 </body>
 </html>
 
