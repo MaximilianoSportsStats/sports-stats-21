@@ -23181,6 +23181,33 @@ setTimeout(tick,300); setTimeout(tick,1500); setTimeout(tick,5000);
 setInterval(tick, 8000);
 })();
 </script>
+
+<script>
+(function(){
+if(window.__v203loaded)return;window.__v203loaded=true;
+function injectCSS(){
+ if(document.getElementById("v203-style"))return;
+ var s=document.createElement("style"); s.id="v203-style";
+ s.textContent=""
+  +"html body #v25-intro, html body .v25-intro{display:none !important;visibility:hidden !important;height:0 !important;overflow:hidden !important;margin:0 !important;padding:0 !important;}"
+  +"html body .inicio-features{display:none !important;}";
+ document.head.appendChild(s);
+}
+function killEl(){
+ var el=document.getElementById("v25-intro");
+ if(el){ el.style.setProperty("display","none","important"); try{ el.remove(); }catch(e){} }
+ document.querySelectorAll(".v25-intro,.inicio-features").forEach(function(el){
+  el.style.setProperty("display","none","important");
+  try{ el.remove(); }catch(e){}
+ });
+}
+injectCSS(); killEl();
+setTimeout(function(){injectCSS();killEl();},300);
+setTimeout(function(){injectCSS();killEl();},1500);
+setTimeout(function(){injectCSS();killEl();},5000);
+setInterval(function(){injectCSS();killEl();},10000);
+})();
+</script>
 </body>
 </html>
 
