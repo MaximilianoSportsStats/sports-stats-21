@@ -20892,6 +20892,37 @@ if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded"
 setInterval(wireInput, 1500);
 })();
 </script>
+
+<script>
+(function(){
+if(window.__v169loaded)return;window.__v169loaded=true;
+function injectCSS(){
+ if(document.getElementById("v169-style")) return;
+ var s=document.createElement("style"); s.id="v169-style";
+ s.textContent=""
+  +"#v166-chat-toggle{background:linear-gradient(135deg,#991b1b,#dc2626) !important;box-shadow:0 6px 20px rgba(220,38,38,0.45) !important;}"
+  +"#v166-chat-header{background:linear-gradient(135deg,#991b1b,#dc2626) !important;}"
+  +".v166-msg-avatar{background:linear-gradient(135deg,#dc2626,#ef4444) !important;}"
+  +"#v166-chat-header > div > div:first-child{background:linear-gradient(135deg,#dc2626,#ef4444) !important;}"
+  +".v166-msg-user .v166-msg-text{background:linear-gradient(135deg,#dc2626,#991b1b) !important;}"
+  +"#v166-chat-input input:focus{border-color:#dc2626 !important;}"
+  +"#v166-chat-send{background:linear-gradient(135deg,#dc2626,#991b1b) !important;}";
+ document.head.appendChild(s);
+}
+function fixHeaderAvatarInline(){
+ // The header avatar uses inline style background:linear-gradient(...). Override inline.
+ var header=document.getElementById("v166-chat-header");
+ if(!header) return;
+ var ava=header.querySelector("div > div:first-child");
+ if(ava && ava.style.background && ava.style.background.indexOf("3b82f6")>=0){
+  ava.style.setProperty("background","linear-gradient(135deg,#dc2626,#ef4444)","important");
+ }
+}
+function init(){ injectCSS(); fixHeaderAvatarInline(); }
+if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",init);}else{init();}
+setInterval(function(){ injectCSS(); fixHeaderAvatarInline(); },1500);
+})();
+</script>
 </body>
 </html>
 
