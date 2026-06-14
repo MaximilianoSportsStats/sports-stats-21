@@ -22318,3 +22318,56 @@ window.selectLLPriv=function(el){document.querySelectorAll('.ll-priv-opt').forEa
   setInterval(tick,2000);
 })();
    </script>
+<script>
+/* v225 - arreglar ticker que tiembla: restaurar animacion + clonar track para loop seamless */
+(function(){
+  if(window.__v225loaded)return;window.__v225loaded=true;
+  
+  function injectCSS(){
+    if(document.getElementById('v225-style'))return;
+    var s=document.createElement('style');s.id='v225-style';
+    s.textContent=
+      /* Restaurar animation del ticker que v224 mato */
+      '.v100-ticker-track{animation:v100scroll 120s linear infinite !important;}'+
+      /* Pausar en hover para que sea menos agresivo */
+      '.v100-ticker:hover .v100-ticker-track{animation-play-state:paused !important;}'+
+      /* Asegurar overflow hidden y position relative en ticker */
+      '#v100-ticker{overflow:hidden !important;position:relative !important;}'+
+      /* Evitar saltos: usar translate3d para GPU acceleration */
+      '.v100-ticker-track{transform:translateZ(0);backface-visibility:hidden;}'+
+      /* Smoothing del scroll */
+      '.v100-ticker-track{will-change:transform;}';
+    document.head.appendChild(s);
+  }
+  
+  function cloneTrack(){
+    try{
+      var ticker=document.getElementById('v100-ticker');
+      if(!ticker)return;
+      var tracks=ticker.querySelectorAll('.v100-ticker-track');
+      if(tracks.length>=2)return; /* ya hay 2+ tracks */
+      var orig=tracks[0];
+      if(!orig)return;
+      /* clonar y duplicar items dentro del MISMO track */
+      var items=Array.from(orig.children);
+      if(items.length>0 && !orig.dataset.v225Cloned){
+        /* duplicar los items para que el track sea mas largo y el loop sea continuo */
+        items.forEach(function(it){
+          var clone=it.cloneNode(true);
+          orig.appendChild(clone);
+        });
+        orig.dataset.v225Cloned='1';
+      }
+    }catch(e){}
+  }
+  
+  function init(){
+    injectCSS();
+    cloneTrack();
+  }
+  init();
+  setTimeout(init, 500);
+  setTimeout(init, 1500);
+  setInterval(injectCSS, 2000);
+})();
+   </script>
