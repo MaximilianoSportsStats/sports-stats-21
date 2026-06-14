@@ -23340,3 +23340,44 @@ window.selectLLPriv=function(el){document.querySelectorAll('.ll-priv-opt').forEa
   setTimeout(init, 1500);
 })();
    </script>
+<script>
+/* v234 - cards Inicio achicadas DEFINITIVO - cancelar v229 flex-grow + min-height bajo */
+(function(){
+  if(window.__v234loaded)return;window.__v234loaded=true;
+  function injectCSS(){
+    if(document.getElementById('v234-style'))return;
+    var s=document.createElement('style');s.id='v234-style';
+    s.textContent=
+      /* Override min-height del card y eliminar el espacio vacio */
+      'html body .v100-news-big{min-height:0 !important;height:auto !important;padding:14px !important;}'+
+      'html body .v100-news-mini{min-height:0 !important;height:auto !important;padding:10px !important;}'+
+      /* Imagen del big card: SOLO 100px de alto */
+      'html body .v100-news-big>div:nth-child(2){flex:none !important;height:100px !important;min-height:100px !important;max-height:100px !important;margin-bottom:8px !important;border-radius:8px !important;}'+
+      /* Imagen del mini card: 70px */
+      'html body .v100-news-mini>div:nth-child(2){flex:none !important;height:70px !important;min-height:70px !important;max-height:70px !important;margin-bottom:6px !important;border-radius:6px !important;}'+
+      /* Tag mas chico */
+      'html body .v100-news-big .v100-news-tag,html body .v100-news-mini .v100-news-tag-mini,html body .v100-news-mini .v100-news-tag{font-size:11px !important;padding:3px 8px !important;}'+
+      /* Title mas chico */
+      'html body .v100-news-big>div:nth-child(3){font-size:14px !important;line-height:1.3 !important;}'+
+      'html body .v100-news-mini>div:nth-child(3){font-size:13px !important;line-height:1.3 !important;}';
+    document.head.appendChild(s);
+  }
+  function killFlexGrow(){
+    /* Eliminar inline flex:1 que v229 pone */
+    document.querySelectorAll('.v100-news-big>div:nth-child(2),.v100-news-mini>div:nth-child(2)').forEach(function(div){
+      if(div.style.flex && div.style.flex.indexOf('1')>=0){
+        div.style.removeProperty('flex');
+      }
+      if(div.style.minHeight && parseInt(div.style.minHeight)>110){
+        div.style.removeProperty('min-height');
+      }
+      if(div.style.height==='auto'){
+        div.style.removeProperty('height');
+      }
+    });
+  }
+  injectCSS();
+  killFlexGrow();
+  setInterval(function(){injectCSS();killFlexGrow();}, 400);
+})();
+   </script>
