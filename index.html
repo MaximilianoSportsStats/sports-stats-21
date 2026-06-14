@@ -23059,3 +23059,29 @@ window.selectLLPriv=function(el){document.querySelectorAll('.ll-priv-opt').forEa
   setInterval(init, 3000);
 })();
    </script>
+<script>
+/* v232 - forzar orden menu: Mas Sobre SS 21 SIEMPRE al final, despues de Contenido y Comunidad */
+(function(){
+  if(window.__v232loaded)return;window.__v232loaded=true;
+  function reorderMenu(){
+    try{
+      var ul=document.querySelector('.v56-ul')||document.querySelector('.v36-side ul')||document.querySelector('#v36-side ul');
+      if(!ul)return;
+      var items=Array.from(ul.children);
+      var masSS21Item=items.find(function(it){return /M[aá]s Sobre SS\s*21/i.test(it.textContent);});
+      if(!masSS21Item)return;
+      var lastChild=ul.lastElementChild;
+      if(lastChild===masSS21Item)return;
+      ul.appendChild(masSS21Item);
+    }catch(e){}
+  }
+  reorderMenu();
+  setTimeout(reorderMenu, 500);
+  setTimeout(reorderMenu, 1500);
+  setInterval(reorderMenu, 2000);
+  /* MutationObserver para revertir cualquier intento de moverlo arriba */
+  var obs=new MutationObserver(reorderMenu);
+  var ulTarget=document.querySelector('.v56-ul')||document.querySelector('.v36-side ul');
+  if(ulTarget){obs.observe(ulTarget,{childList:true});}
+})();
+   </script>
