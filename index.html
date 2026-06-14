@@ -24204,3 +24204,78 @@ window.selectLLPriv=function(el){document.querySelectorAll('.ll-priv-opt').forEa
   setTimeout(removeOldHeader, 1500);
 })();
    </script>
+<script>
+/* v244 - cancelar nuke v243 + restaurar control sidebar + remover header viejo SIN loops */
+(function(){
+  if(window.__v244loaded)return;window.__v244loaded=true;
+  
+  /* Cancelar setTimeout 3s del nuke - intentar limpiar antes de que dispare */
+  /* Como no tenemos su ID exacto, vamos a re-aplicar control con un solo loop muy lento */
+  
+  function sidebarControl(){
+    var sidebar=document.getElementById('sidebar')||document.querySelector('.sidebar');
+    if(!sidebar)return;
+    var nav=document.querySelector('.sport-nav-bar');
+    var activeBtn=nav?nav.querySelector('.sport-btn.active'):null;
+    var text=activeBtn?activeBtn.textContent:'';
+    var isTodos=activeBtn && activeBtn.hasAttribute('data-v103-todos');
+    var noActive=!activeBtn;
+    var hero=document.getElementById('heroCarousel');
+    var heroVis=hero && hero.offsetParent!==null;
+    var isInicio=(isTodos || noActive || heroVis);
+    var isTenis=/Tenis/.test(text);
+    var isFutbol=/F[uú]tbol/.test(text) && !/Americano/.test(text);
+    
+    var futbolSec=sidebar.querySelector('.sidebar-section');
+    var tenisSec=sidebar.querySelector('.v114-tenis-sidebar');
+    
+    if(isInicio){
+      sidebar.style.setProperty('display','none','important');
+    } else if(isTenis){
+      sidebar.style.removeProperty('display');
+      sidebar.style.setProperty('display','block','important');
+      if(tenisSec){tenisSec.style.setProperty('display','block','important');}
+      if(futbolSec){futbolSec.style.setProperty('display','none','important');}
+    } else if(isFutbol){
+      sidebar.style.removeProperty('display');
+      sidebar.style.setProperty('display','block','important');
+      if(futbolSec){futbolSec.style.removeProperty('display');}
+      if(tenisSec){tenisSec.style.setProperty('display','none','important');}
+    }
+  }
+  
+  function removeOldHeader(){
+    var v87=document.getElementById('v87-page-masss21');
+    if(!v87)return;
+    var fc=v87.firstElementChild;
+    while(fc){
+      var nx=fc.nextElementSibling;
+      if(fc.id==='v233-panel' || fc.id==='v102-nov-inside'){fc=nx;continue;}
+      var t=(fc.textContent||'').slice(0,200);
+      if(/Más Sobre SS\s*21/i.test(t) && /historia.*misi[oó]n|equipo detrás/i.test(t)){
+        fc.remove();
+        return;
+      }
+      fc=nx;
+    }
+  }
+  
+  function tick(){
+    sidebarControl();
+    removeOldHeader();
+  }
+  
+  tick();
+  setTimeout(tick, 500);
+  setTimeout(tick, 1500);
+  setTimeout(tick, 4000);
+  setTimeout(tick, 6000);
+  /* SOLO 1 setInterval con 3 segundos - suficiente para mantener sidebar correcto, no causa tremor */
+  setInterval(tick, 3000);
+  /* Y un click handler para responder a cambios manuales */
+  document.addEventListener('click', function(){
+    setTimeout(tick, 100);
+    setTimeout(tick, 400);
+  }, true);
+})();
+   </script>
