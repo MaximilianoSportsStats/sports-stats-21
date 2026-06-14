@@ -21849,3 +21849,40 @@ window.selectLLPriv=function(el){document.querySelectorAll('.ll-priv-opt').forEa
   }, true);
 })();
    </script>
+<script>
+/* v218 - restaurar sidebar Tenis cuando Tenis es el sport activo */
+(function(){
+  if(window.__v218loaded)return;window.__v218loaded=true;
+  function tick(){
+    try{
+      var sidebar=document.getElementById('sidebar')||document.querySelector('.sidebar');
+      if(!sidebar)return;
+      var nav=document.querySelector('.sport-nav-bar');
+      var activeBtn=nav?nav.querySelector('.sport-btn.active'):null;
+      var activeText=activeBtn?activeBtn.textContent:'';
+      var isTenis=/Tenis/.test(activeText);
+      var isFutbol=/F[uú]tbol/.test(activeText) && !/Americano/.test(activeText);
+      
+      var futbolSec=sidebar.querySelector('.sidebar-section');
+      var tenisSec=sidebar.querySelector('.v114-tenis-sidebar');
+      
+      if(isTenis){
+        sidebar.style.setProperty('display','block','important');
+        if(tenisSec){tenisSec.style.setProperty('display','block','important');}
+        if(futbolSec){futbolSec.style.setProperty('display','none','important');}
+      } else if(isFutbol){
+        sidebar.style.setProperty('display','block','important');
+        if(futbolSec){futbolSec.style.removeProperty('display');}
+        if(tenisSec){tenisSec.style.setProperty('display','none','important');}
+      }
+    }catch(e){}
+  }
+  tick();
+  setInterval(tick, 500);
+  document.addEventListener('click', function(){
+    setTimeout(tick, 100);
+    setTimeout(tick, 400);
+    setTimeout(tick, 1000);
+  }, true);
+})();
+   </script>
