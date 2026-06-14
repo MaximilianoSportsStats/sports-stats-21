@@ -23926,3 +23926,82 @@ window.selectLLPriv=function(el){document.querySelectorAll('.ll-priv-opt').forEa
   mo.observe(document.body,{childList:true,subtree:true});
 })();
    </script>
+<script>
+/* v240 - LOCK images: aplicar UNA VEZ y bloquear que cambien (cancela rotacion entre v220-v238) */
+(function(){
+  if(window.__v240loaded)return;window.__v240loaded=true;
+  
+  /* Inyectar flags TRUE para todos los v scripts viejos asi sus tick() salen temprano */
+  function setAllDoneFlags(){
+    document.querySelectorAll('.v100-news-big, .v100-news-mini').forEach(function(card){
+      /* Si ya tiene background-image aplicado, marcar TODOS los flags como done */
+      var bg=card.style.backgroundImage||card.style.background;
+      var emojiBg=card.children[1]?(card.children[1].style.backgroundImage||''):'';
+      if((bg && bg.indexOf('url')>=0)||(emojiBg && emojiBg.indexOf('url')>=0)){
+        card.dataset.v220Done='1';
+        card.dataset.v223Done='1';
+        card.dataset.v224Done='1';
+        card.dataset.v227Done='1';
+        card.dataset.v228Done='1';
+        card.dataset.v235Done='1';
+        card.dataset.v238Done='1';
+        card.dataset.v240Locked='1';
+      }
+    });
+  }
+  
+  /* MutationObserver para detectar cuando style.backgroundImage cambia despues de fijado */
+  function lockImage(card){
+    if(card.dataset.v240Locked!=='1')return;
+    /* Guardar el background-image inicial */
+    if(!card.dataset.v240Bg){
+      card.dataset.v240Bg=card.style.backgroundImage||'';
+    }
+  }
+  
+  function enforceStable(){
+    document.querySelectorAll('.v100-news-big, .v100-news-mini').forEach(function(card){
+      lockImage(card);
+      if(card.dataset.v240Locked==='1' && card.dataset.v240Bg){
+        if(card.style.backgroundImage!==card.dataset.v240Bg){
+          card.style.setProperty('background-image', card.dataset.v240Bg.match(/url\([^)]*\)/) ? card.dataset.v240Bg : ('url('+card.dataset.v240Bg+')'), 'important');
+        }
+      }
+    });
+  }
+  
+  setAllDoneFlags();
+  enforceStable();
+  setTimeout(function(){setAllDoneFlags();enforceStable();}, 300);
+  setTimeout(function(){setAllDoneFlags();enforceStable();}, 1000);
+  setTimeout(function(){setAllDoneFlags();enforceStable();}, 3000);
+  /* MutationObserver: si alguien cambia el background-image inline, revertir */
+  var mo=new MutationObserver(function(list){
+    list.forEach(function(m){
+      var t=m.target;
+      if(t.classList && (t.classList.contains('v100-news-big')||t.classList.contains('v100-news-mini'))){
+        if(t.dataset.v240Locked==='1' && t.dataset.v240Bg){
+          if(t.style.backgroundImage!==t.dataset.v240Bg){
+            t.style.backgroundImage=t.dataset.v240Bg;
+          }
+        } else {
+          /* aun no locked - chequear si ya tiene imagen, entonces lock */
+          var bg=t.style.backgroundImage;
+          if(bg && bg.indexOf('url')>=0){
+            t.dataset.v240Bg=bg;
+            t.dataset.v240Locked='1';
+            t.dataset.v220Done='1';
+            t.dataset.v223Done='1';
+            t.dataset.v224Done='1';
+            t.dataset.v227Done='1';
+            t.dataset.v228Done='1';
+            t.dataset.v235Done='1';
+            t.dataset.v238Done='1';
+          }
+        }
+      }
+    });
+  });
+  mo.observe(document.body,{attributes:true,attributeFilter:['style'],subtree:true});
+})();
+   </script>
