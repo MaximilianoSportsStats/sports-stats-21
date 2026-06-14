@@ -21460,6 +21460,43 @@ setTimeout(function(){injectCSS();ensureVisible();},2000);
 setInterval(ensureVisible, 3000);
 })();
 </script>
+
+<script>
+(function(){
+if(window.__v211loaded)return;window.__v211loaded=true;
+function injectCSS(){
+ if(document.getElementById("v211-style"))return;
+ var s=document.createElement("style"); s.id="v211-style";
+ s.textContent=""
+  +"html body header, html body .header, html body .meta-nav{overflow:visible !important;}"
+  +"html body #v25-search-bar{display:flex !important;visibility:visible !important;opacity:1 !important;flex-shrink:0 !important;min-width:180px !important;width:auto !important;height:auto !important;position:relative !important;}"
+  +"html body #v30-lang{display:flex !important;visibility:visible !important;opacity:1 !important;flex-shrink:0 !important;min-width:100px !important;width:auto !important;height:auto !important;position:relative !important;}"
+  +"html body #v25-search-bar > *{display:inline-flex !important;visibility:visible !important;}"
+  +"html body #v30-lang > *{display:inline-flex !important;visibility:visible !important;}"
+  +"html body #v25-search-bar input{display:block !important;visibility:visible !important;min-width:120px !important;}"
+  +"html body .meta-nav{flex-wrap:wrap !important;align-items:center !important;}";
+ document.head.appendChild(s);
+}
+function ensureVisible(){
+ var search=document.getElementById("v25-search-bar");
+ var lang=document.getElementById("v30-lang");
+ [search,lang].forEach(function(el){
+  if(!el) return;
+  el.style.setProperty("display","flex","important");
+  el.style.setProperty("visibility","visible","important");
+  el.style.setProperty("opacity","1","important");
+  el.style.setProperty("flex-shrink","0","important");
+ });
+ if(search) search.style.setProperty("min-width","180px","important");
+ if(lang) lang.style.setProperty("min-width","100px","important");
+}
+injectCSS();ensureVisible();
+setTimeout(function(){injectCSS();ensureVisible();},200);
+setTimeout(function(){injectCSS();ensureVisible();},1000);
+setTimeout(function(){injectCSS();ensureVisible();},3000);
+setInterval(ensureVisible, 2500);
+})();
+</script>
 </body>
 </html>
 
