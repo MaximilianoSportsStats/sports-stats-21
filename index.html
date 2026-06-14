@@ -22023,3 +22023,53 @@ window.selectLLPriv=function(el){document.querySelectorAll('.ll-priv-opt').forEa
   }, true);
 })();
    </script>
+<script>
+/* v222 - MutationObserver en sidebar para ganar race contra v218 en modo Inicio */
+(function(){
+  if(window.__v222loaded)return;window.__v222loaded=true;
+  var sidebar=null,obs=null,enforcing=false;
+  function isInicioMode(){
+    var hero=document.getElementById('heroCarousel');
+    if(hero && hero.offsetParent!==null) return true;
+    var inicio=document.getElementById('panel-inicio');
+    var nav=document.querySelector('.sport-nav-bar');
+    var act=nav?nav.querySelector('.sport-btn.active'):null;
+    var isTodos=act && act.hasAttribute('data-v103-todos');
+    var noActive=!act;
+    return inicio && inicio.classList.contains('active') && (isTodos || noActive);
+  }
+  function enforce(){
+    if(enforcing)return;
+    if(!sidebar){sidebar=document.getElementById('sidebar')||document.querySelector('.sidebar');}
+    if(!sidebar)return;
+    if(isInicioMode()){
+      if(getComputedStyle(sidebar).display!=='none'){
+        enforcing=true;
+        sidebar.style.setProperty('display','none','important');
+        setTimeout(function(){enforcing=false;},10);
+      }
+    }
+  }
+  function bind(){
+    sidebar=document.getElementById('sidebar')||document.querySelector('.sidebar');
+    if(!sidebar)return false;
+    if(obs)obs.disconnect();
+    obs=new MutationObserver(enforce);
+    obs.observe(sidebar,{attributes:true,attributeFilter:['style','class']});
+    return true;
+  }
+  function init(){
+    if(!bind()){
+      var rIv=setInterval(function(){if(bind()){clearInterval(rIv);}},200);
+    }
+    enforce();
+  }
+  init();
+  setInterval(enforce, 100);
+  document.addEventListener('click', function(){
+    setTimeout(enforce, 50);
+    setTimeout(enforce, 200);
+    setTimeout(enforce, 600);
+  }, true);
+})();
+   </script>
