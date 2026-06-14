@@ -21638,3 +21638,89 @@ window.selectLLPriv=function(el){document.querySelectorAll('.ll-priv-opt').forEa
   }catch(e){}
 })();
                                                         </script>
+<script>
+/* v214 - dropdown nativo #v30-lang: vertical, debajo, toggle por click */
+(function(){
+  if(window.__v214loaded)return;window.__v214loaded=true;
+  var STYLE_ID='v214-style';
+  function ensureCSS(){
+    if(document.getElementById(STYLE_ID))return;
+    var s=document.createElement('style');s.id=STYLE_ID;
+    s.textContent=
+      '#v30-lang{position:relative !important;}'+
+      '#v30-lang .v30-lang-menu{'+
+        'position:absolute !important;'+
+        'top:calc(100% + 6px) !important;'+
+        'left:auto !important;'+
+        'right:0 !important;'+
+        'flex-direction:column !important;'+
+        'flex-wrap:nowrap !important;'+
+        'width:auto !important;'+
+        'min-width:160px !important;'+
+        'max-width:220px !important;'+
+        'height:auto !important;'+
+        'max-height:none !important;'+
+        'padding:6px 0 !important;'+
+        'background:#fff !important;'+
+        'border:1px solid #e2e8f0 !important;'+
+        'border-radius:10px !important;'+
+        'box-shadow:0 8px 24px rgba(0,0,0,0.12) !important;'+
+        'z-index:9999 !important;'+
+        'display:none !important;'+
+      '}'+
+      '#v30-lang.v214-open .v30-lang-menu{display:flex !important;}'+
+      '#v30-lang .v30-lang-menu > button{'+
+        'width:100% !important;'+
+        'justify-content:flex-start !important;'+
+        'gap:10px !important;'+
+        'padding:8px 14px !important;'+
+        'border:none !important;'+
+        'background:transparent !important;'+
+        'text-align:left !important;'+
+        'color:#0f172a !important;'+
+        'font-size:14px !important;'+
+        'cursor:pointer !important;'+
+        'border-radius:0 !important;'+
+      '}'+
+      '#v30-lang .v30-lang-menu > button:hover{background:#f1f5f9 !important;}'+
+      '#v30-lang .v30-lang-menu > button.active{background:#fee2e2 !important;color:#c8102e !important;font-weight:600 !important;}';
+    document.head.appendChild(s);
+  }
+  function isToggleClick(e){
+    var t=e.target;
+    if(!t)return false;
+    if(t.closest && t.closest('#v30-lang .v30-lang-menu'))return false; // click dentro del menu = seleccionar
+    var inside=t.closest && t.closest('#v30-lang');
+    return !!inside;
+  }
+  function onClick(e){
+    var nat=document.getElementById('v30-lang');
+    if(!nat)return;
+    if(isToggleClick(e)){
+      e.preventDefault();
+      e.stopPropagation();
+      nat.classList.toggle('v214-open');
+      return;
+    }
+    // click fuera = cerrar
+    if(nat.classList.contains('v214-open')){
+      // si click dentro del menu (selección de idioma), cerrar después de seleccionar
+      if(e.target.closest && e.target.closest('#v30-lang .v30-lang-menu')){
+        setTimeout(function(){nat.classList.remove('v214-open');},50);
+      } else {
+        nat.classList.remove('v214-open');
+      }
+    }
+  }
+  function init(){
+    ensureCSS();
+    // bind once
+    if(!window.__v214bound){
+      document.addEventListener('click',onClick,true);
+      window.__v214bound=true;
+    }
+  }
+  init();
+  setInterval(ensureCSS,2000);
+})();
+   </script>
