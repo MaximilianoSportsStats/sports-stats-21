@@ -24279,3 +24279,42 @@ window.selectLLPriv=function(el){document.querySelectorAll('.ll-priv-opt').forEa
   }, true);
 })();
    </script>
+<script>
+/* v245 - reconstruir items del drawer menu que v243 vacio. SOLO una vez, sin loops. */
+(function(){
+  if(window.__v245loaded)return;window.__v245loaded=true;
+  function rebuildMenu(){
+    var ul=document.querySelector('.v56-ul')||document.querySelector('.v36-side ul')||document.querySelector('#v36-side ul')||document.querySelector('aside ul');
+    if(!ul)return false;
+    /* Si ya tiene items, NO TOCAR */
+    var existingItems=ul.querySelectorAll('.v56-item');
+    if(existingItems.length>=4)return true;
+    /* Reconstruir items mínimos para navegacion */
+    ul.innerHTML=
+      '<li class="v56-item" data-v56-key="inicio" style="cursor:pointer;padding:14px 20px;display:flex;align-items:center;gap:12px;font-weight:600;color:#0f172a;font-size:15px;"><span style="font-size:22px;">🏠</span><span>Inicio</span></li>'+
+      '<li class="v56-item" data-v56-key="favoritos" style="cursor:pointer;padding:14px 20px;display:flex;align-items:center;gap:12px;font-weight:600;color:#0f172a;font-size:15px;"><span style="font-size:22px;">⭐</span><span>Favoritos</span></li>'+
+      '<li class="v56-item" data-v56-key="envivo" style="cursor:pointer;padding:14px 20px;display:flex;align-items:center;gap:12px;font-weight:600;color:#0f172a;font-size:15px;"><span style="font-size:22px;">🔴</span><span>En Vivo</span></li>'+
+      '<li class="v56-item" data-v56-key="deportes" style="cursor:pointer;padding:14px 20px;display:flex;align-items:center;gap:12px;font-weight:600;color:#0f172a;font-size:15px;justify-content:space-between;"><span style="display:flex;align-items:center;gap:12px;"><span style="font-size:22px;">🏆</span><span>Deportes</span></span><span>▼</span></li>'+
+      '<ul class="v56-sub-list" style="list-style:none;padding:0;margin:0;">'+
+        '<li class="v56-sub-item" data-v56-key="profesionales" style="padding:10px 20px 10px 50px;font-size:14px;color:#475569;cursor:pointer;"><span style="font-size:18px;margin-right:8px;">🏆</span>Profesionales</li>'+
+        '<li class="v56-sub-item" data-v56-key="universitarios" style="padding:10px 20px 10px 50px;font-size:14px;color:#475569;cursor:pointer;"><span style="font-size:18px;margin-right:8px;">🎓</span>Universitarios</li>'+
+        '<li class="v56-sub-item" data-v56-key="amateur" style="padding:10px 20px 10px 50px;font-size:14px;color:#475569;cursor:pointer;"><span style="font-size:18px;margin-right:8px;">🤵</span>Mercado</li>'+
+        '<li class="v56-sub-item" data-v56-key="escolar" style="padding:10px 20px 10px 50px;font-size:14px;color:#475569;cursor:pointer;"><span style="font-size:18px;margin-right:8px;">🏫</span>Escolar</li>'+
+      '</ul>'+
+      '<li class="v56-item" data-v56-key="contenido" style="cursor:pointer;padding:14px 20px;display:flex;align-items:center;gap:12px;font-weight:600;color:#0f172a;font-size:15px;justify-content:space-between;"><span style="display:flex;align-items:center;gap:12px;"><span style="font-size:22px;">📚</span><span>Contenido y Comunidad</span></span><span>▼</span></li>'+
+      '<ul class="v56-sub-list" style="list-style:none;padding:0;margin:0;">'+
+        '<li class="v56-sub-item" style="padding:10px 20px 10px 50px;font-size:14px;color:#475569;cursor:pointer;"><span style="font-size:18px;margin-right:8px;">📰</span>Noticias</li>'+
+        '<li class="v56-sub-item" style="padding:10px 20px 10px 50px;font-size:14px;color:#475569;cursor:pointer;"><span style="font-size:18px;margin-right:8px;">📝</span>Blogs</li>'+
+        '<li class="v56-sub-item" style="padding:10px 20px 10px 50px;font-size:14px;color:#475569;cursor:pointer;"><span style="font-size:18px;margin-right:8px;">🎙️</span>Podcast</li>'+
+        '<li class="v56-sub-item" style="padding:10px 20px 10px 50px;font-size:14px;color:#475569;cursor:pointer;"><span style="font-size:18px;margin-right:8px;">📝</span>Artículos</li>'+
+        '<li class="v56-sub-item" style="padding:10px 20px 10px 50px;font-size:14px;color:#475569;cursor:pointer;"><span style="font-size:18px;margin-right:8px;">👥</span>Comunidad</li>'+
+      '</ul>'+
+      '<li class="v56-item" style="cursor:pointer;padding:14px 20px;display:flex;align-items:center;gap:12px;font-weight:600;color:#0f172a;font-size:15px;"><span style="font-size:22px;">🌟</span><span>Más Sobre SS 21</span></li>';
+    return true;
+  }
+  rebuildMenu();
+  setTimeout(rebuildMenu, 300);
+  setTimeout(rebuildMenu, 1000);
+  setTimeout(rebuildMenu, 3000);
+})();
+   </script>
