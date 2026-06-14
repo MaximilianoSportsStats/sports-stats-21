@@ -22908,3 +22908,46 @@ window.selectLLPriv=function(el){document.querySelectorAll('.ll-priv-opt').forEa
   }, true);
 })();
    </script>
+<script>
+/* v247 - dedupe setProperty para parar tremor masivo en sport-nav-bar y sidebars */
+(function(){
+  if(window.__v247loaded)return;window.__v247loaded=true;
+  /* Monkey-patch setProperty para skipear cuando el valor no cambia */
+  var origSetProp=CSSStyleDeclaration.prototype.setProperty;
+  CSSStyleDeclaration.prototype.setProperty=function(prop,val,priority){
+    try{
+      var cur=this.getPropertyValue(prop);
+      var curPrio=this.getPropertyPriority(prop);
+      var newPrio=priority||'';
+      /* Skip si valor Y prioridad son iguales */
+      if(cur===val && curPrio===newPrio)return;
+    }catch(e){}
+    return origSetProp.call(this,prop,val,priority);
+  };
+  /* Tambien patch removeProperty para evitar removes redundantes */
+  var origRemove=CSSStyleDeclaration.prototype.removeProperty;
+  CSSStyleDeclaration.prototype.removeProperty=function(prop){
+    try{
+      var cur=this.getPropertyValue(prop);
+      if(!cur)return '';
+    }catch(e){}
+    return origRemove.call(this,prop);
+  };
+  /* Patch classList.add para evitar adds redundantes */
+  var origAdd=DOMTokenList.prototype.add;
+  DOMTokenList.prototype.add=function(){
+    var args=Array.prototype.slice.call(arguments);
+    var newArgs=args.filter(function(c){return !this.contains(c);}.bind(this));
+    if(newArgs.length===0)return;
+    return origAdd.apply(this,newArgs);
+  };
+  /* Patch classList.remove para evitar removes redundantes */
+  var origClassRem=DOMTokenList.prototype.remove;
+  DOMTokenList.prototype.remove=function(){
+    var args=Array.prototype.slice.call(arguments);
+    var existing=args.filter(function(c){return this.contains(c);}.bind(this));
+    if(existing.length===0)return;
+    return origClassRem.apply(this,existing);
+  };
+})();
+   </script>
