@@ -23381,3 +23381,94 @@ window.selectLLPriv=function(el){document.querySelectorAll('.ll-priv-opt').forEa
   setInterval(function(){injectCSS();killFlexGrow();}, 400);
 })();
    </script>
+<script>
+/* v235 - imagen llena toda la card + 16 fotos por categoria + mas secciones MasSS21 */
+(function(){
+  if(window.__v235loaded)return;window.__v235loaded=true;
+  
+  /* === 16 imagenes por categoria === */
+  var IMG={
+    basket:['photo-1546519638-68e109acd27d','photo-1518614368389-e09d5a4ed9c5','photo-1504450758481-7338eba7524a','photo-1519861531473-9200262188bf','photo-1577471488278-16eec37ffcc2','photo-1606925797300-0b35e9d1794e','photo-1495466581-9c6cb18cdcfe','photo-1574623452334-1e0ac2b3ccb4','photo-1608245449230-4ac19066d2d0','photo-1518365050014-70fe7232897f','photo-1612831455540-ec0ba7e7f0c5','photo-1494199505258-5f95387f933c','photo-1596730330643-7e1b3ad99b34','photo-1567593810070-7a3d471af022','photo-1571260899304-425eee4c7efc','photo-1505666287802-931582b5b8a3'],
+    soccer:['photo-1574629810360-7efbbe195018','photo-1551958219-acbc608c6377','photo-1431324155629-1a6deb1dec8d','photo-1508098682722-e99c43a406b2','photo-1521412644187-c49fa049e84d','photo-1577223625816-7546f13df25d','photo-1518155317743-a8ff43ea6a5f','photo-1543326727-cf6c39e8f84c','photo-1606925797300-0b35e9d1794e','photo-1565376049-4cf6e10dbfb6','photo-1535231540604-72e8fbaf8cdb','photo-1623880840102-7df0a9f3545b','photo-1602674809970-89e1432e5f31','photo-1517466787929-bc90951d0974','photo-1493769677478-f9bd3a30b22f','photo-1539622235788-bfb8b1ddd1ed'],
+    tennis:['photo-1554068865-24cecd4e34b8','photo-1622279457486-62dcc4a431d6','photo-1551773118-cbecd72d4bc7','photo-1531315396756-905d68d21b56','photo-1542144612-1b3641ec3459','photo-1551649001-7a2482d98d05','photo-1599981708635-d4ea3d56dc66','photo-1626224583764-f87db24ac4ea','photo-1576593467024-7b8e51a9ca7e','photo-1530915534036-f63cda7551e0','photo-1599901860904-17e6ed7083a0','photo-1517585022-d70d2dccba1d','photo-1602155848275-bc3b7a087c12','photo-1594381898411-846e7d193883','photo-1573152958517-58aff7a0d2a3','photo-1600679472233-44bf4ec45fcc'],
+    cricket:['photo-1599050751795-5d0922db7b4d','photo-1531415074968-036ba1b575da','photo-1540747913346-19e32dc3e97e','photo-1531405222052-b39bc3e7d8d2','photo-1622380137493-6cdaa1c9c6e1','photo-1593766787884-0eb20ea27887','photo-1607734834561-d31cf04c0f2c','photo-1607734834571-3b8f7fe5d4ae','photo-1597135842616-bccc89d2bbe1','photo-1571902943202-507ec2618e8f','photo-1620742820748-87c09249a72a','photo-1568432234-2c0d7c0d5d63','photo-1517649763962-0c623066013b','photo-1485965120184-e220f721d03e','photo-1461896836934-ffe607ba8211','photo-1495434942214-9b525bba74de'],
+    nfl:['photo-1566577739112-5180d4bf9390','photo-1486286701208-1d58e9338013','photo-1607734834561-d31cf04c0f2c','photo-1532706436809-65c0a06fbc04','photo-1574629810360-7efbbe195018','photo-1556745753-b2904692b3cd','photo-1518091051280-7d4d49f93cf2','photo-1582295913-2336a4ce58c2','photo-1574391884720-bbc049ec09ad','photo-1607734834571-3b8f7fe5d4ae','photo-1571902943202-507ec2618e8f','photo-1517649763962-0c623066013b','photo-1485965120184-e220f721d03e','photo-1461896836934-ffe607ba8211','photo-1495434942214-9b525bba74de','photo-1567452470712-3a8a76876d8e'],
+    baseball:['photo-1508344928-a700e93af038','photo-1632437041057-5b9826867e94','photo-1518091051280-7d4d49f93cf2','photo-1574391884720-bbc049ec09ad','photo-1567452470712-3a8a76876d8e','photo-1577896851231-70ef18881754','photo-1607734834561-d31cf04c0f2c','photo-1556745753-b2904692b3cd','photo-1582295913-2336a4ce58c2','photo-1607734834571-3b8f7fe5d4ae','photo-1571902943202-507ec2618e8f','photo-1517649763962-0c623066013b','photo-1485965120184-e220f721d03e','photo-1461896836934-ffe607ba8211','photo-1495434942214-9b525bba74de','photo-1606925207923-c2b3f9a30f47'],
+    hockey:['photo-1612872087720-bb876e2e67d1','photo-1517867065852-8c7d5af0a635','photo-1591608971376-5f56e3ec0d75','photo-1521405924368-64c5b84bec60','photo-1542144612-1b3641ec3459','photo-1556745753-b2904692b3cd','photo-1582295913-2336a4ce58c2','photo-1607734834571-3b8f7fe5d4ae','photo-1571902943202-507ec2618e8f','photo-1517649763962-0c623066013b','photo-1485965120184-e220f721d03e','photo-1461896836934-ffe607ba8211','photo-1495434942214-9b525bba74de','photo-1606925207923-c2b3f9a30f47','photo-1577471488278-16eec37ffcc2','photo-1567452470712-3a8a76876d8e'],
+    f1:['photo-1517994112540-009c47ea476b','photo-1538843128842-bf75d9d4d7fa','photo-1551244072-5d12893278ab','photo-1568819317551-31051b37f69f','photo-1568605114967-8130f3a36994','photo-1503376780353-7e6692767b70','photo-1583121274602-3e2820c69888','photo-1568819317551-31051b37f69f','photo-1494976688531-7b2f64b86d12','photo-1532639950086-19ade41ef4d4','photo-1531406150516-3fea91d4f59c','photo-1559717201-fbb671ff56b7','photo-1614026480418-bd11fde2f0d2','photo-1607893387624-8d5a1e6b89b8','photo-1565009354-c79b3b8d4dab','photo-1593504099960-3e9c7ff34edb'],
+    boxing:['photo-1549719386-74dfcbf7dbed','photo-1517438476312-10d79c5c9af5','photo-1607962776932-58baa8b53e63','photo-1530549387789-4c1017266635','photo-1547941126-3d5322b218b0','photo-1546484959-f9a381d1330d','photo-1517466787929-bc90951d0974','photo-1583121274602-3e2820c69888','photo-1568819317551-31051b37f69f','photo-1494976688531-7b2f64b86d12','photo-1532639950086-19ade41ef4d4','photo-1531406150516-3fea91d4f59c','photo-1559717201-fbb671ff56b7','photo-1614026480418-bd11fde2f0d2','photo-1607893387624-8d5a1e6b89b8','photo-1565009354-c79b3b8d4dab'],
+    golf:['photo-1535131749006-b7f58c99034b','photo-1587174486073-ae5e5cff23aa','photo-1530028828-25e8270793c5','photo-1593111774240-d529f12cf4bb','photo-1602674809970-89e1432e5f31','photo-1593504099960-3e9c7ff34edb','photo-1577896851231-70ef18881754','photo-1607734834561-d31cf04c0f2c','photo-1556745753-b2904692b3cd','photo-1582295913-2336a4ce58c2','photo-1607734834571-3b8f7fe5d4ae','photo-1571902943202-507ec2618e8f','photo-1517649763962-0c623066013b','photo-1485965120184-e220f721d03e','photo-1461896836934-ffe607ba8211','photo-1495434942214-9b525bba74de'],
+    rugby:['photo-1591491633412-d712a04f93b3','photo-1626449037486-3f23735c2f7b','photo-1485732468400-6cf4c9adc8ed','photo-1565009354-c79b3b8d4dab','photo-1607893387624-8d5a1e6b89b8','photo-1614026480418-bd11fde2f0d2','photo-1559717201-fbb671ff56b7','photo-1531406150516-3fea91d4f59c','photo-1532639950086-19ade41ef4d4','photo-1494976688531-7b2f64b86d12','photo-1568819317551-31051b37f69f','photo-1583121274602-3e2820c69888','photo-1517466787929-bc90951d0974','photo-1546484959-f9a381d1330d','photo-1547941126-3d5322b218b0','photo-1530549387789-4c1017266635'],
+    cycling:['photo-1541625602330-2277a4c46182','photo-1517649763962-0c623066013b','photo-1485965120184-e220f721d03e','photo-1502323777036-f29e3972d82f','photo-1500964882471-fa10812e0fad','photo-1517649763962-0c623066013b','photo-1567452470712-3a8a76876d8e','photo-1571902943202-507ec2618e8f','photo-1517867065852-8c7d5af0a635','photo-1591608971376-5f56e3ec0d75','photo-1556745753-b2904692b3cd','photo-1582295913-2336a4ce58c2','photo-1607734834571-3b8f7fe5d4ae','photo-1485965120184-e220f721d03e','photo-1461896836934-ffe607ba8211','photo-1495434942214-9b525bba74de'],
+    swim:['photo-1565992441121-4367c2967103','photo-1622469483050-72fbedf3e0c8','photo-1530549387789-4c1017266635','photo-1593766787884-0eb20ea27887','photo-1622380137493-6cdaa1c9c6e1','photo-1606925797300-0b35e9d1794e','photo-1567452470712-3a8a76876d8e','photo-1571902943202-507ec2618e8f','photo-1517867065852-8c7d5af0a635','photo-1591608971376-5f56e3ec0d75','photo-1556745753-b2904692b3cd','photo-1582295913-2336a4ce58c2','photo-1607734834571-3b8f7fe5d4ae','photo-1485965120184-e220f721d03e','photo-1461896836934-ffe607ba8211','photo-1495434942214-9b525bba74de'],
+    padel:['photo-1554068865-24cecd4e34b8','photo-1622279457486-62dcc4a431d6','photo-1551773118-cbecd72d4bc7','photo-1531315396756-905d68d21b56','photo-1542144612-1b3641ec3459','photo-1551649001-7a2482d98d05','photo-1599981708635-d4ea3d56dc66','photo-1626224583764-f87db24ac4ea','photo-1576593467024-7b8e51a9ca7e','photo-1530915534036-f63cda7551e0','photo-1599901860904-17e6ed7083a0','photo-1517585022-d70d2dccba1d','photo-1602155848275-bc3b7a087c12','photo-1594381898411-846e7d193883','photo-1573152958517-58aff7a0d2a3','photo-1600679472233-44bf4ec45fcc'],
+    olympics:['photo-1571902943202-507ec2618e8f','photo-1614027164847-1b28cfe1df60','photo-1532634726-8b9fb99825e0','photo-1517649763962-0c623066013b','photo-1485965120184-e220f721d03e','photo-1461896836934-ffe607ba8211','photo-1495434942214-9b525bba74de','photo-1567452470712-3a8a76876d8e','photo-1517867065852-8c7d5af0a635','photo-1591608971376-5f56e3ec0d75','photo-1556745753-b2904692b3cd','photo-1582295913-2336a4ce58c2','photo-1607734834571-3b8f7fe5d4ae','photo-1606925207923-c2b3f9a30f47','photo-1577471488278-16eec37ffcc2','photo-1574623452334-1e0ac2b3ccb4'],
+    money:['photo-1611229632331-bc55b80fe2cb','photo-1565514020179-026b92b84bb6','photo-1554224155-6726b3ff858f','photo-1639762681485-074b7f938ba0','photo-1591033594798-33227a05780d','photo-1611974789855-9c2a0a7236a3','photo-1518770660439-4636190af475','photo-1620325867502-221cfb5faa5f','photo-1601597111158-2fceff292cdc','photo-1620712943543-bcc4688e7485','photo-1614624532995-0a8f5b80bbf2','photo-1601814933824-fd0b574dd592','photo-1567427018141-0584cfcbf1b8','photo-1633158829585-23ba8f7c8caf','photo-1632437041057-5b9826867e94','photo-1556745753-b2904692b3cd'],
+    sports:['photo-1461896836934-ffe607ba8211','photo-1517649763962-0c623066013b','photo-1495434942214-9b525bba74de','photo-1574629810360-7efbbe195018','photo-1551958219-acbc608c6377','photo-1546519638-68e109acd27d','photo-1554068865-24cecd4e34b8','photo-1531415074968-036ba1b575da','photo-1486286701208-1d58e9338013','photo-1508344928-a700e93af038','photo-1517867065852-8c7d5af0a635','photo-1517994112540-009c47ea476b','photo-1549719386-74dfcbf7dbed','photo-1535131749006-b7f58c99034b','photo-1591491633412-d712a04f93b3','photo-1541625602330-2277a4c46182']
+  };
+  
+  function pickPhoto(tag, title){
+    var t=(tag+' '+title).toLowerCase();
+    var arr;
+    if(/basket|nba|baloncesto|lebron|curry|don[cč]i[cć]/.test(t))arr=IMG.basket;
+    else if(/cricket|virat|kohli/.test(t))arr=IMG.cricket;
+    else if(/\bnfl\b|americano|football americano/.test(t))arr=IMG.nfl;
+    else if(/baseball|mlb|b[eé]isbol/.test(t))arr=IMG.baseball;
+    else if(/hockey|nhl/.test(t))arr=IMG.hockey;
+    else if(/\bf1\b|formula|verstappen|hamilton|leclerc|mercedes|ferrari|mclaren/.test(t))arr=IMG.f1;
+    else if(/\bbox|ufc|mma|combate/.test(t))arr=IMG.boxing;
+    else if(/golf/.test(t))arr=IMG.golf;
+    else if(/rugby/.test(t))arr=IMG.rugby;
+    else if(/ciclismo|cycling|tour de/.test(t))arr=IMG.cycling;
+    else if(/nataci[oó]n|swim/.test(t))arr=IMG.swim;
+    else if(/p[aá]del/.test(t))arr=IMG.padel;
+    else if(/tenis|tennis|atp|wta|alcaraz|djokovic|nadal|federer|sinner/.test(t))arr=IMG.tennis;
+    else if(/f[uú]tbol|soccer|fifa|messi|mbapp[eé]|cristiano|ronaldo|neymar|haaland|vinicius|premier|champions|laliga|barcelona|madrid|psg|albiceleste/.test(t))arr=IMG.soccer;
+    else if(/mercado|fichaje|transfer|contrato/.test(t))arr=IMG.money;
+    else arr=IMG.sports;
+    var h=0;
+    for(var i=0;i<title.length && i<60;i++){h=((h<<5)-h+title.charCodeAt(i))|0;}
+    var idx=Math.abs(h)%arr.length;
+    return 'https://images.unsplash.com/'+arr[idx]+'?w=900&q=75';
+  }
+  
+  /* === Imagen llena la card entera (background-image en CARD) === */
+  function injectCSS(){
+    if(document.getElementById('v235-style'))return;
+    var s=document.createElement('style');s.id='v235-style';
+    s.textContent=
+      /* Cards: imagen de fondo cubre todo + content overlay */
+      'html body .v100-news-big,html body .v100-news-mini{position:relative !important;overflow:hidden !important;background-size:cover !important;background-position:center !important;background-repeat:no-repeat !important;}'+
+      /* Overlay oscuro para legibilidad de texto */
+      'html body .v100-news-big::after,html body .v100-news-mini::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0.15) 0%,rgba(0,0,0,0.85) 100%);pointer-events:none;z-index:1;}'+
+      /* El contenido encima del overlay */
+      'html body .v100-news-big>*,html body .v100-news-mini>*{position:relative;z-index:2;}'+
+      /* Ocultar el emoji div interno */
+      'html body .v100-news-big>div:nth-child(2),html body .v100-news-mini>div:nth-child(2){display:none !important;}'+
+      /* Texto blanco para contraste */
+      'html body .v100-news-big>div:nth-child(3),html body .v100-news-mini>div:nth-child(3){color:#fff !important;text-shadow:0 1px 3px rgba(0,0,0,0.6) !important;}'+
+      'html body .v100-news-big .v100-news-sub,html body .v100-news-mini .v100-news-sub{color:#e2e8f0 !important;text-shadow:0 1px 2px rgba(0,0,0,0.6) !important;}'+
+      /* Card alturas */
+      'html body .v100-news-big{min-height:280px !important;}'+
+      'html body .v100-news-mini{min-height:160px !important;}';
+    document.head.appendChild(s);
+  }
+  
+  function applyImages(){
+    document.querySelectorAll('.v100-news-big, .v100-news-mini').forEach(function(card){
+      if(card.dataset.v235Done==='1')return;
+      var tag=card.querySelector('.v100-news-tag, .v100-news-tag-mini');
+      var tagTxt=tag?tag.textContent.trim():'';
+      var title=card.children[2]?card.children[2].textContent.trim():'';
+      var url=pickPhoto(tagTxt, title);
+      card.style.setProperty('background-image','url("'+url+'")','important');
+      card.dataset.v235Done='1';
+    });
+  }
+  
+  injectCSS();
+  applyImages();
+  setTimeout(applyImages,500);
+  setInterval(function(){injectCSS();applyImages();},2000);
+})();
+   </script>
