@@ -21724,3 +21724,68 @@ window.selectLLPriv=function(el){document.querySelectorAll('.ll-priv-opt').forEa
   setInterval(ensureCSS,2000);
 })();
    </script>
+<script>
+/* v215 - ticker solo Inicio + Mercado restaurar topbar/sidebar + Inicio click confiable */
+(function(){
+  if(window.__v215loaded)return;window.__v215loaded=true;
+  var SID='v215-style';
+  function css(){
+    if(document.getElementById(SID))return;
+    var s=document.createElement('style');s.id=SID;
+    s.textContent=
+      /* Fix #3: ticker visible solo en Inicio */
+      'body:not(.v32-view-inicio) #v100-ticker{display:none !important;}'+
+      'body.v32-view-inicio #v100-ticker{display:block !important;}'+
+      /* Fix #4: Mercado panel en flujo normal para que topbar/sidebar se vean */
+      'html body #v200-mercado-panel.v200-active{position:static !important;inset:auto !important;}';
+    document.head.appendChild(s);
+  }
+  /* Fix #1: Inicio click reliable */
+  function goInicioReliable(){
+    try{
+      var b=document.body;
+      /* limpiar clases de vistas */
+      var toRemove=[];
+      b.classList.forEach(function(c){if(c.indexOf('v32-view-')===0 || c==='v200-mercado-mode')toRemove.push(c);});
+      toRemove.forEach(function(c){b.classList.remove(c);});
+      b.classList.add('v32-view-inicio');
+      /* desactivar Mercado panel */
+      var merc=document.getElementById('v200-mercado-panel');
+      if(merc){merc.classList.remove('v200-active');}
+      /* mostrar heroCarousel si está oculto */
+      var hero=document.getElementById('heroCarousel');
+      if(hero){hero.style.removeProperty('display');}
+      /* mostrar panel-inicio */
+      var inicio=document.getElementById('panel-inicio');
+      if(inicio){inicio.classList.add('active');inicio.style.removeProperty('display');}
+      /* desactivar otros paneles soccer/tennis/etc */
+      ['panel-soccer','panel-tennis','panel-basketball','panel-mercado'].forEach(function(id){
+        var p=document.getElementById(id);
+        if(p && id!=='panel-inicio'){p.classList.remove('active');}
+      });
+      /* botón Inicio en sport-nav-bar active */
+      var sb=document.querySelector('.sport-nav-bar .sport-btn');
+      if(sb){
+        document.querySelectorAll('.sport-nav-bar .sport-btn.active').forEach(function(b){b.classList.remove('active');});
+      }
+    }catch(e){}
+  }
+  function onClick(e){
+    var t=e.target;
+    if(!t)return;
+    var btn=t.closest && t.closest('[data-v26id="inicio"]');
+    if(!btn)return;
+    setTimeout(goInicioReliable, 50);
+    setTimeout(goInicioReliable, 200);
+  }
+  function init(){
+    css();
+    if(!window.__v215bound){
+      document.addEventListener('click', onClick, true);
+      window.__v215bound=true;
+    }
+  }
+  init();
+  setInterval(css, 2000);
+})();
+   </script>
