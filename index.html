@@ -24070,3 +24070,60 @@ window.selectLLPriv=function(el){document.querySelectorAll('.ll-priv-opt').forEa
   setInterval(removeOldHeader, 1000);
 })();
    </script>
+<script>
+/* v242 - matar tremor (v240 MutationObserver subtree) + remover header viejo MasSS21 con DOM directo */
+(function(){
+  if(window.__v242loaded)return;window.__v242loaded=true;
+  
+  /* === Eliminar header viejo (primer hijo de v87-page-masss21 que no es v233-panel) === */
+  function removeOldHeader(){
+    var v87=document.getElementById('v87-page-masss21');
+    if(!v87)return;
+    if(v87.dataset.v242Cleaned==='1')return;
+    /* Identificar primer hijo del v87 que NO es nuestro v233-panel */
+    var firstChild=v87.firstElementChild;
+    while(firstChild){
+      var next=firstChild.nextElementSibling;
+      if(firstChild.id!=='v233-panel' && firstChild.id!=='v102-nov-inside'){
+        var t=(firstChild.textContent||'').slice(0,200);
+        if(/Más Sobre SS\s*21|La historia.*misi[oó]n|equipo detrás/i.test(t)){
+          firstChild.remove();
+        }
+      }
+      firstChild=next;
+    }
+    v87.dataset.v242Cleaned='1';
+  }
+  
+  /* === DETENER tremor: cancelar todos los MutationObservers globales conocidos === */
+  /* Como no tenemos referencia, hacemos: enforceStable de v240 desactivado por sobreescritura del setter */
+  function killTremorLoops(){
+    /* Setear flag para todos los cards que detenga las re-aplicaciones */
+    document.querySelectorAll('.v100-news-big, .v100-news-mini').forEach(function(card){
+      card.dataset.v220Done='1';
+      card.dataset.v223Done='1';
+      card.dataset.v224Done='1';
+      card.dataset.v227Done='1';
+      card.dataset.v228Done='1';
+      card.dataset.v235Done='1';
+      card.dataset.v238Done='1';
+      card.dataset.v240Locked='1';
+      /* Garantizar que v240Bg no sea sobrescrito */
+      if(!card.dataset.v240Bg && card.style.backgroundImage){
+        card.dataset.v240Bg=card.style.backgroundImage;
+      }
+    });
+  }
+  
+  function init(){
+    removeOldHeader();
+    killTremorLoops();
+  }
+  
+  init();
+  setTimeout(init, 800);
+  setTimeout(init, 2000);
+  /* SOLO 1 interval LENTO (no rápido) para no agregar mas tremor */
+  setInterval(init, 8000);
+})();
+   </script>
