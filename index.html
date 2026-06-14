@@ -23891,3 +23891,38 @@ window.selectLLPriv=function(el){document.querySelectorAll('.ll-priv-opt').forEa
   setInterval(applyImages,3000);
 })();
    </script>
+<script>
+/* v239 - mover v233-panel a #v87-page-masss21 (la real MasSS21) y limpiar de Inicio */
+(function(){
+  if(window.__v239loaded)return;window.__v239loaded=true;
+  function moveContent(){
+    var v233=document.getElementById('v233-panel');
+    var target=document.getElementById('v87-page-masss21');
+    if(!v233 || !target)return;
+    if(v233.dataset.v239Moved==='1')return;
+    /* Mover el panel completo al final de v87-page-masss21 */
+    target.appendChild(v233);
+    /* Forzar visible siempre dentro de MasSS21 (no toggle) */
+    v233.classList.add('v233-active');
+    v233.style.setProperty('display','block','important');
+    /* Quitar v233-mode del body para no afectar inicio */
+    document.body.classList.remove('v233-mode');
+    /* Quitar style v233-mode que ocultaba hero/ticker */
+    var st=document.getElementById('v233-style');
+    if(st){
+      var newCSS=st.textContent.replace(/body\.v233-mode[^}]*\}/g,'');
+      st.textContent=newCSS;
+    }
+    v233.dataset.v239Moved='1';
+  }
+  function init(){moveContent();}
+  init();
+  setTimeout(init, 500);
+  setTimeout(init, 1500);
+  setTimeout(init, 3000);
+  setInterval(moveContent, 2000);
+  /* MutationObserver para detectar cuando v87-page-masss21 aparece */
+  var mo=new MutationObserver(moveContent);
+  mo.observe(document.body,{childList:true,subtree:true});
+})();
+   </script>
