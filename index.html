@@ -22667,3 +22667,244 @@ window.selectLLPriv=function(el){document.querySelectorAll('.ll-priv-opt').forEa
   setInterval(fixCards,3000);
 })();
    </script>
+<script>
+/* v229 - fix big card layout (flex-grow para imagen) + sidebars custom por deporte */
+(function(){
+  if(window.__v229loaded)return;window.__v229loaded=true;
+  
+  /* === Fix big card: que la imagen llene el espacio === */
+  function fixBigCards(){
+    document.querySelectorAll('.v100-news-big').forEach(function(card){
+      var emojiDiv=card.children[1];
+      if(!emojiDiv)return;
+      var hadImage=emojiDiv.style.backgroundImage && emojiDiv.style.backgroundImage.indexOf('url')>=0;
+      if(!hadImage)return;
+      /* Hacer que la imagen llene flex-grow:1 (el card es flex column) */
+      emojiDiv.style.setProperty('flex','1 1 auto','important');
+      emojiDiv.style.setProperty('min-height','280px','important');
+      emojiDiv.style.setProperty('height','auto','important');
+    });
+  }
+  fixBigCards();
+  setInterval(fixBigCards,1000);
+  
+  /* === SIDEBARS CUSTOM POR DEPORTE === */
+  var SPORT_SIDEBARS={
+    nba:{title:'BASKETBALL', emoji:'🏀', items:[
+      {emoji:'📋',label:'Reglas'},
+      {emoji:'📚',label:'Historia'},
+      {emoji:'🏅',label:'Records'},
+      {emoji:'📅',label:'Calendario'},
+      {emoji:'🏆',label:'NBA Finals'},
+      {emoji:'⭐',label:'All-Star'},
+      {emoji:'🌎',label:'EuroLeague'},
+      {emoji:'🎓',label:'NCAA'},
+      {emoji:'🥇',label:'Olympics'},
+      {emoji:'👑',label:'Leyendas'}
+    ]},
+    nfl:{title:'NFL', emoji:'🏈', items:[
+      {emoji:'📋',label:'Reglas'},
+      {emoji:'📚',label:'Historia'},
+      {emoji:'🏅',label:'Records'},
+      {emoji:'📅',label:'Calendario'},
+      {emoji:'🏆',label:'Super Bowl'},
+      {emoji:'⭐',label:'Pro Bowl'},
+      {emoji:'🎓',label:'NCAA Football'},
+      {emoji:'👑',label:'Leyendas'}
+    ]},
+    f1:{title:'CARRERAS', emoji:'🏎️', items:[
+      {emoji:'📋',label:'Reglas'},
+      {emoji:'📚',label:'Historia'},
+      {emoji:'🏅',label:'Records'},
+      {emoji:'📅',label:'Calendario'},
+      {emoji:'🏆',label:'F1 GP'},
+      {emoji:'🏁',label:'MotoGP'},
+      {emoji:'🚗',label:'NASCAR'},
+      {emoji:'🛞',label:'IndyCar'},
+      {emoji:'🏎',label:'Rally Dakar'},
+      {emoji:'👑',label:'Leyendas'}
+    ]},
+    ufc:{title:'COMBATE', emoji:'🥊', items:[
+      {emoji:'📋',label:'Reglas'},
+      {emoji:'📚',label:'Historia'},
+      {emoji:'🏅',label:'Records'},
+      {emoji:'📅',label:'Calendario'},
+      {emoji:'🥋',label:'UFC'},
+      {emoji:'🥊',label:'Boxeo'},
+      {emoji:'🤼',label:'WWE'},
+      {emoji:'👑',label:'Leyendas'}
+    ]},
+    mlb:{title:'BASEBALL', emoji:'⚾', items:[
+      {emoji:'📋',label:'Reglas'},
+      {emoji:'📚',label:'Historia'},
+      {emoji:'🏅',label:'Records'},
+      {emoji:'📅',label:'Calendario'},
+      {emoji:'🏆',label:'World Series'},
+      {emoji:'🌎',label:'NPB Japón'},
+      {emoji:'🇰🇷',label:'KBO Corea'},
+      {emoji:'👑',label:'Leyendas'}
+    ]},
+    nhl:{title:'HOCKEY', emoji:'🏒', items:[
+      {emoji:'📋',label:'Reglas'},
+      {emoji:'📚',label:'Historia'},
+      {emoji:'🏅',label:'Records'},
+      {emoji:'📅',label:'Calendario'},
+      {emoji:'🏆',label:'Stanley Cup'},
+      {emoji:'⭐',label:'All-Star'},
+      {emoji:'🌎',label:'IIHF'},
+      {emoji:'👑',label:'Leyendas'}
+    ]},
+    rugby:{title:'RUGBY', emoji:'🏉', items:[
+      {emoji:'📋',label:'Reglas'},
+      {emoji:'📚',label:'Historia'},
+      {emoji:'🏅',label:'Records'},
+      {emoji:'📅',label:'Calendario'},
+      {emoji:'🏆',label:'World Cup'},
+      {emoji:'🌍',label:'Six Nations'},
+      {emoji:'🌎',label:'Rugby Champ.'},
+      {emoji:'⭐',label:'Top 14'},
+      {emoji:'👑',label:'Leyendas'}
+    ]},
+    golf:{title:'GOLF', emoji:'⛳', items:[
+      {emoji:'📋',label:'Reglas'},
+      {emoji:'📚',label:'Historia'},
+      {emoji:'🏅',label:'Records'},
+      {emoji:'📅',label:'Calendario'},
+      {emoji:'🏆',label:'Majors'},
+      {emoji:'⭐',label:'PGA Tour'},
+      {emoji:'🌍',label:'European Tour'},
+      {emoji:'🚺',label:'LPGA'},
+      {emoji:'👑',label:'Leyendas'}
+    ]},
+    athletics:{title:'ATLETISMO', emoji:'🏃', items:[
+      {emoji:'📋',label:'Disciplinas'},
+      {emoji:'📚',label:'Historia'},
+      {emoji:'🏅',label:'Records'},
+      {emoji:'📅',label:'Calendario'},
+      {emoji:'🏆',label:'World Champ.'},
+      {emoji:'💎',label:'Diamond League'},
+      {emoji:'🥇',label:'Olympics'},
+      {emoji:'👑',label:'Leyendas'}
+    ]},
+    acuaticos:{title:'NATACIÓN', emoji:'🏊', items:[
+      {emoji:'📋',label:'Disciplinas'},
+      {emoji:'📚',label:'Historia'},
+      {emoji:'🏅',label:'Records'},
+      {emoji:'📅',label:'Calendario'},
+      {emoji:'🏆',label:'World Champ.'},
+      {emoji:'🥇',label:'Olympics'},
+      {emoji:'👑',label:'Leyendas'}
+    ]},
+    cycling:{title:'CICLISMO', emoji:'🚴', items:[
+      {emoji:'📋',label:'Reglas'},
+      {emoji:'📚',label:'Historia'},
+      {emoji:'🏅',label:'Records'},
+      {emoji:'📅',label:'Calendario'},
+      {emoji:'🏆',label:'Tour de France'},
+      {emoji:'🇮🇹',label:'Giro'},
+      {emoji:'🇪🇸',label:'Vuelta'},
+      {emoji:'🌍',label:'World Champ.'},
+      {emoji:'👑',label:'Leyendas'}
+    ]},
+    volley:{title:'VOLLEYBALL', emoji:'🏐', items:[
+      {emoji:'📋',label:'Reglas'},
+      {emoji:'📚',label:'Historia'},
+      {emoji:'🏅',label:'Records'},
+      {emoji:'📅',label:'Calendario'},
+      {emoji:'🏆',label:'World Champ.'},
+      {emoji:'⭐',label:'Nations League'},
+      {emoji:'🏖',label:'Beach Volley'},
+      {emoji:'👑',label:'Leyendas'}
+    ]},
+    padel:{title:'PÁDEL', emoji:'🎾', items:[
+      {emoji:'📋',label:'Reglas'},
+      {emoji:'📚',label:'Historia'},
+      {emoji:'🏅',label:'Records'},
+      {emoji:'📅',label:'Calendario'},
+      {emoji:'🏆',label:'WPT'},
+      {emoji:'⭐',label:'Premier Padel'},
+      {emoji:'🌍',label:'Major Open'},
+      {emoji:'👑',label:'Leyendas'}
+    ]},
+    cricket:{title:'CRICKET', emoji:'🏏', items:[
+      {emoji:'📋',label:'Reglas'},
+      {emoji:'📚',label:'Historia'},
+      {emoji:'🏅',label:'Records'},
+      {emoji:'📅',label:'Calendario'},
+      {emoji:'🏆',label:'ICC World Cup'},
+      {emoji:'⭐',label:'IPL'},
+      {emoji:'🇮🇳',label:'T20 League'},
+      {emoji:'👑',label:'Leyendas'}
+    ]}
+  };
+  
+  function buildSidebars(){
+    var sidebar=document.getElementById('sidebar')||document.querySelector('.sidebar');
+    if(!sidebar)return;
+    Object.keys(SPORT_SIDEBARS).forEach(function(key){
+      var cls='v229-sidebar-'+key;
+      if(sidebar.querySelector('.'+cls))return;
+      var data=SPORT_SIDEBARS[key];
+      var html='<div class="'+cls+'" style="display:none;padding:14px 12px;color:#0f172a;">'+
+        '<div style="font-weight:800;font-size:18px;letter-spacing:.5px;padding:8px 12px;margin-bottom:8px;border-bottom:1px solid #e2e8f0;">'+data.emoji+' '+data.title+'</div>'+
+        '<div style="display:inline-flex;gap:4px;background:#fee2e2;border-radius:999px;padding:3px;margin:6px 12px 12px;"><button style="border:none;background:#c8102e;color:#fff;border-radius:999px;padding:4px 12px;font-weight:600;font-size:12px;">M</button><button style="border:none;background:transparent;color:#9b0d22;border-radius:999px;padding:4px 12px;font-weight:600;font-size:12px;">F</button></div>'+
+        '<ul style="list-style:none;padding:0;margin:0;">';
+      data.items.forEach(function(it){
+        html+='<li style="padding:9px 16px;font-size:14px;color:#1f2937;border-radius:6px;cursor:pointer;display:flex;align-items:center;gap:10px;" onmouseover="this.style.background=\'#f1f5f9\'" onmouseout="this.style.background=\'transparent\'">'+
+          '<span>'+it.emoji+'</span><span>'+it.label+'</span></li>';
+      });
+      html+='</ul></div>';
+      sidebar.insertAdjacentHTML('beforeend', html);
+    });
+  }
+  
+  function tickSidebars(){
+    var sidebar=document.getElementById('sidebar')||document.querySelector('.sidebar');
+    if(!sidebar)return;
+    var nav=document.querySelector('.sport-nav-bar');
+    var activeBtn=nav?nav.querySelector('.sport-btn.active'):null;
+    if(!activeBtn)return;
+    var onclick=activeBtn.getAttribute('onclick')||'';
+    var key='';
+    var keyMatch=onclick.match(/switchSport\(['"]([\w-]+)/);
+    if(keyMatch)key=keyMatch[1];
+    var text=activeBtn.textContent;
+    
+    /* Ocultar todos los sidebars custom */
+    Object.keys(SPORT_SIDEBARS).forEach(function(k){
+      var el=sidebar.querySelector('.v229-sidebar-'+k);
+      if(el)el.style.setProperty('display','none','important');
+    });
+    
+    /* Solo activar para deportes que NO son Fútbol/Tenis (que tienen sus propios sidebars) */
+    if(/F[uú]tbol/i.test(text) && !/Americano/i.test(text))return;
+    if(/Tenis/i.test(text))return;
+    
+    /* Mostrar el sidebar del deporte activo */
+    var elActive=sidebar.querySelector('.v229-sidebar-'+key);
+    if(elActive){
+      elActive.style.setProperty('display','block','important');
+      /* Tambien hacer visible el #sidebar padre */
+      sidebar.style.setProperty('display','block','important');
+      /* Ocultar sidebar-section (Futbol) y v114 (Tenis) */
+      var futSec=sidebar.querySelector('.sidebar-section');
+      if(futSec)futSec.style.setProperty('display','none','important');
+      var tenSec=sidebar.querySelector('.v114-tenis-sidebar');
+      if(tenSec)tenSec.style.setProperty('display','none','important');
+    }
+  }
+  
+  function init(){
+    buildSidebars();
+    tickSidebars();
+  }
+  init();
+  setTimeout(init, 500);
+  setTimeout(init, 1500);
+  setInterval(tickSidebars, 500);
+  document.addEventListener('click', function(){
+    setTimeout(tickSidebars, 100);
+    setTimeout(tickSidebars, 300);
+  }, true);
+})();
+   </script>
