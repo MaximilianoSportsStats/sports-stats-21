@@ -21497,6 +21497,107 @@ setTimeout(function(){injectCSS();ensureVisible();},3000);
 setInterval(ensureVisible, 2500);
 })();
 </script>
+
+<script>
+(function(){
+if(window.__v212loaded)return;window.__v212loaded=true;
+var LANGS=[
+ {code:"es",flag:"🇪🇸",label:"Español"},
+ {code:"en",flag:"🇬🇧",label:"English"},
+ {code:"de",flag:"🇩🇪",label:"Deutsch"},
+ {code:"fr",flag:"🇫🇷",label:"Français"},
+ {code:"it",flag:"🇮🇹",label:"Italiano"},
+ {code:"pt",flag:"🇵🇹",label:"Português"}
+];
+function injectCSS(){
+ if(document.getElementById("v212-style"))return;
+ var s=document.createElement("style"); s.id="v212-style";
+ s.textContent=""
+  +"html body .meta-nav{display:flex !important;align-items:center !important;gap:10px !important;overflow:visible !important;flex-wrap:wrap !important;}"
+  +"#v212-search-bar{display:flex !important;align-items:center !important;gap:8px !important;padding:8px 14px !important;border:1px solid #e5e7eb !important;border-radius:20px !important;background:#fff !important;visibility:visible !important;opacity:1 !important;flex-shrink:0 !important;}"
+  +"#v212-search-bar input{border:none !important;outline:none !important;min-width:140px !important;background:transparent !important;font-size:14px !important;}"
+  +"#v212-lang{position:relative !important;display:flex !important;align-items:center !important;visibility:visible !important;opacity:1 !important;flex-shrink:0 !important;}"
+  +"#v212-lang-toggle{display:flex !important;align-items:center !important;gap:8px !important;padding:8px 14px !important;border:1px solid #e5e7eb !important;border-radius:20px !important;background:#fff !important;cursor:pointer !important;font-size:14px !important;color:#0f172a !important;}"
+  +"#v212-lang-menu{display:none;position:absolute;top:calc(100% + 4px);right:0;background:#fff;border:1px solid #e5e7eb;border-radius:8px;padding:5px;min-width:160px;box-shadow:0 8px 24px rgba(0,0,0,0.12);z-index:9999;}"
+  +"#v212-lang.open #v212-lang-menu{display:block;}"
+  +"#v212-lang-menu button{display:flex;align-items:center;gap:10px;width:100%;padding:8px 12px;background:none;border:none;cursor:pointer;font-size:13px;color:#0f172a;text-align:left;border-radius:6px;}"
+  +"#v212-lang-menu button:hover{background:#f3f4f6;}"
+  +"#v212-lang-menu button.active{background:#fef2f2;color:#dc2626;font-weight:700;}";
+ document.head.appendChild(s);
+}
+function applyLangText(code){
+ /* Use native v174apply if exists */
+ if(typeof window.__v174apply==="function"){ try{ window.__v174apply(code); }catch(e){} }
+ try{ localStorage.setItem("v174-lang", code); }catch(e){}
+ /* Update our v212 picker label */
+ var lang=LANGS.find(function(l){return l.code===code;}) || LANGS[0];
+ var f=document.getElementById("v212-lang-flag");
+ var lb=document.getElementById("v212-lang-label");
+ if(f) f.textContent=lang.flag;
+ if(lb) lb.textContent=lang.label;
+ document.querySelectorAll("#v212-lang-menu button").forEach(function(b){
+  b.classList.toggle("active", b.getAttribute("data-code")===code);
+ });
+}
+function buildSearch(meta){
+ if(document.getElementById("v212-search-bar")) return;
+ var d=document.createElement("div");
+ d.id="v212-search-bar";
+ d.innerHTML="<span style=\"font-size:14px\">🔍</span><input type=\"search\" placeholder=\"Buscar deportes, ligas, equipos, jugadores...\" />";
+ var loginBtn=meta.querySelector(".login-btn");
+ if(loginBtn) meta.insertBefore(d, loginBtn);
+ else meta.appendChild(d);
+}
+function buildLang(meta){
+ if(document.getElementById("v212-lang")) return;
+ var cur="es";
+ try{ var s=localStorage.getItem("v174-lang"); if(s) cur=s; }catch(e){}
+ var lang=LANGS.find(function(l){return l.code===cur;}) || LANGS[0];
+ var d=document.createElement("div");
+ d.id="v212-lang";
+ var menuHTML="";
+ LANGS.forEach(function(l){
+  menuHTML+="<button type=\"button\" data-code=\""+l.code+"\""+(l.code===cur?" class=\"active\"":"")+"><span style=\"font-size:16px\">"+l.flag+"</span>"+l.label+"</button>";
+ });
+ d.innerHTML="<button id=\"v212-lang-toggle\" type=\"button\">"
+  +"<span id=\"v212-lang-flag\" style=\"font-size:16px\">"+lang.flag+"</span>"
+  +"<span id=\"v212-lang-label\">"+lang.label+"</span>"
+  +"<span style=\"color:#9ca3af;font-size:11px\">▾</span>"
+ +"</button>"
+ +"<div id=\"v212-lang-menu\">"+menuHTML+"</div>";
+ var loginBtn=meta.querySelector(".login-btn");
+ if(loginBtn) meta.insertBefore(d, loginBtn);
+ else meta.appendChild(d);
+ /* Wire clicks */
+ var toggle=d.querySelector("#v212-lang-toggle");
+ toggle.addEventListener("click", function(e){ e.preventDefault(); e.stopPropagation(); d.classList.toggle("open"); });
+ d.querySelectorAll("#v212-lang-menu button").forEach(function(b){
+  b.addEventListener("click", function(e){ e.preventDefault(); e.stopPropagation(); var code=b.getAttribute("data-code"); applyLangText(code); d.classList.remove("open"); });
+ });
+ document.addEventListener("click", function(e){
+  if(!d.contains(e.target)) d.classList.remove("open");
+ });
+}
+function tick(){
+ injectCSS();
+ var meta=document.querySelector(".meta-nav");
+ if(!meta) return;
+ /* Detect if native search/lang are MISSING from meta-nav (not just hidden) */
+ var natSearch=meta.querySelector("#v25-search-bar");
+ var natLang=meta.querySelector("#v30-lang");
+ /* Check if native is visible */
+ var searchVis=natSearch && natSearch.offsetWidth>0 && natSearch.offsetHeight>0;
+ var langVis=natLang && natLang.offsetWidth>0 && natLang.offsetHeight>0;
+ if(!searchVis){ buildSearch(meta); }
+ if(!langVis){ buildLang(meta); }
+}
+tick();
+setTimeout(tick, 300);
+setTimeout(tick, 1500);
+setTimeout(tick, 4000);
+setInterval(tick, 3000);
+})();
+</script>
 </body>
 </html>
 
