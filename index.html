@@ -24005,3 +24005,68 @@ window.selectLLPriv=function(el){document.querySelectorAll('.ll-priv-opt').forEa
   mo.observe(document.body,{attributes:true,attributeFilter:['style'],subtree:true});
 })();
    </script>
+<script>
+/* v241 - eliminar header viejo de v87-page-masss21 + fix Inicio click desde MasSS21 */
+(function(){
+  if(window.__v241loaded)return;window.__v241loaded=true;
+  
+  function removeOldHeader(){
+    var v87=document.getElementById('v87-page-masss21');
+    if(!v87)return;
+    /* Eliminar el primer hijo (el header viejo "La historia, la misión y el equipo") */
+    var children=Array.from(v87.children);
+    children.forEach(function(c){
+      if(c.id==='v233-panel')return; /* no tocar mi panel */
+      var t=(c.textContent||'').slice(0,150);
+      if(/Más Sobre SS\s*21/i.test(t) && /La historia.*misi[oó]n.*equipo/i.test(t)){
+        c.style.setProperty('display','none','important');
+      }
+    });
+  }
+  
+  function hideMasSS21AndShowInicio(){
+    var v87=document.getElementById('v87-page-masss21');
+    if(v87)v87.style.setProperty('display','none','important');
+    /* Reactivar panel-inicio */
+    var inicio=document.getElementById('panel-inicio');
+    if(inicio){
+      inicio.classList.add('active');
+      inicio.style.removeProperty('display');
+    }
+    /* Mostrar hero */
+    var hero=document.getElementById('heroCarousel');
+    if(hero)hero.style.removeProperty('display');
+    /* Mostrar ticker */
+    var ticker=document.getElementById('v100-ticker');
+    if(ticker)ticker.style.removeProperty('display');
+    /* Limpiar body class de masss21 */
+    document.body.classList.remove('v200-mercado-mode');
+    var bodyClasses=Array.from(document.body.classList);
+    bodyClasses.forEach(function(c){if(/v32-view-/.test(c) && c!=='v32-view-inicio')document.body.classList.remove(c);});
+    document.body.classList.add('v32-view-inicio');
+  }
+  
+  function onClick(e){
+    var t=e.target;
+    if(!t||!t.closest)return;
+    var btn=t.closest('[data-v26id="inicio"]');
+    if(btn){
+      setTimeout(hideMasSS21AndShowInicio, 50);
+      setTimeout(hideMasSS21AndShowInicio, 200);
+      setTimeout(hideMasSS21AndShowInicio, 600);
+    }
+  }
+  
+  function init(){
+    removeOldHeader();
+    if(!window.__v241bound){
+      document.addEventListener('click', onClick, true);
+      window.__v241bound=true;
+    }
+  }
+  init();
+  setTimeout(init, 500);
+  setTimeout(init, 1500);
+  setInterval(removeOldHeader, 1000);
+})();
+   </script>
