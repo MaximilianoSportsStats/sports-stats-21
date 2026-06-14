@@ -21886,3 +21886,44 @@ window.selectLLPriv=function(el){document.querySelectorAll('.ll-priv-opt').forEa
   }, true);
 })();
    </script>
+<script>
+/* v219 - eliminar marea/flicker en Inicio: limpiar hash + suprimir layout shifts */
+(function(){
+  if(window.__v219loaded)return;window.__v219loaded=true;
+  var STYLE='v219-style';
+  function css(){
+    if(document.getElementById(STYLE))return;
+    var s=document.createElement('style');s.id=STYLE;
+    s.textContent=
+      /* Prevenir layout shifts: panel-inicio siempre tiene espacio reservado */
+      'html body #panel-inicio.tab-panel{min-height:1px;}'+
+      /* Quitar focus outline que parpadea */
+      '[data-v26id="inicio"]:focus{outline:none !important;}'+
+      '[data-v26id="inicio"]:focus-visible{outline:2px solid #c8102e !important;outline-offset:2px;}'+
+      /* Suavizar transición */
+      '#panel-inicio{transition:opacity .12s ease;}';
+    document.head.appendChild(s);
+  }
+  function onClick(e){
+    var t=e.target;
+    if(!t||!t.closest)return;
+    var btn=t.closest('[data-v26id="inicio"]');
+    if(!btn)return;
+    /* Limpiar hash de URL después del click (sin recargar) */
+    setTimeout(function(){
+      if(location.hash){
+        try{history.replaceState(null,'',location.pathname+location.search);}catch(e){}
+      }
+    },10);
+  }
+  function init(){
+    css();
+    if(!window.__v219bound){
+      document.addEventListener('click',onClick,true);
+      window.__v219bound=true;
+    }
+  }
+  init();
+  setInterval(css,2000);
+})();
+   </script>
