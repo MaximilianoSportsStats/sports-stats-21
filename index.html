@@ -22371,3 +22371,37 @@ window.selectLLPriv=function(el){document.querySelectorAll('.ll-priv-opt').forEa
   setInterval(injectCSS, 2000);
 })();
    </script>
+<script>
+/* v226 - forzar ticker animation con higher specificity + inline style */
+(function(){
+  if(window.__v226loaded)return;window.__v226loaded=true;
+  
+  function injectCSS(){
+    var s=document.getElementById('v226-style');
+    if(s)return;
+    s=document.createElement('style');s.id='v226-style';
+    s.textContent=
+      /* Specificity (1,1,0) gana sobre v224 (1,0,0) */
+      'html body #v100-ticker .v100-ticker-track{animation:v100scroll 120s linear infinite !important;will-change:transform;transform:translateZ(0);}'+
+      'html body #v100-ticker:hover .v100-ticker-track{animation-play-state:paused !important;}';
+    document.head.appendChild(s);
+  }
+  
+  function forceAnim(){
+    try{
+      var track=document.querySelector('.v100-ticker-track');
+      if(!track)return;
+      /* Aplicar tambien inline para garantizar */
+      track.style.setProperty('animation','v100scroll 120s linear infinite','important');
+      track.style.setProperty('will-change','transform','important');
+      track.style.setProperty('transform','translateZ(0)','important');
+    }catch(e){}
+  }
+  
+  injectCSS();
+  forceAnim();
+  setTimeout(forceAnim, 500);
+  setTimeout(forceAnim, 1500);
+  setInterval(function(){injectCSS();forceAnim();}, 2000);
+})();
+   </script>
