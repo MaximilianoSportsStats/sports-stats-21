@@ -21818,3 +21818,34 @@ window.selectLLPriv=function(el){document.querySelectorAll('.ll-priv-opt').forEa
   }, true);
 })();
    </script>
+<script>
+/* v217 - ticker visible solo si sport-btn activo es Todos (data-v103-todos) */
+(function(){
+  if(window.__v217loaded)return;window.__v217loaded=true;
+  function tickerTick(){
+    try{
+      var ticker=document.getElementById('v100-ticker');
+      if(!ticker)return;
+      var nav=document.querySelector('.sport-nav-bar');
+      var activeBtn=nav?nav.querySelector('.sport-btn.active'):null;
+      var isTodos=activeBtn && activeBtn.hasAttribute('data-v103-todos');
+      var noActive=!activeBtn;
+      var merc=document.getElementById('v200-mercado-panel');
+      var mercActive=merc && merc.classList.contains('v200-active');
+      var isInicio=(isTodos || noActive) && !mercActive;
+      if(isInicio){
+        ticker.style.removeProperty('display');
+      } else {
+        ticker.style.setProperty('display','none','important');
+      }
+    }catch(e){}
+  }
+  tickerTick();
+  setInterval(tickerTick, 400);
+  document.addEventListener('click', function(){
+    setTimeout(tickerTick, 100);
+    setTimeout(tickerTick, 400);
+    setTimeout(tickerTick, 1000);
+  }, true);
+})();
+   </script>
