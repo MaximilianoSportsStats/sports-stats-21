@@ -23272,3 +23272,28 @@ window.selectLLPriv=function(el){document.querySelectorAll('.ll-priv-opt').forEa
   }, 100);
 })();
    </script>
+<script>
+/* v252 - dedupe agresivo setAttribute('style'/'class') + dedupe innerHTML + ocultar v250 paneles ANTES de aplicar resto */
+(function(){
+  if(window.__v252loaded)return;window.__v252loaded=true;
+  /* Monkey-patch setAttribute para detectar redundancia en style y class */
+  var origSetAttr=Element.prototype.setAttribute;
+  Element.prototype.setAttribute=function(name,val){
+    try{
+      if(name==='style' || name==='class'){
+        var cur=this.getAttribute(name);
+        if(cur===val)return;
+      }
+    }catch(e){}
+    return origSetAttr.call(this,name,val);
+  };
+  /* removeAttribute */
+  var origRemoveAttr=Element.prototype.removeAttribute;
+  Element.prototype.removeAttribute=function(name){
+    try{
+      if(!this.hasAttribute(name))return;
+    }catch(e){}
+    return origRemoveAttr.call(this,name);
+  };
+})();
+   </script>
