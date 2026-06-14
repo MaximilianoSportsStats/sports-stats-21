@@ -23208,3 +23208,67 @@ window.selectLLPriv=function(el){document.querySelectorAll('.ll-priv-opt').forEa
   }, true);
 })();
    </script>
+<script>
+/* v251 - arreglar v250: rename basket->nba + mover paneles a posicion correcta + ocultar todo al cargar */
+(function(){
+  if(window.__v251loaded)return;window.__v251loaded=true;
+  
+  function fixPanels(){
+    /* 1. Renombrar basket → nba para que matchee switchSport(nba) */
+    var oldBasket=document.getElementById('v250-panel-basket');
+    if(oldBasket){
+      oldBasket.id='v250-panel-nba';
+    }
+    /* 2. Mover TODOS los paneles v250 al final de panel-inicio o al final de body si no encuentra */
+    var target=document.body;
+    var allPanels=document.querySelectorAll('[id^="v250-panel-"]');
+    allPanels.forEach(function(p){
+      /* Forzar full-width abajo de todo */
+      p.style.cssText='display:none;width:100%;max-width:1100px;margin:30px auto;padding:0 24px;';
+      /* Mover al body si no esta ahi ya */
+      if(p.parentElement!==target){
+        target.appendChild(p);
+      }
+    });
+  }
+  
+  function showPanelForSport(key){
+    document.querySelectorAll('[id^="v250-panel-"]').forEach(function(p){
+      var pKey=p.id.replace('v250-panel-','');
+      p.style.display=(pKey===key)?'block':'none';
+    });
+  }
+  
+  /* Override del handler de v250: re-aplicar mapping con NBA */
+  document.addEventListener('click', function(e){
+    var t=e.target.closest('.sport-btn');
+    if(!t)return;
+    var onclick=t.getAttribute('onclick')||'';
+    var keyMatch=onclick.match(/switchSport\(['"]([\w-]+)/);
+    var key=keyMatch?keyMatch[1]:'';
+    /* Si es Todos (Inicio), ocultar todos */
+    if(t.hasAttribute('data-v103-todos')){
+      document.querySelectorAll('[id^="v250-panel-"]').forEach(function(p){p.style.display='none';});
+      return;
+    }
+    showPanelForSport(key);
+  }, true);
+  
+  /* Tambien cuando click en Inicio del menu, ocultar */
+  document.addEventListener('click', function(e){
+    var inicio=e.target.closest('[data-v26id="inicio"]');
+    if(inicio){
+      document.querySelectorAll('[id^="v250-panel-"]').forEach(function(p){p.style.display='none';});
+    }
+  }, true);
+  
+  /* Init: ocultar todos al cargar y aplicar fix */
+  fixPanels();
+  setTimeout(fixPanels, 500);
+  setTimeout(fixPanels, 1500);
+  /* Ocultar todo al cargar */
+  setTimeout(function(){
+    document.querySelectorAll('[id^="v250-panel-"]').forEach(function(p){p.style.display='none';});
+  }, 100);
+})();
+   </script>
