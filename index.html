@@ -22558,3 +22558,112 @@ window.selectLLPriv=function(el){document.querySelectorAll('.ll-priv-opt').forEa
   setInterval(applyMini, 3000);
 })();
    </script>
+<script>
+/* v228 - rollback cards (espacios vacios) + imagenes verificadas + matar v226 ticker */
+(function(){
+  if(window.__v228loaded)return;window.__v228loaded=true;
+  
+  /* === Matar v226 ticker interference: ganar via requestAnimationFrame === */
+  function killTickerInline(){
+    try{
+      var track=document.querySelector('.v100-ticker-track');
+      if(track){
+        if(track.style.animation){track.style.removeProperty('animation');}
+        if(track.style.transform === 'translateZ(0px)' || track.style.transform === 'translateZ(0)'){track.style.removeProperty('transform');}
+        if(track.style.willChange){track.style.removeProperty('will-change');}
+      }
+    }catch(e){}
+  }
+  function rafLoop(){
+    killTickerInline();
+    requestAnimationFrame(rafLoop);
+  }
+  rafLoop();
+  /* Asegurar CSS animation via stylesheet con specificity 1,1,0 */
+  if(!document.getElementById('v228-ticker-style')){
+    var s=document.createElement('style');s.id='v228-ticker-style';
+    s.textContent='html body #v100-ticker .v100-ticker-track{animation:v100scroll 90s linear infinite !important;will-change:transform;}'+
+      'html body #v100-ticker:hover .v100-ticker-track{animation-play-state:paused !important;}';
+    document.head.appendChild(s);
+  }
+  
+  /* === IMAGENES VERIFICADAS (1 por categoria) === */
+  var IMG={
+    basket:'photo-1546519638-68e109acd27d',
+    soccer:'photo-1431324155629-1a6deb1dec8d',
+    tennis:'photo-1554068865-24cecd4e34b8',
+    cricket:'photo-1531415074968-036ba1b575da',
+    nfl:'photo-1486286701208-1d58e9338013',
+    baseball:'photo-1508344928-a700e93af038',
+    hockey:'photo-1517867065852-8c7d5af0a635',
+    f1:'photo-1517994112540-009c47ea476b',
+    boxing:'photo-1549719386-74dfcbf7dbed',
+    golf:'photo-1535131749006-b7f58c99034b',
+    rugby:'photo-1591491633412-d712a04f93b3',
+    cycling:'photo-1541625602330-2277a4c46182',
+    swim:'photo-1565992441121-4367c2967103',
+    padel:'photo-1554068865-24cecd4e34b8',
+    money:'photo-1611229632331-bc55b80fe2cb',
+    sports:'photo-1461896836934-ffe607ba8211'
+  };
+  
+  function pickPhoto(tag, title){
+    var t=(tag+' '+title).toLowerCase();
+    if(/basketball|nba|baloncesto|lebron|curry|don[cč]i[cć]/.test(t))return IMG.basket;
+    if(/cricket|virat|kohli/.test(t))return IMG.cricket;
+    if(/nfl|americano|football americano/.test(t))return IMG.nfl;
+    if(/baseball|mlb|b[eé]isbol/.test(t))return IMG.baseball;
+    if(/hockey|nhl/.test(t))return IMG.hockey;
+    if(/f1|formula|verstappen|hamilton|leclerc|mercedes|ferrari|mclaren/.test(t))return IMG.f1;
+    if(/box|ufc|mma|combate/.test(t))return IMG.boxing;
+    if(/golf/.test(t))return IMG.golf;
+    if(/rugby/.test(t))return IMG.rugby;
+    if(/ciclismo|cycling|tour de/.test(t))return IMG.cycling;
+    if(/nataci[oó]n|swim/.test(t))return IMG.swim;
+    if(/p[aá]del/.test(t))return IMG.padel;
+    if(/tenis|tennis|atp|wta|alcaraz|djokovic|nadal|federer|sinner/.test(t))return IMG.tennis;
+    if(/f[uú]tbol|soccer|fifa|messi|mbapp[eé]|cristiano|ronaldo|neymar|haaland|vinicius|premier|champions|laliga|barcelona|madrid|psg|albiceleste/.test(t))return IMG.soccer;
+    if(/mercado|fichaje|transfer|contrato/.test(t))return IMG.money;
+    return IMG.sports;
+  }
+  
+  function fixCards(){
+    /* BIG cards - usar background-image en el CARD entero (no en emoji div) */
+    document.querySelectorAll('.v100-news-big').forEach(function(card){
+      if(card.dataset.v228Done==='1')return;
+      var tag=card.querySelector('.v100-news-tag');
+      var tagTxt=tag?tag.textContent.trim():'';
+      var title=card.children[2]?card.children[2].textContent.trim():'';
+      var photoId=pickPhoto(tagTxt, title);
+      var url='https://images.unsplash.com/'+photoId+'?w=900&q=75';
+      /* Resetear el emoji div al estado original (sin background) */
+      var emojiDiv=card.children[1];
+      if(emojiDiv){
+        emojiDiv.style.cssText='';
+        var orig=emojiDiv.getAttribute('data-v220-orig');
+        if(orig && !emojiDiv.textContent.trim()){emojiDiv.textContent=orig;}
+        emojiDiv.style.cssText='background-image:linear-gradient(180deg,rgba(0,0,0,0) 30%,rgba(0,0,0,.55) 100%),url("'+url+'");background-size:cover;background-position:center;height:180px;border-radius:12px;margin-bottom:14px;color:transparent;';
+      }
+      card.dataset.v228Done='1';
+    });
+    /* MINI cards - igual pero altura menor */
+    document.querySelectorAll('.v100-news-mini').forEach(function(card){
+      if(card.dataset.v228Done==='1')return;
+      var tag=card.querySelector('.v100-news-tag-mini, .v100-news-tag');
+      var tagTxt=tag?tag.textContent.trim():'';
+      var title=card.children[2]?card.children[2].textContent.trim():'';
+      var photoId=pickPhoto(tagTxt, title);
+      var url='https://images.unsplash.com/'+photoId+'?w=600&q=75';
+      var emojiDiv=card.children[1];
+      if(emojiDiv){
+        emojiDiv.style.cssText='background-image:linear-gradient(180deg,rgba(0,0,0,0) 30%,rgba(0,0,0,.55) 100%),url("'+url+'");background-size:cover;background-position:center;height:110px;border-radius:10px;margin-bottom:10px;color:transparent;';
+      }
+      card.dataset.v228Done='1';
+    });
+  }
+  fixCards();
+  setTimeout(fixCards,500);
+  setTimeout(fixCards,1500);
+  setInterval(fixCards,3000);
+})();
+   </script>
