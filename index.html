@@ -23297,3 +23297,43 @@ window.selectLLPriv=function(el){document.querySelectorAll('.ll-priv-opt').forEa
   };
 })();
    </script>
+<script>
+/* v253 - dedupe direct style assignments (el.style.display='block' etc) */
+(function(){
+  if(window.__v253loaded)return;window.__v253loaded=true;
+  /* Lista de propiedades de style mas usadas y patcheables */
+  var props=['display','visibility','opacity','width','height','minHeight','maxHeight','flex','flexGrow','flexShrink','top','left','right','bottom','transform','animation','background','backgroundImage','padding','margin','color','position','zIndex'];
+  props.forEach(function(p){
+    try{
+      var desc=Object.getOwnPropertyDescriptor(CSSStyleDeclaration.prototype, p);
+      if(!desc || !desc.set)return;
+      var origSet=desc.set;
+      Object.defineProperty(CSSStyleDeclaration.prototype, p, {
+        configurable:true,
+        get:desc.get,
+        set:function(v){
+          try{
+            if(this[p]===v)return;
+          }catch(e){}
+          origSet.call(this, v);
+        }
+      });
+    }catch(e){}
+  });
+  /* Patch cssText tambien */
+  try{
+    var ctDesc=Object.getOwnPropertyDescriptor(CSSStyleDeclaration.prototype,'cssText');
+    if(ctDesc && ctDesc.set){
+      var origCT=ctDesc.set;
+      Object.defineProperty(CSSStyleDeclaration.prototype,'cssText',{
+        configurable:true,
+        get:ctDesc.get,
+        set:function(v){
+          if(this.cssText===v)return;
+          origCT.call(this, v);
+        }
+      });
+    }
+  }catch(e){}
+})();
+   </script>
