@@ -23587,3 +23587,242 @@ window.selectLLPriv=function(el){document.querySelectorAll('.ll-priv-opt').forEa
   setInterval(init, 5000);
 })();
    </script>
+<script>
+/* v237 - mas info MasSS21 + detalle Mundial (cada edicion, femenino, sub20, clubes, 2026 2030) */
+(function(){
+  if(window.__v237loaded)return;window.__v237loaded=true;
+  
+  /* ========== MAS SECCIONES MASSS21 ========== */
+  function extendMasSS21(){
+    var panel=document.getElementById('v233-panel');
+    if(!panel)return false;
+    if(document.getElementById('v237-extra'))return true;
+    var extra=document.createElement('div');
+    extra.id='v237-extra';
+    extra.innerHTML=
+      /* Mundial 2026 Hub */
+      '<section><h2>🌎 Mundial 2026 Hub</h2><div class="v233-grid">'+
+        '<div class="v233-card"><h3>Centro Mundial 2026</h3><p>Cobertura completa de las 48 selecciones, 16 sedes en USA/MEX/CAN, calendario interactivo, predicciones de la comunidad y fan zones virtuales por país.</p></div>'+
+        '<div class="v233-card"><h3>Predictor Comunitario</h3><p>Juego gratis para predecir resultados de cada partido. Premios: Premium 1 año, camisetas oficiales, viajes a sedes.</p></div>'+
+        '<div class="v233-card"><h3>Stats en vivo</h3><p>Cada gol, tarjeta, sustitución actualizado en milisegundos. Heat maps, xG, posesión por jugador.</p></div>'+
+        '<div class="v233-card"><h3>Hinchada virtual</h3><p>Únete al canal Discord de tu selección, chat en vivo durante los partidos, AMAs con periodistas locales.</p></div>'+
+      '</div></section>'+
+      
+      /* Influencers / Creators */
+      '<section><h2>🎥 Programa Creators</h2><div class="v233-grid">'+
+        '<div class="v233-card"><h3>SS21 Creators</h3><p>Programa para influencers y periodistas deportivos: revenue share, herramientas exclusivas, soporte editorial.</p></div>'+
+        '<div class="v233-card"><h3>Studio en la nube</h3><p>Suite gratuita para creators: edición de clips, gráficos animados con datos en vivo, plantillas de social.</p></div>'+
+        '<div class="v233-card"><h3>Fund SS21</h3><p>USD 2M anuales para fondear contenido deportivo en LATAM. Postulaciones cada semestre.</p></div>'+
+        '<div class="v233-card"><h3>Mentorías con expertos</h3><p>Sesiones 1:1 con periodistas de The Athletic, ESPN y Marca para creators emergentes.</p></div>'+
+      '</div></section>'+
+      
+      /* Plans Premium detalle */
+      '<section><h2>💎 Planes y precios</h2><div class="v233-grid">'+
+        '<div class="v233-card"><h3>Free</h3><p style="font-size:24px;font-weight:800;color:#0f172a;margin:6px 0;">USD 0/mes</p><p>· Resultados en vivo<br>· 3 equipos favoritos<br>· Stats básicas<br>· Con publicidad</p></div>'+
+        '<div class="v233-card" style="border:2px solid #c8102e;"><h3 style="color:#c8102e;">Premium</h3><p style="font-size:24px;font-weight:800;color:#c8102e;margin:6px 0;">USD 4.99/mes</p><p>· Equipos ilimitados<br>· Stats avanzadas (xG, heat maps)<br>· Sin publicidad<br>· Contenido exclusivo<br>· Notificaciones avanzadas</p></div>'+
+        '<div class="v233-card"><h3>Pro</h3><p style="font-size:24px;font-weight:800;color:#0f172a;margin:6px 0;">USD 14.99/mes</p><p>· Todo Premium<br>· API 10K req/día<br>· Datos históricos profundos<br>· Soporte prioritario<br>· Para periodistas/scouts</p></div>'+
+        '<div class="v233-card"><h3>Anual</h3><p style="font-size:24px;font-weight:800;color:#0f172a;margin:6px 0;">USD 49.99/año</p><p>· Premium con 2 meses gratis<br>· Equivalente USD 4.16/mes<br>· Cancelación cuando quieras</p></div>'+
+        '<div class="v233-card"><h3>Estudiantes</h3><p style="font-size:24px;font-weight:800;color:#0f172a;margin:6px 0;">50% off</p><p>Verifica con email .edu o ID estudiantil. Aplica a Premium y Pro.</p></div>'+
+        '<div class="v233-card"><h3>Familia</h3><p style="font-size:24px;font-weight:800;color:#0f172a;margin:6px 0;">USD 8.99/mes</p><p>Hasta 6 cuentas Premium en el mismo hogar. Configuración familiar con perfiles.</p></div>'+
+      '</div></section>'+
+      
+      /* Casos de uso */
+      '<section><h2>👥 Casos de uso</h2><div class="v233-grid">'+
+        '<div class="v233-card"><h3>🎯 Fan apasionado</h3><p>Sigue 5 equipos en 3 deportes diferentes. Notificaciones de gol en tiempo real. Comparte stats en grupos de WhatsApp.</p></div>'+
+        '<div class="v233-card"><h3>📰 Periodista deportivo</h3><p>Usa la API para preparar notas. Acceso a stats históricas. Plantillas de gráficos. Análisis comparativos.</p></div>'+
+        '<div class="v233-card"><h3>🎓 Estudiante</h3><p>Datasets para sus tesis sobre deporte y sociedad. Acceso académico a la API. Material educativo SS21 Academy.</p></div>'+
+        '<div class="v233-card"><h3>🏟️ Club profesional</h3><p>Scouting con datos detallados de jugadores. Comparación con rivales. Benchmark de ligas.</p></div>'+
+        '<div class="v233-card"><h3>🎮 Apostador responsable</h3><p>Stats objetivas para análisis previo. Solo datos, no recomendaciones. Programa Juego Responsable activo.</p></div>'+
+        '<div class="v233-card"><h3>📱 Creador de contenido</h3><p>Studio en la nube para clips animados. Datos vivos para overlays. Revenue share con SS21.</p></div>'+
+      '</div></section>'+
+      
+      /* Glossary */
+      '<section><h2>📖 Glosario de stats</h2>'+
+        '<details><summary>xG (Expected Goals)</summary><p>Probabilidad de que un disparo termine en gol según factores como ángulo, distancia, defensores y tipo de pase previo. Métrica clave para evaluar la calidad de oportunidades.</p></details>'+
+        '<details><summary>PER (Player Efficiency Rating)</summary><p>Estadística NBA que resume el rendimiento por minuto. Media liga: 15.0. MVP típico: 25+.</p></details>'+
+        '<details><summary>WAR (Wins Above Replacement)</summary><p>MLB: estima cuántas victorias aporta un jugador comparado con un reemplazo promedio.</p></details>'+
+        '<details><summary>ELO Rating</summary><p>Sistema de puntuación adaptativo. Originalmente para ajedrez, usado en tenis, fútbol y otros deportes para comparar equipos.</p></details>'+
+        '<details><summary>Heat Map</summary><p>Visualización del calor de presencia de un jugador en el campo. Muestra dónde tocó más la pelota.</p></details>'+
+        '<details><summary>Tackles per Game (TPG)</summary><p>Promedio de quites por partido. Indicador defensivo clave en fútbol.</p></details>'+
+        '<details><summary>Possesion Adjusted Stats (P90)</summary><p>Stats ajustadas a 90 minutos de posesión efectiva. Permite comparar equipos con estilos diferentes.</p></details>'+
+        '<details><summary>True Shooting % (TS%)</summary><p>NBA: porcentaje de tiro que considera triples y libres. Mejor que FG% para evaluar eficiencia ofensiva total.</p></details>'+
+      '</section>'+
+      
+      /* Eventos en vivo / Meetups */
+      '<section><h2>🎉 Eventos & Comunidad en persona</h2><div class="v233-grid">'+
+        '<div class="v233-card"><h3>Watch Parties globales</h3><p>Eventos en CABA, CDMX, Madrid, Lima, Bogotá durante finales importantes. Bares partner, descuentos exclusivos.</p></div>'+
+        '<div class="v233-card"><h3>SS21 Conference</h3><p>Cumbre anual de deporte y datos. Speakers de FIFA, NBA, federaciones. Próxima: Santiago, Octubre 2026.</p></div>'+
+        '<div class="v233-card"><h3>Sports Awards</h3><p>Premios de la comunidad SS21: mejor jugador, gol del año, sorpresa del año. Votación de 500K+ usuarios.</p></div>'+
+        '<div class="v233-card"><h3>Visitas a sedes</h3><p>Pre-Mundial: tours guiados a sedes con periodistas SS21. Acceso a zonas restringidas.</p></div>'+
+      '</div></section>'+
+      
+      /* Comparativa */
+      '<section><h2>🔄 SS21 vs alternativas</h2><div class="v233-grid">'+
+        '<div class="v233-card"><h3>vs FlashScore</h3><p>SS21 cubre más deportes en español, tiene contenido editorial original y comunidad activa. FlashScore enfocado en scores rápidos.</p></div>'+
+        '<div class="v233-card"><h3>vs SofaScore</h3><p>SS21 es bilingüe (6 idiomas), MasSS21 ofrece más profundidad histórica. SofaScore mejor en live timeline.</p></div>'+
+        '<div class="v233-card"><h3>vs ESPN App</h3><p>SS21 enfocado en LATAM y Europa con stats abiertas. ESPN mejor en cobertura USA con video.</p></div>'+
+        '<div class="v233-card"><h3>vs The Athletic</h3><p>SS21 ofrece datos crudos + comunidad gratis. The Athletic mejor en long-form periodismo (de pago).</p></div>'+
+      '</div></section>'+
+      
+      /* User Stories */
+      '<section><h2>🌟 Historias de usuarios</h2><div class="v233-grid">'+
+        '<div class="v233-card"><h3>Pedro, de fan a periodista</h3><p>Empezó usando SS21 como hincha de Independiente. Hoy escribe para una agencia argentina y usa nuestra API a diario.</p></div>'+
+        '<div class="v233-card"><h3>Maria, scout amateur</h3><p>Descubrió jugadores juveniles colombianos usando nuestros datos. Hoy trabaja como scout junior en un club europeo.</p></div>'+
+        '<div class="v233-card"><h3>Equipo Belize FA</h3><p>Federación pequeña que usa SS21 Pro para análisis táctico. Subieron 12 posiciones en el ranking FIFA en 2 años.</p></div>'+
+        '<div class="v233-card"><h3>Profesor Carlos</h3><p>Da clases de "Deporte y Sociedad" en UBA usando datasets SS21. Sus alumnos publican papers académicos cada semestre.</p></div>'+
+      '</div></section>'+
+      
+      /* Editorial Principles */
+      '<section><h2>📜 Principios editoriales</h2><div class="v233-grid">'+
+        '<div class="v233-card"><h3>Verificación de fuentes</h3><p>Toda info de fichaje, lesión o rumor se verifica con al menos 2 fuentes independientes antes de publicarse.</p></div>'+
+        '<div class="v233-card"><h3>Sin sesgo de club</h3><p>Nuestros periodistas firman conflictos de interés. No cubren clubes con los que tienen relación personal.</p></div>'+
+        '<div class="v233-card"><h3>Correcciones públicas</h3><p>Si publicamos algo incorrecto, lo corregimos con nota explicativa visible. No borramos historia.</p></div>'+
+        '<div class="v233-card"><h3>Diferenciación opinion/news</h3><p>Las opiniones y los análisis se marcan claramente. Los hechos van sin opinión.</p></div>'+
+      '</div></section>'+
+      
+      /* Política de pagos */
+      '<section><h2>💳 Pagos & Política de reembolso</h2>'+
+        '<details><summary>¿Qué métodos de pago aceptan?</summary><p>Visa, Mastercard, Amex, PayPal, Mercado Pago, PIX (Brasil), OXXO (México), transferencia bancaria para planes anuales.</p></details>'+
+        '<details><summary>¿Política de reembolso?</summary><p>Reembolso completo dentro de 14 días sin preguntas. Después: pro-rata por uso si hay problema técnico no resuelto.</p></details>'+
+        '<details><summary>¿Renovación automática?</summary><p>Sí, pero te notificamos 5 días antes con email. Puedes cancelar en 1 click desde la app.</p></details>'+
+        '<details><summary>¿Aceptan criptomonedas?</summary><p>Aún no, pero está en el roadmap. Por ahora trabajamos con métodos de pago tradicionales por estabilidad de precio.</p></details>'+
+        '<details><summary>¿Hay descuentos por estudiantes/militares?</summary><p>Sí: 50% off para estudiantes (verificable con email .edu), militares activos, y mayores de 65 años.</p></details>'+
+      '</section>'+
+      
+      /* Affiliate Program */
+      '<section><h2>🤝 Programa de Afiliados</h2><div class="v233-grid">'+
+        '<div class="v233-card"><h3>30% comisión recurrente</h3><p>Por cada usuario que traes, ganas 30% de su suscripción mientras siga activo. Pagado mensualmente.</p></div>'+
+        '<div class="v233-card"><h3>Dashboard en tiempo real</h3><p>Mira tus conversiones, ingresos y top contenidos. Links únicos para cada campaña.</p></div>'+
+        '<div class="v233-card"><h3>Material listo para usar</h3><p>Banners, gifs, scripts editables. Tienes libertad creativa pero te damos templates.</p></div>'+
+        '<div class="v233-card"><h3>Tier de embajadores</h3><p>Top afiliados pasan a embajadores: contratos directos, contenido exclusivo, invitaciones a eventos.</p></div>'+
+      '</div></section>'+
+      
+      /* Misión social */
+      '<section><h2>🌍 Compromiso social</h2><div class="v233-grid">'+
+        '<div class="v233-card"><h3>Premium gratis para periodistas</h3><p>Más de 5.000 periodistas deportivos en LATAM tienen acceso Premium gratis a través de SS21 Press.</p></div>'+
+        '<div class="v233-card"><h3>Soporte a deportes minoritarios</h3><p>Damos cobertura completa a deportes que normalmente quedan fuera: handball, cricket, badminton, esquí.</p></div>'+
+        '<div class="v233-card"><h3>Programa Refugio</h3><p>Acceso gratuito Premium para personas en situación de refugio en colaboración con ACNUR.</p></div>'+
+        '<div class="v233-card"><h3>Campañas anti-discriminación</h3><p>Colaboramos con FIFA y clubes en campañas contra racismo, homofobia y violencia en el deporte.</p></div>'+
+      '</div></section>'+
+      
+      /* Verticales del producto */
+      '<section><h2>🧩 Verticales del producto</h2><div class="v233-grid">'+
+        '<div class="v233-card"><h3>SS21 Live</h3><p>Centro de partidos en vivo con timeline minuto a minuto, lineups, sustituciones, eventos clave.</p></div>'+
+        '<div class="v233-card"><h3>SS21 Stats</h3><p>Base de datos completa de estadísticas, comparadores, leaderboards y rankings dinámicos.</p></div>'+
+        '<div class="v233-card"><h3>SS21 News</h3><p>Redacción propia + agregador de fuentes verificadas. Curado por humanos, no algoritmos.</p></div>'+
+        '<div class="v233-card"><h3>SS21 Mercado</h3><p>Centro de fichajes, valores de mercado, rumores verificados, agentes libres.</p></div>'+
+        '<div class="v233-card"><h3>SS21 Community</h3><p>Foros por deporte/equipo, AMAs con periodistas, chat en vivo durante partidos.</p></div>'+
+        '<div class="v233-card"><h3>SS21 Academy</h3><p>Cursos sobre análisis deportivo, periodismo, scouting. Gratuitos + Premium.</p></div>'+
+      '</div></section>'+
+      
+      /* Bug Bounty */
+      '<section><h2>🐛 Seguridad y Bug Bounty</h2><div class="v233-grid">'+
+        '<div class="v233-card"><h3>Programa activo</h3><p>Reportá una vulnerabilidad y recibí desde USD 100 hasta USD 25.000 según severidad.</p></div>'+
+        '<div class="v233-card"><h3>Scope</h3><p>Plataforma web, apps iOS/Android, API. Excluido: ingeniería social, ataques DOS.</p></div>'+
+        '<div class="v233-card"><h3>Hall of Fame</h3><p>Reconocemos a los hackers éticos en nuestra página de seguridad con permiso. Top contribuidores tienen trofeo personalizado.</p></div>'+
+        '<div class="v233-card"><h3>Contacto</h3><p>📧 security@sportsstats21.com<br>Clave PGP disponible en sportsstats21.com/.well-known/security.txt</p></div>'+
+      '</div></section>';
+    panel.appendChild(extra);
+    return true;
+  }
+  
+  /* ========== MUNDIAL - DETALLE DE CADA EDICION + FEMENINO + SUB-20 + CLUBES + 2026/2030 ========== */
+  function expandMundial(){
+    var mundo=document.querySelector('[data-v147-slide="mundo"]')||document.getElementById('v147-slide-mundo');
+    if(!mundo)return false;
+    if(mundo.dataset.v237Done==='1')return true;
+    var extraHTML='<h3>📅 Detalle de cada Mundial</h3>'+
+      '<details><summary><strong>Uruguay 1930</strong> · Primer Mundial · Uruguay campeón 4-2 vs Argentina</summary><p>13 selecciones (todas invitadas, sin clasificación). Sede única: Montevideo. Estadio Centenario inaugurado para el torneo. Goleador: Guillermo Stábile (Argentina, 8 goles). Mascota: ninguna. Primer gol Mundial: Lucien Laurent (Francia vs México). Solo 4 selecciones europeas viajaron por la dificultad del transporte transatlántico.</p></details>'+
+      '<details><summary><strong>Italia 1934</strong> · Italia campeón 2-1 vs Checoslovaquia (TS)</summary><p>16 selecciones. Primer Mundial con clasificación previa. Goleador: Oldřich Nejedlý (Checoslovaquia, 5 goles). Uruguay no defendió el título (única vez en la historia que un campeón vigente no participó).</p></details>'+
+      '<details><summary><strong>Francia 1938</strong> · Italia bicampeón 4-2 vs Hungría</summary><p>15 selecciones (Austria se retiró tras la anexión nazi). Goleador: Leônidas (Brasil, 7 goles). Último Mundial antes de la WWII. España y Argentina ausentes por la guerra civil/conflicto político.</p></details>'+
+      '<details><summary><strong>Brasil 1950</strong> · Maracanazo · Uruguay 2-1 Brasil</summary><p>Sin final formal, se decidió en cuadrangular final. 199.854 personas en el Maracaná — récord histórico. Goleador: Ademir (Brasil, 9 goles). India se retiró por no permitir jugar descalzos. Inauguración del Maracaná. Considerado el "partido más impactante de la historia".</p></details>'+
+      '<details><summary><strong>Suiza 1954</strong> · "Milagro de Berna" · Alemania 3-2 Hungría</summary><p>16 selecciones. Hungría era favorita absoluta (invicta en 31 partidos). Alemania remontó 0-2. Goleador: Sándor Kocsis (Hungría, 11 goles). Primer Mundial televisado en directo en algunos países.</p></details>'+
+      '<details><summary><strong>Suecia 1958</strong> · Brasil 5-2 Suecia · Debut de Pelé</summary><p>16 selecciones. Pelé, 17 años, marcó 3 en semis vs Francia y 2 en la final. Goleador: Just Fontaine (Francia, 13 goles — récord vigente en un Mundial). Primer y único título Mundial de Brasil en el extranjero (hasta 2002).</p></details>'+
+      '<details><summary><strong>Chile 1962</strong> · Brasil bicampeón 3-1 Checoslovaquia</summary><p>16 selecciones. "Batalla de Santiago" Italia 0-2 Chile — partido más violento del Mundial. Pelé se lesionó en el segundo partido. Garrincha llevó a Brasil al título. Goleadores compartidos con 4 goles cada uno (6 jugadores).</p></details>'+
+      '<details><summary><strong>Inglaterra 1966</strong> · Inglaterra 4-2 Alemania (TS) · Gol fantasma</summary><p>16 selecciones. Goleador: Eusébio (Portugal, 9 goles). Inglaterra ganó su único título Mundial. El "gol que entró o no entró" de Hurst sigue en debate. Mascota: World Cup Willie (primera mascota oficial).</p></details>'+
+      '<details><summary><strong>México 1970</strong> · Brasil tricampeón 4-1 Italia · Jules Rimet definitivo</summary><p>16 selecciones. Goleador: Gerd Müller (Alemania, 10 goles). Brasil ganó la Jules Rimet para siempre tras 3 títulos. Considerado por muchos el mejor equipo de la historia (Pelé, Tostão, Jairzinho, Gérson, Rivellino, Carlos Alberto). Primer Mundial a color en TV.</p></details>'+
+      '<details><summary><strong>Alemania 1974</strong> · Alemania 2-1 Países Bajos · Naranja Mecánica</summary><p>16 selecciones. Trofeo nuevo: Copa FIFA. Goleador: Grzegorz Lato (Polonia, 7 goles). Cruyff y la "Naranja Mecánica" revolucionaron el fútbol con el "fútbol total".</p></details>'+
+      '<details><summary><strong>Argentina 1978</strong> · Argentina 3-1 Países Bajos (TS)</summary><p>16 selecciones. Goleador: Mario Kempes (Argentina, 6 goles). Mundial bajo dictadura militar — polémica histórica por presunto arreglo Perú-Argentina (Argentina necesitaba ganar 4-0, ganó 6-0).</p></details>'+
+      '<details><summary><strong>España 1982</strong> · Italia 3-1 Alemania · "Pablito" Rossi</summary><p>24 selecciones (primera expansión). Goleador: Paolo Rossi (Italia, 6 goles). Italia campeón con Rossi tras volver de sanción por escándalo. Mundial con sorpresas: Argelia venció a Alemania 2-1.</p></details>'+
+      '<details><summary><strong>México 1986</strong> · Argentina 3-2 Alemania · La era Maradona</summary><p>24 selecciones. Goleador: Gary Lineker (Inglaterra, 6 goles). Maradona: "Mano de Dios" y "Gol del Siglo" vs Inglaterra. 5 goles 5 asistencias. Brasil ausente sorprendentemente eliminado en cuartos por Francia.</p></details>'+
+      '<details><summary><strong>Italia 1990</strong> · Alemania 1-0 Argentina · Notte Magiche</summary><p>24 selecciones. Goleador: Salvatore Schillaci (Italia, 6 goles). "Italia 90" con tarjetas, faltas y poco gol — el Mundial más defensivo. Camerún sorprendente 4tos. Maradona expulsado en la final.</p></details>'+
+      '<details><summary><strong>USA 1994</strong> · Brasil tetracampeón 0-0 Italia (3-2 penales)</summary><p>24 selecciones. Goleadores: Salenko y Stoichkov (6 goles c/u). Primera final por penales. Roberto Baggio falla el penal definitivo. Mundial en USA — apuesta arriesgada que pagó. Récord asistencia promedio: 68.626.</p></details>'+
+      '<details><summary><strong>Francia 1998</strong> · Francia 3-0 Brasil · "Zizou"</summary><p>32 selecciones. Goleador: Davor Šuker (Croacia, 6 goles). Croacia tercer puesto en su primer Mundial. Zidane: 2 goles en la final. Ronaldo enigma — convulsión horas antes de la final.</p></details>'+
+      '<details><summary><strong>Corea/Japón 2002</strong> · Brasil pentacampeón 2-0 Alemania</summary><p>32 selecciones. Primer Mundial en Asia y compartido. Goleador: Ronaldo (Brasil, 8 goles). Corea del Sur 4to puesto (polémico — eliminó a Italia y España). Argentina y Francia eliminados en fase de grupos.</p></details>'+
+      '<details><summary><strong>Alemania 2006</strong> · Italia 1-1 Francia (5-3 penales) · Cabezazo de Zidane</summary><p>32 selecciones. Goleador: Miroslav Klose (Alemania, 5 goles). Zidane expulsado por cabezazo a Materazzi en final. Italia 4to título. Mundial famoso por su organización ejemplar.</p></details>'+
+      '<details><summary><strong>Sudáfrica 2010</strong> · España 1-0 Países Bajos · Iniesta</summary><p>32 selecciones. Primer Mundial en África. Goleadores: Müller, Forlán, Sneijder, Villa (5 c/u). Vuvuzelas marca registrada. España campeón con Tiki-Taka. Pulpo Paul predijo correctamente todos los resultados.</p></details>'+
+      '<details><summary><strong>Brasil 2014</strong> · Alemania 1-0 Argentina · Götze · El 7-1 histórico</summary><p>32 selecciones. Goleador: James Rodríguez (Colombia, 6 goles). Alemania 7-1 Brasil en semis — humillación histórica. Mascota: Fuleco. Mineirazo. Maradona y Pelé se enfrentaron en redes durante el Mundial.</p></details>'+
+      '<details><summary><strong>Rusia 2018</strong> · Francia 4-2 Croacia · Modrić MVP</summary><p>32 selecciones. Goleadores: Kane (6), Cavani, Lukaku, Griezmann (4 c/u). VAR debutó. Croacia llegó por primera vez a la final. Mascota: Zabivaka. Final con 6 goles, una de las más entretenidas.</p></details>'+
+      '<details><summary><strong>Qatar 2022</strong> · Argentina 3-3 Francia (4-2 penales) · Messi consagrado</summary><p>32 selecciones. Primer Mundial en Medio Oriente, en invierno (Nov-Dic). Goleador: Mbappé (8). Messi finalmente alcanzó la copa. Considerada por muchos la mejor final de la historia. Arabia 2-1 Argentina recordada como gran sorpresa.</p></details>'+
+      '<details><summary><strong>USA/MEX/CAN 2026</strong> · 48 selecciones · El más grande</summary><p>Primer Mundial con 48 selecciones. 16 sedes en 3 países. 104 partidos. Nuevo formato: 12 grupos de 4. Lionel Messi se rumorea como embajador. Apertura: Estadio Azteca CDMX (su tercer Mundial — único en historia). Final: MetLife Stadium NJ.</p></details>'+
+      '<details><summary><strong>Centenario 2030</strong> · Uruguay/Argentina/Paraguay/España/Portugal/Marruecos</summary><p>Mundial del 100º aniversario. 3 partidos inaugurales en Sudamérica (1 en Montevideo Centenario para honrar 1930). Resto en Europa/África. Polémico por el reparto continental y huellas de carbono del transporte.</p></details>'+
+      
+      '<h3>🚺 Mundial Femenino</h3>'+
+      '<table style="width:100%;border-collapse:collapse;margin:12px 0;font-size:13px;">'+
+      '<thead><tr style="background:#fee2e2;color:#9b0d22;"><th style="padding:8px;text-align:left;">Año</th><th style="padding:8px;">Sede</th><th style="padding:8px;">Campeón</th><th style="padding:8px;">Subcampeón</th></tr></thead><tbody>'+
+      [['1991','China','EE.UU. 🇺🇸','Noruega'],['1995','Suecia','Noruega 🇳🇴','Alemania'],['1999','EE.UU.','EE.UU. 🇺🇸','China'],['2003','EE.UU.','Alemania 🇩🇪','Suecia'],['2007','China','Alemania 🇩🇪','Brasil'],['2011','Alemania','Japón 🇯🇵','EE.UU.'],['2015','Canadá','EE.UU. 🇺🇸','Japón'],['2019','Francia','EE.UU. 🇺🇸','Países Bajos'],['2023','Australia/NZ','España 🇪🇸','Inglaterra'],['2027','Brasil','—','—']].map(function(r){return '<tr style="border-bottom:1px solid #e2e8f0;"><td style="padding:6px;">'+r[0]+'</td><td style="padding:6px;">'+r[1]+'</td><td style="padding:6px;font-weight:600;">'+r[2]+'</td><td style="padding:6px;">'+r[3]+'</td></tr>';}).join('')+
+      '</tbody></table>'+
+      '<p><strong>Goleadora histórica:</strong> Marta Vieira 🇧🇷 — 17 goles. <strong>Más títulos:</strong> EE.UU. — 4. <strong>Audiencia 2023 final:</strong> 2.0 billones globales.</p>'+
+      
+      '<h3>🧒 Mundial Sub-20</h3>'+
+      '<p>Creado en 1977. Disputado cada 2 años. <strong>Más títulos:</strong> Argentina (6: 1979, 1995, 1997, 2001, 2005, 2007). <strong>Otros campeones:</strong> Brasil 5, Portugal 2, URSS 2. Talentos que pasaron por el Sub-20: Maradona, Messi, Pogba, Lautaro Martínez, Phil Foden, Erling Haaland.</p>'+
+      
+      '<h3>👦 Mundial Sub-17</h3>'+
+      '<p>Creado en 1985. <strong>Más títulos:</strong> Nigeria (5), Brasil (4). Reconocido por descubrir talentos: Romario, Ronaldinho, Iniesta, Kelechi Iheanacho.</p>'+
+      
+      '<h3>🏆 Mundial de Clubes FIFA</h3>'+
+      '<p><strong>Formato anterior (2000-2023):</strong> 7 clubes — un campeón por confederación + anfitrión. Disputado cada año. <strong>Más títulos:</strong> Real Madrid (5), Barcelona (3), Bayern Munich (2). <strong>Único campeón sudamericano reciente:</strong> Corinthians 2012.</p>'+
+      '<p><strong>Formato nuevo (desde 2025):</strong> 32 clubes cada 4 años. Primer Mundial de Clubes ampliado: USA 2025. Premio total: USD 1.000 millones. Real Madrid inauguró el nuevo formato como ganador.</p>'+
+      
+      '<h3>🌎 Eliminatorias por confederación</h3>'+
+      '<ul>'+
+      '<li><strong>CONMEBOL 🇦🇷</strong> (Sudamérica, 10 selecciones): formato todos contra todos — el más exigente del mundo según expertos.</li>'+
+      '<li><strong>UEFA 🇪🇺</strong> (Europa, 55 selecciones): grupos + playoffs. 16 cupos directos para 2026 + repechaje.</li>'+
+      '<li><strong>CONCACAF 🇲🇽</strong> (Norte/Centroamérica, 35 selecciones): formato hexagonal/octogonal final. USA/MEX/CAN clasificados como anfitriones 2026.</li>'+
+      '<li><strong>AFC 🇯🇵</strong> (Asia, 47 selecciones): formato de rondas eliminatorias seguidas de grupos finales.</li>'+
+      '<li><strong>CAF 🇪🇬</strong> (África, 54 selecciones): grupos + repechaje final. 9 cupos para 2026.</li>'+
+      '<li><strong>OFC 🇳🇿</strong> (Oceanía, 11 selecciones): el más pequeño. Suele tener repechaje intercontinental para llegar al Mundial.</li>'+
+      '</ul>'+
+      
+      '<h3>🏟️ Estadios míticos del Mundial</h3>'+
+      '<ul>'+
+      '<li><strong>Maracaná 🇧🇷</strong> (Río de Janeiro): finales 1950 y 2014.</li>'+
+      '<li><strong>Azteca 🇲🇽</strong> (Ciudad de México): finales 1970 y 1986. Tercer Mundial en 2026.</li>'+
+      '<li><strong>Estadio Centenario 🇺🇾</strong> (Montevideo): primera final Mundial 1930.</li>'+
+      '<li><strong>Wembley 🏴󠁧󠁢󠁥󠁮󠁧󠁿</strong> (Londres): final 1966.</li>'+
+      '<li><strong>Olímpico 🇩🇪</strong> (Múnich): final 1974.</li>'+
+      '<li><strong>Santiago Bernabéu 🇪🇸</strong> (Madrid): final 1982.</li>'+
+      '<li><strong>Olímpico de Roma 🇮🇹</strong>: final 1990.</li>'+
+      '<li><strong>Stade de France 🇫🇷</strong> (Saint-Denis): final 1998.</li>'+
+      '<li><strong>Yokohama 🇯🇵</strong>: final 2002.</li>'+
+      '<li><strong>Lusail 🇶🇦</strong>: final 2022.</li>'+
+      '</ul>'+
+      
+      '<h3>🏆 Trofeos del Mundial</h3>'+
+      '<p><strong>Jules Rimet (1930-1970):</strong> escultura de la diosa Niké, 35cm, 3.8kg. Robada dos veces (1966 en Inglaterra y 1983 en Brasil — esta última nunca recuperada). Brasil la ganó definitivamente tras 3 títulos.</p>'+
+      '<p><strong>Copa FIFA (1974-presente):</strong> diseñada por Silvio Gazzaniga. 36.8cm, 6.175kg de oro de 18 quilates. Valor estimado: USD 20 millones (algunos dicen \"invaluable\"). Solo permanece en posesión del campeón hasta el siguiente Mundial — luego se entrega una réplica.</p>'+
+      
+      '<h3>🎨 Mascotas y balones</h3>'+
+      '<table style="width:100%;border-collapse:collapse;font-size:13px;margin:12px 0;">'+
+      '<thead><tr style="background:#fee2e2;color:#9b0d22;"><th style="padding:8px;">Mundial</th><th style="padding:8px;">Mascota</th><th style="padding:8px;">Balón oficial</th></tr></thead><tbody>'+
+      [['1966 Inglaterra','World Cup Willie','Slazenger Challenge'],['1970 México','Juanito','Telstar'],['1974 Alemania','Tip & Tap','Telstar Durlast'],['1978 Argentina','Gauchito','Tango'],['1982 España','Naranjito','Tango España'],['1986 México','Pique','Azteca'],['1990 Italia','Ciao','Etrusco'],['1994 USA','Striker','Questra'],['1998 Francia','Footix','Tricolore'],['2002 Corea/Japón','Ato Kaz Nik','Fevernova'],['2006 Alemania','Goleo VI','Teamgeist'],['2010 Sudáfrica','Zakumi','Jabulani'],['2014 Brasil','Fuleco','Brazuca'],['2018 Rusia','Zabivaka','Telstar 18'],['2022 Qatar','Laeeb','Al Rihla'],['2026 USA/MEX/CAN','Por revelar','Por revelar']].map(function(r){return '<tr style="border-bottom:1px solid #e2e8f0;"><td style="padding:6px;">'+r[0]+'</td><td style="padding:6px;">'+r[1]+'</td><td style="padding:6px;">'+r[2]+'</td></tr>';}).join('')+
+      '</tbody></table>';
+    
+    /* Append to existing content */
+    var body=mundo.querySelector('.body');
+    if(body){body.insertAdjacentHTML('beforeend', extraHTML);}
+    else{mundo.insertAdjacentHTML('beforeend', '<div class="body">'+extraHTML+'</div>');}
+    mundo.dataset.v237Done='1';
+    return true;
+  }
+  
+  function init(){
+    extendMasSS21();
+    expandMundial();
+  }
+  init();
+  setTimeout(init, 800);
+  setTimeout(init, 2500);
+  setInterval(init, 5000);
+})();
+   </script>
