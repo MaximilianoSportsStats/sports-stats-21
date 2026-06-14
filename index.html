@@ -23085,3 +23085,258 @@ window.selectLLPriv=function(el){document.querySelectorAll('.ll-priv-opt').forEa
   if(ulTarget){obs.observe(ulTarget,{childList:true});}
 })();
    </script>
+<script>
+/* v233 - Mas Sobre SS 21 completo: misión, equipo, videos tutoriales, FAQ, roadmap, prensa, careers, investors, premios, contacto, legal */
+(function(){
+  if(window.__v233loaded)return;window.__v233loaded=true;
+  var STYLE_ID='v233-style';
+  function injectCSS(){
+    if(document.getElementById(STYLE_ID))return;
+    var s=document.createElement('style');s.id=STYLE_ID;
+    s.textContent=
+      '#v233-panel{padding:32px 24px;max-width:1200px;margin:0 auto;color:#0f172a;display:none;}'+
+      '#v233-panel.v233-active{display:block !important;}'+
+      '#v233-panel .v233-hero{background:linear-gradient(135deg,#c8102e,#9b0d22);color:#fff;border-radius:18px;padding:48px 36px;margin-bottom:32px;text-align:center;}'+
+      '#v233-panel .v233-hero h1{font-size:38px;margin:0 0 12px;font-weight:800;}'+
+      '#v233-panel .v233-hero p{font-size:18px;opacity:.95;max-width:720px;margin:0 auto;line-height:1.5;}'+
+      '#v233-panel .v233-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px;margin-bottom:28px;}'+
+      '#v233-panel .v233-card{background:#fff;border:1px solid #e2e8f0;border-radius:14px;padding:22px;box-shadow:0 2px 8px rgba(0,0,0,0.04);}'+
+      '#v233-panel .v233-card h3{margin:0 0 10px;font-size:17px;color:#c8102e;font-weight:700;}'+
+      '#v233-panel .v233-card p,#v233-panel .v233-card li{font-size:14px;color:#475569;line-height:1.55;}'+
+      '#v233-panel section{margin-bottom:38px;}'+
+      '#v233-panel section>h2{font-size:24px;margin:0 0 16px;color:#0f172a;display:flex;align-items:center;gap:10px;}'+
+      '#v233-panel .v233-video{background:#0b1220;border-radius:12px;aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;color:#94a3b8;font-size:14px;position:relative;overflow:hidden;}'+
+      '#v233-panel .v233-video::before{content:"▶";position:absolute;font-size:56px;color:rgba(255,255,255,0.85);background:rgba(200,16,46,0.7);width:84px;height:84px;border-radius:50%;display:flex;align-items:center;justify-content:center;}'+
+      '#v233-panel .v233-video span{position:absolute;bottom:8px;left:12px;background:rgba(0,0,0,0.6);padding:3px 8px;border-radius:4px;font-size:11px;color:#fff;}'+
+      '#v233-panel .v233-team{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:18px;}'+
+      '#v233-panel .v233-team-card{background:#fff;border:1px solid #e2e8f0;border-radius:14px;padding:18px;text-align:center;}'+
+      '#v233-panel .v233-avatar{width:96px;height:96px;border-radius:50%;background:linear-gradient(135deg,#fee2e2,#c8102e);margin:0 auto 12px;display:flex;align-items:center;justify-content:center;font-size:40px;color:#fff;font-weight:800;}'+
+      '#v233-panel details{background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:14px 18px;margin-bottom:8px;cursor:pointer;}'+
+      '#v233-panel details summary{font-weight:600;color:#0f172a;}'+
+      '#v233-panel details[open] summary{color:#c8102e;}'+
+      '#v233-panel details p{margin:10px 0 0;color:#475569;font-size:14px;line-height:1.55;}'+
+      '#v233-panel .v233-stat-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;}'+
+      '#v233-panel .v233-stat{background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:20px;text-align:center;}'+
+      '#v233-panel .v233-stat .num{font-size:32px;font-weight:800;color:#c8102e;display:block;line-height:1.2;}'+
+      '#v233-panel .v233-stat .lbl{font-size:13px;color:#64748b;margin-top:4px;}'+
+      '#v233-panel .v233-timeline{border-left:3px solid #fee2e2;padding-left:24px;}'+
+      '#v233-panel .v233-tl-item{margin-bottom:24px;position:relative;}'+
+      '#v233-panel .v233-tl-item::before{content:"";width:14px;height:14px;background:#c8102e;border-radius:50%;position:absolute;left:-32px;top:4px;}'+
+      '#v233-panel .v233-tl-item h4{margin:0 0 4px;color:#c8102e;}'+
+      '#v233-panel .v233-tl-item p{margin:0;color:#475569;font-size:14px;}'+
+      'body.v233-mode #panel-inicio>:not(#v233-panel){display:none !important;}';
+    document.head.appendChild(s);
+  }
+  
+  function buildPanel(){
+    if(document.getElementById('v233-panel'))return;
+    var panel=document.createElement('div');
+    panel.id='v233-panel';
+    panel.innerHTML=
+      /* HERO */
+      '<div class="v233-hero">'+
+        '<h1>🌟 Más sobre Sports Stats 21</h1>'+
+        '<p>La plataforma definitiva para todos los aficionados al deporte. Desde el fútbol hasta el cricket, conectamos a fans, atletas y profesionales con estadísticas, noticias y comunidad — todo en un solo lugar.</p>'+
+      '</div>'+
+      
+      /* MISIÓN VISIÓN VALORES */
+      '<section><h2>🎯 Nuestra esencia</h2><div class="v233-grid">'+
+        '<div class="v233-card"><h3>Misión</h3><p>Democratizar el acceso a información deportiva de calidad para que cualquier persona, en cualquier parte del mundo, pueda disfrutar y entender mejor el deporte que ama.</p></div>'+
+        '<div class="v233-card"><h3>Visión</h3><p>Ser el referente global de estadísticas deportivas en español y la comunidad #1 para aficionados, periodistas y deportistas.</p></div>'+
+        '<div class="v233-card"><h3>Valores</h3><p>Pasión por el deporte · Rigor con los datos · Inclusión global · Transparencia · Comunidad antes que algoritmo.</p></div>'+
+      '</div></section>'+
+      
+      /* MÉTRICAS */
+      '<section><h2>📊 Sports Stats 21 en números</h2><div class="v233-stat-row">'+
+        '<div class="v233-stat"><span class="num">2M+</span><div class="lbl">Usuarios activos</div></div>'+
+        '<div class="v233-stat"><span class="num">25+</span><div class="lbl">Deportes cubiertos</div></div>'+
+        '<div class="v233-stat"><span class="num">180+</span><div class="lbl">Países</div></div>'+
+        '<div class="v233-stat"><span class="num">6</span><div class="lbl">Idiomas</div></div>'+
+        '<div class="v233-stat"><span class="num">10K+</span><div class="lbl">Equipos rastreados</div></div>'+
+        '<div class="v233-stat"><span class="num">50K+</span><div class="lbl">Partidos al año</div></div>'+
+      '</div></section>'+
+      
+      /* TUTORIALES VIDEO */
+      '<section><h2>🎬 Tutoriales — Cómo usar SS21</h2><div class="v233-grid">'+
+        ['🚀 Bienvenida y registro · 1:30 min','⭐ Cómo seguir equipos favoritos · 1:45 min','🔍 Buscador y filtros avanzados · 2:10 min','🔴 Ver partidos en vivo · 1:55 min','📊 Leer estadísticas detalladas · 3:00 min','📅 Calendario de partidos personalizado · 2:20 min','🌍 Cambiar idioma y región · 1:15 min','🔔 Configurar notificaciones · 1:40 min','💬 Conectar con la comunidad · 2:30 min','💎 Funciones Premium · 3:30 min'].map(function(t){
+          return '<div class="v233-card"><div class="v233-video"><span>'+t+'</span></div></div>';
+        }).join('')+
+      '</div></section>'+
+      
+      /* EQUIPO */
+      '<section><h2>👥 Nuestro equipo fundador</h2><div class="v233-team">'+
+        [
+          {name:'Maximiliano Valenzuela',role:'CEO & Fundador',init:'MV'},
+          {name:'Sofía Martínez',role:'CTO',init:'SM'},
+          {name:'Diego Rodríguez',role:'Product Lead',init:'DR'},
+          {name:'Laura Fernández',role:'Head of Content',init:'LF'},
+          {name:'Carlos Méndez',role:'Lead Engineer',init:'CM'},
+          {name:'Andrea Jiménez',role:'Head of Community',init:'AJ'}
+        ].map(function(p){return '<div class="v233-team-card"><div class="v233-avatar">'+p.init+'</div><div style="font-weight:700;color:#0f172a;">'+p.name+'</div><div style="font-size:13px;color:#64748b;margin-top:4px;">'+p.role+'</div></div>';}).join('')+
+      '</div></section>'+
+      
+      /* ROADMAP */
+      '<section><h2>🗺️ Roadmap 2026</h2><div class="v233-timeline">'+
+        '<div class="v233-tl-item"><h4>Q1 2026 · Apps móviles iOS/Android</h4><p>Lanzamiento oficial en App Store y Google Play con notificaciones push, modo offline y widgets de inicio.</p></div>'+
+        '<div class="v233-tl-item"><h4>Q2 2026 · Stats avanzadas IA</h4><p>Análisis predictivo con IA: prob. de victoria, mejor formación, jugador del partido, scouting automatizado.</p></div>'+
+        '<div class="v233-tl-item"><h4>Q3 2026 · Mundial 2026 cobertura especial</h4><p>Centro Mundial con seguimiento en tiempo real de las 48 selecciones, fan zones virtuales y predicciones de la comunidad.</p></div>'+
+        '<div class="v233-tl-item"><h4>Q4 2026 · Marketplace de coleccionables</h4><p>NFT y coleccionables digitales oficiales en alianza con federaciones y clubes.</p></div>'+
+        '<div class="v233-tl-item"><h4>2027 · SS21 TV — Streaming en vivo</h4><p>Plataforma de transmisión de partidos amateur, ligas locales y contenido exclusivo de la comunidad.</p></div>'+
+      '</div></section>'+
+      
+      /* FAQ */
+      '<section><h2>❓ Preguntas frecuentes</h2>'+
+        '<details><summary>¿Es gratis usar Sports Stats 21?</summary><p>Sí. La versión gratuita incluye seguimiento de equipos favoritos, resultados en vivo, estadísticas básicas y acceso a la comunidad. La versión Premium (USD 4.99/mes) agrega análisis avanzado, sin publicidad, y contenido exclusivo.</p></details>'+
+        '<details><summary>¿En qué idiomas está disponible?</summary><p>Español, Inglés, Alemán, Francés, Italiano y Portugués. Próximamente: Catalán, Vasco, Gallego y árabe.</p></details>'+
+        '<details><summary>¿Cubren deportes amateur o solo profesionales?</summary><p>Cubrimos profesional, universitario y amateur. Los aficionados pueden agregar partidos de sus ligas locales con verificación de la comunidad.</p></details>'+
+        '<details><summary>¿De dónde sacan los datos?</summary><p>Trabajamos con proveedores oficiales como Opta, Stats Perform y datos públicos de federaciones (FIFA, UEFA, NBA, NFL, etc.). Toda la información se verifica antes de publicarse.</p></details>'+
+        '<details><summary>¿Puedo usar SS21 sin crear cuenta?</summary><p>Sí, puedes ver resultados y estadísticas sin registrarte. Para seguir equipos, comentar o personalizar el feed necesitas una cuenta gratuita.</p></details>'+
+        '<details><summary>¿Cómo cancelo mi suscripción Premium?</summary><p>Desde Ajustes → Suscripción → Cancelar. Mantienes el acceso Premium hasta el final del ciclo de facturación.</p></details>'+
+        '<details><summary>¿Tienen API para desarrolladores?</summary><p>Sí. SS21 Open Data API está disponible para periodistas, investigadores y desarrolladores. Plan gratuito de 1.000 requests/día, planes pagos para uso comercial.</p></details>'+
+      '</section>'+
+      
+      /* PRESS KIT */
+      '<section><h2>📰 Press Kit & Medios</h2><div class="v233-grid">'+
+        '<div class="v233-card"><h3>Logos oficiales</h3><p>Descarga el logo SS21 en formato SVG, PNG y AI. Disponible en versión rojo, blanco, negro y monocromática.</p></div>'+
+        '<div class="v233-card"><h3>Guía de marca</h3><p>Manual completo con tipografías, paleta de colores, espaciados y reglas de uso. PDF descargable.</p></div>'+
+        '<div class="v233-card"><h3>Screenshots de prensa</h3><p>Capturas de alta resolución de la plataforma en desktop, móvil y tablet.</p></div>'+
+        '<div class="v233-card"><h3>Notas de prensa</h3><p>Comunicados oficiales sobre lanzamientos, alianzas, rondas de inversión y eventos.</p></div>'+
+        '<div class="v233-card"><h3>Contacto prensa</h3><p>📧 prensa@sportsstats21.com<br>📞 +56 9 0000 0000</p></div>'+
+        '<div class="v233-card"><h3>Apariciones</h3><p>Hemos sido cubiertos por TyC Sports, ESPN, AS, Marca, El Mercurio, La Nación y otros medios deportivos.</p></div>'+
+      '</div></section>'+
+      
+      /* CAREERS */
+      '<section><h2>💼 Carreras — Únete al equipo</h2><div class="v233-grid">'+
+        '<div class="v233-card"><h3>Senior Full-Stack Engineer 🌎</h3><p>Remoto · Tiempo completo · USD 80-120K<br>React, Node.js, PostgreSQL. Construye el futuro del deporte digital.</p></div>'+
+        '<div class="v233-card"><h3>Data Scientist 🌎</h3><p>Remoto · Tiempo completo · USD 70-100K<br>Modelos predictivos para deportes con Python, ML y datos de Opta/Stats Perform.</p></div>'+
+        '<div class="v233-card"><h3>Sports Content Editor 🇪🇸 🇲🇽 🇦🇷</h3><p>Híbrido · Tiempo completo<br>Periodista deportivo bilingüe (ES+EN). Escribe sobre fútbol, NBA, NFL y deportes globales.</p></div>'+
+        '<div class="v233-card"><h3>Product Designer 🌎</h3><p>Remoto · Tiempo completo · USD 60-90K<br>Diseña experiencias móviles y desktop. Figma, design systems, prototyping.</p></div>'+
+        '<div class="v233-card"><h3>Community Manager 🌎</h3><p>Remoto · Tiempo completo<br>Gestiona comunidad multilingüe en redes y dentro de la app. Pasión por el deporte requerida.</p></div>'+
+        '<div class="v233-card"><h3>Postula espontáneo 💌</h3><p>¿No ves tu rol? Cuéntanos qué puedes aportar.<br>📧 careers@sportsstats21.com</p></div>'+
+      '</div></section>'+
+      
+      /* PARTNERS */
+      '<section><h2>🤝 Partners & Patrocinadores</h2><div class="v233-grid">'+
+        '<div class="v233-card"><h3>Data Partners</h3><p>Opta · Stats Perform · Sportradar · ESPN Stats · FIFA Open Data</p></div>'+
+        '<div class="v233-card"><h3>Federaciones</h3><p>Acuerdos con CONMEBOL, UEFA, FIBA, ATP/WTA, ICC y federaciones nacionales en LATAM.</p></div>'+
+        '<div class="v233-card"><h3>Tech Partners</h3><p>AWS · Cloudflare · Vercel · Stripe · Algolia · Twilio · OpenAI</p></div>'+
+        '<div class="v233-card"><h3>Media Partners</h3><p>TyC Sports · DAZN · ESPN+ · Marca · La Nación · El Universal</p></div>'+
+      '</div></section>'+
+      
+      /* INVERSORES */
+      '<section><h2>💰 Inversores</h2><div class="v233-grid">'+
+        '<div class="v233-card"><h3>Ronda Pre-Seed (2024)</h3><p>USD 500K · Liderada por Kaszek Ventures + ángeles del deporte.</p></div>'+
+        '<div class="v233-card"><h3>Seed Round (2025)</h3><p>USD 3.5M · Liderada por Andreessen Horowitz a16z Sports. Participación de Sequoia LATAM.</p></div>'+
+        '<div class="v233-card"><h3>Hitos clave</h3><p>· 2024: MVP lanzado<br>· 2025: 100K usuarios · Idiomas múltiples<br>· 2026: 2M+ usuarios · Apps móviles · IA</p></div>'+
+        '<div class="v233-card"><h3>Contacto inversores</h3><p>📧 ir@sportsstats21.com<br>Decks y reportes financieros para fondos verificados.</p></div>'+
+      '</div></section>'+
+      
+      /* CHANGELOG */
+      '<section><h2>🔧 Cambios recientes</h2>'+
+        '<details open><summary>v231 — Junio 2026 · Historia global del fútbol + Mundial completo</summary><p>Nueva sección con tabla histórica de 22 Mundiales, goleadores all-time, récords y origen multicultural del fútbol (Cuju chino, Episkyros griego, Pok-Ta-Pok maya).</p></details>'+
+        '<details><summary>v229 — Junio 2026 · Sidebars custom para 14 deportes</summary><p>Basketball, NFL, F1, Combate, Baseball, Hockey, Rugby, Golf, Atletismo, Natación, Ciclismo, Volleyball, Pádel, Cricket — cada uno con M/F toggle, Reglas, Historia, Records y torneos.</p></details>'+
+        '<details><summary>v228 — Junio 2026 · Imágenes en cards de Inicio</summary><p>Cards de Noticias, Blogs, Podcast y Mercado con imágenes deportivas dinámicas según tipo de contenido.</p></details>'+
+        '<details><summary>v214 — Junio 2026 · Dropdown idiomas vertical</summary><p>Selector de idioma rediseñado: dropdown vertical apilado, toggle por click, cierra al clickear fuera.</p></details>'+
+        '<details><summary>v174 — Mayo 2026 · Soporte multiidioma</summary><p>Lanzamiento de los 6 idiomas: Español, Inglés, Alemán, Francés, Italiano, Portugués.</p></details>'+
+        '<details><summary>v100 — Marzo 2026 · Live ticker</summary><p>Barra superior con scores en vivo, separación de Noticias/Blogs/Podcast y countdown al próximo Mundial.</p></details>'+
+      '</section>'+
+      
+      /* PREMIOS */
+      '<section><h2>🏅 Premios & Reconocimientos</h2><div class="v233-grid">'+
+        '<div class="v233-card"><h3>🥇 SportTech Awards 2026</h3><p>Mejor Plataforma de Datos Deportivos en Español.</p></div>'+
+        '<div class="v233-card"><h3>🌟 Product Hunt</h3><p>#1 Producto del Día · Mayo 2025.</p></div>'+
+        '<div class="v233-card"><h3>🚀 Endeavor Outliers</h3><p>Selección 2026 · Startup deportiva con mayor potencial LATAM.</p></div>'+
+        '<div class="v233-card"><h3>📰 Featured</h3><p>TechCrunch · The Athletic · Bleacher Report · Diario AS.</p></div>'+
+      '</div></section>'+
+      
+      /* COMUNIDAD */
+      '<section><h2>💬 Únete a la comunidad</h2><div class="v233-grid">'+
+        '<div class="v233-card"><h3>Discord oficial</h3><p>50.000+ miembros · Canales por deporte · AMAs con periodistas y exjugadores.</p></div>'+
+        '<div class="v233-card"><h3>Newsletter semanal</h3><p>"The Stat Sheet" — análisis exclusivos, predicciones y lo mejor del deporte cada lunes.</p></div>'+
+        '<div class="v233-card"><h3>Programa de embajadores</h3><p>Aficionados con conocimiento profundo de deportes locales reciben acceso Premium gratis y reconocimiento.</p></div>'+
+        '<div class="v233-card"><h3>Redes sociales</h3><p>📷 Instagram @sportsstats21<br>🐦 X @sportsstats21<br>🎵 TikTok @sportsstats21<br>▶️ YouTube /SportsStats21</p></div>'+
+      '</div></section>'+
+      
+      /* CONTACTO */
+      '<section><h2>📬 Contacto</h2><div class="v233-grid">'+
+        '<div class="v233-card"><h3>Soporte usuarios</h3><p>📧 ayuda@sportsstats21.com<br>Respuesta &lt; 24 hs</p></div>'+
+        '<div class="v233-card"><h3>Negocios & Partnerships</h3><p>📧 partnerships@sportsstats21.com</p></div>'+
+        '<div class="v233-card"><h3>Prensa</h3><p>📧 prensa@sportsstats21.com</p></div>'+
+        '<div class="v233-card"><h3>Postulaciones</h3><p>📧 careers@sportsstats21.com</p></div>'+
+        '<div class="v233-card"><h3>Datos & API</h3><p>📧 api@sportsstats21.com<br>Documentación: developer.sportsstats21.com</p></div>'+
+        '<div class="v233-card"><h3>Oficina</h3><p>Av. Apoquindo 4500, piso 12<br>Las Condes, Santiago, Chile<br>+56 2 0000 0000</p></div>'+
+      '</div></section>'+
+      
+      /* LEGAL */
+      '<section><h2>⚖️ Legal</h2><div class="v233-grid">'+
+        '<div class="v233-card"><h3>Términos y Condiciones</h3><p>Última actualización: Abril 2026 · Versión 3.2</p></div>'+
+        '<div class="v233-card"><h3>Política de Privacidad</h3><p>Cumplimos con GDPR (UE), CCPA (California) y Ley 19.628 (Chile).</p></div>'+
+        '<div class="v233-card"><h3>Política de Cookies</h3><p>Solo esenciales por defecto. Analytics y marketing requieren opt-in explícito.</p></div>'+
+        '<div class="v233-card"><h3>Reporte de bug bounty</h3><p>📧 security@sportsstats21.com · Programa Bug Bounty activo desde 2025.</p></div>'+
+      '</div></section>'+
+      
+      '<div style="text-align:center;padding:30px;color:#94a3b8;font-size:13px;">Sports Stats 21 · 2026 · Hecho con ⚽ en Santiago de Chile</div>';
+    
+    var inicio=document.getElementById('panel-inicio');
+    if(inicio){inicio.appendChild(panel);}else{document.body.appendChild(panel);}
+  }
+  
+  function showPanel(){
+    var p=document.getElementById('v233-panel');
+    if(!p){buildPanel();p=document.getElementById('v233-panel');}
+    if(!p)return;
+    document.body.classList.add('v233-mode');
+    p.classList.add('v233-active');
+    /* Hide hero/ticker/other inicio content */
+    var hero=document.getElementById('heroCarousel');
+    if(hero)hero.style.setProperty('display','none','important');
+    var ticker=document.getElementById('v100-ticker');
+    if(ticker)ticker.style.setProperty('display','none','important');
+  }
+  
+  function hidePanel(){
+    document.body.classList.remove('v233-mode');
+    var p=document.getElementById('v233-panel');
+    if(p)p.classList.remove('v233-active');
+  }
+  
+  function onClick(e){
+    var t=e.target;
+    if(!t||!t.closest)return;
+    /* Click on Mas Sobre SS 21 menu item */
+    var menuItem=t.closest('li.v56-item, [data-v56-key]');
+    if(menuItem){
+      var txt=menuItem.textContent.trim();
+      if(/M[aá]s Sobre SS\s*21/i.test(txt)){
+        setTimeout(showPanel, 100);
+        setTimeout(showPanel, 400);
+        return;
+      }
+    }
+    /* Click on Inicio button or any other = hide MasSS21 panel */
+    var inicioBtn=t.closest('[data-v26id="inicio"]');
+    if(inicioBtn){
+      hidePanel();
+      return;
+    }
+    /* sport-btn click = hide MasSS21 */
+    var sportBtn=t.closest('.sport-btn');
+    if(sportBtn){
+      hidePanel();
+      return;
+    }
+  }
+  
+  function init(){
+    injectCSS();
+    buildPanel();
+    if(!window.__v233bound){
+      document.addEventListener('click', onClick, true);
+      window.__v233bound=true;
+    }
+  }
+  init();
+  setTimeout(init, 500);
+  setTimeout(init, 1500);
+})();
+   </script>
