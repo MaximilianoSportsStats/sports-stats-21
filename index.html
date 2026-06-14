@@ -21789,3 +21789,32 @@ window.selectLLPriv=function(el){document.querySelectorAll('.ll-priv-opt').forEa
   setInterval(css, 2000);
 })();
    </script>
+<script>
+/* v216 - ticker visible solo cuando panel-inicio.active (v215 usaba body class que no cambia) */
+(function(){
+  if(window.__v216loaded)return;window.__v216loaded=true;
+  function tickerTick(){
+    try{
+      var ticker=document.getElementById('v100-ticker');
+      if(!ticker)return;
+      var inicio=document.getElementById('panel-inicio');
+      var merc=document.getElementById('v200-mercado-panel');
+      var mercActive=merc && merc.classList.contains('v200-active');
+      var inicioActive=inicio && inicio.classList.contains('active');
+      if(inicioActive && !mercActive){
+        ticker.style.removeProperty('display');
+      } else {
+        ticker.style.setProperty('display','none','important');
+      }
+    }catch(e){}
+  }
+  tickerTick();
+  setInterval(tickerTick, 500);
+  // Listen for any click that might change panel state
+  document.addEventListener('click', function(){
+    setTimeout(tickerTick, 100);
+    setTimeout(tickerTick, 400);
+    setTimeout(tickerTick, 1000);
+  }, true);
+})();
+   </script>
