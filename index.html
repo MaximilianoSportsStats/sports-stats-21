@@ -21992,3 +21992,34 @@ window.selectLLPriv=function(el){document.querySelectorAll('.ll-priv-opt').forEa
   setInterval(tick, 2000);
 })();
    </script>
+<script>
+/* v221 - ocultar sidebar en Inicio (panel-inicio active sobrepasa v218) */
+(function(){
+  if(window.__v221loaded)return;window.__v221loaded=true;
+  function tick(){
+    try{
+      var sidebar=document.getElementById('sidebar')||document.querySelector('.sidebar');
+      if(!sidebar)return;
+      var inicio=document.getElementById('panel-inicio');
+      var inicioActive=inicio && inicio.classList.contains('active');
+      var nav=document.querySelector('.sport-nav-bar');
+      var activeBtn=nav?nav.querySelector('.sport-btn.active'):null;
+      var isTodos=activeBtn && activeBtn.hasAttribute('data-v103-todos');
+      var noActive=!activeBtn;
+      var heroCarousel=document.getElementById('heroCarousel');
+      var heroVis=heroCarousel && heroCarousel.offsetParent!==null;
+      var isInicioMode=inicioActive && (isTodos || noActive || heroVis);
+      if(isInicioMode){
+        sidebar.style.setProperty('display','none','important');
+      }
+    }catch(e){}
+  }
+  tick();
+  setInterval(tick, 300);
+  document.addEventListener('click', function(){
+    setTimeout(tick, 50);
+    setTimeout(tick, 200);
+    setTimeout(tick, 600);
+  }, true);
+})();
+   </script>
