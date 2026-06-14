@@ -21602,3 +21602,39 @@ setInterval(tick, 3000);
 </html>
 
 window.selectLLPriv=function(el){document.querySelectorAll('.ll-priv-opt').forEach(function(o){o.classList.remove('ll-priv-active');o.style.border='2px solid var(--border)';o.style.background='transparent';});el.classList.add('ll-priv-active');el.style.border='2px solid var(--primary)';el.style.background='rgba(200,16,46,.06)';var inp=el.querySelector('input');if(inp)inp.checked=true;};
+<script>
+/* v213 - hide v212 fallback when native search/lang are visible elsewhere */
+(function(){
+  if(window.__v213loaded)return;window.__v213loaded=true;
+  function tick(){
+    try{
+      var natSearch=document.getElementById('v25-search-bar');
+      var natLang=document.getElementById('v30-lang');
+      var v212s=document.getElementById('v212-search-bar');
+      var v212l=document.getElementById('v212-lang');
+      var natSearchVis=natSearch && natSearch.offsetWidth>0 && natSearch.offsetHeight>0 && natSearch.offsetParent!==null;
+      var natLangVis=natLang && natLang.offsetWidth>0 && natLang.offsetHeight>0 && natLang.offsetParent!==null;
+      // If native search visible, hide v212 search
+      if(v212s){
+        if(natSearchVis){ v212s.style.setProperty('display','none','important'); }
+        else { v212s.style.removeProperty('display'); }
+      }
+      // If native lang visible, hide v212 lang
+      if(v212l){
+        if(natLangVis){ v212l.style.setProperty('display','none','important'); }
+        else { v212l.style.removeProperty('display'); }
+      }
+    }catch(e){}
+  }
+  tick();
+  setTimeout(tick,300);
+  setTimeout(tick,1000);
+  setTimeout(tick,3000);
+  setInterval(tick,1500);
+  // Also observe DOM changes
+  try{
+    var mo=new MutationObserver(tick);
+    mo.observe(document.body,{childList:true,subtree:true,attributes:true,attributeFilter:['style','class']});
+  }catch(e){}
+})();
+                                                        </script>
