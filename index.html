@@ -22991,3 +22991,220 @@ window.selectLLPriv=function(el){document.querySelectorAll('.ll-priv-opt').forEa
   document.head.appendChild(s);
 })();
    </script>
+<script>
+/* v250 - contenido detallado para los 14 deportes (Basketball, NFL, F1, Combate, Baseball, Hockey, Rugby, Golf, Atletismo, Natación, Ciclismo, Volleyball, Pádel, Cricket). Solo CSS + DOM, sin observers ni intervals. */
+(function(){
+  if(window.__v250loaded)return;window.__v250loaded=true;
+  
+  var SPORT_CONTENT={
+    basket:{
+      title:'🏀 BASKETBALL',
+      sections:[
+        {h:'📚 Historia',body:'Inventado por <strong>James Naismith</strong> en 1891 en Springfield, Massachusetts, como una alternativa indoor al fútbol americano. Las primeras canastas eran cestos de melocotones colgados de balcones. La NBA se fundó en <strong>1946</strong> tras la fusión BAA + NBL. La FIBA se creó en 1932 y organizó el primer Mundial en Argentina 1950 (ganado por Argentina). El primer Mundial femenino fue en 1953. Michael Jordan, Magic Johnson, Larry Bird, Kobe Bryant y LeBron James definieron eras enteras. La era moderna está dominada por Stephen Curry y la revolución del triple.'},
+        {h:'📋 Reglas básicas',body:'Equipos de 5 jugadores en cancha. 4 cuartos de <strong>12 minutos (NBA)</strong> o 10 (FIBA). Punto: 2 dentro del arco, 3 desde más allá, 1 desde el tiro libre. 24 segundos para tirar. 5 faltas personales = eliminación (NBA: 6). Step-back, crossover, alley-oop son jugadas icónicas. El reglamento NCAA y FIBA tiene diferencias notables (24 vs 30 seg, defensa zonal, eligibilidad).'},
+        {h:'🏆 NBA Finals (últimos 20)',body:'2025: Oklahoma City Thunder · 2024: Boston Celtics · 2023: Denver Nuggets · 2022: Golden State Warriors · 2021: Milwaukee Bucks · 2020: LA Lakers · 2019: Toronto Raptors · 2018-15: Warriors (3) · 2016: Cavaliers · 2014: Spurs · 2013-12: Heat · 2011: Mavericks · 2010-09: Lakers · 2008: Celtics. <strong>Más títulos:</strong> Lakers/Celtics (17 cada uno), Warriors (7), Bulls/Spurs (6).'},
+        {h:'⭐ All-Star Game',body:'Desde 1951. Formato Este vs Oeste hasta 2017, luego draft entre capitanes. <strong>Más apariciones:</strong> Kareem Abdul-Jabbar (19), LeBron James (20+), Kobe (18). Skills Challenge, 3-Point Contest (mejor: Steph Curry, 32 puntos), Slam Dunk Contest (Michael Jordan vs Dominique Wilkins, Kobe 1997, Vince Carter 2000).'},
+        {h:'🏅 Records all-time',body:'<strong>Más puntos NBA:</strong> LeBron James (40K+). <strong>Más anillos:</strong> Bill Russell (11). <strong>Más MVPs:</strong> Kareem (6). <strong>Wilt Chamberlain:</strong> 100 puntos en 1962 vs Knicks. <strong>Más triples en un partido:</strong> Klay Thompson (14). <strong>Más rebotes en un partido:</strong> Wilt Chamberlain (55).'},
+        {h:'👑 Leyendas',body:'<strong>Michael Jordan</strong> (6 anillos, 5 MVPs) · <strong>Kareem Abdul-Jabbar</strong> (6 anillos, 6 MVPs) · <strong>LeBron James</strong> (4 anillos, 4 MVPs, top scorer all-time) · <strong>Magic Johnson</strong> (5 anillos) · <strong>Larry Bird</strong> (3 anillos) · <strong>Bill Russell</strong> (11 anillos) · <strong>Kobe Bryant</strong> (5 anillos, 81 pts en un partido) · <strong>Wilt Chamberlain</strong> · <strong>Tim Duncan</strong> · <strong>Hakeem Olajuwon</strong> · <strong>Shaq</strong>.'},
+        {h:'🌎 Ligas globales',body:'NBA (USA) · WNBA (femenina) · EuroLeague (Europa) · Liga ACB (España) · NBL (Australia) · CBA (China) · NCAA (universidades USA) · G-League (desarrollo NBA) · BSN (Puerto Rico) · LNB (Argentina, Brasil) · BCL (Champions Europea).'},
+        {h:'🥇 Juegos Olímpicos',body:'USA dominó históricamente. Dream Team 1992 considerado el mejor equipo de todos los tiempos. Argentina campeón 2004 (Ginóbili) sorprendió. España plata 2008 y 2012. Recientemente: USA en Tokio 2020 y París 2024.'}
+      ]
+    },
+    nfl:{
+      title:'🏈 FÚTBOL AMERICANO',
+      sections:[
+        {h:'📚 Historia',body:'Evolucionó del rugby a fines del siglo XIX en universidades estadounidenses. Walter Camp es considerado el "padre" del fútbol americano por introducir reglas modernas: línea de scrimmage, 4 downs, snap. La NFL se fundó en <strong>1920</strong> como APFA. La AFL se fusionó con la NFL en 1970 creando las conferencias AFC/NFC. Super Bowl I se jugó en 1967 (Packers vencieron a los Chiefs).'},
+        {h:'📋 Reglas básicas',body:'Equipos de 11 jugadores. 4 cuartos de 15 min. Touchdown: 6 puntos. Field goal: 3 puntos. Conversión: 1 o 2 puntos. Safety: 2 puntos. 4 downs para avanzar 10 yardas. La cancha mide 100 yardas + 2 zonas de anotación de 10 yardas cada una. Posiciones clave: QB, RB, WR, TE en ofensiva; DL, LB, DB en defensa.'},
+        {h:'🏆 Super Bowls (últimos 15)',body:'LIX 2025: Eagles · LVIII 2024: Chiefs · LVII 2023: Chiefs · LVI 2022: Rams · LV 2021: Buccaneers · LIV 2020: Chiefs · LIII 2019: Patriots · LII 2018: Eagles · LI 2017: Patriots · L 2016: Broncos · XLIX 2015: Patriots · XLVIII 2014: Seahawks · XLVII 2013: Ravens · XLVI 2012: Giants. <strong>Más Super Bowls:</strong> Patriots y Steelers (6).'},
+        {h:'🏅 Records',body:'<strong>Más pases TD carrera:</strong> Tom Brady (649). <strong>Más yardas pase:</strong> Brady (89K). <strong>Más TD corriendo:</strong> Emmitt Smith (164). <strong>Más recepciones:</strong> Jerry Rice (1.549). <strong>Más Super Bowls jugando:</strong> Brady (10). <strong>Más Super Bowls ganando:</strong> Brady (7).'},
+        {h:'👑 Leyendas',body:'<strong>Tom Brady</strong> (7 SB) · <strong>Joe Montana</strong> (4 SB) · <strong>Peyton Manning</strong> · <strong>Jerry Rice</strong> · <strong>Walter Payton</strong> · <strong>Emmitt Smith</strong> · <strong>Jim Brown</strong> · <strong>Lawrence Taylor</strong> · <strong>Patrick Mahomes</strong> (3 SB y contando) · <strong>Aaron Donald</strong>.'},
+        {h:'🎓 NCAA Football',body:'College football casi tan grande como la NFL. Bowl games (Rose Bowl, Sugar Bowl, Orange Bowl, Cotton Bowl), College Football Playoff con 12 equipos desde 2024. <strong>Heisman Trophy</strong> al mejor jugador desde 1935. Notables: Tim Tebow, Reggie Bush, Cam Newton, Joe Burrow, Caleb Williams.'}
+      ]
+    },
+    f1:{
+      title:'🏎️ CARRERAS',
+      sections:[
+        {h:'📚 Historia F1',body:'La <strong>FIA</strong> organizó el primer mundial en 1950 en Silverstone. Pioneros como Juan Manuel Fangio (5 títulos en 50s), Stirling Moss, Jim Clark. Era moderna: Senna vs Prost (80s-90s), Schumacher (década 2000-04), Hamilton vs Vettel, hoy Verstappen domina. Coches de F1 modernos: motor V6 turbo híbrido 1.6L, alcanzan 370 km/h, generan 5G en curvas.'},
+        {h:'📋 Reglas F1',body:'Cada temporada: ~24 GPs. Cada GP: 3 prácticas + clasificación + carrera (300 km, ~90 min). Sistema de puntos: 1° (25), 2° (18), 3° (15)... 10° (1) + vuelta rápida (1 pt si terminas top 10). 2 títulos: Pilotos y Constructores. DRS desde 2011, suelo efecto desde 2022.'},
+        {h:'🏆 GP F1 históricos',body:'Mónaco · Silverstone · Monza · Spa-Francorchamps · Suzuka · Interlagos · Nürburgring · Albert Park · Marina Bay · Circuit of the Americas · Yas Marina · Zandvoort.'},
+        {h:'🏅 Records F1',body:'<strong>Más títulos:</strong> Schumacher y Hamilton (7 cada uno). <strong>Más victorias:</strong> Hamilton (104+). <strong>Más pole positions:</strong> Hamilton (104). <strong>Más rápido en clasificación:</strong> Lewis Hamilton. <strong>Más jóven campeón:</strong> Vettel (23). <strong>Más años en F1:</strong> Rubens Barrichello.'},
+        {h:'👑 Leyendas',body:'<strong>Juan Manuel Fangio</strong> 🇦🇷 (5 títulos) · <strong>Ayrton Senna</strong> 🇧🇷 (3 títulos, fallecido en Imola 1994) · <strong>Michael Schumacher</strong> 🇩🇪 (7) · <strong>Lewis Hamilton</strong> 🇬🇧 (7) · <strong>Max Verstappen</strong> 🇳🇱 (4 y subiendo) · <strong>Niki Lauda</strong> 🇦🇹 · <strong>Alain Prost</strong> 🇫🇷 · <strong>Sebastian Vettel</strong> 🇩🇪 · <strong>Jackie Stewart</strong> 🇬🇧.'},
+        {h:'🏁 MotoGP',body:'Categoría reina del motociclismo. <strong>Más títulos:</strong> Giacomo Agostini (15), Valentino Rossi (9), Marc Márquez (8). Circuitos: Mugello, Phillip Island, Sepang, Jerez. Velocidad máxima: 366 km/h.'},
+        {h:'🚗 NASCAR',body:'Categoría más popular en EE.UU. Circuitos ovales como Daytona, Talladega, Indianapolis. Carreras de 500 millas. <strong>Más títulos:</strong> Richard Petty, Dale Earnhardt, Jimmie Johnson (7 cada uno). Velocidad media: 320 km/h en óvalo.'},
+        {h:'🛞 IndyCar',body:'Circuitos USA, óvalos y urbanos. La carrera estrella es las 500 Millas de Indianápolis. <strong>Más victorias:</strong> A.J. Foyt, Mario Andretti, Rick Mears.'},
+        {h:'🏎 Rally Dakar',body:'El rally raid más extremo del mundo. Originalmente París-Dakar, ahora se disputa en Arabia Saudita. Categorías: autos, camiones, motos, quads, SSV. Sebastien Loeb y Stéphane Peterhansel son leyendas.'}
+      ]
+    },
+    ufc:{
+      title:'🥊 COMBATE',
+      sections:[
+        {h:'📚 Historia UFC',body:'UFC fundada en <strong>1993</strong> en Denver, Colorado. Originalmente sin reglas (estilo libre). Las reglas modernas se introdujeron en 2000-01 (Unified Rules of MMA). Dana White compró UFC en 2001 por 2 millones; en 2016 vendido por 4 mil millones. PRIDE FC (Japón) dominó hasta 2007 cuando fue absorbido por UFC.'},
+        {h:'📋 Reglas UFC',body:'Peleas de 3 rondas de 5 min (peleas titulares: 5 rondas). Victoria por KO, sumisión, decisión judicial. Categorías de peso: peso paja (115 lb) hasta peso pesado (265 lb). Octógono: 8 lados, 9 metros de diámetro. Prohibido: golpes a la nuca, ojos, partes íntimas, mordidas, dedos en orificios.'},
+        {h:'🏆 Campeones actuales UFC',body:'Peso pesado · Peso semipesado · Peso medio · Peso wélter · Peso ligero · Peso pluma · Peso gallo · Peso mosca · Femenino: bantam, fly, straw. Históricos múltiples campeones: Conor McGregor (2 divisiones), Daniel Cormier, Henry Cejudo, Amanda Nunes.'},
+        {h:'🥋 Disciplinas',body:'<strong>MMA:</strong> mezcla de todas las artes marciales · <strong>Kickboxing</strong> · <strong>Boxeo</strong> · <strong>Lucha libre</strong> (wrestling) · <strong>Jiu-Jitsu brasileño</strong> · <strong>Muay Thai</strong> · <strong>Judo</strong> · <strong>Sambo</strong> · <strong>Karate</strong> · <strong>Taekwondo</strong>.'},
+        {h:'🥊 Boxeo',body:'Categorías principales: peso pesado, crucero, semipesado, medio, wélter, ligero, pluma, gallo, mosca. Organizaciones: WBC, WBA, IBF, WBO. Históricos: Muhammad Ali, Mike Tyson, Sugar Ray Robinson, Floyd Mayweather Jr (50-0), Manny Pacquiao, Canelo Álvarez.'},
+        {h:'👑 Leyendas combate',body:'<strong>Muhammad Ali</strong> (boxeo) · <strong>Mike Tyson</strong> · <strong>Sugar Ray Robinson</strong> · <strong>Floyd Mayweather</strong> (50-0) · <strong>Manny Pacquiao</strong> · <strong>Anderson Silva</strong> (UFC) · <strong>Khabib Nurmagomedov</strong> (UFC, 29-0) · <strong>Jon Jones</strong> · <strong>Israel Adesanya</strong> · <strong>Amanda Nunes</strong> · <strong>Saul "Canelo" Álvarez</strong>.'},
+        {h:'🤼 WWE / Lucha profesional',body:'Espectáculo, no competición real. WWE controla la industria mundial. Wrestlemania es el evento estrella. Leyendas: Hulk Hogan, The Rock, Stone Cold Steve Austin, John Cena, Undertaker.'}
+      ]
+    },
+    mlb:{
+      title:'⚾ BASEBALL',
+      sections:[
+        {h:'📚 Historia',body:'Evolucionó del cricket y juegos ingleses. Las primeras reglas modernas fueron escritas por <strong>Alexander Cartwright</strong> en 1845. La MLB se formó con la fusión de la National League (1876) y la American League (1901). La "Era de Oro" en los años 50 vio a Babe Ruth, DiMaggio, Williams y luego Jackie Robinson rompiendo la barrera racial en 1947.'},
+        {h:'📋 Reglas básicas',body:'Equipos de 9 jugadores. 9 entradas (innings). Cada entrada: 3 outs por equipo. Lanzamiento: bola/strike. 4 bolas = base por bolas. 3 strikes = ponche. Home run = vuelta al diamante. Diamante: 90 pies (27.4m) entre bases. Posiciones: pitcher, catcher, 1B, 2B, 3B, SS, LF, CF, RF.'},
+        {h:'🏆 World Series (últimos 15)',body:'2025: ? · 2024: Dodgers · 2023: Rangers · 2022: Astros · 2021: Braves · 2020: Dodgers · 2019: Nationals · 2018: Red Sox · 2017: Astros · 2016: Cubs (después de 108 años) · 2015: Royals · 2014: Giants · 2013: Red Sox · 2012: Giants · 2011: Cardinals. <strong>Más títulos:</strong> Yankees (27), Cardinals (11), Athletics (9).'},
+        {h:'🏅 Records',body:'<strong>Más HR carrera:</strong> Barry Bonds (762, polémico). <strong>Más HR sin polémica:</strong> Hank Aaron (755). <strong>Más HR temporada:</strong> Barry Bonds (73, 2001). <strong>Más hits carrera:</strong> Pete Rose (4.256). <strong>Más ponches pitcher:</strong> Nolan Ryan (5.714). <strong>Mejor ERA carrera:</strong> Ed Walsh (1.82).'},
+        {h:'👑 Leyendas',body:'<strong>Babe Ruth</strong> · <strong>Willie Mays</strong> · <strong>Hank Aaron</strong> · <strong>Ted Williams</strong> · <strong>Jackie Robinson</strong> · <strong>Sandy Koufax</strong> · <strong>Roberto Clemente</strong> 🇵🇷 · <strong>Mariano Rivera</strong> 🇵🇦 · <strong>Derek Jeter</strong> · <strong>Albert Pujols</strong> 🇩🇴 · <strong>Mike Trout</strong> · <strong>Shohei Ohtani</strong> 🇯🇵 (revolucionario: bateador y pitcher).'},
+        {h:'🌎 NPB Japón',body:'Liga japonesa fundada en 1936. Dos ligas: Central y Pacific. Yomiuri Giants ha ganado 22 títulos. Talento mundial: Ichiro Suzuki, Hideki Matsui, Shohei Ohtani, Yu Darvish — todos pasaron a la MLB.'},
+        {h:'🇰🇷 KBO Corea',body:'Liga coreana fundada en 1982. 10 equipos. Cultura del beisbol única: cheerleaders, cánticos. Hyun-jin Ryu y Shin-Soo Choo son ex-KBO famosos en MLB.'}
+      ]
+    },
+    nhl:{
+      title:'🏒 HOCKEY',
+      sections:[
+        {h:'📚 Historia',body:'Nació en <strong>Canadá</strong> en el siglo XIX, derivado del hurling irlandés. Primer juego organizado: Montreal, 9 de marzo de 1875. NHL fundada en 1917 con 4 equipos canadienses. Original Six (Boston, Chicago, Detroit, Montreal, New York, Toronto) hasta expansión 1967. Hoy: 32 equipos.'},
+        {h:'📋 Reglas',body:'5 jugadores + portero por equipo. 3 períodos de 20 min. Si empate: tiempo extra 3v3 + shootout. Penalidades: 2 min menor, 5 min mayor, 10 min misconduct. Off-side, icing son las dos infracciones más comunes. Power play: jugar con ventaja numérica.'},
+        {h:'🏆 Stanley Cup',body:'El trofeo más antiguo en deportes profesionales (1893). Cada jugador campeón pasa un día con la Copa en verano. <strong>Más Cups:</strong> Montreal Canadiens (24), Toronto Maple Leafs (13), Detroit Red Wings (11), Boston Bruins (6), Chicago Blackhawks (6). Recientes: Florida Panthers (2024), Vegas Golden Knights (2023), Colorado Avalanche (2022).'},
+        {h:'🏅 Records',body:'<strong>Más goles carrera:</strong> Wayne Gretzky (894). <strong>Más asistencias:</strong> Gretzky (1.963). <strong>Más puntos carrera:</strong> Gretzky (2.857). <strong>Más victorias portero:</strong> Martin Brodeur (691). <strong>Más Hat Tricks carrera:</strong> Gretzky (50).'},
+        {h:'👑 Leyendas',body:'<strong>Wayne Gretzky</strong> "The Great One" · <strong>Bobby Orr</strong> · <strong>Mario Lemieux</strong> · <strong>Sidney Crosby</strong> · <strong>Alex Ovechkin</strong> (récord de goles a punto de superar a Gretzky) · <strong>Connor McDavid</strong> · <strong>Patrick Roy</strong> · <strong>Mark Messier</strong> · <strong>Gordie Howe</strong>.'},
+        {h:'🌎 IIHF',body:'Federación Internacional. Mundial cada año. <strong>Más títulos:</strong> Canadá (28), URSS/Rusia (27), Suecia (11). Olímpicos: dominio histórico canadiense con USSR/Rusia. Última medalla USA: 1980 "Miracle on Ice".'}
+      ]
+    },
+    rugby:{
+      title:'🏉 RUGBY',
+      sections:[
+        {h:'📚 Historia',body:'Originado en <strong>Rugby School, Inglaterra</strong>, en 1823 cuando William Webb Ellis "agarró la pelota y corrió". Las dos formas modernas: Rugby Union (15 jugadores) y Rugby League (13 jugadores). World Rugby (antes IRB) gobierna desde 1886. Sevens debutó en Olímpicos Río 2016.'},
+        {h:'📋 Reglas',body:'15 jugadores Union, 13 League. Try: 5 puntos (Union) o 4 (League). Conversion: 2 puntos. Drop goal: 3. Penalty: 3. Partidos de 80 min. Posiciones: 8 forwards (scrum) + 7 backs. Scrum, ruck, maul son fases icónicas.'},
+        {h:'🏆 World Cup Rugby',body:'Desde 1987 cada 4 años. Campeones: 1987 NZ · 1991 AUS · 1995 RSA (Mandela) · 1999 AUS · 2003 ENG · 2007 RSA · 2011 NZ · 2015 NZ · 2019 RSA · 2023 RSA. <strong>Más títulos:</strong> NZ y RSA (4 cada uno).'},
+        {h:'🌍 Six Nations',body:'Torneo más antiguo. Inglaterra · Francia · Irlanda · Italia · Escocia · Gales. Disputado desde 1883. Inglaterra y Gales lideran títulos. Grand Slam = ganar a los 5 rivales.'},
+        {h:'🌎 The Rugby Championship',body:'Hemisferio Sur: Argentina · Australia · Nueva Zelanda · Sudáfrica. Antes Tri-Nations (sin Argentina). NZ ha dominado.'},
+        {h:'⭐ Top 14 / Premiership',body:'Top 14 (Francia): liga más rica del mundo, Top 14 clubes. Premiership (Inglaterra): 10 equipos. URC (United Rugby Championship): Irlanda, Gales, Escocia, Italia, Sudáfrica.'},
+        {h:'👑 Leyendas',body:'<strong>Jonah Lomu</strong> 🇳🇿 (transformó el wing) · <strong>Richie McCaw</strong> 🇳🇿 (148 caps) · <strong>Dan Carter</strong> 🇳🇿 · <strong>Brian O Driscoll</strong> 🇮🇪 · <strong>Martin Johnson</strong> 🇬🇧 · <strong>Bryan Habana</strong> 🇿🇦 · <strong>Sergio Parisse</strong> 🇮🇹 · <strong>Antoine Dupont</strong> 🇫🇷 · <strong>Siya Kolisi</strong> 🇿🇦.'}
+      ]
+    },
+    golf:{
+      title:'⛳ GOLF',
+      sections:[
+        {h:'📚 Historia',body:'Origen en <strong>Escocia</strong> en el siglo XV. Las primeras reglas escritas: Leith Links 1744. The Open Championship (más antiguo, 1860). USGA fundada en 1894. PGA Tour comenzó en 1929. Tiger Woods revolucionó el deporte desde 1997.'},
+        {h:'📋 Reglas',body:'18 hoyos por ronda. Cada hoyo tiene un par (3, 4 o 5). Birdie = 1 bajo par. Eagle = 2 bajo. Albatross = 3 bajo. Bogey = 1 sobre. Stroke play (suma de golpes) o Match play (gano hoyo a hoyo). Palos: driver, woods, hierros, wedges, putter (máx 14).'},
+        {h:'🏆 Los 4 Majors',body:'<strong>The Masters</strong> (abril, Augusta National, Georgia, USA) · <strong>PGA Championship</strong> (mayo) · <strong>US Open</strong> (junio) · <strong>The Open Championship / British Open</strong> (julio, rotativo en Reino Unido). Career Grand Slam = ganar los 4. Los únicos hombres en lograrlo: Gene Sarazen, Ben Hogan, Gary Player, Jack Nicklaus, Tiger Woods.'},
+        {h:'⭐ PGA Tour',body:'Tour profesional USA. ~46 torneos al año. FedEx Cup desde 2007. Comisionado Jay Monahan. Sueldos: prize pool USD 600M anuales. Top earners: Tiger (USD 120M carrera), Rory McIlroy, Scottie Scheffler.'},
+        {h:'🌍 European Tour / DP World Tour',body:'Antes European Tour, rebrandeado DP World Tour. Torneos en Europa, Asia, Sudáfrica, Australia. Comisionado: Keith Pelley. Race to Dubai.'},
+        {h:'🚺 LPGA',body:'Tour femenino. Top jugadoras: Annika Sörenstam (90 torneos), Lorena Ochoa, Lydia Ko, Nelly Korda. Majors femeninos: Chevron Championship, US Open, KPMG, Evian, Womens Open.'},
+        {h:'👑 Leyendas',body:'<strong>Jack Nicklaus</strong> (18 Majors) · <strong>Tiger Woods</strong> (15 Majors, 82 PGA wins) · <strong>Sam Snead</strong> (82 PGA wins, empatado con Tiger) · <strong>Ben Hogan</strong> · <strong>Arnold Palmer</strong> "The King" · <strong>Gary Player</strong> 🇿🇦 · <strong>Phil Mickelson</strong> · <strong>Rory McIlroy</strong> · <strong>Severiano Ballesteros</strong> 🇪🇸.'}
+      ]
+    },
+    athletics:{
+      title:'🏃 ATLETISMO',
+      sections:[
+        {h:'📚 Historia',body:'El deporte más antiguo: la primera Olimpiada en Olimpia, Grecia en <strong>776 a.C.</strong> tenía como única prueba carrera (stadion = ~192 metros). Los Juegos Modernos se restablecieron en 1896. World Athletics (antes IAAF) fundada en 1912. Atletismo es la prueba madre de los JJOO modernos.'},
+        {h:'📋 Disciplinas',body:'<strong>Pista:</strong> velocidad (100, 200, 400m) · medio fondo (800, 1500m) · fondo (5000, 10000m, maratón) · vallas (110/100m, 400m, 3000m steeplechase) · relevos (4x100, 4x400). <strong>Campo:</strong> saltos (largo, alto, triple, garrocha) · lanzamientos (peso, disco, martillo, jabalina). <strong>Combinadas:</strong> decatlón (M) heptatlón (F).'},
+        {h:'🏆 World Championships',body:'Cada 2 años desde 1983. Hosts notables: Helsinki 1983 (primero), Berlín 2009 (Usain Bolt récord 9.58), Doha 2019, Eugene 2022, Budapest 2023. <strong>Más medallas all-time:</strong> USA (lejos).'},
+        {h:'💎 Diamond League',body:'Circuito de 14-15 reuniones cada año en Europa, Asia y América. Final temporada con USD 30K por evento al ganador. Reuniones: Doha, Eugene Prefontaine, Roma, Oslo, París, Estocolmo, Mónaco, Londres, Zurich.'},
+        {h:'🥇 Olympics records',body:'<strong>100m M:</strong> Usain Bolt 9.63 (Londres 2012). <strong>100m F:</strong> Florence Griffith-Joyner 10.62 (Seúl 1988). <strong>Maratón M:</strong> 2:01:09 Kelvin Kiptum (Chicago 2023, fallecido 2024). <strong>Salto largo:</strong> Bob Beamon 8.90 (México 1968) · superado por Mike Powell 8.95 (1991, no JJOO).'},
+        {h:'🏅 Records mundiales actuales',body:'<strong>100m M:</strong> 9.58 Bolt (Berlín 2009). <strong>200m M:</strong> 19.19 Bolt. <strong>400m M:</strong> 43.03 Wayde van Niekerk. <strong>Maratón M:</strong> 2:00:35 (no oficial Eliud Kipchoge). <strong>Salto largo M:</strong> 8.95 Mike Powell. <strong>Salto alto M:</strong> 2.45 Javier Sotomayor.'},
+        {h:'👑 Leyendas',body:'<strong>Usain Bolt</strong> 🇯🇲 (8 oros olímpicos) · <strong>Carl Lewis</strong> 🇺🇸 (9 oros) · <strong>Jesse Owens</strong> 🇺🇸 · <strong>Mo Farah</strong> 🇬🇧 · <strong>Allyson Felix</strong> 🇺🇸 (más medallas atleta femenina) · <strong>Florence Griffith-Joyner</strong> · <strong>Sergey Bubka</strong> 🇺🇦 (35 récords mundiales garrocha) · <strong>Eliud Kipchoge</strong> 🇰🇪 (maratón).'}
+      ]
+    },
+    acuaticos:{
+      title:'🏊 NATACIÓN',
+      sections:[
+        {h:'📚 Historia',body:'Natación competitiva moderna desde la 1ra Olimpiada moderna 1896 (Atenas). FINA (Federación Internacional) fundada en 1908. World Aquatics es el nombre desde 2023. Mark Spitz revolucionó con 7 oros en Múnich 72. Michael Phelps marcó la era moderna con 23 oros olímpicos.'},
+        {h:'📋 Disciplinas',body:'<strong>Estilos:</strong> Libre (crol) · Espalda · Pecho · Mariposa. <strong>Distancias:</strong> 50m, 100m, 200m (todos los estilos), 400m libre, 800m, 1500m libre, 400m combinados (4 estilos), relevos 4x100, 4x200, 4x100 combinados. <strong>Otras:</strong> Aguas abiertas (10km), Saltos ornamentales (trampolín 3m, plataforma 10m), Polo acuático, Nado artístico.'},
+        {h:'🏆 Mundiales',body:'Cada 2 años. <strong>Más medallas:</strong> Michael Phelps (33 medallas Mundial). Sedes importantes: Budapest (varias ocasiones), Roma 2009 (Phelps 5 oros), Kazan 2015, Fukuoka 2023.'},
+        {h:'🥇 Olympics',body:'Natación es la disciplina con más medallas en JJOO. Hosts: Atenas 1896, Roma 1960 (recordemos a Dawn Fraser), Múnich 72 (Spitz), Sídney 2000 (Thorpe), Pekín 2008 (Phelps 8 oros), Londres 2012, Río 2016, Tokio 2020, París 2024 (Léon Marchand 4 oros).'},
+        {h:'🏅 Records mundiales',body:'<strong>50m libre M:</strong> 20.91 César Cielo. <strong>100m libre M:</strong> 46.86 Pan Zhanle (París 2024). <strong>200m libre M:</strong> 1:42.00 Paul Biedermann. <strong>100m mariposa M:</strong> 49.45 Caeleb Dressel. <strong>1500m libre M:</strong> 14:30.67 Sun Yang.'},
+        {h:'👑 Leyendas',body:'<strong>Michael Phelps</strong> 🇺🇸 (23 oros olímpicos, GOAT) · <strong>Mark Spitz</strong> 🇺🇸 · <strong>Ian Thorpe</strong> 🇦🇺 · <strong>Caeleb Dressel</strong> 🇺🇸 · <strong>Katie Ledecky</strong> 🇺🇸 (mayor distancia femenina) · <strong>Sarah Sjöström</strong> 🇸🇪 · <strong>Adam Peaty</strong> 🇬🇧 · <strong>Léon Marchand</strong> 🇫🇷 · <strong>Krisztina Egerszegi</strong> 🇭🇺 · <strong>Ariarne Titmus</strong> 🇦🇺.'}
+      ]
+    },
+    cycling:{
+      title:'🚴 CICLISMO',
+      sections:[
+        {h:'📚 Historia',body:'Primera competencia de bicicletas: Paris-Rouen 1869. UCI fundada en 1900. Tour de France creado en 1903 por Henri Desgrange como estrategia de marketing del periódico LAuto. Lance Armstrong ganó 7 Tours (1999-2005) pero fue desposeído por doping. Hoy: era Pogačar vs Vingegaard.'},
+        {h:'📋 Disciplinas',body:'<strong>Ruta:</strong> Etapas (Tour, Giro, Vuelta) · Clásicas (Paris-Roubaix, Lieja, Lombardía) · Mundial. <strong>Pista:</strong> velocidad, persecución, kilómetro. <strong>Montaña (MTB):</strong> XC, downhill, enduro. <strong>BMX:</strong> Race, Freestyle. <strong>Ciclocross.</strong> <strong>Gravel.</strong>'},
+        {h:'🏆 Tour de France',body:'La carrera más grande del mundo. 21 etapas, 3 semanas, ~3500 km. 4 maillots: Amarillo (general), Verde (sprints), Lunares (montaña), Blanco (mejor joven). <strong>Más victorias:</strong> Merckx, Anquetil, Hinault, Indurain (5 cada uno). Reciente: Vingegaard 2022-23, Pogačar 2024.'},
+        {h:'🇮🇹 Giro de Italia',body:'El Giro es la prueba más estética: maglia rosa, atravesando los Dolomitas. Creado 1909. Cima Coppi al punto más alto. 7 victorias Eddy Merckx, Tadej Pogačar campeón 2024.'},
+        {h:'🇪🇸 Vuelta a España',body:'Maillot rojo. Recorre Pirineos, Sierra Nevada, costas. Creada 1935. 3 victorias Roberto Heras, polémica con su DQ.'},
+        {h:'🌍 Mundiales',body:'UCI Road World Championships. Disputado en septiembre. <strong>Más títulos:</strong> Peter Sagan 🇸🇰 (3), Eddy Merckx 🇧🇪 (3), Óscar Freire 🇪🇸 (3).'},
+        {h:'👑 Leyendas',body:'<strong>Eddy Merckx</strong> 🇧🇪 "El Caníbal" (5 Tours, 5 Giros, 1 Vuelta, 525 victorias) · <strong>Bernard Hinault</strong> 🇫🇷 · <strong>Miguel Indurain</strong> 🇪🇸 · <strong>Lance Armstrong</strong> 🇺🇸 (DQ) · <strong>Marco Pantani</strong> 🇮🇹 · <strong>Chris Froome</strong> 🇬🇧 · <strong>Tadej Pogačar</strong> 🇸🇮 · <strong>Jonas Vingegaard</strong> 🇩🇰 · <strong>Mark Cavendish</strong> 🇬🇧 (record sprints).'}
+      ]
+    },
+    volley:{
+      title:'🏐 VOLLEYBALL',
+      sections:[
+        {h:'📚 Historia',body:'Inventado por <strong>William G. Morgan</strong> en 1895 en Holyoke, Massachusetts (USA). Originalmente llamado "Mintonette". FIVB fundada en 1947. Debut olímpico Tokio 1964 (M y F). Beach volleyball debutó en Olímpicos Atlanta 1996.'},
+        {h:'📋 Reglas',body:'6 jugadores por equipo. Cancha 18x9m. Red a 2.43m (M) o 2.24m (F). Sets a 25 puntos (último a 15). Mejor de 5 sets. Cada equipo: 3 toques máximo antes de pasar al otro lado. Posiciones: setter (armador), liberos, opuesto, central, receptores.'},
+        {h:'🏆 World Championships',body:'Desde 1949 (M) y 1952 (F). Cada 4 años. <strong>Más títulos M:</strong> URSS/Rusia (6), Italia (4), Brasil (3), Polonia (3). <strong>Más títulos F:</strong> URSS/Rusia (7), Cuba (3), Japón (3).'},
+        {h:'⭐ Nations League',body:'Desde 2018, reemplazó World League. Formato round robin + final 8. Polonia y Brasil dominaron rama M. USA y Italia rama F.'},
+        {h:'🏖 Beach Volley',body:'Cancha 16x8m. 2 vs 2. Sin red liberos. Pareja celebra fuerte cada punto. Brasil dominó históricamente (Emanuel/Ricardo, Misty May/Walsh). Hoy Anders Mol/Sørum (Noruega) reinventaron el juego masculino.'},
+        {h:'🥇 Olympics',body:'Sala: <strong>URSS/Rusia (M):</strong> 4 oros. <strong>Brasil (M):</strong> 3 oros. <strong>Cuba (F):</strong> 3 oros consecutivos (92-96-00). <strong>USA (F):</strong> dominante reciente. Beach: USA, Brasil dominan.'},
+        {h:'👑 Leyendas',body:'<strong>Sala:</strong> Karch Kiraly 🇺🇸 (único Oro Sala + Beach) · Giba 🇧🇷 · Wilfredo León 🇨🇺/🇵🇱 · Earvin Ngapeth 🇫🇷 · Yekaterina Gamova 🇷🇺. <strong>Beach:</strong> Misty May-Treanor 🇺🇸 · Kerri Walsh 🇺🇸 · Phil Dalhausser 🇺🇸 · Emanuel Rego 🇧🇷.'}
+      ]
+    },
+    padel:{
+      title:'🎾 PÁDEL',
+      sections:[
+        {h:'📚 Historia',body:'Inventado por <strong>Enrique Corcuera</strong> en Acapulco, México, en <strong>1969</strong>. El príncipe Alfonso de Hohenlohe lo trajo a España (Marbella) en 1974. España es el país que lo masificó. Argentina es el otro gran polo del pádel mundial. La FIP (Federación Internacional) data de 1991. Boom global desde 2020.'},
+        {h:'📋 Reglas',body:'2 vs 2 siempre. Cancha 20x10m con paredes (a diferencia del tenis). Puntuación tenis: 15-30-40-game. Set a 6 games, tie-break a 6-6. Mejor de 3 sets. La pelota PUEDE rebotar en paredes. Saque obligatorio bajo (cintura abajo).'},
+        {h:'🏆 WPT / Premier Padel',body:'Desde 2022 se unificaron World Padel Tour y Premier Padel bajo la nueva categoría Premier Padel. Circuito profesional con 20+ torneos anuales. <strong>Top jugadores:</strong> Arturo Coello 🇪🇸, Agustín Tapia 🇦🇷, Juan Lebrón 🇪🇸, Alejandro Galán 🇪🇸. <strong>Femenino:</strong> Ari Sánchez 🇦🇷, Paula Josemaría 🇪🇸, Bea González 🇪🇸.'},
+        {h:'🌍 Major Open',body:'Tournaments Grand Slam-style: Madrid Open · Buenos Aires Open · México Open · Doha Open · Roma Open · French Open. Premios entre €300K-1M por torneo.'},
+        {h:'🥇 Mundiales',body:'World Padel Championships cada 2 años por equipos. <strong>Más títulos M:</strong> España (11), Argentina (4). <strong>Más títulos F:</strong> Argentina y España compiten parejas. Sedes recientes: Doha, Buenos Aires.'},
+        {h:'📈 Boom global',body:'En 2024: 25 millones de jugadores en 70 países. Top: España (4M jugadores), Argentina, Suecia, Italia, EE.UU. Wall Street invierte millones en franquicias. Nadal, Beckham, Ronaldo son inversores.'},
+        {h:'👑 Leyendas',body:'<strong>Fernando Belasteguín</strong> 🇦🇷 "Bela" (16 años N°1 ranking) · <strong>Juan Martín Díaz</strong> 🇦🇷 · <strong>Fernando Mar</strong> 🇪🇸 · <strong>Paquito Navarro</strong> 🇪🇸 · <strong>Arturo Coello</strong> 🇪🇸 (era actual) · <strong>Agustín Tapia</strong> 🇦🇷 (joven figura).'}
+      ]
+    },
+    cricket:{
+      title:'🏏 CRICKET',
+      sections:[
+        {h:'📚 Historia',body:'Origen en <strong>Inglaterra</strong> en el siglo XVI, posible deriva de un juego pastoril. Primeras reglas: 1744. MCC (Marylebone Cricket Club) fundado 1787 — sigue siendo guardián del reglamento. ICC se fundó en 1909. Primer Test Match: Australia vs Inglaterra, Melbourne, 15 marzo 1877.'},
+        {h:'📋 Formatos',body:'<strong>Test Cricket:</strong> 5 días, 2 innings por equipo, formato clásico. <strong>ODI (One Day International):</strong> 50 overs por equipo, 1 día. <strong>T20:</strong> 20 overs por equipo, 3 horas, formato moderno y comercial. <strong>The Hundred:</strong> 100 bolas por equipo (formato más nuevo).'},
+        {h:'🏆 ICC World Cup',body:'<strong>ODI World Cup:</strong> cada 4 años desde 1975. <strong>Más títulos:</strong> Australia (6), India (2), West Indies (2). 2023: Australia. <strong>T20 World Cup:</strong> cada 2 años desde 2007. <strong>Más títulos:</strong> India (2 - 2007, 2024), West Indies (2). <strong>Champions Trophy:</strong> mini-mundial. <strong>Test Championship</strong> (WTC): nueva, 2 ediciones disputadas.'},
+        {h:'⭐ IPL (Indian Premier League)',body:'La liga T20 más rica del mundo. Fundada 2008. 10 equipos. Temporada de marzo-mayo. Subastas anuales con sueldos millonarios. Top franquicias: Mumbai Indians (5 títulos), Chennai Super Kings (5 títulos). Audiencia: 600M solo en India.'},
+        {h:'🇮🇳 Otras T20 ligas',body:'BBL (Big Bash League, Australia) · CPL (Caribbean Premier League) · SA20 (South Africa) · PSL (Pakistan Super League) · Hundred (England) · ILT20 (UAE) · MLC (Major League Cricket en USA, nueva).'},
+        {h:'🏅 Records',body:'<strong>Más runs Test:</strong> Sachin Tendulkar 🇮🇳 (15.921). <strong>Más wickets Test:</strong> Muttiah Muralitharan 🇱🇰 (800). <strong>Más runs ODI:</strong> Sachin (18.426). <strong>Mayor score individual Test:</strong> Brian Lara 🇼🇮 (400 vs England 2004).'},
+        {h:'👑 Leyendas',body:'<strong>Sir Don Bradman</strong> 🇦🇺 (promedio 99.94 — récord eterno) · <strong>Sachin Tendulkar</strong> 🇮🇳 "Little Master" · <strong>Brian Lara</strong> 🇼🇮 · <strong>Sir Vivian Richards</strong> 🇼🇮 · <strong>Muttiah Muralitharan</strong> 🇱🇰 · <strong>Shane Warne</strong> 🇦🇺 · <strong>Ricky Ponting</strong> 🇦🇺 · <strong>Virat Kohli</strong> 🇮🇳 · <strong>MS Dhoni</strong> 🇮🇳 · <strong>Jacques Kallis</strong> 🇿🇦.'}
+      ]
+    }
+  };
+  
+  /* CSS para los paneles */
+  var s=document.createElement('style');s.id='v250-style';
+  s.textContent=
+    '.v250-panel{padding:24px;max-width:1100px;margin:0 auto;color:#0f172a;}'+
+    '.v250-panel h1{font-size:28px;color:#c8102e;margin:0 0 18px;border-bottom:2px solid #fee2e2;padding-bottom:12px;}'+
+    '.v250-panel section{margin-bottom:22px;background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:18px 20px;}'+
+    '.v250-panel section h3{margin:0 0 8px;color:#c8102e;font-size:16px;}'+
+    '.v250-panel section p{margin:0;font-size:14px;color:#475569;line-height:1.6;}';
+  document.head.appendChild(s);
+  
+  function buildPanel(key){
+    if(document.getElementById('v250-panel-'+key))return;
+    var data=SPORT_CONTENT[key];
+    if(!data)return;
+    var html='<div class="v250-panel" id="v250-panel-'+key+'" style="display:none;"><h1>'+data.title+'</h1>';
+    data.sections.forEach(function(sec){
+      html+='<section><h3>'+sec.h+'</h3><p>'+sec.body+'</p></section>';
+    });
+    html+='</div>';
+    var sidebar=document.getElementById('sidebar')||document.querySelector('.sidebar');
+    var parent=sidebar?sidebar.parentElement:document.body;
+    parent.insertAdjacentHTML('beforeend', html);
+  }
+  
+  /* Construir todos los paneles al cargar */
+  Object.keys(SPORT_CONTENT).forEach(function(k){buildPanel(k);});
+  
+  /* Wire: cuando se hace click en un sport-btn, mostrar su panel y ocultar otros */
+  document.addEventListener('click', function(e){
+    var t=e.target.closest('.sport-btn');
+    if(!t)return;
+    var onclick=t.getAttribute('onclick')||'';
+    var keyMatch=onclick.match(/switchSport\(['"]([\w-]+)/);
+    var key=keyMatch?keyMatch[1]:'';
+    Object.keys(SPORT_CONTENT).forEach(function(k){
+      var el=document.getElementById('v250-panel-'+k);
+      if(el)el.style.display=(k===key)?'block':'none';
+    });
+  }, true);
+})();
+   </script>
