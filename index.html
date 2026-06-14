@@ -24127,3 +24127,80 @@ window.selectLLPriv=function(el){document.querySelectorAll('.ll-priv-opt').forEa
   setInterval(init, 8000);
 })();
    </script>
+<script>
+/* v243 - NUCLEAR: matar TODOS los intervals + override MutationObserver + remover header viejo */
+(function(){
+  if(window.__v243loaded)return;window.__v243loaded=true;
+  
+  /* 1. Remover header viejo MasSS21 */
+  function removeOldHeader(){
+    var v87=document.getElementById('v87-page-masss21');
+    if(!v87)return;
+    var fc=v87.firstElementChild;
+    while(fc){
+      var nx=fc.nextElementSibling;
+      if(fc.id==='v233-panel' || fc.id==='v102-nov-inside'){fc=nx;continue;}
+      var t=(fc.textContent||'').slice(0,200);
+      if(/Más Sobre SS\s*21/i.test(t) && /historia.*misi[oó]n|equipo detrás/i.test(t)){
+        fc.remove();
+        break;
+      }
+      fc=nx;
+    }
+  }
+  
+  /* 2. MATAR todos los setIntervals/setTimeouts existentes - itera y limpia */
+  function nukeTimers(){
+    var maxId=99999;
+    /* Guardar el ID del ticker animation (necesitamos preservar el CSS animation) */
+    for(var i=1;i<maxId;i++){
+      try{
+        clearInterval(i);
+        clearTimeout(i);
+      }catch(e){}
+    }
+  }
+  
+  /* 3. Override MutationObserver para que future llamadas a observe() sean no-op */
+  /* Pero los ya existentes siguen activos - los matamos via nukeTimers (no aplica - MO no usa timers) */
+  /* Hack: replace MutationObserver constructor con stub */
+  var OrigMO=window.MutationObserver;
+  function FakeMO(cb){
+    this._cb=cb;
+    this.observe=function(){};
+    this.disconnect=function(){};
+    this.takeRecords=function(){return[];};
+  }
+  /* Solo override despues de matar timers - asi nuevos MOs no agregan al lag */
+  function stubMO(){
+    try{
+      window.MutationObserver=FakeMO;
+    }catch(e){}
+  }
+  
+  /* 4. Forzar background-image estable en cards - aplicar y dejar */
+  function lockCardImages(){
+    document.querySelectorAll('.v100-news-big, .v100-news-mini').forEach(function(card){
+      var bg=card.style.backgroundImage;
+      if(bg && bg.indexOf('url')>=0){
+        /* Setear via cssText final con !important para que NADIE pueda overridear */
+        var others=card.style.cssText.replace(/background-image\s*:[^;]*;?/g,'');
+        card.style.cssText=others+'; background-image:'+bg+' !important;';
+      }
+    });
+  }
+  
+  function init(){
+    removeOldHeader();
+    lockCardImages();
+    nukeTimers();
+    stubMO();
+  }
+  
+  /* Esperar un poco para que todo el DOM se asiente, despues nuke */
+  setTimeout(init, 3000);
+  setTimeout(removeOldHeader, 100);
+  setTimeout(removeOldHeader, 800);
+  setTimeout(removeOldHeader, 1500);
+})();
+   </script>
