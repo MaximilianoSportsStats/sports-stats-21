@@ -23224,3 +23224,27 @@ window.selectLLPriv=function(el){document.querySelectorAll('.ll-priv-opt').forEa
   }, 2000);
 })();
    </script>
+<script>
+/* v272 - ocultar sidebar cuando heroCarousel visible (estamos en Inicio) - se ejecuta DESPUES de v271 */
+(function(){
+  if(window.__v272loaded)return;window.__v272loaded=true;
+  function hideOnInicio(){
+    var sidebar=document.getElementById('sidebar')||document.querySelector('.sidebar');
+    if(!sidebar)return;
+    var hero=document.getElementById('heroCarousel');
+    var heroVis=hero && hero.offsetParent!==null && hero.offsetHeight>50;
+    if(heroVis){
+      sidebar.style.setProperty('display','none','important');
+    }
+  }
+  hideOnInicio();
+  setTimeout(hideOnInicio, 300);
+  setTimeout(hideOnInicio, 1000);
+  setTimeout(hideOnInicio, 3000);
+  setInterval(hideOnInicio, 1500);
+  document.addEventListener('click', function(){
+    setTimeout(hideOnInicio, 100);
+    setTimeout(hideOnInicio, 500);
+  }, true);
+})();
+   </script>
