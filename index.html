@@ -23578,3 +23578,68 @@ window.selectLLPriv=function(el){document.querySelectorAll('.ll-priv-opt').forEa
   document.head.appendChild(s);
 })();
    </script>
+<script>
+/* v257 - rebuild menu drawer en orden correcto: Inicio, Favoritos, En Vivo, Deportes(sub), Contenido(sub), MasSS21 */
+(function(){
+  if(window.__v257loaded)return;window.__v257loaded=true;
+  
+  function rebuildMenu(){
+    var ul=document.querySelector('.v56-ul')||document.querySelector('.v36-side ul')||document.querySelector('aside ul');
+    if(!ul)return;
+    /* Marcar como reconstruido para no repetir */
+    if(ul.dataset.v257Built==='1')return;
+    
+    /* Limpiar items existentes */
+    ul.innerHTML='';
+    
+    /* Reconstruir en orden CORRECTO */
+    ul.innerHTML=
+      /* 1. Inicio */
+      '<li class="v56-item" data-v56-key="inicio" style="cursor:pointer;padding:14px 20px;display:flex;align-items:center;gap:12px;font-weight:600;color:#0f172a;font-size:15px;"><span style="font-size:22px;">🏠</span><span>Inicio</span></li>'+
+      /* 2. Favoritos */
+      '<li class="v56-item" data-v56-key="favoritos" style="cursor:pointer;padding:14px 20px;display:flex;align-items:center;gap:12px;font-weight:600;color:#0f172a;font-size:15px;"><span style="font-size:22px;">⭐</span><span>Favoritos</span></li>'+
+      /* 3. En Vivo */
+      '<li class="v56-item" data-v56-key="envivo" style="cursor:pointer;padding:14px 20px;display:flex;align-items:center;gap:12px;font-weight:600;color:#0f172a;font-size:15px;"><span style="font-size:22px;">🔴</span><span>En Vivo</span></li>'+
+      /* 4. Deportes con sub-list correcta */
+      '<li class="v56-item v56-has-dropdown" data-v56-key="deportes" style="cursor:pointer;padding:14px 20px;display:flex;align-items:center;gap:12px;font-weight:600;color:#0f172a;font-size:15px;justify-content:space-between;"><span style="display:flex;align-items:center;gap:12px;"><span style="font-size:22px;">🏆</span><span>Deportes</span></span><span class="v56-arrow">▼</span></li>'+
+      '<ul class="v56-sub-list" style="list-style:none;padding:0;margin:0;display:none;">'+
+        '<li class="v56-sub-item" data-v56-key="profesionales" style="padding:10px 20px 10px 50px;font-size:14px;color:#475569;cursor:pointer;display:flex;align-items:center;gap:8px;"><span style="font-size:18px;">🏆</span><span>Profesionales</span></li>'+
+        '<li class="v56-sub-item" data-v56-key="universitarios" style="padding:10px 20px 10px 50px;font-size:14px;color:#475569;cursor:pointer;display:flex;align-items:center;gap:8px;"><span style="font-size:18px;">🎓</span><span>Universitarios</span></li>'+
+        '<li class="v56-sub-item v200-mercado-li" data-v56-key="amateur" style="padding:10px 20px 10px 50px;font-size:14px;color:#475569;cursor:pointer;display:flex;align-items:center;gap:8px;"><span style="font-size:18px;">🤵</span><span>Mercado</span></li>'+
+        '<li class="v56-sub-item" data-v56-key="escolar" style="padding:10px 20px 10px 50px;font-size:14px;color:#475569;cursor:pointer;display:flex;align-items:center;gap:8px;"><span style="font-size:18px;">🏫</span><span>Escolar</span></li>'+
+        '<li class="v56-sub-item" data-v56-key="comparar" style="padding:10px 20px 10px 50px;font-size:14px;color:#475569;cursor:pointer;display:flex;align-items:center;gap:8px;"><span style="font-size:18px;">⚖️</span><span>Comparar</span></li>'+
+      '</ul>'+
+      /* 5. Contenido y Comunidad con sub-list correcta */
+      '<li class="v56-item v56-has-dropdown" data-v56-key="contenido" style="cursor:pointer;padding:14px 20px;display:flex;align-items:center;gap:12px;font-weight:600;color:#0f172a;font-size:15px;justify-content:space-between;"><span style="display:flex;align-items:center;gap:12px;"><span style="font-size:22px;">📚</span><span>Contenido y Comunidad</span></span><span class="v56-arrow">▼</span></li>'+
+      '<ul class="v56-sub-list" style="list-style:none;padding:0;margin:0;display:none;">'+
+        '<li class="v56-sub-item" style="padding:10px 20px 10px 50px;font-size:14px;color:#475569;cursor:pointer;display:flex;align-items:center;gap:8px;"><span style="font-size:18px;">📰</span><span>Noticias</span></li>'+
+        '<li class="v56-sub-item" style="padding:10px 20px 10px 50px;font-size:14px;color:#475569;cursor:pointer;display:flex;align-items:center;gap:8px;"><span style="font-size:18px;">📝</span><span>Blogs</span></li>'+
+        '<li class="v56-sub-item" style="padding:10px 20px 10px 50px;font-size:14px;color:#475569;cursor:pointer;display:flex;align-items:center;gap:8px;"><span style="font-size:18px;">🎙️</span><span>Podcast</span></li>'+
+        '<li class="v56-sub-item" style="padding:10px 20px 10px 50px;font-size:14px;color:#475569;cursor:pointer;display:flex;align-items:center;gap:8px;"><span style="font-size:18px;">📝</span><span>Artículos</span></li>'+
+        '<li class="v56-sub-item" style="padding:10px 20px 10px 50px;font-size:14px;color:#475569;cursor:pointer;display:flex;align-items:center;gap:8px;"><span style="font-size:18px;">👥</span><span>Seguidos</span></li>'+
+        '<li class="v56-sub-item" style="padding:10px 20px 10px 50px;font-size:14px;color:#475569;cursor:pointer;display:flex;align-items:center;gap:8px;"><span style="font-size:18px;">🎯</span><span>Reclutar</span></li>'+
+        '<li class="v56-sub-item" style="padding:10px 20px 10px 50px;font-size:14px;color:#475569;cursor:pointer;display:flex;align-items:center;gap:8px;"><span style="font-size:18px;">📍</span><span>Centros Deportivos</span></li>'+
+      '</ul>'+
+      /* 6. Más Sobre SS 21 SIEMPRE AL FINAL */
+      '<li class="v56-item" style="cursor:pointer;padding:14px 20px;display:flex;align-items:center;gap:12px;font-weight:600;color:#0f172a;font-size:15px;"><span style="font-size:22px;">🌟</span><span>Más Sobre SS 21</span></li>';
+    
+    /* Hook toggle dropdown */
+    ul.querySelectorAll('.v56-has-dropdown').forEach(function(item){
+      item.addEventListener('click', function(){
+        var nextUl=item.nextElementSibling;
+        if(nextUl && nextUl.classList.contains('v56-sub-list')){
+          var isOpen=nextUl.style.display!=='none';
+          nextUl.style.display=isOpen?'none':'block';
+          var arrow=item.querySelector('.v56-arrow');
+          if(arrow)arrow.textContent=isOpen?'▼':'▲';
+        }
+      });
+    });
+    
+    ul.dataset.v257Built='1';
+  }
+  rebuildMenu();
+  setTimeout(rebuildMenu, 500);
+  setTimeout(rebuildMenu, 2000);
+})();
+   </script>
