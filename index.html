@@ -23322,3 +23322,37 @@ window.selectLLPriv=function(el){document.querySelectorAll('.ll-priv-opt').forEa
   }, true);
 })();
    </script>
+<script>
+/* v274 - fix ticker en MasSS21 via body class detection (v273 nunca matcheaba CSS) */
+(function(){
+  if(window.__v274loaded)return;window.__v274loaded=true;
+  
+  /* CSS: ocultar ticker cuando body tiene clase v274-masss21 */
+  var s=document.createElement('style');s.id='v274-style';
+  s.textContent='html body.v274-masss21 #v100-ticker{display:none !important;}';
+  document.head.appendChild(s);
+  
+  /* Detectar MasSS21 visible y poner/quitar body class */
+  function detectMasSS21(){
+    var masss21=document.getElementById('v87-page-masss21');
+    var hero=document.getElementById('heroCarousel');
+    /* MasSS21 visible si: v87-page-masss21 visible Y heroCarousel NO visible */
+    var masss21Vis=masss21 && masss21.offsetParent!==null && masss21.offsetHeight>100;
+    var heroVis=hero && hero.offsetParent!==null && hero.offsetHeight>50;
+    if(masss21Vis && !heroVis){
+      document.body.classList.add('v274-masss21');
+    } else {
+      document.body.classList.remove('v274-masss21');
+    }
+  }
+  
+  detectMasSS21();
+  setTimeout(detectMasSS21, 500);
+  setTimeout(detectMasSS21, 1500);
+  setInterval(detectMasSS21, 1500);
+  document.addEventListener('click', function(){
+    setTimeout(detectMasSS21, 100);
+    setTimeout(detectMasSS21, 400);
+  }, true);
+})();
+   </script>
