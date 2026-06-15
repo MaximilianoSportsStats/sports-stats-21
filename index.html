@@ -24137,3 +24137,102 @@ window.selectLLPriv=function(el){document.querySelectorAll('.ll-priv-opt').forEa
   document.addEventListener('click',function(){setTimeout(sidebarTick,100);setTimeout(sidebarTick,400);},true);
 })();
    </script>
+<script>
+/* v263 - re-agregar Amateur + layout 2 big + 3 mini + force hide sidebar Inicio */
+(function(){
+  if(window.__v263loaded)return;window.__v263loaded=true;
+  
+  /* === 1. Re-agregar Amateur a Deportes sub-list (entre Profesionales y Universitarios) === */
+  function addAmateur(){
+    var subs=document.querySelectorAll('.v56-sub-list');
+    subs.forEach(function(sub){
+      var prevItem=sub.previousElementSibling;
+      if(!prevItem || !/Deportes/i.test(prevItem.textContent))return;
+      var hasAmateur=Array.from(sub.children).some(function(it){return /^.{0,4}Amateur$/i.test(it.textContent.trim());});
+      if(hasAmateur)return;
+      var amateurLi=document.createElement('li');
+      amateurLi.className='v56-sub-item';
+      amateurLi.setAttribute('data-v56-key','amateur-leagues');
+      amateurLi.style.cssText='padding:10px 20px 10px 50px;font-size:14px;color:#475569;cursor:pointer;display:flex;align-items:center;gap:8px;';
+      amateurLi.innerHTML='<span style="font-size:18px;">⚽</span><span>Amateur</span>';
+      var prof=Array.from(sub.children).find(function(it){return /Profesional/i.test(it.textContent);});
+      if(prof && prof.nextSibling){
+        sub.insertBefore(amateurLi, prof.nextSibling);
+      } else if(prof){
+        sub.appendChild(amateurLi);
+      } else {
+        sub.insertBefore(amateurLi, sub.firstChild);
+      }
+    });
+  }
+  [0,500,1500,3000,5000].forEach(function(t){setTimeout(addAmateur, t);});
+  
+  /* === 2. Layout 2 big + 3 mini: convertir el 4to mini en un segundo big card === */
+  function restructure5cards(){
+    document.querySelectorAll('.v100-news-sec').forEach(function(sec){
+      if(sec.dataset.v263Done==='1')return;
+      var bigs=sec.querySelectorAll('.v100-news-big');
+      var minis=sec.querySelectorAll('.v100-news-mini');
+      
+      if(bigs.length>=2)return; /* ya tiene 2 bigs */
+      if(minis.length<4)return; /* esperar al v262 */
+      
+      /* Convertir el ULTIMO mini en un big (que estará abajo del big actual) */
+      var lastMini=minis[minis.length-1];
+      var firstBig=bigs[0];
+      if(!lastMini || !firstBig)return;
+      
+      var newBig=document.createElement('div');
+      newBig.className='v100-news-big';
+      newBig.innerHTML=lastMini.innerHTML;
+      /* Limpiar data flags */
+      delete newBig.dataset.v260Done;
+      delete newBig.dataset.v261Done;
+      newBig.removeAttribute('data-v240-locked');
+      
+      /* Insertar el nuevo big después del big actual */
+      if(firstBig.parentNode){
+        firstBig.parentNode.insertBefore(newBig, firstBig.nextSibling);
+      }
+      /* Remover el mini que se convirtió */
+      lastMini.remove();
+      
+      sec.dataset.v263Done='1';
+    });
+  }
+  restructure5cards();
+  setTimeout(restructure5cards, 500);
+  setTimeout(restructure5cards, 1500);
+  
+  /* === 3. CSS lock para sidebar oculto en Inicio (con higher specificity) === */
+  var s=document.createElement('style');s.id='v263-style';
+  s.textContent=
+    /* Sidebar oculto cuando heroCarousel visible o sin sport-btn activo */
+    'html body.v32-view-inicio #sidebar,html body.v32-view-inicio .sidebar{display:none !important;visibility:hidden !important;}'+
+    /* Asegurar que 2 bigs queden bien stacked */
+    'html body section.v100-news-sec .v100-news-grid .v100-news-big{margin-bottom:14px !important;}';
+  document.head.appendChild(s);
+  
+  /* === 4. JS force hide sidebar - cada click verifica === */
+  function forceHideSidebar(){
+    var sidebar=document.getElementById('sidebar')||document.querySelector('.sidebar');
+    if(!sidebar)return;
+    var hero=document.getElementById('heroCarousel');
+    var nav=document.querySelector('.sport-nav-bar');
+    var activeBtn=nav?nav.querySelector('.sport-btn.active'):null;
+    var isTodos=activeBtn && activeBtn.hasAttribute('data-v103-todos');
+    var heroVis=hero && hero.offsetParent!==null && hero.offsetHeight>0;
+    if(heroVis || isTodos || !activeBtn){
+      sidebar.style.setProperty('display','none','important');
+      sidebar.style.setProperty('visibility','hidden','important');
+    }
+  }
+  forceHideSidebar();
+  setInterval(forceHideSidebar, 600);
+  document.addEventListener('click',function(){
+    setTimeout(forceHideSidebar,100);
+    setTimeout(forceHideSidebar,400);
+    setTimeout(forceHideSidebar,1000);
+  },true);
+})();
+   </script>
