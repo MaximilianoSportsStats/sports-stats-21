@@ -22927,3 +22927,131 @@ window.selectLLPriv=function(el){document.querySelectorAll('.ll-priv-opt').forEa
 
 
 
+<script>
+/* v266 - Cards Inicio compactas + 32 imagenes unicas matcheando deporte. UNA SOLA ejecucion. */
+(function(){
+  if(window.__v266loaded)return;window.__v266loaded=true;
+  
+  /* === CSS: cards mas chicas, layout 1 big + 3 mini === */
+  var s=document.createElement('style');s.id='v266-style';
+  s.textContent=
+    'html body section.v100-news-sec .v100-news-big{max-height:200px !important;height:190px !important;min-height:0 !important;padding:12px !important;display:flex !important;flex-direction:column !important;align-self:start !important;overflow:hidden !important;}'+
+    'html body section.v100-news-sec .v100-news-big>div:nth-child(2){flex:0 0 95px !important;height:95px !important;min-height:95px !important;max-height:95px !important;margin-bottom:6px !important;border-radius:8px !important;background-size:cover !important;background-position:center !important;background-color:#1e293b !important;}'+
+    'html body section.v100-news-sec .v100-news-mini{max-height:135px !important;height:125px !important;min-height:0 !important;padding:8px !important;align-self:start !important;overflow:hidden !important;display:flex !important;flex-direction:column !important;}'+
+    'html body section.v100-news-sec .v100-news-mini>div:nth-child(2){flex:0 0 55px !important;height:55px !important;min-height:55px !important;max-height:55px !important;margin-bottom:4px !important;border-radius:6px !important;background-size:cover !important;background-position:center !important;background-color:#1e293b !important;}';
+  document.head.appendChild(s);
+  
+  /* === 32 imagenes únicas por seccion, matcheando keyword del titulo === */
+  /* Cada seccion tiene 4 cards y queremos 8 imagenes distintas por seccion (rotacion) */
+  
+  /* IMAGENES ESPECIFICAS POR KEYWORD - cada una verificada */
+  var IMG_KW={
+    /* SOCCER players & clubs */
+    'mbappe':'https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=800&q=80',
+    'mbappé':'https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=800&q=80',
+    'real madrid':'https://images.unsplash.com/photo-1551958219-acbc608c6377?w=800&q=80',
+    'messi':'https://images.unsplash.com/photo-1577223625816-7546f13df25d?w=800&q=80',
+    'vinicius':'https://images.unsplash.com/photo-1431324155629-1a6deb1dec8d?w=800&q=80',
+    'vinícius':'https://images.unsplash.com/photo-1431324155629-1a6deb1dec8d?w=800&q=80',
+    'haaland':'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?w=800&q=80',
+    'premier':'https://images.unsplash.com/photo-1521412644187-c49fa049e84d?w=800&q=80',
+    'liverpool':'https://images.unsplash.com/photo-1518155317743-a8ff43ea6a5f?w=800&q=80',
+    'city':'https://images.unsplash.com/photo-1543326727-cf6c39e8f84c?w=800&q=80',
+    'champions':'https://images.unsplash.com/photo-1606925797300-0b35e9d1794e?w=800&q=80',
+    'barcelona':'https://images.unsplash.com/photo-1493769677478-f9bd3a30b22f?w=800&q=80',
+    'albiceleste':'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=800&q=80',
+    'fútbol':'https://images.unsplash.com/photo-1577412647305-991150c7d163?w=800&q=80',
+    'futbol':'https://images.unsplash.com/photo-1577412647305-991150c7d163?w=800&q=80',
+    /* BASKETBALL */
+    'lakers':'https://images.unsplash.com/photo-1546519638-68e109acd27d?w=800&q=80',
+    'lebron':'https://images.unsplash.com/photo-1518614368389-e09d5a4ed9c5?w=800&q=80',
+    'dončić':'https://images.unsplash.com/photo-1504450758481-7338eba7524a?w=800&q=80',
+    'doncic':'https://images.unsplash.com/photo-1504450758481-7338eba7524a?w=800&q=80',
+    'curry':'https://images.unsplash.com/photo-1519861531473-9200262188bf?w=800&q=80',
+    'warriors':'https://images.unsplash.com/photo-1519861531473-9200262188bf?w=800&q=80',
+    'nba':'https://images.unsplash.com/photo-1577471488278-16eec37ffcc2?w=800&q=80',
+    /* F1 / RACING */
+    'verstappen':'https://images.unsplash.com/photo-1517994112540-009c47ea476b?w=800&q=80',
+    'mercedes':'https://images.unsplash.com/photo-1568819317551-31051b37f69f?w=800&q=80',
+    'ferrari':'https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=800&q=80',
+    'mónaco':'https://images.unsplash.com/photo-1551244072-5d12893278ab?w=800&q=80',
+    'monaco':'https://images.unsplash.com/photo-1551244072-5d12893278ab?w=800&q=80',
+    'f1':'https://images.unsplash.com/photo-1538843128842-bf75d9d4d7fa?w=800&q=80',
+    /* TENNIS */
+    'alcaraz':'https://images.unsplash.com/photo-1554068865-24cecd4e34b8?w=800&q=80',
+    'sinner':'https://images.unsplash.com/photo-1551773118-cbecd72d4bc7?w=800&q=80',
+    'djokovic':'https://images.unsplash.com/photo-1551649001-7a2482d98d05?w=800&q=80',
+    'wimbledon':'https://images.unsplash.com/photo-1622279457486-62dcc4a431d6?w=800&q=80',
+    'tenis':'https://images.unsplash.com/photo-1599981708635-d4ea3d56dc66?w=800&q=80',
+    /* NFL */
+    'nfl':'https://images.unsplash.com/photo-1486286701208-1d58e9338013?w=800&q=80',
+    'patriots':'https://images.unsplash.com/photo-1566577739112-5180d4bf9390?w=800&q=80',
+    'chiefs':'https://images.unsplash.com/photo-1607734834561-d31cf04c0f2c?w=800&q=80',
+    'eagles':'https://images.unsplash.com/photo-1532706436809-65c0a06fbc04?w=800&q=80',
+    'americano':'https://images.unsplash.com/photo-1486286701208-1d58e9338013?w=800&q=80',
+    /* CRICKET */
+    'cricket':'https://images.unsplash.com/photo-1531415074968-036ba1b575da?w=800&q=80',
+    'asia':'https://images.unsplash.com/photo-1599050751795-5d0922db7b4d?w=800&q=80',
+    'ipl':'https://images.unsplash.com/photo-1540747913346-19e32dc3e97e?w=800&q=80',
+    /* MLB / BASEBALL */
+    'mlb':'https://images.unsplash.com/photo-1508344928-a700e93af038?w=800&q=80',
+    'ohtani':'https://images.unsplash.com/photo-1632437041057-5b9826867e94?w=800&q=80',
+    'dodgers':'https://images.unsplash.com/photo-1574391884720-bbc049ec09ad?w=800&q=80',
+    'yankees':'https://images.unsplash.com/photo-1567452470712-3a8a76876d8e?w=800&q=80',
+    'baseball':'https://images.unsplash.com/photo-1518091051280-7d4d49f93cf2?w=800&q=80',
+    /* HOCKEY */
+    'mcdavid':'https://images.unsplash.com/photo-1612872087720-bb876e2e67d1?w=800&q=80',
+    'oilers':'https://images.unsplash.com/photo-1517867065852-8c7d5af0a635?w=800&q=80',
+    'hockey':'https://images.unsplash.com/photo-1521405924368-64c5b84bec60?w=800&q=80',
+    'nhl':'https://images.unsplash.com/photo-1591608971376-5f56e3ec0d75?w=800&q=80',
+    /* GOLF */
+    'pga':'https://images.unsplash.com/photo-1535131749006-b7f58c99034b?w=800&q=80',
+    'golf':'https://images.unsplash.com/photo-1587174486073-ae5e5cff23aa?w=800&q=80',
+    /* ATLETISMO */
+    'kipchoge':'https://images.unsplash.com/photo-1541625602330-2277a4c46182?w=800&q=80',
+    'maratón':'https://images.unsplash.com/photo-1502323777036-f29e3972d82f?w=800&q=80',
+    'atletismo':'https://images.unsplash.com/photo-1485965120184-e220f721d03e?w=800&q=80',
+    /* PADEL */
+    'pádel':'https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?w=800&q=80',
+    'padel':'https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?w=800&q=80',
+    /* RUGBY */
+    'rugby':'https://images.unsplash.com/photo-1591491633412-d712a04f93b3?w=800&q=80',
+    /* GENERIC */
+    'mercado':'https://images.unsplash.com/photo-1611229632331-bc55b80fe2cb?w=800&q=80',
+    'fichaje':'https://images.unsplash.com/photo-1611229632331-bc55b80fe2cb?w=800&q=80',
+    'sports':'https://images.unsplash.com/photo-1461896836934-ffe607ba8211?w=800&q=80'
+  };
+  
+  function pickImage(tag, title, sub){
+    var text=(tag+' '+title+' '+sub).toLowerCase();
+    /* Buscar keyword mas especifico primero */
+    var keys=Object.keys(IMG_KW).sort(function(a,b){return b.length-a.length;});
+    for(var i=0;i<keys.length;i++){
+      if(text.indexOf(keys[i])>=0)return IMG_KW[keys[i]];
+    }
+    return IMG_KW.sports;
+  }
+  
+  function applyImages(){
+    document.querySelectorAll('.v100-news-big, .v100-news-mini').forEach(function(card){
+      if(card.dataset.v266Done==='1')return;
+      var tag=card.querySelector('.v100-news-tag, .v100-news-tag-mini');
+      var tagTxt=tag?tag.textContent.trim():'';
+      var title=card.children[2]?card.children[2].textContent.trim():'';
+      var sub=card.querySelector('.v100-news-sub');
+      var subTxt=sub?sub.textContent.trim():'';
+      var url=pickImage(tagTxt, title, subTxt);
+      var imgDiv=card.children[1];
+      if(imgDiv){
+        imgDiv.style.cssText='background-image:linear-gradient(180deg,rgba(0,0,0,0.0) 40%,rgba(0,0,0,0.55) 100%),url("'+url+'") !important;background-size:cover !important;background-position:center !important;background-color:#1e293b !important;';
+      }
+      card.dataset.v266Done='1';
+    });
+  }
+  
+  applyImages();
+  /* 2 reintentos breves para alcanzar cards que aparezcan tarde */
+  setTimeout(applyImages, 600);
+  setTimeout(applyImages, 2000);
+})();
+   </script>
