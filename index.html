@@ -24044,3 +24044,96 @@ window.selectLLPriv=function(el){document.querySelectorAll('.ll-priv-opt').forEa
   [0,200,500,1000,2000,3500,5000,8000].forEach(function(t){setTimeout(dedupeMenu, t);});
 })();
    </script>
+<script>
+/* v262 - quitar Amateur de Deportes + agregar 5ta card + hide sidebar Futbol en Inicio + tremor */
+(function(){
+  if(window.__v262loaded)return;window.__v262loaded=true;
+  
+  /* === 1. Quitar Amateur de Deportes sub-list === */
+  function removeAmateur(){
+    var subs=document.querySelectorAll('.v56-sub-list');
+    subs.forEach(function(sub){
+      var prevItem=sub.previousElementSibling;
+      if(!prevItem || !/Deportes/i.test(prevItem.textContent))return;
+      Array.from(sub.children).forEach(function(it){
+        if(/^.{0,4}Amateur$/i.test(it.textContent.trim())){
+          it.remove();
+        }
+      });
+    });
+  }
+  [0,500,1500,3000,5000].forEach(function(t){setTimeout(removeAmateur, t);});
+  
+  /* === 2. Agregar 5ta card mini en cada sección Noticias/Blogs/Podcast/Mercado === */
+  function add5thCard(){
+    document.querySelectorAll('.v100-news-sec').forEach(function(sec){
+      if(sec.dataset.v262Added==='1')return;
+      var miniCol=sec.querySelector('.v100-news-mini-col')||sec.querySelector('[class*="mini-col"]');
+      if(!miniCol)return;
+      var existingMinis=miniCol.querySelectorAll('.v100-news-mini');
+      if(existingMinis.length>=4)return;
+      /* Clonar el ultimo mini como base */
+      var lastMini=existingMinis[existingMinis.length-1];
+      if(!lastMini)return;
+      var newMini=lastMini.cloneNode(true);
+      /* Cambiar contenido según la sección */
+      var sectionTitle=sec.querySelector('h2,h3')?.textContent.trim()||'';
+      var tag=newMini.querySelector('.v100-news-tag,.v100-news-tag-mini');
+      var titleDiv=newMini.children[2];
+      var subDiv=newMini.querySelector('.v100-news-sub');
+      if(/NOTICIAS/i.test(sectionTitle)){
+        if(tag)tag.textContent='Hockey';
+        if(titleDiv){titleDiv.textContent='McDavid alcanza 1000 puntos';if(subDiv){titleDiv.appendChild(subDiv);}}
+        if(subDiv)subDiv.textContent='El capitán de los Oilers se convirtió en el jugador más rápido en alcanzar la marca.';
+      } else if(/BLOGS/i.test(sectionTitle)){
+        if(tag)tag.textContent='Tenis';
+        if(titleDiv){titleDiv.textContent='Las nuevas raquetas del 2026';if(subDiv){titleDiv.appendChild(subDiv);}}
+        if(subDiv)subDiv.textContent='Análisis técnico de las innovaciones que están marcando esta temporada en el ATP.';
+      } else if(/PODCAST/i.test(sectionTitle)){
+        if(tag)tag.textContent='Atletismo';
+        if(titleDiv){titleDiv.textContent='Maratón de Boston: la previa';if(subDiv){titleDiv.appendChild(subDiv);}}
+        if(subDiv)subDiv.textContent='Charla con Eliud Kipchoge sobre su preparación para una nueva temporada de maratones. 45 min.';
+      } else if(/MERCADO/i.test(sectionTitle)){
+        if(tag)tag.textContent='MLB';
+        if(titleDiv){titleDiv.textContent='Ohtani renueva con Dodgers';if(subDiv){titleDiv.appendChild(subDiv);}}
+        if(subDiv)subDiv.textContent='Extensión de 5 años por USD 350M. Será el jugador mejor pagado de la historia del beisbol.';
+      }
+      /* Limpiar el data flag para que se le aplique imagen */
+      delete newMini.dataset.v260Done;
+      delete newMini.dataset.v261Done;
+      newMini.removeAttribute('data-v240-locked');
+      newMini.removeAttribute('data-v220-orig');
+      miniCol.appendChild(newMini);
+      sec.dataset.v262Added='1';
+    });
+  }
+  add5thCard();
+  setTimeout(add5thCard, 500);
+  setTimeout(add5thCard, 1500);
+  
+  /* === 3. Hide Fútbol sidebar en Inicio === */
+  var hidesidebar=document.createElement('style');hidesidebar.id='v262-sidebar-style';
+  hidesidebar.textContent=
+    /* Si v32-view-inicio o no hay sport activo no-Todos, ocultar sidebar */
+    'html body.v32-view-inicio #sidebar,html body.v32-view-inicio .sidebar{display:none !important;}'+
+    'html body:not(.v29-show-bar) #sidebar,html body:not(.v29-show-bar) .sidebar{display:none !important;}';
+  document.head.appendChild(hidesidebar);
+  
+  /* === 4. JS adicional para forzar hide sidebar cuando heroCarousel visible === */
+  function sidebarTick(){
+    var sidebar=document.getElementById('sidebar')||document.querySelector('.sidebar');
+    if(!sidebar)return;
+    var hero=document.getElementById('heroCarousel');
+    var nav=document.querySelector('.sport-nav-bar');
+    var activeBtn=nav?nav.querySelector('.sport-btn.active'):null;
+    var isTodos=activeBtn && activeBtn.hasAttribute('data-v103-todos');
+    var heroVis=hero && hero.offsetParent!==null;
+    if(heroVis || isTodos || !activeBtn){
+      sidebar.style.setProperty('display','none','important');
+    }
+  }
+  sidebarTick();
+  setInterval(sidebarTick, 800);
+  document.addEventListener('click',function(){setTimeout(sidebarTick,100);setTimeout(sidebarTick,400);},true);
+})();
+   </script>
