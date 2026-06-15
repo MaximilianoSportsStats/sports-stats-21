@@ -23248,3 +23248,77 @@ window.selectLLPriv=function(el){document.querySelectorAll('.ll-priv-opt').forEa
   }, true);
 })();
    </script>
+<script>
+/* v273 - targeted dedupe SOLO en sport-nav-bar y v114-tenis-sidebar + ocultar ticker en MasSS21 */
+(function(){
+  if(window.__v273loaded)return;window.__v273loaded=true;
+  
+  /* === 1. Targeted dedupe en los 2 elementos que tienen loop infinito === */
+  function makeElementDedupe(el){
+    if(!el || el.dataset.v273dedup==='1')return;
+    var origSetAttr=el.setAttribute.bind(el);
+    var origRemoveAttr=el.removeAttribute.bind(el);
+    el.setAttribute=function(name,val){
+      if(name==='style'||name==='class'){
+        if(el.getAttribute(name)===val)return;
+      }
+      return origSetAttr(name,val);
+    };
+    el.removeAttribute=function(name){
+      if(!el.hasAttribute(name))return;
+      return origRemoveAttr(name);
+    };
+    /* Tambien interceptar style.setProperty */
+    var origSetProp=el.style.setProperty.bind(el.style);
+    el.style.setProperty=function(prop,val,priority){
+      var cur=el.style.getPropertyValue(prop);
+      var curPrio=el.style.getPropertyPriority(prop);
+      if(cur===val && curPrio===(priority||''))return;
+      return origSetProp(prop,val,priority);
+    };
+    el.dataset.v273dedup='1';
+  }
+  
+  function applyDedupe(){
+    var nav=document.querySelector('.sport-nav-bar');
+    if(nav)makeElementDedupe(nav);
+    var tenis=document.querySelector('.v114-tenis-sidebar');
+    if(tenis)makeElementDedupe(tenis);
+  }
+  applyDedupe();
+  setTimeout(applyDedupe, 500);
+  setTimeout(applyDedupe, 1500);
+  
+  /* === 2. Ocultar ticker en MasSS21 (no solo en Inicio) === */
+  var s=document.createElement('style');s.id='v273-style';
+  s.textContent=
+    /* Ticker oculto cuando MasSS21 panel activo */
+    'html body.v200-mercado-mode #v100-ticker{display:none !important;}'+
+    /* Ticker oculto cuando v87-page-masss21 visible (con higher specificity) */
+    'html body #v87-page-masss21[style*="display: block"] ~ #v100-ticker,'+
+    'html body #v87-page-masss21:not([style*="none"]) ~ #v100-ticker{display:none !important;}';
+  document.head.appendChild(s);
+  
+  /* JS adicional: si MasSS21 panel visible, ocultar ticker */
+  function tickerCheck(){
+    var ticker=document.getElementById('v100-ticker');
+    if(!ticker)return;
+    var masss21=document.getElementById('v87-page-masss21');
+    var masss21Vis=masss21 && masss21.offsetParent!==null && masss21.offsetHeight>50;
+    var hero=document.getElementById('heroCarousel');
+    var heroVis=hero && hero.offsetParent!==null && hero.offsetHeight>50;
+    /* Mostrar ticker SOLO en Inicio (heroCarousel visible y NO masss21) */
+    if(masss21Vis){
+      ticker.style.setProperty('display','none','important');
+    } else if(heroVis){
+      ticker.style.removeProperty('display');
+    }
+  }
+  tickerCheck();
+  setInterval(tickerCheck, 1500);
+  document.addEventListener('click', function(){
+    setTimeout(tickerCheck, 200);
+    setTimeout(tickerCheck, 600);
+  }, true);
+})();
+   </script>
