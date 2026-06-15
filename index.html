@@ -23553,3 +23553,28 @@ window.selectLLPriv=function(el){document.querySelectorAll('.ll-priv-opt').forEa
   }, true);
 })();
    </script>
+<script>
+/* v256 - achicar drasticamente cards Noticias/Blogs/Podcast/Mercado */
+(function(){
+  if(window.__v256loaded)return;window.__v256loaded=true;
+  var s=document.createElement('style');s.id='v256-style';
+  s.textContent=
+    /* Card big: max 220px - sin stretch */
+    'html body .v100-news-big{min-height:0 !important;max-height:240px !important;height:220px !important;padding:12px !important;align-self:start !important;}'+
+    /* Imagen del big: 100px fijo */
+    'html body .v100-news-big>div:nth-child(2){flex:0 0 100px !important;height:100px !important;min-height:100px !important;max-height:100px !important;margin-bottom:6px !important;border-radius:6px !important;}'+
+    /* Card mini: max 130px */
+    'html body .v100-news-mini{min-height:0 !important;max-height:140px !important;height:120px !important;padding:8px !important;align-self:start !important;}'+
+    /* Imagen del mini: 50px */
+    'html body .v100-news-mini>div:nth-child(2){flex:0 0 50px !important;height:50px !important;min-height:50px !important;max-height:50px !important;margin-bottom:4px !important;border-radius:4px !important;}'+
+    /* Grid/section: no estirar items (align-items start) */
+    'html body .v100-news-sec,html body .v100-news-grid,html body .v100-news-mini-col{align-items:start !important;}'+
+    /* Tag y title más chicos */
+    'html body .v100-news-big .v100-news-tag,html body .v100-news-mini .v100-news-tag,html body .v100-news-mini .v100-news-tag-mini{font-size:10px !important;padding:2px 6px !important;}'+
+    'html body .v100-news-big>div:nth-child(3){font-size:13px !important;line-height:1.25 !important;margin:2px 0 !important;}'+
+    'html body .v100-news-mini>div:nth-child(3){font-size:12px !important;line-height:1.25 !important;margin:2px 0 !important;}'+
+    /* Subtitulo/descripción más chica */
+    'html body .v100-news-sub{font-size:11px !important;line-height:1.3 !important;color:#94a3b8 !important;}';
+  document.head.appendChild(s);
+})();
+   </script>
