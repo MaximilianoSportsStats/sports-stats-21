@@ -23055,3 +23055,54 @@ window.selectLLPriv=function(el){document.querySelectorAll('.ll-priv-opt').forEa
   setTimeout(applyImages, 2000);
 })();
    </script>
+<script>
+/* v267 - forzar height inline en image divs para vencer v229 setInterval que oculta titulo */
+(function(){
+  if(window.__v267loaded)return;window.__v267loaded=true;
+  
+  function forceImgHeight(imgDiv,isMini){
+    var h=isMini?55:95;
+    imgDiv.style.setProperty('flex','0 0 '+h+'px','important');
+    imgDiv.style.setProperty('height',h+'px','important');
+    imgDiv.style.setProperty('min-height',h+'px','important');
+    imgDiv.style.setProperty('max-height',h+'px','important');
+  }
+  
+  function applyAll(){
+    document.querySelectorAll('.v100-news-big').forEach(function(card){
+      var imgDiv=card.children[1];
+      if(imgDiv){
+        forceImgHeight(imgDiv,false);
+        /* MutationObserver SOLO en este image div para auto-revertir */
+        if(!imgDiv.dataset.v267obs){
+          var mo=new MutationObserver(function(){
+            var curH=imgDiv.style.height;
+            if(curH!=='95px'){forceImgHeight(imgDiv,false);}
+          });
+          mo.observe(imgDiv,{attributes:true,attributeFilter:['style']});
+          imgDiv.dataset.v267obs='1';
+        }
+      }
+    });
+    document.querySelectorAll('.v100-news-mini').forEach(function(card){
+      var imgDiv=card.children[1];
+      if(imgDiv){
+        forceImgHeight(imgDiv,true);
+        if(!imgDiv.dataset.v267obs){
+          var mo=new MutationObserver(function(){
+            var curH=imgDiv.style.height;
+            if(curH!=='55px'){forceImgHeight(imgDiv,true);}
+          });
+          mo.observe(imgDiv,{attributes:true,attributeFilter:['style']});
+          imgDiv.dataset.v267obs='1';
+        }
+      }
+    });
+  }
+  
+  applyAll();
+  setTimeout(applyAll, 500);
+  setTimeout(applyAll, 1500);
+  setTimeout(applyAll, 3500);
+})();
+   </script>
