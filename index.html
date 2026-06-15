@@ -23106,3 +23106,65 @@ window.selectLLPriv=function(el){document.querySelectorAll('.ll-priv-opt').forEa
   setTimeout(applyAll, 3500);
 })();
    </script>
+<script>
+/* v268 - Big card alto = 3 mini stackeados (~400px). Imagen big toma 320px, titulo 60px abajo. */
+(function(){
+  if(window.__v268loaded)return;window.__v268loaded=true;
+  
+  /* CSS con maxima specificity para ganar a v229 */
+  var s=document.createElement('style');s.id='v268-style';
+  s.textContent=
+    /* BIG card: 400px de alto total (igual a 3 mini de 125px + 2 gaps) */
+    'html body section.v100-news-sec .v100-news-big{max-height:420px !important;height:400px !important;min-height:400px !important;padding:12px !important;display:flex !important;flex-direction:column !important;overflow:hidden !important;}'+
+    'html body section.v100-news-sec .v100-news-big>div:nth-child(2){flex:0 0 320px !important;height:320px !important;min-height:320px !important;max-height:320px !important;margin-bottom:8px !important;border-radius:8px !important;background-size:cover !important;background-position:center !important;background-color:#1e293b !important;}'+
+    /* MINI cards: 125px de alto, imagen 60px */
+    'html body section.v100-news-sec .v100-news-mini{max-height:130px !important;height:125px !important;min-height:0 !important;padding:8px !important;display:flex !important;flex-direction:column !important;overflow:hidden !important;}'+
+    'html body section.v100-news-sec .v100-news-mini>div:nth-child(2){flex:0 0 60px !important;height:60px !important;min-height:60px !important;max-height:60px !important;margin-bottom:4px !important;border-radius:6px !important;background-size:cover !important;background-position:center !important;background-color:#1e293b !important;}';
+  document.head.appendChild(s);
+  
+  /* Forzar inline tambien con MO solo en image div - sin afectar nada del body */
+  function forceImgHeight(imgDiv,h){
+    imgDiv.style.setProperty('flex','0 0 '+h+'px','important');
+    imgDiv.style.setProperty('height',h+'px','important');
+    imgDiv.style.setProperty('min-height',h+'px','important');
+    imgDiv.style.setProperty('max-height',h+'px','important');
+  }
+  
+  function applyAll(){
+    document.querySelectorAll('.v100-news-big').forEach(function(card){
+      card.style.setProperty('height','400px','important');
+      card.style.setProperty('min-height','400px','important');
+      card.style.setProperty('max-height','420px','important');
+      var imgDiv=card.children[1];
+      if(imgDiv){
+        forceImgHeight(imgDiv,320);
+        if(!imgDiv.dataset.v268obs){
+          var mo=new MutationObserver(function(){
+            if(imgDiv.style.height!=='320px'){forceImgHeight(imgDiv,320);}
+          });
+          mo.observe(imgDiv,{attributes:true,attributeFilter:['style']});
+          imgDiv.dataset.v268obs='1';
+        }
+      }
+    });
+    document.querySelectorAll('.v100-news-mini').forEach(function(card){
+      card.style.setProperty('height','125px','important');
+      var imgDiv=card.children[1];
+      if(imgDiv){
+        forceImgHeight(imgDiv,60);
+        if(!imgDiv.dataset.v268obs){
+          var mo=new MutationObserver(function(){
+            if(imgDiv.style.height!=='60px'){forceImgHeight(imgDiv,60);}
+          });
+          mo.observe(imgDiv,{attributes:true,attributeFilter:['style']});
+          imgDiv.dataset.v268obs='1';
+        }
+      }
+    });
+  }
+  
+  applyAll();
+  setTimeout(applyAll, 600);
+  setTimeout(applyAll, 2000);
+})();
+   </script>
