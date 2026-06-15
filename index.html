@@ -23699,3 +23699,120 @@ window.selectLLPriv=function(el){document.querySelectorAll('.ll-priv-opt').forEa
   document.head.appendChild(s);
 })();
    </script>
+<script>
+/* v259 - dedupe agresivo sidebar + imágenes verificadas matcheando texto */
+(function(){
+  if(window.__v259loaded)return;window.__v259loaded=true;
+  
+  /* === 1. Dedupe agresivo sidebar (incluso si v257 lo rebuilda) === */
+  function dedupeMenu(){
+    var ul=document.querySelector('.v56-ul')||document.querySelector('.v36-side ul')||document.querySelector('aside ul');
+    if(!ul)return;
+    var seen={};
+    Array.from(ul.children).forEach(function(item){
+      var t=item.textContent.trim().slice(0,60);
+      var key='';
+      if(/^.{0,5}Inicio$/i.test(t))key='inicio';
+      else if(/^.{0,5}Favoritos$/i.test(t))key='favoritos';
+      else if(/^.{0,5}En Vivo$/i.test(t))key='envivo';
+      else if(/Deportes/i.test(t) && item.tagName==='LI')key='deportes';
+      else if(/Contenido y Comunidad/i.test(t) && item.tagName==='LI')key='contenido';
+      else if(/M[aá]s Sobre SS\s*21/i.test(t))key='masss21';
+      else return;
+      if(seen[key]){item.remove();}
+      else{seen[key]=true;}
+    });
+  }
+  dedupeMenu();
+  /* Correr 5 veces para asegurar que gana sobre v257 que vuelve a poblar */
+  [200,600,1500,3000,5000].forEach(function(t){setTimeout(dedupeMenu, t);});
+  
+  /* === 2. Imágenes verificadas con matching exacto por keywords del título === */
+  var IMG_BY_KEY={
+    /* Soccer specific players */
+    mbappe:'https://images.unsplash.com/photo-1614632537190-23e4146777db?w=900&q=80',
+    messi:'https://images.unsplash.com/photo-1614632537190-23e4146777db?w=900&q=80',
+    vinicius:'https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=900&q=80',
+    haaland:'https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=900&q=80',
+    premier:'https://images.unsplash.com/photo-1431324155629-1a6deb1dec8d?w=900&q=80',
+    soccer:'https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=900&q=80',
+    futbol:'https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=900&q=80',
+    /* Basketball */
+    nba:'https://images.unsplash.com/photo-1546519638-68e109acd27d?w=900&q=80',
+    lakers:'https://images.unsplash.com/photo-1546519638-68e109acd27d?w=900&q=80',
+    doncic:'https://images.unsplash.com/photo-1518614368389-e09d5a4ed9c5?w=900&q=80',
+    lebron:'https://images.unsplash.com/photo-1518614368389-e09d5a4ed9c5?w=900&q=80',
+    curry:'https://images.unsplash.com/photo-1518614368389-e09d5a4ed9c5?w=900&q=80',
+    basketball:'https://images.unsplash.com/photo-1546519638-68e109acd27d?w=900&q=80',
+    /* F1 */
+    f1:'https://images.unsplash.com/photo-1517994112540-009c47ea476b?w=900&q=80',
+    verstappen:'https://images.unsplash.com/photo-1551033406-611cf9a28f67?w=900&q=80',
+    formula:'https://images.unsplash.com/photo-1517994112540-009c47ea476b?w=900&q=80',
+    mercedes:'https://images.unsplash.com/photo-1551033406-611cf9a28f67?w=900&q=80',
+    ferrari:'https://images.unsplash.com/photo-1551033406-611cf9a28f67?w=900&q=80',
+    /* Tennis */
+    tenis:'https://images.unsplash.com/photo-1554068865-24cecd4e34b8?w=900&q=80',
+    tennis:'https://images.unsplash.com/photo-1554068865-24cecd4e34b8?w=900&q=80',
+    alcaraz:'https://images.unsplash.com/photo-1554068865-24cecd4e34b8?w=900&q=80',
+    djokovic:'https://images.unsplash.com/photo-1554068865-24cecd4e34b8?w=900&q=80',
+    /* Cricket */
+    cricket:'https://images.unsplash.com/photo-1531415074968-036ba1b575da?w=900&q=80',
+    /* NFL */
+    nfl:'https://images.unsplash.com/photo-1486286701208-1d58e9338013?w=900&q=80',
+    americano:'https://images.unsplash.com/photo-1486286701208-1d58e9338013?w=900&q=80',
+    superbowl:'https://images.unsplash.com/photo-1486286701208-1d58e9338013?w=900&q=80',
+    /* Baseball */
+    mlb:'https://images.unsplash.com/photo-1508344928-a700e93af038?w=900&q=80',
+    baseball:'https://images.unsplash.com/photo-1508344928-a700e93af038?w=900&q=80',
+    /* Mercado / Money */
+    mercado:'https://images.unsplash.com/photo-1565514020179-026b92b84bb6?w=900&q=80',
+    fichaje:'https://images.unsplash.com/photo-1565514020179-026b92b84bb6?w=900&q=80',
+    contrato:'https://images.unsplash.com/photo-1565514020179-026b92b84bb6?w=900&q=80',
+    /* Generic */
+    sports:'https://images.unsplash.com/photo-1461896836934-ffe607ba8211?w=900&q=80'
+  };
+  
+  function pickByText(text){
+    var lt=text.toLowerCase();
+    /* Buscar keywords en orden de especificidad */
+    var keys=['mbappe','mbappé','messi','vinicius','vinícius','haaland','doncic','doncic','dončić','lebron','curry','alcaraz','djokovic','verstappen','ferrari','mercedes','lakers','premier','superbowl','formula','f1','nba','nfl','nhl','mlb','tenis','tennis','cricket','futbol','fútbol','soccer','basketball','americano','baseball','mercado','fichaje','contrato'];
+    for(var i=0;i<keys.length;i++){
+      var k=keys[i];
+      if(lt.indexOf(k)>=0){
+        var imgKey=k.replace(/[áéíóúñ]/g, function(c){return {á:'a',é:'e',í:'i',ó:'o',ú:'u',ñ:'n'}[c];}).replace('mbappe','mbappe').replace('vinicius','vinicius').replace('doncic','doncic');
+        if(IMG_BY_KEY[imgKey])return IMG_BY_KEY[imgKey];
+      }
+    }
+    return IMG_BY_KEY.sports;
+  }
+  
+  function applyBetterImages(){
+    document.querySelectorAll('.v100-news-big, .v100-news-mini').forEach(function(card){
+      if(card.dataset.v259Done==='1')return;
+      var tag=card.querySelector('.v100-news-tag, .v100-news-tag-mini');
+      var tagTxt=tag?tag.textContent.trim():'';
+      var title=card.children[2]?card.children[2].textContent.trim():'';
+      var subtitle=card.querySelector('.v100-news-sub');
+      var fullText=tagTxt+' '+title+' '+(subtitle?subtitle.textContent:'');
+      var url=pickByText(fullText);
+      /* Aplicar a la card o al img div */
+      var imgDiv=card.children[1];
+      if(imgDiv){
+        imgDiv.style.setProperty('background-image','linear-gradient(180deg,rgba(0,0,0,0.0) 50%,rgba(0,0,0,0.6) 100%),url("'+url+'")','important');
+        imgDiv.style.setProperty('background-size','cover','important');
+        imgDiv.style.setProperty('background-position','center','important');
+        imgDiv.style.setProperty('background-color','#1e293b','important');
+      }
+      /* También sobre la card */
+      card.style.setProperty('background-image','linear-gradient(180deg,rgba(0,0,0,0.0) 30%,rgba(0,0,0,0.55) 100%),url("'+url+'")','important');
+      card.style.setProperty('background-size','cover','important');
+      card.style.setProperty('background-position','center','important');
+      card.dataset.v259Done='1';
+      card.dataset.v240Locked='1';
+    });
+  }
+  applyBetterImages();
+  setTimeout(applyBetterImages, 500);
+  setTimeout(applyBetterImages, 1500);
+})();
+   </script>
