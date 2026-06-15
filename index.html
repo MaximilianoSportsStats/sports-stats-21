@@ -17525,6 +17525,35 @@ attachInicio2();
   window.addEventListener("load",forceInicio);
 })();
 </script>
+
+<script>
+/* v303 - Inicio lock hasta que user haga click (mata auto-nav diferido) */
+(function(){
+  if(window.__v303)return;window.__v303=true;
+  var userActed=false;
+  document.addEventListener("click",function(){userActed=true;},true);
+  function forceInicio(){
+    if(userActed)return;
+    var inicio=document.getElementById("panel-inicio");
+    if(inicio)inicio.classList.add("active");
+    document.querySelectorAll("[id^=panel-]").forEach(function(p){if(p.id!=="panel-inicio")p.classList.remove("active");});
+    document.querySelectorAll(".sport-btn").forEach(function(b){
+      var isAll=(b.textContent||"").includes("Todos")||/goInicio/.test(b.getAttribute("onclick")||"");
+      if(isAll){b.classList.add("active");}else{b.classList.remove("active");}
+    });
+    document.body.classList.add("v32-view-inicio");
+    document.body.classList.remove("v32-view-soccer");
+    var sidebar=document.getElementById("sidebar");
+    if(sidebar)sidebar.style.display="none";
+  }
+  var startTime=Date.now();
+  var iv=setInterval(function(){
+    if(userActed||Date.now()-startTime>30000){clearInterval(iv);return;}
+    forceInicio();
+  },250);
+  forceInicio();
+})();
+</script>
 </body>
 </html>
 
