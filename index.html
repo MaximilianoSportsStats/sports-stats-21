@@ -17504,6 +17504,27 @@ function attachInicio2(){
 attachInicio2();
 })();
 </script>
+
+<script>
+/* v302 - forzar Inicio al cargar (matar auto-nav a Futbol) */
+(function(){
+  if(window.__v302)return;window.__v302=true;
+  function forceInicio(){
+    var inicio=document.getElementById("panel-inicio");
+    if(inicio)inicio.classList.add("active");
+    document.querySelectorAll("[id^=panel-]").forEach(function(p){if(p.id!=="panel-inicio")p.classList.remove("active");});
+    document.querySelectorAll(".sport-btn").forEach(function(b){
+      var isAll=(b.textContent||"").includes("Todos")||/goInicio/.test(b.getAttribute("onclick")||"");
+      if(isAll){b.classList.add("active");}else{b.classList.remove("active");}
+    });
+    document.body.classList.add("v32-view-inicio");
+    document.body.classList.remove("v32-view-soccer");
+  }
+  if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",forceInicio);}else{forceInicio();}
+  [100,500,1000,2000,3000,5000].forEach(function(ms){setTimeout(forceInicio,ms);});
+  window.addEventListener("load",forceInicio);
+})();
+</script>
 </body>
 </html>
 
