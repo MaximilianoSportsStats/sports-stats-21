@@ -23076,3 +23076,151 @@ window.selectLLPriv=function(el){document.querySelectorAll('.ll-priv-opt').forEa
   setTimeout(moveAtEnd, 2000);
 })();
    </script>
+<script>
+/* v271 - mapear correctamente sport-btn → sidebar + crear sidebars faltantes (Otros, Eventos Globales) */
+(function(){
+  if(window.__v271loaded)return;window.__v271loaded=true;
+  
+  /* === Mapping definitivo: nombre del sport-btn → sidebar key === */
+  function getSidebarKeyForSport(label){
+    var t=label.toLowerCase();
+    if(/f[uú]tbol/.test(t) && !/americano/.test(t))return 'soccer_native';
+    if(/tenis/.test(t))return 'tennis_native';
+    if(/carreras|f1/.test(t))return 'f1';
+    if(/basketball|basket/.test(t))return 'nba';
+    if(/combate|ufc/.test(t))return 'ufc';
+    if(/baseball|b[eé]isbol/.test(t))return 'mlb';
+    if(/hockey/.test(t))return 'nhl';
+    if(/americano|nfl/.test(t))return 'nfl';
+    if(/rugby/.test(t))return 'rugby';
+    if(/golf/.test(t))return 'golf';
+    if(/atletismo/.test(t))return 'athletics';
+    if(/nataci[oó]n|acu[aá]ticos/.test(t))return 'acuaticos';
+    if(/ciclismo/.test(t))return 'cycling';
+    if(/volleyball|voleibol/.test(t))return 'volley';
+    if(/p[aá]del/.test(t))return 'padel';
+    if(/cricket/.test(t))return 'cricket';
+    if(/otros/.test(t))return 'otros';
+    if(/eventos/.test(t))return 'eventos';
+    return null;
+  }
+  
+  /* === Crear sidebars faltantes (Otros Deportes, Eventos Globales) === */
+  function buildMissingSidebars(){
+    var sidebar=document.getElementById('sidebar')||document.querySelector('.sidebar');
+    if(!sidebar)return;
+    if(sidebar.dataset.v271Built==='1')return;
+    
+    /* Otros Deportes */
+    if(!document.querySelector('.v271-sidebar-otros')){
+      var otrosHTML='<div class="v271-sidebar-otros" style="display:none;padding:14px 12px;color:#0f172a;">'+
+        '<div style="font-weight:800;font-size:18px;letter-spacing:.5px;padding:8px 12px;margin-bottom:8px;border-bottom:1px solid #e2e8f0;">🏅 OTROS DEPORTES</div>'+
+        '<ul style="list-style:none;padding:0;margin:0;">'+
+          '<li style="padding:9px 16px;font-size:14px;color:#1f2937;cursor:pointer;"><span>🏓</span> Tenis de mesa</li>'+
+          '<li style="padding:9px 16px;font-size:14px;color:#1f2937;cursor:pointer;"><span>🏸</span> Bádminton</li>'+
+          '<li style="padding:9px 16px;font-size:14px;color:#1f2937;cursor:pointer;"><span>🤺</span> Esgrima</li>'+
+          '<li style="padding:9px 16px;font-size:14px;color:#1f2937;cursor:pointer;"><span>🥋</span> Judo/Karate</li>'+
+          '<li style="padding:9px 16px;font-size:14px;color:#1f2937;cursor:pointer;"><span>🏹</span> Tiro con arco</li>'+
+          '<li style="padding:9px 16px;font-size:14px;color:#1f2937;cursor:pointer;"><span>🏇</span> Hípica</li>'+
+          '<li style="padding:9px 16px;font-size:14px;color:#1f2937;cursor:pointer;"><span>🛹</span> Skateboard</li>'+
+          '<li style="padding:9px 16px;font-size:14px;color:#1f2937;cursor:pointer;"><span>🏂</span> Snowboard</li>'+
+          '<li style="padding:9px 16px;font-size:14px;color:#1f2937;cursor:pointer;"><span>⛷️</span> Esquí</li>'+
+          '<li style="padding:9px 16px;font-size:14px;color:#1f2937;cursor:pointer;"><span>🏄</span> Surf</li>'+
+          '<li style="padding:9px 16px;font-size:14px;color:#1f2937;cursor:pointer;"><span>🤸</span> Gimnasia</li>'+
+          '<li style="padding:9px 16px;font-size:14px;color:#1f2937;cursor:pointer;"><span>🤾</span> Handball</li>'+
+        '</ul>'+
+      '</div>';
+      sidebar.insertAdjacentHTML('beforeend', otrosHTML);
+    }
+    
+    /* Eventos Globales */
+    if(!document.querySelector('.v271-sidebar-eventos')){
+      var eventosHTML='<div class="v271-sidebar-eventos" style="display:none;padding:14px 12px;color:#0f172a;">'+
+        '<div style="font-weight:800;font-size:18px;letter-spacing:.5px;padding:8px 12px;margin-bottom:8px;border-bottom:1px solid #e2e8f0;">🌍 EVENTOS GLOBALES</div>'+
+        '<ul style="list-style:none;padding:0;margin:0;">'+
+          '<li style="padding:9px 16px;font-size:14px;color:#1f2937;cursor:pointer;"><span>🏆</span> Mundial FIFA</li>'+
+          '<li style="padding:9px 16px;font-size:14px;color:#1f2937;cursor:pointer;"><span>🥇</span> Juegos Olímpicos</li>'+
+          '<li style="padding:9px 16px;font-size:14px;color:#1f2937;cursor:pointer;"><span>🏈</span> Super Bowl</li>'+
+          '<li style="padding:9px 16px;font-size:14px;color:#1f2937;cursor:pointer;"><span>🏀</span> NBA Finals</li>'+
+          '<li style="padding:9px 16px;font-size:14px;color:#1f2937;cursor:pointer;"><span>⚾</span> World Series</li>'+
+          '<li style="padding:9px 16px;font-size:14px;color:#1f2937;cursor:pointer;"><span>🏒</span> Stanley Cup</li>'+
+          '<li style="padding:9px 16px;font-size:14px;color:#1f2937;cursor:pointer;"><span>🎾</span> Grand Slams</li>'+
+          '<li style="padding:9px 16px;font-size:14px;color:#1f2937;cursor:pointer;"><span>⛳</span> Majors Golf</li>'+
+          '<li style="padding:9px 16px;font-size:14px;color:#1f2937;cursor:pointer;"><span>🏎</span> Mónaco GP</li>'+
+          '<li style="padding:9px 16px;font-size:14px;color:#1f2937;cursor:pointer;"><span>🚴</span> Tour de France</li>'+
+          '<li style="padding:9px 16px;font-size:14px;color:#1f2937;cursor:pointer;"><span>🏏</span> ICC World Cup</li>'+
+          '<li style="padding:9px 16px;font-size:14px;color:#1f2937;cursor:pointer;"><span>🥊</span> UFC PPVs</li>'+
+        '</ul>'+
+      '</div>';
+      sidebar.insertAdjacentHTML('beforeend', eventosHTML);
+    }
+    
+    sidebar.dataset.v271Built='1';
+  }
+  
+  /* === Mostrar sidebar correcto cuando se clickea sport-btn === */
+  function showCorrectSidebar(){
+    var sidebar=document.getElementById('sidebar')||document.querySelector('.sidebar');
+    if(!sidebar)return;
+    var nav=document.querySelector('.sport-nav-bar');
+    if(!nav)return;
+    var activeBtn=nav.querySelector('.sport-btn.active');
+    
+    /* Ocultar todos los sidebars custom */
+    sidebar.querySelectorAll('[class^="v229-sidebar-"]').forEach(function(el){el.style.setProperty('display','none','important');});
+    var otrosSec=sidebar.querySelector('.v271-sidebar-otros');
+    var eventosSec=sidebar.querySelector('.v271-sidebar-eventos');
+    if(otrosSec)otrosSec.style.setProperty('display','none','important');
+    if(eventosSec)eventosSec.style.setProperty('display','none','important');
+    var futbolSec=sidebar.querySelector('.sidebar-section');
+    var tenisSec=sidebar.querySelector('.v114-tenis-sidebar');
+    
+    if(!activeBtn){
+      sidebar.style.setProperty('display','none','important');
+      return;
+    }
+    if(activeBtn.hasAttribute('data-v103-todos')){
+      sidebar.style.setProperty('display','none','important');
+      return;
+    }
+    
+    var key=getSidebarKeyForSport(activeBtn.textContent.trim());
+    if(!key){sidebar.style.setProperty('display','none','important');return;}
+    
+    /* Mostrar sidebar */
+    sidebar.style.removeProperty('display');
+    sidebar.style.setProperty('display','block','important');
+    
+    if(key==='soccer_native'){
+      if(futbolSec)futbolSec.style.removeProperty('display');
+      if(tenisSec)tenisSec.style.setProperty('display','none','important');
+    } else if(key==='tennis_native'){
+      if(tenisSec)tenisSec.style.setProperty('display','block','important');
+      if(futbolSec)futbolSec.style.setProperty('display','none','important');
+    } else {
+      if(futbolSec)futbolSec.style.setProperty('display','none','important');
+      if(tenisSec)tenisSec.style.setProperty('display','none','important');
+      var customSidebar=sidebar.querySelector('.v229-sidebar-'+key)||sidebar.querySelector('.v271-sidebar-'+key);
+      if(customSidebar)customSidebar.style.setProperty('display','block','important');
+    }
+  }
+  
+  buildMissingSidebars();
+  showCorrectSidebar();
+  
+  /* Click handler en sport-btns */
+  document.addEventListener('click', function(e){
+    var t=e.target.closest('.sport-btn');
+    if(t){
+      setTimeout(showCorrectSidebar, 100);
+      setTimeout(showCorrectSidebar, 400);
+    }
+  }, true);
+  
+  /* Tick periodico cada 2s para mantener sincronizado (no setInterval rapido) */
+  setInterval(function(){
+    buildMissingSidebars();
+    showCorrectSidebar();
+  }, 2000);
+})();
+   </script>
