@@ -23945,3 +23945,102 @@ window.selectLLPriv=function(el){document.querySelectorAll('.ll-priv-opt').forEa
   setTimeout(applyImages, 1500);
 })();
    </script>
+<script>
+/* v261 - fix card vacío forzando height inline + agregar Amateur a Deportes + dedupe definitivo */
+(function(){
+  if(window.__v261loaded)return;window.__v261loaded=true;
+  
+  /* === 1. Fix card vacío: forzar height inline en image div + asegurar title visible === */
+  function fixCards(){
+    document.querySelectorAll('.v100-news-big').forEach(function(card){
+      var imgDiv=card.children[1];
+      if(imgDiv){
+        imgDiv.style.setProperty('flex','0 0 110px','important');
+        imgDiv.style.setProperty('height','110px','important');
+        imgDiv.style.setProperty('min-height','110px','important');
+        imgDiv.style.setProperty('max-height','110px','important');
+      }
+      var titleDiv=card.children[2];
+      if(titleDiv){
+        titleDiv.style.setProperty('display','block','important');
+        titleDiv.style.setProperty('min-height','24px','important');
+        titleDiv.style.setProperty('overflow','visible','important');
+        titleDiv.style.setProperty('color','#fff','important');
+      }
+      card.style.setProperty('height','220px','important');
+      card.style.setProperty('max-height','240px','important');
+    });
+    document.querySelectorAll('.v100-news-mini').forEach(function(card){
+      var imgDiv=card.children[1];
+      if(imgDiv){
+        imgDiv.style.setProperty('flex','0 0 60px','important');
+        imgDiv.style.setProperty('height','60px','important');
+        imgDiv.style.setProperty('min-height','60px','important');
+        imgDiv.style.setProperty('max-height','60px','important');
+      }
+      var titleDiv=card.children[2];
+      if(titleDiv){
+        titleDiv.style.setProperty('display','block','important');
+        titleDiv.style.setProperty('overflow','visible','important');
+        titleDiv.style.setProperty('color','#fff','important');
+      }
+      card.style.setProperty('height','150px','important');
+      card.style.setProperty('max-height','170px','important');
+    });
+  }
+  fixCards();
+  setTimeout(fixCards, 500);
+  setTimeout(fixCards, 1500);
+  setTimeout(fixCards, 3000);
+  
+  /* === 2. Agregar Amateur a Deportes sub-list si no está === */
+  function addAmateur(){
+    var subs=document.querySelectorAll('.v56-sub-list');
+    subs.forEach(function(sub){
+      var prevItem=sub.previousElementSibling;
+      if(!prevItem || !/Deportes/i.test(prevItem.textContent))return;
+      var hasAmateur=Array.from(sub.children).some(function(it){return /Amateur/i.test(it.textContent);});
+      if(!hasAmateur){
+        var amateurLi=document.createElement('li');
+        amateurLi.className='v56-sub-item';
+        amateurLi.setAttribute('data-v56-key','amateur-leagues');
+        amateurLi.style.cssText='padding:10px 20px 10px 50px;font-size:14px;color:#475569;cursor:pointer;display:flex;align-items:center;gap:8px;';
+        amateurLi.innerHTML='<span style="font-size:18px;">⚽</span><span>Amateur</span>';
+        /* Insertar después de Profesionales */
+        var prof=Array.from(sub.children).find(function(it){return /Profesional/i.test(it.textContent);});
+        if(prof && prof.nextSibling){
+          sub.insertBefore(amateurLi, prof.nextSibling);
+        } else {
+          sub.appendChild(amateurLi);
+        }
+      }
+    });
+  }
+  addAmateur();
+  setTimeout(addAmateur, 500);
+  setTimeout(addAmateur, 2000);
+  
+  /* === 3. Dedupe agresivo otra vez (Mas Sobre SS21 sigue duplicandose) === */
+  function dedupeMenu(){
+    var ul=document.querySelector('.v56-ul')||document.querySelector('.v36-side ul')||document.querySelector('aside ul');
+    if(!ul)return;
+    var seen={};
+    Array.from(ul.children).forEach(function(item){
+      if(item.tagName==='UL')return;
+      var t=item.textContent.trim().slice(0,60);
+      var key='';
+      if(/^.{0,5}Inicio$/i.test(t))key='inicio';
+      else if(/^.{0,5}Favoritos$/i.test(t))key='favoritos';
+      else if(/^.{0,5}En Vivo$/i.test(t))key='envivo';
+      else if(/Deportes/i.test(t))key='deportes';
+      else if(/Contenido y Comunidad/i.test(t))key='contenido';
+      else if(/M[aá]s Sobre SS\s*21/i.test(t))key='masss21';
+      else return;
+      if(seen[key]){item.remove();}
+      else{seen[key]=true;}
+    });
+  }
+  /* Correr 8 veces */
+  [0,200,500,1000,2000,3500,5000,8000].forEach(function(t){setTimeout(dedupeMenu, t);});
+})();
+   </script>
