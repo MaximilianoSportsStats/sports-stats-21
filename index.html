@@ -23058,3 +23058,21 @@ window.selectLLPriv=function(el){document.querySelectorAll('.ll-priv-opt').forEa
    </script>
 
 
+<script>
+/* v270 - mover Mas Sobre SS 21 al final del menu drawer (despues de Contenido y Comunidad) */
+(function(){
+  if(window.__v270loaded)return;window.__v270loaded=true;
+  function moveAtEnd(){
+    var ul=document.querySelector('.v56-ul')||document.querySelector('.v36-side ul')||document.querySelector('aside ul');
+    if(!ul)return;
+    var items=Array.from(ul.children);
+    var masSS21=items.find(function(it){return /M[aá]s Sobre SS\s*21/i.test(it.textContent);});
+    if(!masSS21)return;
+    if(ul.lastElementChild===masSS21)return;
+    ul.appendChild(masSS21);
+  }
+  moveAtEnd();
+  setTimeout(moveAtEnd, 500);
+  setTimeout(moveAtEnd, 2000);
+})();
+   </script>
