@@ -20457,6 +20457,30 @@ if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded"
 setInterval(patchItem,1500);
 })();
 </script>
+
+<script>
+/* v300 - CONGELAR hero carousel - una sola fuente de verdad, sin MO, sin setInterval */
+(function(){
+  if(window.__v300freezeHero)return; window.__v300freezeHero=true;
+  /* 1. Override heroGo to noop */
+  try{ window.heroGo=function(){}; }catch(e){}
+  /* 2. Inject CSS that locks ONLY first slide visible */
+  var s=document.createElement("style");
+  s.id="v300-hero-lock";
+  s.textContent="#heroCarousel .hero-slide{opacity:0!important;pointer-events:none!important;transition:none!important;animation:none!important;}#heroCarousel .hero-slide:first-child,#heroCarousel .hero-slide:nth-child(1){opacity:1!important;pointer-events:auto!important;}#heroCarousel .hero-slide:nth-child(1) *{animation:none!important;transition:none!important;}";
+  document.head.appendChild(s);
+  /* 3. Force first slide active class once at load (no observer) */
+  function lockFirst(){
+    var slides=document.querySelectorAll(".hero-slide");
+    slides.forEach(function(sl,i){ if(i===0) sl.classList.add("active"); else sl.classList.remove("active"); });
+  }
+  if(document.readyState==="loading"){
+    document.addEventListener("DOMContentLoaded",lockFirst);
+  } else { lockFirst(); }
+  setTimeout(lockFirst, 500);
+  setTimeout(lockFirst, 2000);
+})();
+</script>
 </body>
 </html>
 
