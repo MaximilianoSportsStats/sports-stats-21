@@ -23643,3 +23643,59 @@ window.selectLLPriv=function(el){document.querySelectorAll('.ll-priv-opt').forEa
   setTimeout(rebuildMenu, 2000);
 })();
    </script>
+<script>
+/* v258 - remover duplicados sidebar + fix cards Inicio (big card no exagerada, mini cards sin clip texto) */
+(function(){
+  if(window.__v258loaded)return;window.__v258loaded=true;
+  
+  /* === 1. Remover duplicados del sidebar drawer === */
+  function dedupeMenu(){
+    var ul=document.querySelector('.v56-ul')||document.querySelector('.v36-side ul')||document.querySelector('aside ul');
+    if(!ul)return;
+    var seen={};
+    var items=Array.from(ul.children);
+    items.forEach(function(item){
+      var t=item.textContent.trim().slice(0,60);
+      /* Key normalizada: solo texto unico de cada item */
+      var key='';
+      if(/^.{0,5}Inicio$/i.test(t))key='inicio';
+      else if(/^.{0,5}Favoritos$/i.test(t))key='favoritos';
+      else if(/^.{0,5}En Vivo$/i.test(t))key='envivo';
+      else if(/Deportes/i.test(t) && item.classList.contains('v56-item'))key='deportes';
+      else if(/Contenido y Comunidad/i.test(t) && item.classList.contains('v56-item'))key='contenido';
+      else if(/M[aá]s Sobre SS\s*21/i.test(t))key='masss21';
+      else return; /* sub-lists no se deduplican aqui */
+      if(seen[key]){
+        item.remove();
+      } else {
+        seen[key]=true;
+      }
+    });
+  }
+  dedupeMenu();
+  setTimeout(dedupeMenu, 500);
+  setTimeout(dedupeMenu, 1500);
+  setTimeout(dedupeMenu, 3000);
+  
+  /* === 2. CSS DEFINITIVO para cards Inicio === */
+  var s=document.createElement('style');s.id='v258-style';
+  s.textContent=
+    /* BIG CARD: specificity altísima para ganar a v249/v256/etc */
+    'html body section.v100-news-sec .v100-news-big{min-height:0 !important;max-height:280px !important;height:260px !important;padding:14px !important;display:flex !important;flex-direction:column !important;align-self:start !important;overflow:hidden !important;}'+
+    /* Imagen del big card: 130px sin flex-grow */
+    'html body section.v100-news-sec .v100-news-big>div:nth-child(2){flex:0 0 130px !important;height:130px !important;min-height:130px !important;max-height:130px !important;margin-bottom:8px !important;border-radius:8px !important;background-size:cover !important;background-position:center !important;}'+
+    
+    /* MINI CARDS: más altas para que no se corte texto */
+    'html body section.v100-news-sec .v100-news-mini{min-height:0 !important;max-height:180px !important;height:160px !important;padding:10px !important;align-self:start !important;overflow:hidden !important;display:flex !important;flex-direction:column !important;}'+
+    /* Imagen del mini: 70px */
+    'html body section.v100-news-sec .v100-news-mini>div:nth-child(2){flex:0 0 70px !important;height:70px !important;min-height:70px !important;max-height:70px !important;margin-bottom:6px !important;border-radius:6px !important;background-size:cover !important;background-position:center !important;}'+
+    /* Tag styling chico */
+    'html body section.v100-news-sec .v100-news-tag,html body section.v100-news-sec .v100-news-tag-mini{font-size:10px !important;padding:2px 6px !important;}'+
+    /* Title con line-clamp para no overflowear */
+    'html body section.v100-news-sec .v100-news-big>div:nth-child(3){font-size:13px !important;line-height:1.25 !important;margin:2px 0 !important;display:-webkit-box !important;-webkit-line-clamp:2 !important;-webkit-box-orient:vertical !important;overflow:hidden !important;}'+
+    'html body section.v100-news-sec .v100-news-mini>div:nth-child(3){font-size:12px !important;line-height:1.25 !important;margin:2px 0 !important;display:-webkit-box !important;-webkit-line-clamp:2 !important;-webkit-box-orient:vertical !important;overflow:hidden !important;}'+
+    /* Subtitulo chico */
+    'html body section.v100-news-sec .v100-news-sub{font-size:11px !important;line-height:1.3 !important;color:#94a3b8 !important;display:-webkit-box !important;-webkit-line-clamp:2 !important;-webkit-box-orient:vertical !important;overflow:hidden !important;}';
+  document.head.appendChild(s);
+})();
+   </script>
