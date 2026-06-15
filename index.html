@@ -23816,3 +23816,132 @@ window.selectLLPriv=function(el){document.querySelectorAll('.ll-priv-opt').forEa
   setTimeout(applyBetterImages, 1500);
 })();
    </script>
+<script>
+/* v260 - reorder Deportes sub + imagenes VERIFICADAS + big card mas chica + dedupe sidebar */
+(function(){
+  if(window.__v260loaded)return;window.__v260loaded=true;
+  
+  /* === 1. Reordenar Deportes sub-list === */
+  function reorderDeportes(){
+    var subs=document.querySelectorAll('.v56-sub-list');
+    subs.forEach(function(sub){
+      var prevItem=sub.previousElementSibling;
+      if(!prevItem || !/Deportes/i.test(prevItem.textContent))return;
+      var items=Array.from(sub.children);
+      /* Buscar items por su key */
+      var byKey={};
+      items.forEach(function(it){
+        var t=it.textContent.trim().toLowerCase();
+        if(/profesional/.test(t))byKey.pro=it;
+        else if(/amateur/.test(t) && !/universitar/.test(t))byKey.amateur=it;
+        else if(/universitar/.test(t))byKey.uni=it;
+        else if(/escolar/.test(t))byKey.escolar=it;
+        else if(/mercado/.test(t))byKey.mercado=it;
+        else if(/comparar/.test(t))byKey.comparar=it;
+      });
+      /* Orden deseado: Profesionales, Amateur, Universitarios, Escolar, Mercado, Comparar */
+      var order=['pro','amateur','uni','escolar','mercado','comparar'];
+      order.forEach(function(k){
+        if(byKey[k]){sub.appendChild(byKey[k]);}
+      });
+    });
+  }
+  reorderDeportes();
+  setTimeout(reorderDeportes, 500);
+  setTimeout(reorderDeportes, 2000);
+  
+  /* === 2. Sidebar dedupe definitivo (5 tries con MutationObserver) === */
+  function dedupeMenu(){
+    var ul=document.querySelector('.v56-ul')||document.querySelector('.v36-side ul')||document.querySelector('aside ul');
+    if(!ul)return;
+    var seen={};
+    Array.from(ul.children).forEach(function(item){
+      var t=item.textContent.trim().slice(0,60);
+      var key='';
+      if(item.tagName==='UL')return;
+      if(/^.{0,5}Inicio$/i.test(t))key='inicio';
+      else if(/^.{0,5}Favoritos$/i.test(t))key='favoritos';
+      else if(/^.{0,5}En Vivo$/i.test(t))key='envivo';
+      else if(/Deportes/i.test(t))key='deportes';
+      else if(/Contenido y Comunidad/i.test(t))key='contenido';
+      else if(/M[aá]s Sobre SS\s*21/i.test(t))key='masss21';
+      else return;
+      if(seen[key]){item.remove();}
+      else{seen[key]=true;}
+    });
+  }
+  dedupeMenu();
+  [200,600,1500,3000,5000,8000].forEach(function(t){setTimeout(dedupeMenu, t);});
+  
+  /* === 3. CSS DEFINITIVO para big card MUCHO MAS CHICA === */
+  var s=document.createElement('style');s.id='v260-style';
+  s.textContent=
+    'html body section.v100-news-sec .v100-news-big{max-height:220px !important;height:200px !important;min-height:0 !important;padding:12px !important;display:flex !important;flex-direction:column !important;align-self:start !important;overflow:hidden !important;}'+
+    'html body section.v100-news-sec .v100-news-big>div:nth-child(2){flex:0 0 90px !important;height:90px !important;min-height:90px !important;max-height:90px !important;margin-bottom:6px !important;border-radius:8px !important;background-size:cover !important;background-position:center !important;background-color:#1e293b !important;}'+
+    'html body section.v100-news-sec .v100-news-mini{max-height:150px !important;height:140px !important;min-height:0 !important;padding:8px !important;align-self:start !important;overflow:hidden !important;display:flex !important;flex-direction:column !important;}'+
+    'html body section.v100-news-sec .v100-news-mini>div:nth-child(2){flex:0 0 55px !important;height:55px !important;min-height:55px !important;max-height:55px !important;margin-bottom:4px !important;border-radius:6px !important;background-size:cover !important;background-position:center !important;background-color:#1e293b !important;}';
+  document.head.appendChild(s);
+  
+  /* === 4. Imágenes VERIFICADAS por tag (no por jugador específico) - simple y robusto === */
+  var IMG={
+    soccer:'https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=900&q=80',
+    soccer2:'https://images.unsplash.com/photo-1431324155629-1a6deb1dec8d?w=900&q=80',
+    soccer3:'https://images.unsplash.com/photo-1551958219-acbc608c6377?w=900&q=80',
+    nba:'https://images.unsplash.com/photo-1546519638-68e109acd27d?w=900&q=80',
+    nba2:'https://images.unsplash.com/photo-1504450758481-7338eba7524a?w=900&q=80',
+    f1:'https://images.unsplash.com/photo-1517994112540-009c47ea476b?w=900&q=80',
+    f12:'https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=900&q=80',
+    nfl:'https://images.unsplash.com/photo-1486286701208-1d58e9338013?w=900&q=80',
+    tennis:'https://images.unsplash.com/photo-1554068865-24cecd4e34b8?w=900&q=80',
+    cricket:'https://images.unsplash.com/photo-1531415074968-036ba1b575da?w=900&q=80',
+    baseball:'https://images.unsplash.com/photo-1508344928-a700e93af038?w=900&q=80',
+    hockey:'https://images.unsplash.com/photo-1517867065852-8c7d5af0a635?w=900&q=80',
+    money:'https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=900&q=80',
+    sports:'https://images.unsplash.com/photo-1461896836934-ffe607ba8211?w=900&q=80'
+  };
+  
+  function pickByText(text){
+    var lt=text.toLowerCase();
+    /* Specific keywords first */
+    if(/messi|mbapp|mbappe|cristiano|ronaldo|vinic|haaland|premier|champions|laliga|barcelona|madrid|psg|liverpool|salah|albicelest/.test(lt))return IMG.soccer;
+    if(/f[uú]tbol/.test(lt) && !/americano/.test(lt))return IMG.soccer2;
+    if(/soccer/.test(lt))return IMG.soccer3;
+    if(/lebron|curry|don[čc]i[ćc]|lakers|warriors|nba|basketball|baloncesto/.test(lt))return IMG.nba;
+    if(/basket/.test(lt))return IMG.nba2;
+    if(/verstappen|hamilton|leclerc|mclaren|ferrari|mercedes|monza|m[oó]naco|f1|formula/.test(lt))return IMG.f1;
+    if(/carrera|motor|gp\b/.test(lt))return IMG.f12;
+    if(/\bnfl\b|americano|patriots|chiefs|eagles|cowboys|super bowl/.test(lt))return IMG.nfl;
+    if(/tenis|tennis|alcaraz|djokovic|nadal|federer|sinner|wimbled|roland/.test(lt))return IMG.tennis;
+    if(/cricket|virat|kohli|ipl/.test(lt))return IMG.cricket;
+    if(/baseball|mlb|b[eé]isbol|yankees|red sox/.test(lt))return IMG.baseball;
+    if(/hockey|nhl|stanley/.test(lt))return IMG.hockey;
+    if(/mercado|fichaje|contrato|millones|euros|renueva|firma/.test(lt))return IMG.money;
+    return IMG.sports;
+  }
+  
+  function applyImages(){
+    document.querySelectorAll('.v100-news-big, .v100-news-mini').forEach(function(card){
+      if(card.dataset.v260Done==='1')return;
+      var tag=card.querySelector('.v100-news-tag, .v100-news-tag-mini');
+      var tagTxt=tag?tag.textContent.trim():'';
+      var title=card.children[2]?card.children[2].textContent.trim():'';
+      var subtitle=card.querySelector('.v100-news-sub');
+      var fullText=tagTxt+' '+title+' '+(subtitle?subtitle.textContent:'');
+      var url=pickByText(fullText);
+      var imgDiv=card.children[1];
+      if(imgDiv){
+        imgDiv.style.setProperty('background-image','linear-gradient(180deg,rgba(0,0,0,0.0) 50%,rgba(0,0,0,0.55) 100%),url("'+url+'")','important');
+        imgDiv.style.setProperty('background-size','cover','important');
+        imgDiv.style.setProperty('background-position','center','important');
+        imgDiv.style.setProperty('background-color','#1e293b','important');
+      }
+      /* Para limpiar background del card grande (que tambien tenia imagen) */
+      card.style.setProperty('background-image','none','important');
+      card.dataset.v260Done='1';
+    });
+  }
+  applyImages();
+  setTimeout(applyImages, 500);
+  setTimeout(applyImages, 1500);
+})();
+   </script>
