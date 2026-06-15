@@ -23489,3 +23489,67 @@ window.selectLLPriv=function(el){document.querySelectorAll('.ll-priv-opt').forEa
   setTimeout(inject, 1500);
 })();
    </script>
+<script>
+/* v255 - CSS lock .tab-panel display + reorder menu + re-inject MasSS21 v254 con observer */
+(function(){
+  if(window.__v255loaded)return;window.__v255loaded=true;
+  
+  /* === 1. CSS LOCK PANELS: usa specificity para ganar a inline style cleared === */
+  var s=document.createElement('style');s.id='v255-style';
+  s.textContent=
+    /* Specificity (0,2,1) para .tab-panel:not(.active) > html body */
+    'html body div.tab-panel:not(.active){display:none !important;}'+
+    'html body div.tab-panel.active{display:block !important;}';
+  document.head.appendChild(s);
+  
+  /* === 2. Reorder menu: Mas Sobre SS 21 al final === */
+  function reorderMenu(){
+    var ul=document.querySelector('.v56-ul')||document.querySelector('.v36-side ul')||document.querySelector('aside ul');
+    if(!ul)return;
+    var items=Array.from(ul.children);
+    var masSS21=items.find(function(it){return /M[aá]s Sobre SS\s*21/i.test(it.textContent);});
+    if(masSS21 && ul.lastElementChild!==masSS21){
+      ul.appendChild(masSS21);
+    }
+  }
+  reorderMenu();
+  setTimeout(reorderMenu, 500);
+  setTimeout(reorderMenu, 1500);
+  
+  /* === 3. Re-inject MasSS21 v254 content cuando aparezca v87-page-masss21 === */
+  function reinjectMasSS21(){
+    var target=document.getElementById('v87-page-masss21');
+    if(!target)return;
+    if(target.dataset.v255Reinjected==='1')return;
+    if(document.getElementById('v254-masss21')){
+      target.dataset.v255Reinjected='1';
+      return;
+    }
+    /* v254 no se inyectó aún, llamar nuevamente */
+    if(typeof window.__v254loaded==='boolean' && window.__v254loaded){
+      /* Re-trigger v254 inject manualmente */
+      var inject=function(){
+        var t=document.getElementById('v87-page-masss21');
+        if(!t || t.dataset.v254Done==='1')return;
+        /* La función inject de v254 ya está en su closure - no podemos llamarla. */
+        /* Hack: setear el flag para que v254 re-inyecte en su próximo setTimeout */
+        t.removeAttribute('data-v254-done');
+      };
+      inject();
+    }
+    target.dataset.v255Reinjected='1';
+  }
+  reinjectMasSS21();
+  setTimeout(reinjectMasSS21, 1000);
+  setTimeout(reinjectMasSS21, 3000);
+  
+  /* === 4. Click handler para reinject en MasSS21 click === */
+  document.addEventListener('click', function(e){
+    var t=e.target.closest('li');
+    if(t && /M[aá]s Sobre SS\s*21/i.test(t.textContent)){
+      setTimeout(reinjectMasSS21, 300);
+      setTimeout(reinjectMasSS21, 1000);
+    }
+  }, true);
+})();
+   </script>
