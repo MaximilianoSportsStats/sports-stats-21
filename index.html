@@ -24236,3 +24236,101 @@ window.selectLLPriv=function(el){document.querySelectorAll('.ll-priv-opt').forEa
   },true);
 })();
    </script>
+<script>
+/* v264 - UNDO monkey-patches v247/v252/v253 que lentos navegacion + CSS lock final */
+(function(){
+  if(window.__v264loaded)return;window.__v264loaded=true;
+  
+  /* === 1. Restaurar prototypes nativos (deshacer monkey-patches que ralentizan) === */
+  /* CSSStyleDeclaration restore */
+  try{
+    /* Setter de display, opacity, etc. - usar prototipo de iframe limpio */
+    var iframe=document.createElement('iframe');
+    iframe.style.cssText='position:absolute;width:0;height:0;border:0;visibility:hidden;left:-9999px;';
+    document.body.appendChild(iframe);
+    var freshProto=iframe.contentWindow.CSSStyleDeclaration.prototype;
+    var props=['display','visibility','opacity','width','height','minHeight','maxHeight','flex','flexGrow','flexShrink','top','left','right','bottom','transform','animation','background','backgroundImage','padding','margin','color','position','zIndex','cssText'];
+    props.forEach(function(p){
+      try{
+        var desc=Object.getOwnPropertyDescriptor(freshProto,p);
+        if(desc){Object.defineProperty(CSSStyleDeclaration.prototype,p,desc);}
+      }catch(e){}
+    });
+    /* setProperty / removeProperty */
+    try{CSSStyleDeclaration.prototype.setProperty=freshProto.setProperty;}catch(e){}
+    try{CSSStyleDeclaration.prototype.removeProperty=freshProto.removeProperty;}catch(e){}
+    /* Element.setAttribute / removeAttribute / DOMTokenList */
+    try{Element.prototype.setAttribute=iframe.contentWindow.Element.prototype.setAttribute;}catch(e){}
+    try{Element.prototype.removeAttribute=iframe.contentWindow.Element.prototype.removeAttribute;}catch(e){}
+    try{DOMTokenList.prototype.add=iframe.contentWindow.DOMTokenList.prototype.add;}catch(e){}
+    try{DOMTokenList.prototype.remove=iframe.contentWindow.DOMTokenList.prototype.remove;}catch(e){}
+    iframe.remove();
+  }catch(e){}
+  
+  /* === 2. CSS final - locks estables sin observers === */
+  var s=document.createElement('style');s.id='v264-style';
+  s.textContent=
+    /* PANELS LOCK - mata tremor de los .tab-panel */
+    'html body div.tab-panel:not(.active){display:none !important;}'+
+    'html body div.tab-panel.active{display:block !important;}'+
+    /* SIDEBAR oculto en Inicio */
+    'html body.v32-view-inicio #sidebar,html body.v32-view-inicio .sidebar{display:none !important;}'+
+    /* CARDS NOTICIAS/BLOGS/PODCAST/MERCADO - tamaño estable */
+    'html body section.v100-news-sec .v100-news-big{max-height:210px !important;height:200px !important;min-height:0 !important;padding:12px !important;display:flex !important;flex-direction:column !important;align-self:start !important;overflow:hidden !important;margin-bottom:14px !important;}'+
+    'html body section.v100-news-sec .v100-news-big>div:nth-child(2){flex:0 0 100px !important;height:100px !important;min-height:100px !important;max-height:100px !important;margin-bottom:6px !important;border-radius:8px !important;background-size:cover !important;background-position:center !important;background-color:#1e293b !important;}'+
+    'html body section.v100-news-sec .v100-news-mini{max-height:140px !important;height:130px !important;min-height:0 !important;padding:8px !important;align-self:start !important;overflow:hidden !important;display:flex !important;flex-direction:column !important;}'+
+    'html body section.v100-news-sec .v100-news-mini>div:nth-child(2){flex:0 0 55px !important;height:55px !important;min-height:55px !important;max-height:55px !important;margin-bottom:4px !important;border-radius:6px !important;background-size:cover !important;background-position:center !important;background-color:#1e293b !important;}';
+  document.head.appendChild(s);
+  
+  /* === 3. Sidebar order DEFINITIVO: Inicio, Favoritos, En Vivo, Deportes (Pro, Amateur, Univ, Escolar, Mercado, Comparar), Contenido y Comunidad, MasSS21 === */
+  function fixSidebar(){
+    var ul=document.querySelector('.v56-ul')||document.querySelector('.v36-side ul')||document.querySelector('aside ul');
+    if(!ul)return;
+    if(ul.dataset.v264Fixed==='1')return;
+    
+    /* Dedupe items */
+    var seen={};
+    Array.from(ul.children).forEach(function(item){
+      if(item.tagName==='UL')return;
+      var t=item.textContent.trim().slice(0,60);
+      var key='';
+      if(/^.{0,5}Inicio$/i.test(t))key='inicio';
+      else if(/^.{0,5}Favoritos$/i.test(t))key='favoritos';
+      else if(/^.{0,5}En Vivo$/i.test(t))key='envivo';
+      else if(/Deportes/i.test(t))key='deportes';
+      else if(/Contenido y Comunidad/i.test(t))key='contenido';
+      else if(/M[aá]s Sobre SS\s*21/i.test(t))key='masss21';
+      else return;
+      if(seen[key]){item.remove();}
+      else{seen[key]=true;}
+    });
+    
+    /* Asegurar Amateur en Deportes sub */
+    var subs=ul.querySelectorAll('.v56-sub-list');
+    subs.forEach(function(sub){
+      var prev=sub.previousElementSibling;
+      if(!prev || !/Deportes/i.test(prev.textContent))return;
+      var hasAmateur=Array.from(sub.children).some(function(it){return /^.{0,5}Amateur$/i.test(it.textContent.trim());});
+      if(!hasAmateur){
+        var amateurLi=document.createElement('li');
+        amateurLi.className='v56-sub-item';
+        amateurLi.setAttribute('data-v56-key','amateur-leagues');
+        amateurLi.style.cssText='padding:10px 20px 10px 50px;font-size:14px;color:#475569;cursor:pointer;display:flex;align-items:center;gap:8px;';
+        amateurLi.innerHTML='<span style="font-size:18px;">⚽</span><span>Amateur</span>';
+        var prof=Array.from(sub.children).find(function(it){return /Profesional/i.test(it.textContent);});
+        if(prof && prof.nextSibling){sub.insertBefore(amateurLi, prof.nextSibling);}
+        else{sub.appendChild(amateurLi);}
+      }
+    });
+    
+    /* MasSS21 al final */
+    var masSS21=Array.from(ul.children).find(function(it){return /M[aá]s Sobre SS\s*21/i.test(it.textContent);});
+    if(masSS21 && ul.lastElementChild!==masSS21){ul.appendChild(masSS21);}
+    
+    ul.dataset.v264Fixed='1';
+  }
+  fixSidebar();
+  setTimeout(fixSidebar, 500);
+  setTimeout(fixSidebar, 2000);
+})();
+   </script>
