@@ -18920,6 +18920,49 @@ if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded"
 setTimeout(setup,500);setTimeout(setup,2000);
 })();
 </script>
+
+<style id="v335-tenis-css">
+.v335-tenis-sidebar{display:none;width:220px;background:#fff;border-right:1px solid #e5e7eb;padding:20px 16px;height:100vh;overflow-y:auto;position:sticky;top:0;flex-shrink:0;}
+html body.v317-show-tennis .v335-tenis-sidebar{display:block !important;}
+html body.v317-show-tennis #panel-tennis{display:flex !important;gap:0 !important;}
+.v335-tenis-sidebar h3{margin:0 0 6px;color:#c0392b;font-size:13px;text-transform:uppercase;letter-spacing:.5px;}
+.v335-tenis-sidebar .v335-mf{display:flex;gap:4px;margin-bottom:14px;}
+.v335-tenis-sidebar .v335-mf button{flex:1;padding:6px;border-radius:6px;border:1px solid #e5e7eb;background:#fff;font-weight:700;cursor:pointer;font-size:13px;}
+.v335-tenis-sidebar .v335-mf button.active{background:#c0392b;color:#fff;border-color:#c0392b;}
+.v335-tenis-sidebar ul{list-style:none;padding:0;margin:0;}
+.v335-tenis-sidebar li{padding:8px 10px;border-radius:6px;cursor:pointer;font-size:13px;color:#444;display:flex;align-items:center;gap:8px;margin-bottom:2px;}
+.v335-tenis-sidebar li:hover{background:#f8f0ef;color:#c0392b;}
+.v335-tenis-sidebar li.v335-section{font-weight:700;color:#1a1a1a;margin-top:14px;font-size:12px;text-transform:uppercase;letter-spacing:.5px;cursor:default;padding:4px 10px;}
+.v335-tenis-sidebar li.v335-section:hover{background:transparent;}
+.v335-tenis-sidebar .v335-sub{display:none;padding-left:8px;}
+.v335-tenis-sidebar .v335-collapse.v335-open + .v335-sub{display:block;}
+.v335-tenis-sidebar .v335-collapse::after{content:"\u25BE";margin-left:auto;font-size:10px;}
+.v335-tenis-sidebar .v335-collapse.v335-open::after{content:"\u25B4";}
+</style>
+<script>
+(function(){if(window.__v335)return;window.__v335=true;
+function setup(){
+  var pt=document.getElementById("panel-tennis");if(!pt)return;
+  if(pt.querySelector(".v335-tenis-sidebar"))return;
+  var aside=document.createElement("aside");aside.className="v335-tenis-sidebar";
+  aside.innerHTML='<h3>Tenis</h3><div class="v335-mf"><button class="active" data-mf="M">M</button><button data-mf="F">F</button></div><ul><li>\u{1F4CB} Reglas</li><li>\u{1F4DA} Historia</li><li>\u{1F3C5} Records</li><li>\u{1F4C5} Calendario</li><li class="v335-collapse">\u{1F3BE} Torneos</li><ul class="v335-sub"><li>\u{1F3C6} Copa Davis</li><li>\u{1F451} Grand Slams</li><li>\u2B50 Master 1000</li><li>\u{1F3AF} ATP 500</li><li>\u{1F3BE} ATP 250</li><li>\u{1F94E} Challenger</li></ul><li>\u{1F3C6} Ranking ATP/WTA</li><li>\u{1F3CB}\uFE0F Top jugadores</li></ul>';
+  pt.insertBefore(aside,pt.firstChild);
+  aside.addEventListener("click",function(e){
+    var li=e.target.closest("li");if(!li)return;
+    if(li.classList.contains("v335-collapse")){li.classList.toggle("v335-open");return;}
+    if(li.classList.contains("v335-section"))return;
+    var lbl=(li.textContent||"").trim();
+    var sec=Array.from(pt.querySelectorAll("h1,h2,h3,h4")).find(function(h){return (h.textContent||"").indexOf(lbl.replace(/^[\u{1F300}-\u{1FAFF}\u2600-\u27BF\s]+/u,""))>=0;});
+    if(sec)sec.scrollIntoView({behavior:"smooth",block:"start"});
+  });
+  aside.querySelectorAll(".v335-mf button").forEach(function(b){
+    b.addEventListener("click",function(){aside.querySelectorAll(".v335-mf button").forEach(function(o){o.classList.remove("active");});b.classList.add("active");});
+  });
+}
+if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",setup);}else{setup();}
+setTimeout(setup,500);setTimeout(setup,2000);
+})();
+</script>
 </body>
 </html>
 
