@@ -18021,6 +18021,68 @@ footer #v311-newsletter .v311-success{color:#86efac !important;font-size:14px !i
 /* v318 - hide sidebar Futbol en Inicio + estilo newsletter original */
 (function(){if(window.__v318)return;window.__v318=true;})();
 </script>
+
+<script>
+/* v319 - FASE 2.2 Mercado en Inicio (clonado de Noticias) */
+(function(){
+  if(window.__v319)return;window.__v319=true;
+  function createMercado(){
+    if(document.getElementById("v164-mercado-wrap"))return;
+    var noticiasWrap=document.getElementById("v100-noticias-wrap");
+    if(!noticiasWrap)return;
+    var blogsWrap=document.getElementById("v100-blogs-wrap");
+    
+    var clone=noticiasWrap.cloneNode(true);
+    clone.id="v164-mercado-wrap";
+    var sec=clone.querySelector("section");
+    if(sec){sec.id="v164-mercado";}
+    var h2=clone.querySelector("h2");
+    if(h2){h2.innerHTML="\u{1F935} MERCADO";h2.style.cursor="pointer";h2.title="Ver Mercado completo";}
+    
+    /* Replace card titles + descriptions with Mercado themed */
+    var mercadoCards=[
+      {title:"Top fichajes de la semana",desc:"Los movimientos mas resonantes del mercado europeo y sudamericano."},
+      {title:"Agentes libres disponibles",desc:"Jugadores sin contrato listos para sumarse a tu equipo."},
+      {title:"Prestamos confirmados",desc:"Operaciones recientes de cesion entre clubes."},
+      {title:"Rumores calientes",desc:"Las negociaciones que mueven la pretemporada."}
+    ];
+    var cards=clone.querySelectorAll("article,.v100-news-big,.v100-news-mini,[class*=card]");
+    cards.forEach(function(card,i){
+      if(i>=mercadoCards.length)return;
+      var data=mercadoCards[i];
+      var titleEl=card.querySelector("h3,h4,.card-title,strong");
+      if(titleEl){titleEl.textContent=data.title;}
+      var descEl=card.querySelector("p,.card-desc");
+      if(descEl){descEl.textContent=data.desc;}
+    });
+    
+    /* Make title click navigate to panel-mercado */
+    if(h2){
+      h2.addEventListener("click",function(e){
+        e.preventDefault();
+        /* For now scroll to mercado section. Panel Mercado se crea en siguiente paso */
+        var pm=document.getElementById("panel-mercado");
+        if(pm){
+          document.body.classList.add("v317-show-mercado");
+          pm.scrollIntoView({behavior:"smooth",block:"start"});
+        } else {
+          alert("Mercado completo: pr\u00f3ximamente con todos los fichajes, prestamos, agentes libres y rumores.");
+        }
+      });
+    }
+    
+    /* Insert AFTER noticias */
+    if(blogsWrap){
+      blogsWrap.parentNode.insertBefore(clone,blogsWrap);
+    } else {
+      noticiasWrap.parentNode.insertBefore(clone,noticiasWrap.nextSibling);
+    }
+  }
+  if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",createMercado);}else{createMercado();}
+  setTimeout(createMercado,500);
+  setTimeout(createMercado,2000);
+})();
+</script>
 </body>
 </html>
 
