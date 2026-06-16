@@ -18083,6 +18083,22 @@ footer #v311-newsletter .v311-success{color:#86efac !important;font-size:14px !i
   setTimeout(createMercado,2000);
 })();
 </script>
+
+<script>
+/* v320 - placeholder newsletter: Nombre.apellido@email.com */
+(function(){
+  if(window.__v320)return;window.__v320=true;
+  function fix(){
+    var nl=document.getElementById("v311-newsletter");
+    if(!nl)return;
+    var input=nl.querySelector("input[type=email]");
+    if(input){input.setAttribute("placeholder","Nombre.apellido@email.com");}
+  }
+  if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",fix);}else{fix();}
+  setTimeout(fix,500);
+  setTimeout(fix,2000);
+})();
+</script>
 </body>
 </html>
 
