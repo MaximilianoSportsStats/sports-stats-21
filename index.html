@@ -19312,6 +19312,85 @@ if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded"
 setTimeout(apply,500);setTimeout(apply,2000);setTimeout(apply,5000);
 })();
 </script>
+
+<script>
+/* v341 - bloquear alert viejo de traduccion + reforzar lang handler con stopImmediatePropagation */
+(function(){if(window.__v341)return;window.__v341=true;
+/* Override window.alert para filtrar mensajes de "Proximamente: traduccion" */
+var origAlert=window.alert;
+window.alert=function(msg){
+  if(typeof msg==="string" && /pr[\u00f3o]ximamente.*traducci[\u00f3o]n/i.test(msg)){console.log("[v341] blocked old translation alert");return;}
+  return origAlert.apply(window,arguments);
+};
+var DICT=window.__v334Dict;
+var BRAND="Sports Stats 21";
+var currentLang=window.__v341CurrentLang||"es";
+var originalTexts=window.__v341OrigTexts||new WeakMap();
+window.__v341OrigTexts=originalTexts;
+function translate(lang){
+  if(lang===currentLang)return;
+  var d={
+    en:{"Inicio":"Home","Favoritos":"Favorites","En Vivo":"Live","Deportes":"Sports","Contenido y Comunidad":"Content & Community","M\u00e1s Sobre SS 21":"About SS 21","Noticias":"News","Blogs":"Blogs","Podcast":"Podcast","Mercado":"Market","Buscar deportes, liga":"Search sports, league","Iniciar Sesi\u00f3n":"Sign In","Crear cuenta":"Create account","Suscribirme":"Subscribe","Profesionales":"Professional","Universitarios":"University","Escolares":"School","Amateur":"Amateur","Comparar":"Compare","Todos":"All","F\u00fatbol":"Football","Tenis":"Tennis","Basketball":"Basketball","Carreras":"Racing","Combate":"Combat","Baseball":"Baseball","Hockey":"Hockey","Rugby":"Rugby","Golf":"Golf","Atletismo":"Athletics","Nataci\u00f3n":"Swimming","Ciclismo":"Cycling","Volleyball":"Volleyball","P\u00e1del":"Padel","Cricket":"Cricket","Otros Deportes":"Other Sports","Eventos Globales":"Global Events","\u00daltima hora":"Breaking news","Resultados de la jornada":"Today's results","Top fichajes":"Top transfers","Mundial":"World Cup","Eurocopa":"Euro Cup","Selecci\u00f3n Nacional":"National team","Historia":"History","Reglas":"Rules","Competiciones":"Competitions","Leyendas":"Legends","Records":"Records","Calendario":"Calendar","Ranking":"Ranking","Reto Diario":"Daily Challenge"},
+    pt:{"Inicio":"In\u00edcio","Favoritos":"Favoritos","En Vivo":"Ao Vivo","Deportes":"Esportes","Contenido y Comunidad":"Conte\u00fado e Comunidade","M\u00e1s Sobre SS 21":"Sobre SS 21","Noticias":"Not\u00edcias","Mercado":"Mercado","Suscribirme":"Inscrever-se","Iniciar Sesi\u00f3n":"Entrar","Profesionales":"Profissionais","Comparar":"Comparar","Todos":"Todos","F\u00fatbol":"Futebol","Nataci\u00f3n":"Nata\u00e7\u00e3o","Otros Deportes":"Outros Esportes","Eventos Globales":"Eventos Globais"},
+    fr:{"Inicio":"Accueil","Favoritos":"Favoris","En Vivo":"En direct","Deportes":"Sports","Contenido y Comunidad":"Contenu et communaut\u00e9","M\u00e1s Sobre SS 21":"\u00c0 propos de SS 21","Noticias":"Actualit\u00e9s","Mercado":"March\u00e9","Suscribirme":"S'abonner","Iniciar Sesi\u00f3n":"Connexion","Comparar":"Comparer","Todos":"Tous","F\u00fatbol":"Football","Nataci\u00f3n":"Natation","Otros Deportes":"Autres sports","Eventos Globales":"\u00c9v\u00e9nements mondiaux"},
+    de:{"Inicio":"Start","Favoritos":"Favoriten","En Vivo":"Live","Deportes":"Sport","Contenido y Comunidad":"Inhalt & Community","M\u00e1s Sobre SS 21":"\u00dcber SS 21","Noticias":"Nachrichten","Mercado":"Markt","Suscribirme":"Abonnieren","Iniciar Sesi\u00f3n":"Anmelden","Comparar":"Vergleichen","Todos":"Alle","F\u00fatbol":"Fu\u00dfball","Tenis":"Tennis","Nataci\u00f3n":"Schwimmen","Otros Deportes":"Andere Sportarten","Eventos Globales":"Globale Events"},
+    it:{"Inicio":"Home","Favoritos":"Preferiti","En Vivo":"Diretta","Deportes":"Sport","Contenido y Comunidad":"Contenuti e Community","M\u00e1s Sobre SS 21":"Su SS 21","Noticias":"Notizie","Mercado":"Mercato","Suscribirme":"Iscriviti","Iniciar Sesi\u00f3n":"Accedi","Comparar":"Confronta","Todos":"Tutti","F\u00fatbol":"Calcio","Tenis":"Tennis","Nataci\u00f3n":"Nuoto","Otros Deportes":"Altri Sport","Eventos Globales":"Eventi Globali"}
+  };
+  var walker=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT,null,false);
+  var node;var nodes=[];while((node=walker.nextNode()))nodes.push(node);
+  nodes.forEach(function(n){
+    if(!n.parentElement)return;
+    var pTag=n.parentElement.tagName;
+    if(pTag==="SCRIPT"||pTag==="STYLE"||pTag==="NOSCRIPT")return;
+    var orig=originalTexts.get(n);
+    if(!orig){orig=n.nodeValue;originalTexts.set(n,orig);}
+    var v=orig;
+    if(lang!=="es"&&d[lang]){
+      var keys=Object.keys(d[lang]).sort(function(a,b){return b.length-a.length;});
+      keys.forEach(function(k){
+        if(orig.indexOf(k)>=0){v=v.split(k).join(d[lang][k]);}
+      });
+    }
+    v=v.split(/Sports\s*Stats\s*21/g).join(BRAND);
+    if(v!==n.nodeValue)n.nodeValue=v;
+  });
+  currentLang=lang;window.__v341CurrentLang=lang;
+  /* Update lang picker label */
+  var labelMap={es:"Espa\u00f1ol",en:"English",pt:"Portugu\u00eas",fr:"Fran\u00e7ais",de:"Deutsch",it:"Italiano"};
+  var lbl=document.getElementById("v30-lang-label");
+  if(lbl){lbl.textContent=labelMap[lang]||"Espa\u00f1ol";}
+  var flagMap={es:"\u{1F1EA}\u{1F1F8}",en:"\u{1F1EC}\u{1F1E7}",pt:"\u{1F1F5}\u{1F1F9}",fr:"\u{1F1EB}\u{1F1F7}",de:"\u{1F1E9}\u{1F1EA}",it:"\u{1F1EE}\u{1F1F9}"};
+  var flag=document.getElementById("v30-lang-flag");
+  if(flag){flag.textContent=flagMap[lang]||"\u{1F1EA}\u{1F1F8}";}
+}
+function wire(){
+  var lang=document.getElementById("v30-lang");if(!lang)return;
+  /* Wire each button with stopImmediatePropagation BEFORE other handlers */
+  var btns=Array.from(lang.querySelectorAll("button,a,li,[role=option]"));
+  btns.forEach(function(b){
+    if(b.dataset.v341Wired)return;
+    var t=(b.textContent||"").toLowerCase();
+    var l=null;
+    if(/english|ingl/i.test(t))l="en";
+    else if(/portug|portugu/i.test(t))l="pt";
+    else if(/fran/i.test(t))l="fr";
+    else if(/deutsch|alem/i.test(t))l="de";
+    else if(/ital/i.test(t))l="it";
+    else if(/espa/i.test(t))l="es";
+    if(l){
+      b.dataset.v341Wired="1";
+      b.addEventListener("click",function(e){
+        if(!e.isTrusted)return;
+        e.preventDefault();e.stopImmediatePropagation();e.stopPropagation();
+        translate(l);
+      },true);
+    }
+  });
+}
+if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",wire);}else{wire();}
+setTimeout(wire,500);setTimeout(wire,2000);setTimeout(wire,5000);
+})();
+</script>
 </body>
 </html>
 
