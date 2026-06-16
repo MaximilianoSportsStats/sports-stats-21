@@ -17569,6 +17569,30 @@ body:not(.v304-clicked) #sidebar{display:none !important;}
   document.addEventListener("touchstart",unlock,true);
 })();
 </script>
+
+<script>
+/* v305 - solo desbloquear con click REAL del user (isTrusted), no programatico */
+(function(){
+  if(window.__v305)return;window.__v305=true;
+  function maybeUnlock(e){
+    if(e && e.isTrusted){
+      document.body.classList.add("v304-clicked");
+      document.removeEventListener("click",maybeUnlock,true);
+      document.removeEventListener("touchstart",maybeUnlock,true);
+      document.removeEventListener("keydown",maybeUnlock,true);
+    }
+  }
+  document.addEventListener("click",maybeUnlock,true);
+  document.addEventListener("touchstart",maybeUnlock,true);
+  document.addEventListener("keydown",maybeUnlock,true);
+  /* Ensure v304-clicked is NOT on body at startup (override v304 script) */
+  document.body.classList.remove("v304-clicked");
+  /* Watch in case something adds it programmatically */
+  setTimeout(function(){document.body.classList.remove("v304-clicked");},100);
+  setTimeout(function(){document.body.classList.remove("v304-clicked");},500);
+  setTimeout(function(){document.body.classList.remove("v304-clicked");},2000);
+})();
+</script>
 </body>
 </html>
 
