@@ -17883,6 +17883,64 @@ footer #v311-newsletter{border-bottom:1px solid #2a2a2a;margin-bottom:32px;}
   setTimeout(function(){clearInterval(iv);},60000);
 })();
 </script>
+
+<style id="v316-nuclear-lock">
+/* Hide ALL non-Inicio panels UNTIL user explicitly clicks sport-btn for that sport */
+html body:not(.v316-soccer) #panel-soccer{display:none !important;visibility:hidden !important;}
+html body:not(.v316-tennis) #panel-tennis{display:none !important;visibility:hidden !important;}
+html body:not(.v316-f1) #panel-f1{display:none !important;visibility:hidden !important;}
+html body:not(.v316-nba) #panel-nba{display:none !important;visibility:hidden !important;}
+html body:not(.v316-ufc) #panel-ufc{display:none !important;visibility:hidden !important;}
+html body:not(.v316-baseball) #panel-baseball{display:none !important;visibility:hidden !important;}
+html body:not(.v316-hockey) #panel-hockey{display:none !important;visibility:hidden !important;}
+html body:not(.v316-nfl) #panel-nfl{display:none !important;visibility:hidden !important;}
+html body:not(.v316-rugby) #panel-rugby{display:none !important;visibility:hidden !important;}
+html body:not(.v316-golf) #panel-golf{display:none !important;visibility:hidden !important;}
+html body:not(.v316-padel) #panel-padel{display:none !important;visibility:hidden !important;}
+html body:not(.v316-acuaticos) #panel-acuaticos{display:none !important;visibility:hidden !important;}
+html body:not(.v316-otros) #panel-otros{display:none !important;visibility:hidden !important;}
+html body.v316-soccer #panel-soccer,html body.v316-tennis #panel-tennis,html body.v316-f1 #panel-f1,html body.v316-nba #panel-nba,html body.v316-ufc #panel-ufc,html body.v316-baseball #panel-baseball,html body.v316-hockey #panel-hockey,html body.v316-nfl #panel-nfl,html body.v316-rugby #panel-rugby,html body.v316-golf #panel-golf,html body.v316-padel #panel-padel,html body.v316-acuaticos #panel-acuaticos,html body.v316-otros #panel-otros{display:block !important;visibility:visible !important;}
+/* Newsletter linea sutil restaurada */
+footer #v311-newsletter{border-bottom:1px solid rgba(255,255,255,0.08) !important;padding-bottom:40px !important;margin-bottom:32px !important;}
+</style>
+<script>
+/* v316 - lock por deporte: solo mostrar el panel cuando user clickea explicitamente ese sport-btn */
+(function(){
+  if(window.__v316)return;window.__v316=true;
+  document.addEventListener("click",function(e){
+    if(!e.isTrusted)return;
+    var btn=e.target.closest && e.target.closest(".sport-btn");
+    if(!btn)return;
+    var oc=(btn.getAttribute("onclick")||"").match(/switchSport\(['"]([^'"]+)/);
+    var sport=oc?oc[1]:null;
+    if(!sport){
+      var txt=(btn.textContent||"").toLowerCase();
+      if(/atletismo/.test(txt))sport="athletics";
+      else if(/ciclismo/.test(txt))sport="cycling";
+      else if(/volleyball/.test(txt))sport="volley";
+      else if(/cricket/.test(txt))sport="cricket";
+      else if(/eventos/.test(txt))sport="eventos";
+    }
+    if(/Todos/i.test(btn.textContent)){
+      ["soccer","tennis","f1","nba","ufc","baseball","hockey","nfl","rugby","golf","padel","acuaticos","otros"].forEach(function(s){document.body.classList.remove("v316-"+s);});
+      return;
+    }
+    /* Clear all then add this one */
+    ["soccer","tennis","f1","nba","ufc","baseball","hockey","nfl","rugby","golf","padel","acuaticos","otros"].forEach(function(s){document.body.classList.remove("v316-"+s);});
+    if(sport){document.body.classList.add("v316-"+sport);}
+  },true);
+  /* When click on Inicio menu/drawer or hero Inicio button - clear all sport classes */
+  document.addEventListener("click",function(e){
+    if(!e.isTrusted)return;
+    var el=e.target.closest && e.target.closest(".v56-item,.v26-has-dropdown,.drawer-menu li,a[href=\"#inicio\"]");
+    if(!el)return;
+    var txt=(el.textContent||"").toLowerCase();
+    if(/inicio/.test(txt)){
+      ["soccer","tennis","f1","nba","ufc","baseball","hockey","nfl","rugby","golf","padel","acuaticos","otros"].forEach(function(s){document.body.classList.remove("v316-"+s);});
+    }
+  },true);
+})();
+</script>
 </body>
 </html>
 
