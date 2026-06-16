@@ -18748,6 +18748,115 @@ if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded"
 setTimeout(setup,500);
 })();
 </script>
+
+<style id="v333-search-css">
+#v333-sugg{position:absolute;background:#fff;border:1px solid #e5e7eb;border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,0.12);padding:6px 0;display:none;z-index:1000;max-height:340px;overflow-y:auto;min-width:280px;}
+#v333-sugg.v333-open{display:block;}
+#v333-sugg .v333-item{padding:10px 14px;cursor:pointer;font-size:14px;color:#333;display:flex;align-items:center;gap:10px;}
+#v333-sugg .v333-item:hover,#v333-sugg .v333-item.active{background:#f8f0ef;color:#c0392b;}
+#v333-sugg .v333-cat{font-size:11px;color:#888;text-transform:uppercase;letter-spacing:.5px;font-weight:600;padding:8px 14px 4px;}
+#v333-sugg .v333-icon{font-size:18px;}
+#v333-sugg .v333-name{flex:1;}
+#v333-sugg .v333-meta{font-size:12px;color:#888;}
+</style>
+<script>
+(function(){if(window.__v333)return;window.__v333=true;
+var DICT=[
+  {cat:"Deportes",icon:"\u26BD",name:"F\u00fatbol",sport:"soccer"},
+  {cat:"Deportes",icon:"\u{1F3BE}",name:"Tenis",sport:"tennis"},
+  {cat:"Deportes",icon:"\u{1F3CE}",name:"Carreras / F1",sport:"f1"},
+  {cat:"Deportes",icon:"\u{1F3C0}",name:"Basketball / NBA",sport:"nba"},
+  {cat:"Deportes",icon:"\u{1F94A}",name:"UFC / Combate",sport:"ufc"},
+  {cat:"Deportes",icon:"\u26BE",name:"Baseball / MLB",sport:"baseball"},
+  {cat:"Deportes",icon:"\u{1F3D2}",name:"Hockey / NHL",sport:"hockey"},
+  {cat:"Deportes",icon:"\u{1F3C8}",name:"F\u00fatbol Americano / NFL",sport:"nfl"},
+  {cat:"Deportes",icon:"\u{1F3C9}",name:"Rugby",sport:"rugby"},
+  {cat:"Deportes",icon:"\u26F3",name:"Golf",sport:"golf"},
+  {cat:"Deportes",icon:"\u{1F3CA}",name:"Nataci\u00f3n",sport:"acuaticos"},
+  {cat:"Deportes",icon:"\u{1F3D3}",name:"P\u00e1del",sport:"padel"},
+  {cat:"Eventos",icon:"\u{1F3C6}",name:"Mundial FIFA",sport:"soccer"},
+  {cat:"Eventos",icon:"\u{1F947}",name:"Juegos Ol\u00edmpicos",sport:"eventos"},
+  {cat:"Eventos",icon:"\u{1F3C8}",name:"Super Bowl",sport:"nfl"},
+  {cat:"Eventos",icon:"\u{1F3C0}",name:"NBA Finals",sport:"nba"},
+  {cat:"Eventos",icon:"\u{1F3BE}",name:"Grand Slams",sport:"tennis"},
+  {cat:"Eventos",icon:"\u26F3",name:"Majors Golf",sport:"golf"},
+  {cat:"Eventos",icon:"\u{1F3CE}",name:"M\u00f3naco GP",sport:"f1"},
+  {cat:"Jugadores",icon:"\u26BD",name:"Lionel Messi",meta:"F\u00fatbol",sport:"soccer"},
+  {cat:"Jugadores",icon:"\u26BD",name:"Cristiano Ronaldo",meta:"F\u00fatbol",sport:"soccer"},
+  {cat:"Jugadores",icon:"\u26BD",name:"Kylian Mbapp\u00e9",meta:"F\u00fatbol",sport:"soccer"},
+  {cat:"Jugadores",icon:"\u{1F3BE}",name:"Novak Djokovic",meta:"Tenis",sport:"tennis"},
+  {cat:"Jugadores",icon:"\u{1F3BE}",name:"Carlos Alcaraz",meta:"Tenis",sport:"tennis"},
+  {cat:"Jugadores",icon:"\u{1F3BE}",name:"Rafael Nadal",meta:"Tenis",sport:"tennis"},
+  {cat:"Jugadores",icon:"\u{1F3C0}",name:"LeBron James",meta:"Basketball",sport:"nba"},
+  {cat:"Jugadores",icon:"\u{1F3C0}",name:"Luka Don\u010di\u0107",meta:"Basketball",sport:"nba"},
+  {cat:"Jugadores",icon:"\u{1F3CE}",name:"Max Verstappen",meta:"F1",sport:"f1"},
+  {cat:"Jugadores",icon:"\u{1F3CE}",name:"Lewis Hamilton",meta:"F1",sport:"f1"},
+  {cat:"Ligas",icon:"\u{1F3C5}",name:"Champions League",meta:"F\u00fatbol",sport:"soccer"},
+  {cat:"Ligas",icon:"\u{1F3C5}",name:"Premier League",meta:"F\u00fatbol",sport:"soccer"},
+  {cat:"Ligas",icon:"\u{1F3C5}",name:"La Liga",meta:"F\u00fatbol",sport:"soccer"},
+  {cat:"Ligas",icon:"\u{1F3C5}",name:"Copa Libertadores",meta:"F\u00fatbol",sport:"soccer"},
+  {cat:"Secciones",icon:"\u{1F4F0}",name:"Noticias",section:"noticias"},
+  {cat:"Secciones",icon:"\u270D\uFE0F",name:"Blogs",section:"blogs"},
+  {cat:"Secciones",icon:"\u{1F935}",name:"Mercado",section:"mercado"},
+  {cat:"Secciones",icon:"\u{1F31F}",name:"M\u00e1s Sobre SS 21",section:"masss21"}
+];
+function norm(s){return (s||"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");}
+function setup(){
+  var input=document.querySelector("#v25-search-bar input, input[type=search]");
+  if(!input)return;
+  if(input.dataset.v333Wired)return;
+  input.dataset.v333Wired="1";
+  var sugg=document.createElement("div");sugg.id="v333-sugg";
+  document.body.appendChild(sugg);
+  function position(){
+    var r=input.getBoundingClientRect();
+    sugg.style.top=(r.bottom+window.scrollY+4)+"px";
+    sugg.style.left=(r.left+window.scrollX)+"px";
+    sugg.style.minWidth=r.width+"px";
+  }
+  function render(q){
+    var nq=norm(q);if(!nq){sugg.classList.remove("v333-open");return;}
+    var hits=DICT.filter(function(d){return norm(d.name).indexOf(nq)>=0||norm(d.meta||"").indexOf(nq)>=0;}).slice(0,12);
+    if(!hits.length){sugg.classList.remove("v333-open");return;}
+    var byCat={};hits.forEach(function(h){if(!byCat[h.cat])byCat[h.cat]=[];byCat[h.cat].push(h);});
+    var html="";
+    Object.keys(byCat).forEach(function(c){
+      html+='<div class="v333-cat">'+c+'</div>';
+      byCat[c].forEach(function(h){
+        html+='<div class="v333-item" data-sport="'+(h.sport||"")+'" data-section="'+(h.section||"")+'"><span class="v333-icon">'+h.icon+'</span><span class="v333-name">'+h.name+'</span>'+(h.meta?'<span class="v333-meta">'+h.meta+'</span>':"")+'</div>';
+      });
+    });
+    sugg.innerHTML=html;position();sugg.classList.add("v333-open");
+  }
+  input.addEventListener("input",function(){render(input.value);});
+  input.addEventListener("focus",function(){if(input.value)render(input.value);});
+  document.addEventListener("click",function(e){
+    var item=e.target.closest&&e.target.closest("#v333-sugg .v333-item");
+    if(item){
+      var sport=item.getAttribute("data-sport");
+      var section=item.getAttribute("data-section");
+      sugg.classList.remove("v333-open");input.value="";
+      if(sport){
+        var btn=Array.from(document.querySelectorAll(".sport-btn")).find(function(b){
+          var oc=(b.getAttribute("onclick")||"").match(/switchSport\(['"]([^'"]+)/);
+          return oc&&oc[1]===sport;
+        });
+        if(btn){btn.click();return;}
+      }
+      if(section==="masss21"){var m=document.querySelector(".v56-item li, .v23-drawer li, button, a");var massBtn=Array.from(document.querySelectorAll("button,a,li")).find(function(el){return /m[\u00e1a]s sobre.{0,3}ss\s*21/i.test((el.textContent||"").trim());});if(massBtn)massBtn.click();return;}
+      if(section==="mercado"){var msec=document.getElementById("v164-mercado-wrap");if(msec)msec.scrollIntoView({behavior:"smooth",block:"start"});return;}
+      if(section==="noticias"||section==="blogs"){var s=document.getElementById("v100-"+section+"-wrap");if(s)s.scrollIntoView({behavior:"smooth",block:"start"});return;}
+      return;
+    }
+    if(!e.target.closest("#v25-search-bar, #v333-sugg")){sugg.classList.remove("v333-open");}
+  },true);
+  window.addEventListener("resize",position);
+  window.addEventListener("scroll",position,true);
+}
+if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",setup);}else{setup();}
+setTimeout(setup,500);setTimeout(setup,2000);
+})();
+</script>
 </body>
 </html>
 
