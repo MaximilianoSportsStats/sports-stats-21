@@ -19678,6 +19678,30 @@ if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded"
 setTimeout(wrapItems,500);setTimeout(wrapItems,2000);setTimeout(wrapItems,5000);
 })();
 </script>
+
+<style id="v345-drawer-dedupe-css">
+/* Ocultar UL duplicado en drawer: solo deja #v56-ul */
+html body aside.v36-side ul:not(#v56-ul){display:none !important;}
+html body aside.v36-side .v344-items > ul:not(#v56-ul){display:none !important;}
+/* Footer mas marcado visualmente */
+html body aside.v36-side .v36-foot{border-top:1px solid #e5e7eb !important;background:#fafafa !important;padding:16px 18px !important;}
+</style>
+<script>
+(function(){if(window.__v345)return;window.__v345=true;
+function clean(){
+  var side=document.querySelector("aside.v36-side");if(!side)return;
+  /* Tambien remover via JS por si CSS no llega */
+  Array.from(side.querySelectorAll("ul")).forEach(function(ul){
+    if(ul.id!=="v56-ul"){
+      var inside56=ul.closest("#v56-ul");
+      if(!inside56)ul.style.display="none";
+    }
+  });
+}
+if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",clean);}else{clean();}
+setTimeout(clean,500);setTimeout(clean,2000);setTimeout(clean,5000);
+})();
+</script>
 </body>
 </html>
 
