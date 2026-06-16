@@ -19194,6 +19194,68 @@ if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded"
 setTimeout(build,500);setTimeout(build,2000);
 })();
 </script>
+
+<script>
+(function(){if(window.__v339)return;window.__v339=true;
+var MUNDIALES=[
+  ["1930 Uruguay","Uruguay 4-2 Argentina","13 selecciones - Primera edici\u00f3n"],
+  ["1934 Italia","Italia 2-1 Checoslovaquia","Primer Mundial en Europa"],
+  ["1938 Francia","Italia 4-2 Hungr\u00eda","Bicampe\u00f3n italiano"],
+  ["1950 Brasil","Uruguay 2-1 Brasil","Maracanazo"],
+  ["1954 Suiza","Alemania 3-2 Hungr\u00eda","Milagro de Berna"],
+  ["1958 Suecia","Brasil 5-2 Suecia","Debut de Pel\u00e9 (17)"],
+  ["1962 Chile","Brasil 3-1 Checoslovaquia","Brasil bicampe\u00f3n"],
+  ["1966 Inglaterra","Inglaterra 4-2 Alemania","\u00danica vez Inglaterra"],
+  ["1970 M\u00e9xico","Brasil 4-1 Italia","Brasil tricampe\u00f3n, Pel\u00e9 GOAT"],
+  ["1974 Alemania O.","Alemania 2-1 Holanda","Cruyff perdedor"],
+  ["1978 Argentina","Argentina 3-1 Holanda","Kempes goleador"],
+  ["1982 Espa\u00f1a","Italia 3-1 Alemania O.","Paolo Rossi"],
+  ["1986 M\u00e9xico","Argentina 3-2 Alemania O.","Maradona, mano y gol del siglo"],
+  ["1990 Italia","Alemania O. 1-0 Argentina","Penal Brehme"],
+  ["1994 USA","Brasil 0-0 Italia (3-2 pen)","Romario, Baggio falla"],
+  ["1998 Francia","Francia 3-0 Brasil","Zidane debut t\u00edtulo"],
+  ["2002 Korea/Jap\u00f3n","Brasil 2-0 Alemania","Ronaldo goleador, 1\u00ba en Asia"],
+  ["2006 Alemania","Italia 1-1 Francia (5-3 pen)","Cabezazo Zidane"],
+  ["2010 Sud\u00e1frica","Espa\u00f1a 1-0 Holanda","Iniesta gol, 1\u00ba en \u00c1frica"],
+  ["2014 Brasil","Alemania 1-0 Argentina","7-1 a Brasil, G\u00f6tze"],
+  ["2018 Rusia","Francia 4-2 Croacia","Mbapp\u00e9 estrella"],
+  ["2022 Qatar","Argentina 3-3 Francia (4-2 pen)","Messi corona, Mbapp\u00e9 hat-trick"]
+];
+function setup(){
+  var slides=document.querySelector("#panel-soccer .v338-slides");if(!slides)return;
+  if(slides.querySelector("[data-slide-id=mundiales]"))return;
+  /* Crear slide nuevo Mundiales */
+  var slide=document.createElement("div");
+  slide.className="v338-slide";slide.setAttribute("data-slide-id","mundiales");
+  var html='<h1>\u{1F3C6} Mundial FIFA - 22 ediciones</h1><div class="v338-sub-title">Desde Uruguay 1930 hasta Qatar 2022. Pr\u00f3ximos: USA/Canad\u00e1/M\u00e9xico 2026 + Espa\u00f1a/Portugal/Marruecos 2030.</div>';
+  html+='<div style="overflow-x:auto;margin-top:20px;"><table style="width:100%;border-collapse:collapse;font-size:13px;">';
+  html+='<thead><tr style="background:#c0392b;color:#fff;text-align:left;"><th style="padding:10px;">Edici\u00f3n</th><th style="padding:10px;">Final</th><th style="padding:10px;">Highlight</th></tr></thead><tbody>';
+  MUNDIALES.forEach(function(m,i){
+    html+='<tr style="border-bottom:1px solid #eee;'+(i%2===0?"background:#f8f9fa;":"")+'"><td style="padding:10px;font-weight:600;">'+m[0]+'</td><td style="padding:10px;">'+m[1]+'</td><td style="padding:10px;color:#666;">'+m[2]+'</td></tr>';
+  });
+  html+='</tbody></table></div>';
+  html+='<h2 style="margin-top:32px;">\u{1F3C6} Pr\u00f3ximos Mundiales</h2>';
+  html+='<h3>2026 - USA, Canad\u00e1, M\u00e9xico</h3><p>48 selecciones (vs 32). 12 grupos de 4. 16 ciudades sede. Final en MetLife Stadium (NJ).</p>';
+  html+='<h3>2030 - Espa\u00f1a, Portugal, Marruecos</h3><p>Centenario del Mundial. Partidos inaugurales en Uruguay, Argentina y Paraguay. Mundial multi-continental.</p>';
+  html+='<h2 style="margin-top:24px;">\u{1F30D} Mundial Femenino</h2>';
+  html+='<p>Desde 1991 cada 4 a\u00f1os. Top: USA (4 t\u00edtulos), Alemania (2), Noruega, Jap\u00f3n, Espa\u00f1a. Pr\u00f3ximo: Brasil 2027.</p>';
+  html+='<h2 style="margin-top:24px;">\u{1F30D} Mundial Sub-20</h2>';
+  html+='<p>Desde 1977. Argentina lider con 6 t\u00edtulos. Cuna de figuras: Maradona, Messi, Pogba.</p>';
+  html+='<h2 style="margin-top:24px;">\u{1F3C6} Mundial de Clubes</h2>';
+  html+='<p>Desde 2000. Nuevo formato 2025: 32 clubes. Sucede a la Copa Intercontinental.</p>';
+  slide.innerHTML=html;
+  slides.appendChild(slide);
+  /* Agregar item al sidebar */
+  var sb=document.querySelector(".v338-soccer-sb .v338-sub");
+  if(sb && !sb.querySelector("[data-slide=mundiales]")){
+    var li=document.createElement("li");li.setAttribute("data-slide","mundiales");li.innerHTML="\u{1F3C6} Mundiales 1930-2030";
+    sb.appendChild(li);
+  }
+}
+if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",setup);}else{setup();}
+setTimeout(setup,500);setTimeout(setup,2000);setTimeout(setup,5000);
+})();
+</script>
 </body>
 </html>
 
