@@ -19023,6 +19023,40 @@ if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded"
 setTimeout(setup,500);setTimeout(setup,2000);
 })();
 </script>
+
+<script>
+(function(){if(window.__v337)return;window.__v337=true;
+var OTROS=["\u{1F3D3} Tenis de Mesa","\u{1F3F8} B\u00e1dminton","\u{1F93A} Esgrima","\u{1F94B} Judo / Karate","\u{1F3F9} Tiro con arco","\u{1F3C7} H\u00edpica","\u{1F6F9} Skateboard","\u{1F3C2} Snowboard","\u26F7\uFE0F Esqu\u00ed","\u{1F3C4} Surf","\u{1F938} Gimnasia","\u{1F93E} Handball"];
+var EVENTOS=["\u{1F3C6} Mundial FIFA","\u{1F947} Juegos Ol\u00edmpicos","\u{1F3C8} Super Bowl","\u{1F3C0} NBA Finals","\u26BE World Series","\u{1F3D2} Stanley Cup","\u{1F3BE} Grand Slams","\u26F3 Majors Golf","\u{1F3CE}\uFE0F M\u00f3naco GP","\u{1F6B4} Tour de France","\u{1F3CF} ICC World Cup","\u{1F94A} UFC PPVs"];
+function setup(){
+  var po=document.getElementById("panel-otros");
+  if(po && !po.querySelector(".v336-sb-otros")){
+    var aside=document.createElement("aside");aside.className="v336-sb v336-sb-otros";
+    var html='<h3>Otros Deportes</h3><ul>';
+    OTROS.forEach(function(o){html+='<li>'+o+'</li>';});
+    html+='</ul>';
+    aside.innerHTML=html;
+    po.insertBefore(aside,po.firstChild);
+  }
+  /* Eventos Globales - crear panel si no existe */
+  var pe=document.getElementById("panel-eventos");
+  if(!pe){
+    var inicio=document.getElementById("panel-inicio");
+    if(inicio&&inicio.parentNode){
+      pe=document.createElement("div");pe.id="panel-eventos";
+      pe.innerHTML='<aside class="v336-sb v336-sb-eventos"><h3>Eventos Globales</h3><ul>'+EVENTOS.map(function(e){return '<li>'+e+'</li>';}).join("")+'</ul></aside><div style="flex:1;padding:32px;"><h1 style="color:#c0392b;">\u{1F30D} Eventos Globales</h1><p>Los 12 megaeventos m\u00e1s grandes del deporte mundial, en un solo lugar.</p><p style="color:#888;">Pr\u00f3ximamente: calendarios oficiales, fechas claves, resultados hist\u00f3ricos.</p></div>';
+      inicio.parentNode.insertBefore(pe,inicio.nextSibling);
+    }
+  }
+  /* CSS para mostrar panel-eventos cuando body.v317-show-eventos */
+  var style=document.createElement("style");
+  style.textContent='html body.v317-show-eventos #panel-eventos{display:flex !important;gap:0 !important;align-items:flex-start;} #panel-eventos{display:none;} .v336-sb-eventos,.v336-sb-otros{display:block;} html body:not(.v317-show-eventos) .v336-sb-eventos{display:none !important;} html body:not(.v317-show-otros) .v336-sb-otros{display:none !important;}';
+  document.head.appendChild(style);
+}
+if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",setup);}else{setup();}
+setTimeout(setup,500);setTimeout(setup,2000);
+})();
+</script>
 </body>
 </html>
 
