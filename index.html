@@ -19757,6 +19757,38 @@ if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded"
 setTimeout(wireOldSidebar,500);setTimeout(wireOldSidebar,2000);
 })();
 </script>
+
+<style id="v349-sport-pages-fix">
+/* Hide v29-todos-page cuando hay sport activo */
+html body[class*="v317-show-"] #v29-todos-page,html body[class*="v317-show-"] #v35-nb-page{display:none !important;}
+/* Forzar panel del deporte activo visible con MAX especificidad - gana a v32-view-inicio */
+html body.v317-show-soccer #panel-soccer,html body.v317-show-tennis #panel-tennis,html body.v317-show-f1 #panel-f1,html body.v317-show-nba #panel-nba,html body.v317-show-ufc #panel-ufc,html body.v317-show-baseball #panel-baseball,html body.v317-show-hockey #panel-hockey,html body.v317-show-nfl #panel-nfl,html body.v317-show-rugby #panel-rugby,html body.v317-show-golf #panel-golf,html body.v317-show-padel #panel-padel,html body.v317-show-acuaticos #panel-acuaticos,html body.v317-show-otros #panel-otros,html body.v317-show-athletics #panel-athletics,html body.v317-show-cycling #panel-cycling,html body.v317-show-volley #panel-volley,html body.v317-show-cricket #panel-cricket,html body.v317-show-eventos #panel-eventos{display:block !important;visibility:visible !important;opacity:1 !important;min-height:600px !important;width:auto !important;height:auto !important;position:relative !important;}
+/* Hide noticias/blogs/podcast/mercado/retos/newsletter EN MODO DEPORTE - solo en Inicio se ven */
+html body[class*="v317-show-"]:not(.v317-show-inicio) #v100-noticias-wrap,html body[class*="v317-show-"] #v100-blogs-wrap,html body[class*="v317-show-"] #v100-podcast-wrap,html body[class*="v317-show-"] #v164-mercado-wrap,html body[class*="v317-show-"] #v99-retos,html body[class*="v317-show-"] footer,html body[class*="v317-show-"] #heroCarousel,html body[class*="v317-show-"] #v25-intro{display:none !important;}
+/* Cuando esta en sport mode, los slides v338 se ven, full width */
+html body[class*="v317-show-"] .v338-slides{display:block !important;width:100% !important;padding:24px !important;}
+/* Hide v344-items adicionales que no sean del drawer */
+</style>
+<script>
+(function(){if(window.__v349)return;window.__v349=true;
+function ensureSlideVisible(){
+  var ps=document.getElementById("panel-soccer");if(!ps)return;
+  if(!document.body.classList.contains("v317-show-soccer"))return;
+  var slides=ps.querySelector(".v338-slides");
+  if(!slides)return;
+  /* Make sure at least one slide is active */
+  var active=slides.querySelector(".v338-slide.active");
+  if(!active){
+    var first=slides.querySelector(".v338-slide");
+    if(first)first.classList.add("active");
+  }
+}
+if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",ensureSlideVisible);}else{ensureSlideVisible();}
+setTimeout(ensureSlideVisible,500);setTimeout(ensureSlideVisible,2000);
+/* On any sport-btn click, ensure */
+document.addEventListener("click",function(e){if(e.isTrusted)setTimeout(ensureSlideVisible,200);},true);
+})();
+</script>
 </body>
 </html>
 
