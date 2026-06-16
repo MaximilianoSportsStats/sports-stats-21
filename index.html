@@ -17813,6 +17813,23 @@ footer #v311-newsletter{border-bottom:1px solid #2a2a2a;margin-bottom:32px;}
   setTimeout(move,2000);
 })();
 </script>
+
+<script>
+/* v313 - el scroll/touch tambien marca user-acted (para parar v302/v303 setIntervals que interfieren con scroll) */
+(function(){
+  if(window.__v313)return;window.__v313=true;
+  function ack(){
+    window.__userActed=true;
+    window.__userClicked=true;
+    document.body.classList.add("v310-realnav");
+  }
+  window.addEventListener("scroll",ack,{passive:true,capture:true});
+  window.addEventListener("wheel",ack,{passive:true,capture:true});
+  window.addEventListener("touchmove",ack,{passive:true,capture:true});
+  window.addEventListener("touchstart",function(e){if(e.isTrusted)ack();},{passive:true,capture:true});
+  window.addEventListener("keydown",function(e){if(e.isTrusted)ack();},true);
+})();
+</script>
 </body>
 </html>
 
