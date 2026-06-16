@@ -17554,6 +17554,21 @@ attachInicio2();
   forceInicio();
 })();
 </script>
+
+<style id="v304-lock-css">
+body:not(.v304-clicked) #panel-inicio{display:block !important;visibility:visible !important;opacity:1 !important;}
+body:not(.v304-clicked) [id^="panel-"]:not(#panel-inicio){display:none !important;}
+body:not(.v304-clicked) #sidebar{display:none !important;}
+</style>
+<script>
+/* v304 - lock visual a Inicio hasta primer click del user (CSS !important = artilleria pesada) */
+(function(){
+  if(window.__v304)return;window.__v304=true;
+  function unlock(){document.body.classList.add("v304-clicked");}
+  document.addEventListener("click",unlock,true);
+  document.addEventListener("touchstart",unlock,true);
+})();
+</script>
 </body>
 </html>
 
