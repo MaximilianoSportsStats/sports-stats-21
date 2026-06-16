@@ -19831,6 +19831,82 @@ document.addEventListener("click",function(e){
 },true);
 })();
 </script>
+
+<style id="v351-sport-css">
+#v351-sport-content{display:none;flex:1;padding:32px;max-width:1100px;}
+html body[class*="v317-show-"]:not(.v317-show-inicio) #v351-sport-content{display:block !important;min-height:600px;}
+html body[class*="v317-show-"]:not(.v317-show-inicio) main,html body[class*="v317-show-"]:not(.v317-show-inicio) body > main{display:flex !important;align-items:flex-start;gap:0;}
+/* Hide ALL old todos cards globally if v317-show */
+html body[class*="v317-show-"]:not(.v317-show-inicio) .v29-todos-card,html body[class*="v317-show-"]:not(.v317-show-inicio) .v29-todos-grid,html body[class*="v317-show-"]:not(.v317-show-inicio) .v29-todos{display:none !important;}
+#v351-sport-content .v351-header{background:linear-gradient(135deg,#c0392b,#a32f24);color:#fff;border-radius:16px;padding:28px;margin-bottom:24px;}
+#v351-sport-content .v351-header h1{margin:0 0 6px;font-size:30px;}
+#v351-sport-content .v351-sub{font-size:15px;opacity:0.92;margin-bottom:18px;}
+#v351-sport-content .v351-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;}
+#v351-sport-content .v351-stat{background:rgba(255,255,255,0.18);border-radius:12px;padding:14px;text-align:center;}
+#v351-sport-content .v351-num{font-size:28px;font-weight:800;line-height:1;}
+#v351-sport-content .v351-lbl{font-size:11px;text-transform:uppercase;letter-spacing:.5px;margin-top:4px;opacity:0.9;}
+#v351-sport-content section{margin:28px 0;}
+#v351-sport-content section h2{font-size:22px;color:#1a1a1a;margin:0 0 12px;}
+#v351-sport-content section p{color:#444;line-height:1.65;}
+#v351-sport-content section ul{color:#444;line-height:1.8;}
+#v351-sport-content .v351-slide{display:none;}
+#v351-sport-content .v351-slide.active{display:block;animation:v351fade .25s ease;}
+@keyframes v351fade{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+</style>
+<script>
+(function(){if(window.__v351)return;window.__v351=true;
+var CONTENT={
+  soccer:{title:"\u26BD F\u00fatbol",sub:"El deporte rey \u00b7 4 mil millones de seguidores \u00b7 211 federaciones FIFA",stats:[["1863","Reglas FA"],["4B+","Fans"],["211","Federaciones"],["5","Brasil Mundiales"]],sections:[{t:"\u{1F4D6} Una mirada al f\u00fatbol",h:"<p>El f\u00fatbol asociaci\u00f3n es el deporte m\u00e1s popular del mundo. Lo juegan 250 millones de personas en m\u00e1s de 200 pa\u00edses. Naci\u00f3 oficialmente en 1863 con las reglas de la FA inglesa.</p>"},{t:"\u{1F3C6} Las grandes potencias",h:"<p>Brasil (5 Mundiales), Alemania (4), Italia (4), Argentina (3), Francia (2), Uruguay (2), Inglaterra (1) y Espa\u00f1a (1) son las \u00fanicas selecciones campeonas del mundo.</p>"},{t:"\u{1F31F} Figuras del f\u00fatbol actual",h:"<p>Messi, Cristiano Ronaldo, Mbapp\u00e9, Haaland, Vinicius Jr., Bellingham, Lamine Yamal y Pedri encabezan la \u00e9lite mundial 2026.</p>"}]},
+  tennis:{title:"\u{1F3BE} Tenis",sub:"El deporte rey de la raqueta \u00b7 1.000M de fans \u00b7 Tours ATP y WTA",stats:[["4","Grand Slams"],["1M","Fans"],["9","Master 1000"],["40+","ATP 250"]],sections:[{t:"\u{1F451} Grand Slams 2025",h:"<p><b>Australian Open</b> (Melbourne, enero) \u00b7 <b>Roland Garros</b> (Par\u00eds, mayo-junio) \u00b7 <b>Wimbledon</b> (Londres, julio) \u00b7 <b>US Open</b> (Nueva York, agosto-septiembre).</p>"},{t:"\u{1F451} Leyendas",h:"<ul><li>Novak Djokovic: 24 Grand Slams (record)</li><li>Rafael Nadal: 22 GS, 14 Roland Garros</li><li>Roger Federer: 20 GS</li><li>Pete Sampras: 14 GS</li><li>Serena Williams: 23 GS (femenino)</li></ul>"}]},
+  f1:{title:"\u{1F3CE}\uFE0F F\u00f3rmula 1 / Carreras",sub:"M\u00e1xima categor\u00eda del automovilismo \u00b7 24 GPs al a\u00f1o",stats:[["24","GPs/a\u00f1o"],["10","Equipos"],["20","Pilotos"],["7","Hamilton/Schumi"]],sections:[{t:"\u{1F3C6} Pilotos top 2026",h:"<ul><li>Max Verstappen (Red Bull) - 4x campe\u00f3n</li><li>Lando Norris (McLaren)</li><li>Charles Leclerc (Ferrari)</li><li>Lewis Hamilton (Ferrari)</li><li>Oscar Piastri (McLaren)</li></ul>"},{t:"\u{1F3CE}\uFE0F Otras categor\u00edas",h:"<p>MotoGP \u00b7 NASCAR Cup Series \u00b7 IndyCar (Indy 500) \u00b7 Rally Dakar \u00b7 Formula E.</p>"}]},
+  nba:{title:"\u{1F3C0} Basketball / NBA",sub:"30 franquicias \u00b7 NBA Finals decide al campe\u00f3n \u00b7 4 conferencias",stats:[["30","Equipos"],["82","Partidos"],["4","Conferencias"],["17","Lakers/Celtics"]],sections:[{t:"\u{1F3C6} Conferencias",h:"<p><b>Este:</b> Atlantic (Boston, NY, Toronto, Philadelphia, Brooklyn), Central (Chicago, Cleveland, Detroit, Indiana, Milwaukee), Southeast (Atlanta, Charlotte, Miami, Orlando, Washington).<br><b>Oeste:</b> Northwest, Pacific, Southwest.</p>"},{t:"\u{1F31F} Estrellas actuales",h:"<p>LeBron James, Stephen Curry, Luka Don\u010di\u0107, Nikola Joki\u0107, Giannis Antetokounmpo, Jayson Tatum, Anthony Edwards.</p>"}]},
+  ufc:{title:"\u{1F94A} UFC / Combate",sub:"MMA con 8 categor\u00edas varones + 4 femeninas",stats:[["8","Cat. M"],["4","Cat. F"],["29-0","Khabib invicto"],["PPV","numerados"]],sections:[{t:"\u{1F451} Leyendas",h:"<p>Khabib Nurmagomedov (29-0), Anderson Silva (record defensa), Georges St-Pierre, Jon Jones, Conor McGregor, Demetrious Johnson, Amanda Nunes, Ronda Rousey.</p>"}]},
+  baseball:{title:"\u26BE Baseball / MLB",sub:"30 franquicias \u00b7 World Series \u00b7 American & National League",stats:[["30","Equipos"],["162","Partidos"],["4","Divisiones"],["27","Yankees t\u00edt."]],sections:[{t:"\u{1F31F} Leyendas",h:"<p>Babe Ruth (714 HR), Hank Aaron (755 HR), Willie Mays, Barry Bonds (762 HR), Mickey Mantle, Joe DiMaggio, Mariano Rivera, Shohei Ohtani.</p>"}]},
+  hockey:{title:"\u{1F3D2} Hockey / NHL",sub:"32 equipos \u00b7 Stanley Cup \u00b7 East vs West",stats:[["32","Equipos"],["82","Partidos"],["1893","Stanley Cup"],["Canada","Cuna"]],sections:[{t:"\u{1F451} Leyendas",h:"<p>Wayne Gretzky (894 goles), Mario Lemieux, Bobby Orr, Sidney Crosby, Alexander Ovechkin, Connor McDavid, Patrick Roy.</p>"}]},
+  nfl:{title:"\u{1F3C8} F\u00fatbol Am. / NFL",sub:"32 equipos \u00b7 Super Bowl en febrero",stats:[["32","Equipos"],["17","Semanas"],["7","Brady SBs"],["3","Mahomes SBs"]],sections:[{t:"\u{1F451} Leyendas",h:"<p>Tom Brady (7 Super Bowls), Joe Montana, Jerry Rice, Walter Payton, Lawrence Taylor, Patrick Mahomes (era actual).</p>"}]},
+  rugby:{title:"\u{1F3C9} Rugby",sub:"World Cup cada 4 a\u00f1os \u00b7 Six Nations \u00b7 Top 14",stats:[["3","NZ Mundiales"],["6","Six Nations"],["20","Equipos WC"],["80","Min partido"]],sections:[{t:"\u{1F451} Leyendas",h:"<p>Jonah Lomu, Dan Carter (2x WC), Richie McCaw (148 caps), Brian O\u2019Driscoll, Antoine Dupont (actual).</p>"}]},
+  golf:{title:"\u26F3 Golf",sub:"4 Majors al a\u00f1o \u00b7 PGA + European Tour",stats:[["4","Majors"],["18","Hoyos"],["15","Tiger Majors"],["18","Nicklaus"]],sections:[{t:"\u{1F3C6} 4 Majors",h:"<p><b>Masters</b> (Augusta, abril) \u00b7 <b>PGA Championship</b> (mayo) \u00b7 <b>US Open</b> (junio) \u00b7 <b>The Open Championship</b> (julio).</p>"}]},
+  padel:{title:"\u{1F3D3} P\u00e1del",sub:"Crecimiento explosivo \u00b7 WPT + Premier P\u00e1del",stats:[["20M+","Jugadores"],["50K+","Pistas"],["WPT","Top circ."],["ESP","Cuna"]],sections:[{t:"\u{1F451} Top parejas",h:"<p>Galan/Lebron, Coello/Tapia, Stupaczuk/Di Nenno. Argentina y Espa\u00f1a dominantes.</p>"}]},
+  acuaticos:{title:"\u{1F3CA} Nataci\u00f3n",sub:"FINA \u00b7 Olympics \u00b7 Estilos libre/espalda/pecho/mariposa",stats:[["23","Phelps oros"],["50m","Piscina"],["4","Estilos"],["Olympics","Cada 4"]],sections:[{t:"\u{1F451} Leyendas",h:"<p>Michael Phelps (23 oros olympics record), Mark Spitz, Ian Thorpe, Katie Ledecky, Caeleb Dressel.</p>"}]},
+  athletics:{title:"\u{1F3C3} Atletismo",sub:"Olympics + World Championships + Diamond League",stats:[["9.58s","Bolt 100m"],["43","Disciplinas"],["Diamond","League"],["Olympics","Joya"]],sections:[{t:"\u{1F451} Leyendas",h:"<p>Usain Bolt (9.58s 100m, 19.19s 200m), Carl Lewis (9 oros), Jesse Owens, Eliud Kipchoge (sub-2 marathon), Allyson Felix.</p>"}]},
+  cycling:{title:"\u{1F6B4} Ciclismo",sub:"3 Grandes Vueltas \u00b7 Tour de France \u00b7 Cl\u00e1sicas",stats:[["21","Etapas Tour"],["3","Grandes"],["Pogacar","2x Tour"],["Vingegaard","2x"]],sections:[{t:"\u{1F3C6} 3 Grandes Vueltas",h:"<p><b>Tour de France</b> (julio) \u00b7 <b>Giro d\u2019Italia</b> (mayo) \u00b7 <b>Vuelta a Espa\u00f1a</b> (sept).</p>"}]},
+  volley:{title:"\u{1F3D0} Volleyball",sub:"FIVB \u00b7 Nations League \u00b7 Beach Volley olimpico",stats:[["6","Por equipo"],["3","Sets ganar"],["Italy","Top F"],["Poland","Top M"]],sections:[{t:"\u{1F3C6} Tops",h:"<p>Polonia, Italia, Brasil, USA, Francia (varones). Italia, Brasil, Polonia (mujeres).</p>"}]},
+  cricket:{title:"\u{1F3CF} Cricket",sub:"ICC World Cup \u00b7 IPL es la liga m\u00e1s rica",stats:[["50","Overs ODI"],["20","T20 overs"],["100","Tendulkar"],["India","TOP"]],sections:[{t:"\u{1F451} Leyendas",h:"<p>Sachin Tendulkar (100 tons), Brian Lara (400 highest), Don Bradman (99.94 avg), Virat Kohli, MS Dhoni, Sir Vivian Richards.</p>"}]},
+  otros:{title:"\u{1F3F8} Otros Deportes",sub:"12 disciplinas adicionales",stats:[["12","Disciplinas"],["IOC","Olympics"],["X-Games","Extremo"],["Mundial","Champ"]],sections:[{t:"\u{1F3D3} Las 12 disciplinas",h:"<ul><li>Tenis de mesa \u00b7 B\u00e1dminton \u00b7 Esgrima</li><li>Judo / Karate \u00b7 Tiro con arco \u00b7 H\u00edpica</li><li>Skateboard \u00b7 Snowboard \u00b7 Esqu\u00ed</li><li>Surf \u00b7 Gimnasia \u00b7 Handball</li></ul>"}]},
+  eventos:{title:"\u{1F30D} Eventos Globales",sub:"12 megaeventos que mueven al mundo",stats:[["12","Mega-eventos"],["4","Anos cycle"],["1B+","TV global"],["Cult.","mundial"]],sections:[{t:"\u{1F3C6} Los 12",h:"<ul><li>Mundial FIFA \u00b7 Juegos Olimpicos</li><li>Super Bowl \u00b7 NBA Finals</li><li>World Series \u00b7 Stanley Cup</li><li>Grand Slams \u00b7 Majors Golf</li><li>Monaco GP \u00b7 Tour de France</li><li>ICC World Cup \u00b7 UFC PPVs</li></ul>"}]}
+};
+function build(){
+  if(document.getElementById("v351-sport-content"))return;
+  /* Find a good parent - try main, then body */
+  var main=document.querySelector("main")||document.body;
+  var c=document.createElement("section");c.id="v351-sport-content";
+  /* Build slides for each sport */
+  var html="";
+  Object.keys(CONTENT).forEach(function(k){
+    var info=CONTENT[k];
+    html+='<div class="v351-slide" data-sport="'+k+'">';
+    html+='<div class="v351-header"><h1>'+info.title+'</h1><div class="v351-sub">'+info.sub+'</div><div class="v351-stats">';
+    info.stats.forEach(function(s){html+='<div class="v351-stat"><div class="v351-num">'+s[0]+'</div><div class="v351-lbl">'+s[1]+'</div></div>';});
+    html+='</div></div>';
+    info.sections.forEach(function(sec){html+='<section><h2>'+sec.t+'</h2>'+sec.h+'</section>';});
+    html+='</div>';
+  });
+  c.innerHTML=html;
+  main.appendChild(c);
+}
+function activate(){
+  build();
+  var c=document.getElementById("v351-sport-content");if(!c)return;
+  var cls=Array.from(document.body.classList).find(function(cl){return cl.indexOf("v317-show-")===0;});
+  if(!cls){c.querySelectorAll(".v351-slide").forEach(function(s){s.classList.remove("active");});return;}
+  var sport=cls.replace("v317-show-","");
+  c.querySelectorAll(".v351-slide").forEach(function(s){s.classList.toggle("active",s.getAttribute("data-sport")===sport);});
+}
+if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",activate);}else{activate();}
+setTimeout(activate,500);setTimeout(activate,2000);
+document.addEventListener("click",function(e){if(e.isTrusted)setTimeout(activate,150);},true);
+})();
+</script>
 </body>
 </html>
 
