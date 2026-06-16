@@ -18857,6 +18857,69 @@ if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded"
 setTimeout(setup,500);setTimeout(setup,2000);
 })();
 </script>
+
+<script>
+/* v334 FASE 6.3 - traducciones funcionales + brand protected */
+(function(){if(window.__v334)return;window.__v334=true;
+var DICT={
+  es:{},
+  en:{"Inicio":"Home","Favoritos":"Favorites","En Vivo":"Live","Deportes":"Sports","Contenido y Comunidad":"Content & Community","Más Sobre SS 21":"About SS 21","Más Sobre Sports Stats 21":"About Sports Stats 21","Noticias":"News","Blogs":"Blogs","Podcast":"Podcast","Mercado":"Market","Buscar deportes, liga":"Search sports, league","Iniciar Sesión":"Sign In","Crear cuenta":"Create account","Suscribirme":"Subscribe","Recibí cada lunes lo mejor de la semana en deportes: análisis, datos exclusivos y los récords que se rompieron. Sin spam, podés cancelar cuando quieras.":"Get the best of the week in sports every Monday: analysis, exclusive data and records broken. No spam, cancel anytime.","Bienvenido a":"Welcome to","La red social de los deportes":"The social network of sports","Profesionales":"Professional","Universitarios":"University","Escolares":"School","Amateur":"Amateur","Comparar":"Compare","Centros Deportivos":"Sports Centers","Fuentes oficiales":"Official sources","Todos":"All","Historia":"History","Sobre Nosotros":"About us","Trabaja con Nosotros":"Work with us","Prensa":"Press","Producto":"Product","Soporte":"Support","Legal":"Legal","Contacto":"Contact","Centro de Ayuda":"Help center","Sugerencias":"Suggestions","Estado del Servicio":"Service status","Política de Privacidad":"Privacy policy","Términos y Condiciones":"Terms and conditions","Política de Cookies":"Cookie policy","Derechos de Imagen":"Image rights","Eventos Globales":"Global Events","Ligas Locales":"Local Leagues","Mi Perfil":"My profile"},
+  pt:{"Inicio":"In\u00edcio","Favoritos":"Favoritos","En Vivo":"Ao Vivo","Deportes":"Esportes","Contenido y Comunidad":"Conte\u00fado e Comunidade","Más Sobre SS 21":"Sobre SS 21","Noticias":"Not\u00edcias","Blogs":"Blogs","Podcast":"Podcast","Mercado":"Mercado","Suscribirme":"Inscrever-se","Buscar deportes, liga":"Buscar esportes, liga","Iniciar Sesión":"Entrar","Crear cuenta":"Criar conta","Profesionales":"Profissionais","Universitarios":"Universidade","Escolares":"Escolar","Amateur":"Amador","Comparar":"Comparar","Centros Deportivos":"Centros Esportivos","Fuentes oficiales":"Fontes oficiais","Todos":"Todos"},
+  fr:{"Inicio":"Accueil","Favoritos":"Favoris","En Vivo":"En direct","Deportes":"Sports","Contenido y Comunidad":"Contenu et communaut\u00e9","Más Sobre SS 21":"\u00c0 propos de SS 21","Noticias":"Actualit\u00e9s","Blogs":"Blogs","Mercado":"March\u00e9","Suscribirme":"S'abonner","Iniciar Sesión":"Connexion","Crear cuenta":"Cr\u00e9er un compte","Profesionales":"Professionnels","Universitarios":"Universit\u00e9","Escolares":"\u00c9cole","Amateur":"Amateur","Comparar":"Comparer","Todos":"Tous"},
+  de:{"Inicio":"Start","Favoritos":"Favoriten","En Vivo":"Live","Deportes":"Sport","Contenido y Comunidad":"Inhalt & Community","Más Sobre SS 21":"\u00dcber SS 21","Noticias":"Nachrichten","Mercado":"Markt","Suscribirme":"Abonnieren","Iniciar Sesión":"Anmelden","Crear cuenta":"Konto erstellen","Profesionales":"Profis","Universitarios":"Universit\u00e4t","Escolares":"Schule","Amateur":"Amateur","Comparar":"Vergleichen","Todos":"Alle"},
+  it:{"Inicio":"Home","Favoritos":"Preferiti","En Vivo":"Diretta","Deportes":"Sport","Contenido y Comunidad":"Contenuti e Community","Más Sobre SS 21":"Su SS 21","Noticias":"Notizie","Mercado":"Mercato","Suscribirme":"Iscriviti","Iniciar Sesión":"Accedi","Crear cuenta":"Crea account","Profesionales":"Professionali","Universitarios":"Universit\u00e0","Escolares":"Scuola","Amateur":"Amatori","Comparar":"Confronta","Todos":"Tutti"}
+};
+var BRAND="Sports Stats 21";
+var currentLang="es";
+var originalTexts=new WeakMap();
+function translate(lang){
+  if(lang===currentLang)return;
+  /* Walk text nodes */
+  var walker=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT,null,false);
+  var node;var nodes=[];while((node=walker.nextNode()))nodes.push(node);
+  nodes.forEach(function(n){
+    if(!n.parentElement)return;
+    var pTag=n.parentElement.tagName;
+    if(pTag==="SCRIPT"||pTag==="STYLE")return;
+    var orig=originalTexts.get(n);
+    if(!orig){orig=n.nodeValue;originalTexts.set(n,orig);}
+    var v=lang==="es"?orig:orig;
+    if(lang!=="es"&&DICT[lang]){
+      Object.keys(DICT[lang]).forEach(function(k){
+        if(orig.indexOf(k)>=0){v=v.split(k).join(DICT[lang][k]);}
+      });
+    }
+    /* Protect brand always */
+    v=v.split(/Sports\s*Stats\s*21/g).join(BRAND);
+    if(v!==n.nodeValue)n.nodeValue=v;
+  });
+  currentLang=lang;
+}
+function setup(){
+  var lang=document.getElementById("v30-lang");if(!lang)return;
+  if(lang.dataset.v334Wired)return;lang.dataset.v334Wired="1";
+  /* Find buttons inside lang */
+  var btns=Array.from(lang.querySelectorAll("button,a,li"));
+  btns.forEach(function(b){
+    var t=(b.textContent||"").toLowerCase();
+    var l=null;
+    if(/english|ingl/i.test(t))l="en";
+    else if(/portug|portugu/i.test(t))l="pt";
+    else if(/fran/i.test(t))l="fr";
+    else if(/deutsch|alem/i.test(t))l="de";
+    else if(/ital/i.test(t))l="it";
+    else if(/espa/i.test(t))l="es";
+    if(l){
+      b.addEventListener("click",function(e){
+        e.preventDefault();translate(l);
+      },true);
+    }
+  });
+}
+if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",setup);}else{setup();}
+setTimeout(setup,500);setTimeout(setup,2000);
+})();
+</script>
 </body>
 </html>
 
