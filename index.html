@@ -18263,6 +18263,119 @@ html body.v324-masss21 #panel-inicio{display:none !important;}
   setTimeout(setup,2000);
 })();
 </script>
+
+<style id="v326-mercado-css">
+#v326-panel-mercado{display:none;padding:32px 24px;max-width:1200px;margin:0 auto;}
+html body.v326-mercado #v326-panel-mercado{display:block !important;}
+html body.v326-mercado #panel-inicio{display:none !important;}
+html body.v326-mercado #v324-panel-masss21{display:none !important;}
+#v326-panel-mercado .v326-header{display:flex;align-items:baseline;gap:16px;margin-bottom:20px;}
+#v326-panel-mercado h1{font-size:28px;color:#c0392b;margin:0;font-weight:700;}
+#v326-panel-mercado .v326-sub{font-size:14px;color:#888;}
+#v326-panel-mercado .v326-tabs{display:flex;gap:6px;border-bottom:2px solid #eee;margin-bottom:24px;overflow-x:auto;flex-wrap:wrap;}
+#v326-panel-mercado .v326-tab{padding:10px 18px;border:none;background:transparent;color:#666;font-size:14px;font-weight:600;cursor:pointer;border-bottom:3px solid transparent;transition:all .15s;white-space:nowrap;}
+#v326-panel-mercado .v326-tab:hover{color:#c0392b;}
+#v326-panel-mercado .v326-tab.active{color:#c0392b;border-bottom-color:#c0392b;}
+#v326-panel-mercado .v326-content{min-height:300px;}
+#v326-panel-mercado .v326-tab-panel{display:none;animation:v326fade .25s ease;}
+#v326-panel-mercado .v326-tab-panel.active{display:block;}
+@keyframes v326fade{from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:translateY(0);}}
+#v326-panel-mercado .v326-card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;}
+#v326-panel-mercado .v326-card{background:#f8f9fa;border:1px solid #e5e7eb;border-radius:10px;padding:18px;}
+#v326-panel-mercado .v326-card h3{margin:0 0 8px;font-size:16px;color:#1a1a1a;}
+#v326-panel-mercado .v326-card p{margin:0;font-size:13px;color:#666;line-height:1.5;}
+#v326-panel-mercado .v326-placeholder{background:#f7f7f9;border:1px dashed #ccc;padding:32px;border-radius:10px;text-align:center;color:#888;font-size:14px;}
+</style>
+<script>
+/* v326 - FASE 2.3 panel Mercado dedicado con 7 tabs */
+(function(){
+  if(window.__v326)return;window.__v326=true;
+  var TABS=[
+    {id:"fichajes",label:"\u{1F525} Top fichajes",cards:[{t:"Mbapp\u00e9 al Real Madrid",d:"Fichaje del a\u00f1o, contrato 5 a\u00f1os."},{t:"Lamine Yamal renueva con Barcelona",d:"Mejora salarial hasta 2030."},{t:"Endrick llega a Madrid",d:"Joya brasile\u00f1a se suma al plantel."},{t:"Vit\u00f3r Roque al Bar\u00e7a",d:"Nuevo delantero brasile\u00f1o."}]},
+    {id:"prestamos",label:"\u{1F501} Pr\u00e9stamos",cards:[{t:"Joao F\u00e9lix al Bar\u00e7a (Atl\u00e9tico)",d:"Cesi\u00f3n por toda la temporada."},{t:"Conor Gallagher al Atl\u00e9tico",d:"Pr\u00e9stamo con opci\u00f3n de compra."},{t:"Eddie Nketiah a Crystal Palace",d:"Cedido por Arsenal."}]},
+    {id:"libres",label:"\u{1F193} Agentes Libres",cards:[{t:"Marco Asensio",d:"Disponible tras salir del PSG."},{t:"Adrien Rabiot",d:"Sin contrato, varios clubes interesados."},{t:"Memphis Depay",d:"Libre, abierto a propuestas."},{t:"Jordan Henderson",d:"Disponible tras Arabia."}]},
+    {id:"contratos",label:"\u{1F4DD} Contratos",cards:[{t:"Vinicius extiende con Real Madrid",d:"Renovaci\u00f3n hasta 2030 con mejora."},{t:"Bellingham firma renovaci\u00f3n",d:"Madrid blinda al ingl\u00e9s."},{t:"Saka renueva con Arsenal",d:"Hasta 2027 con salario top."}]},
+    {id:"rumores",label:"\u{1F525} Rumores",cards:[{t:"Haaland al Real Madrid?",d:"Rumores fuertes para 2026."},{t:"Inter por Lautaro M\u00e1ximo",d:"Negociaci\u00f3n estancada."},{t:"PSG sigue a Bruno Fernandes",d:"Plan B si falla Vitinha."}]},
+    {id:"valores",label:"\u{1F4B0} Valores de mercado",cards:[{t:"Top 10 mas caros 2026",d:"Mbapp\u00e9 (250M\u20ac), Bellingham (200M\u20ac), Vinicius (200M\u20ac), Haaland (180M\u20ac)..."},{t:"Mayor revalorizaci\u00f3n",d:"Jugadores que m\u00e1s subieron en el ultimo a\u00f1o."},{t:"Crash de valor",d:"Top que m\u00e1s baj\u00f3 su valor."}]},
+    {id:"historial",label:"\u{1F4DA} Historial",cards:[{t:"Fichajes record por d\u00e9cada",d:"Desde Maradona hasta Mbapp\u00e9."},{t:"Transferencias mas largas",d:"Negociaciones que duraron meses."},{t:"Operaciones polemicas",d:"Casos jur\u00eddicos historicos."}]}
+  ];
+  function build(){
+    if(document.getElementById("v326-panel-mercado"))return;
+    var inicio=document.getElementById("panel-inicio");
+    if(!inicio||!inicio.parentNode)return;
+    var panel=document.createElement("section");
+    panel.id="v326-panel-mercado";
+    var tabsBar='<div class="v326-header"><h1>\u{1F935} Mercado</h1><span class="v326-sub">Fichajes, agentes libres, contratos y rumores del momento.</span></div>';
+    tabsBar+='<nav class="v326-tabs">';
+    TABS.forEach(function(tab,i){
+      tabsBar+='<button class="v326-tab'+(i===0?" active":"")+'" data-v326-tab="'+tab.id+'">'+tab.label+'</button>';
+    });
+    tabsBar+='</nav><div class="v326-content">';
+    TABS.forEach(function(tab,i){
+      tabsBar+='<div class="v326-tab-panel'+(i===0?" active":"")+'" data-v326-panel="'+tab.id+'">';
+      tabsBar+='<div class="v326-card-grid">';
+      tab.cards.forEach(function(c){
+        tabsBar+='<div class="v326-card"><h3>'+c.t+'</h3><p>'+c.d+'</p></div>';
+      });
+      tabsBar+='</div></div>';
+    });
+    tabsBar+='</div>';
+    panel.innerHTML=tabsBar;
+    inicio.parentNode.insertBefore(panel,inicio.nextSibling);
+    /* Wire tab switching */
+    panel.querySelectorAll(".v326-tab").forEach(function(btn){
+      btn.addEventListener("click",function(e){
+        e.preventDefault();
+        var tabId=btn.getAttribute("data-v326-tab");
+        panel.querySelectorAll(".v326-tab").forEach(function(b){b.classList.remove("active");});
+        btn.classList.add("active");
+        panel.querySelectorAll(".v326-tab-panel").forEach(function(p){
+          p.classList.toggle("active",p.getAttribute("data-v326-panel")===tabId);
+        });
+      });
+    });
+  }
+  function navToMercado(){
+    document.body.classList.add("v326-mercado");
+    document.body.classList.remove("v324-masss21");
+    ["soccer","tennis","f1","nba","ufc","baseball","hockey","nfl","rugby","golf","padel","acuaticos","otros"].forEach(function(s){document.body.classList.remove("v317-show-"+s);});
+    window.scrollTo({top:0,behavior:"smooth"});
+  }
+  function navOut(){document.body.classList.remove("v326-mercado");}
+  function setup(){
+    build();
+    /* Wire Mercado section title in Inicio */
+    var inicioH2=document.querySelector("#v164-mercado h2");
+    if(inicioH2 && !inicioH2.dataset.v326Wired){
+      inicioH2.dataset.v326Wired="1";
+      inicioH2.style.cursor="pointer";
+      inicioH2.addEventListener("click",function(e){e.preventDefault();navToMercado();});
+    }
+    /* Wire Mercado item in drawer Deportes */
+    var drawerMercado=document.querySelector("[data-v321-mercado],[data-v322-mercado]");
+    if(drawerMercado && !drawerMercado.dataset.v326Wired){
+      drawerMercado.dataset.v326Wired="1";
+      drawerMercado.addEventListener("click",function(e){e.preventDefault();navToMercado();});
+    }
+  }
+  /* Listen global clicks for Inicio/sport-btn to exit Mercado mode */
+  document.body.addEventListener("click",function(e){
+    if(!e.isTrusted)return;
+    var target=e.target;
+    if(!target||!target.closest)return;
+    var navEl=target.closest(".v56-item,.v23-drawer li, button, a, .sport-btn");
+    if(!navEl)return;
+    var txt=(navEl.textContent||"").trim();
+    if(/m[áa]s sobre.{0,3}ss\s*21/i.test(txt))return; /* leave for v324 */
+    if(/mercado/i.test(txt))return; /* we handle below */
+    if(/inicio/i.test(txt) && !/deportes/i.test(txt)){navOut();return;}
+    if(navEl.classList && navEl.classList.contains("sport-btn")){navOut();return;}
+  },true);
+  if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",setup);}else{setup();}
+  setTimeout(setup,500);
+  setTimeout(setup,2000);
+})();
+</script>
 </body>
 </html>
 
