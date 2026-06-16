@@ -18963,6 +18963,66 @@ if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded"
 setTimeout(setup,500);setTimeout(setup,2000);
 })();
 </script>
+
+<style id="v336-sidebars-css">
+.v336-sb{display:none;width:220px;background:#fff;border-right:1px solid #e5e7eb;padding:20px 16px;height:100vh;overflow-y:auto;position:sticky;top:0;flex-shrink:0;}
+.v336-sb h3{margin:0 0 6px;color:#c0392b;font-size:13px;text-transform:uppercase;letter-spacing:.5px;}
+.v336-sb .v336-mf{display:flex;gap:4px;margin-bottom:14px;}
+.v336-sb .v336-mf button{flex:1;padding:6px;border-radius:6px;border:1px solid #e5e7eb;background:#fff;font-weight:700;cursor:pointer;font-size:13px;}
+.v336-sb .v336-mf button.active{background:#c0392b;color:#fff;border-color:#c0392b;}
+.v336-sb ul{list-style:none;padding:0;margin:0;}
+.v336-sb li{padding:8px 10px;border-radius:6px;cursor:pointer;font-size:13px;color:#444;margin-bottom:2px;}
+.v336-sb li:hover{background:#f8f0ef;color:#c0392b;}
+html body.v317-show-nba .v336-sb-nba,html body.v317-show-nfl .v336-sb-nfl,html body.v317-show-f1 .v336-sb-f1,html body.v317-show-ufc .v336-sb-ufc,html body.v317-show-baseball .v336-sb-mlb,html body.v317-show-hockey .v336-sb-nhl,html body.v317-show-rugby .v336-sb-rugby,html body.v317-show-golf .v336-sb-golf,html body.v317-show-athletics .v336-sb-athletics,html body.v317-show-acuaticos .v336-sb-acuaticos,html body.v317-show-cycling .v336-sb-cycling,html body.v317-show-volley .v336-sb-volley,html body.v317-show-padel .v336-sb-padel,html body.v317-show-cricket .v336-sb-cricket{display:block !important;}
+</style>
+<script>
+(function(){if(window.__v336)return;window.__v336=true;
+var SIDEBARS={
+  nba:{title:"Basketball",extra:["\u{1F3C6} NBA Finals","\u2B50 All-Star","\u{1F30E} EuroLeague","\u{1F393} NCAA","\u{1F947} Olympics","\u{1F451} Leyendas"]},
+  nfl:{title:"F\u00fatbol Am.",extra:["\u{1F3C8} Super Bowl","\u2B50 Pro Bowl","\u{1F393} NCAA Football","\u{1F451} Leyendas"]},
+  f1:{title:"Carreras",extra:["\u{1F3C1} F1 GP","\u{1F3CD}\uFE0F MotoGP","\u{1F697} NASCAR","\u{1F6BE} IndyCar","\u{1F3CE}\uFE0F Rally Dakar","\u{1F451} Leyendas"]},
+  ufc:{title:"Combate",extra:["\u{1F94B} UFC","\u{1F94A} Boxeo","\u{1F93C} WWE","\u{1F451} Leyendas"]},
+  mlb:{title:"Baseball",extra:["\u{1F3C6} World Series","\u{1F30F} NPB Jap\u00f3n","\u{1F1F0}\u{1F1F7} KBO Corea","\u{1F451} Leyendas"]},
+  nhl:{title:"Hockey",extra:["\u{1F3C6} Stanley Cup","\u2B50 All-Star","\u{1F30E} IIHF","\u{1F451} Leyendas"]},
+  rugby:{title:"Rugby",extra:["\u{1F3C6} World Cup","\u{1F30D} Six Nations","\u{1F30E} Rugby Champ.","\u2B50 Top 14","\u{1F451} Leyendas"]},
+  golf:{title:"Golf",extra:["\u{1F3C6} Majors","\u2B50 PGA Tour","\u{1F30D} European Tour","\u{1F6BA} LPGA","\u{1F451} Leyendas"]},
+  athletics:{title:"Atletismo",extra:["\u{1F3C6} World Champ.","\u{1F48E} Diamond League","\u{1F947} Olympics","\u{1F451} Leyendas"]},
+  acuaticos:{title:"Nataci\u00f3n",extra:["\u{1F3C6} World Champ.","\u{1F947} Olympics","\u{1F451} Leyendas"]},
+  cycling:{title:"Ciclismo",extra:["\u{1F3C6} Tour de France","\u{1F1EE}\u{1F1F9} Giro","\u{1F1EA}\u{1F1F8} Vuelta","\u{1F30D} World Champ.","\u{1F451} Leyendas"]},
+  volley:{title:"Volleyball",extra:["\u{1F3C6} World Champ.","\u2B50 Nations League","\u{1F3D6}\uFE0F Beach Volley","\u{1F451} Leyendas"]},
+  padel:{title:"P\u00e1del",extra:["\u{1F3C6} WPT","\u2B50 Premier P\u00e1del","\u{1F30D} Major Open","\u{1F451} Leyendas"]},
+  cricket:{title:"Cricket",extra:["\u{1F3C6} ICC World Cup","\u2B50 IPL","\u{1F1EE}\u{1F1F3} T20 League","\u{1F451} Leyendas"]}
+};
+function setup(){
+  Object.keys(SIDEBARS).forEach(function(k){
+    var sport=k;
+    var idMap={nba:"nba",nfl:"nfl",f1:"f1",ufc:"ufc",mlb:"baseball",nhl:"hockey",rugby:"rugby",golf:"golf",athletics:"athletics",acuaticos:"acuaticos",cycling:"cycling",volley:"volley",padel:"padel",cricket:"cricket"};
+    var panelId="panel-"+idMap[k];
+    var panel=document.getElementById(panelId);
+    if(!panel)return;
+    if(panel.querySelector(".v336-sb-"+k))return;
+    var info=SIDEBARS[k];
+    var aside=document.createElement("aside");
+    aside.className="v336-sb v336-sb-"+k;
+    var html='<h3>'+info.title+'</h3><div class="v336-mf"><button class="active">M</button><button>F</button></div><ul><li>\u{1F4CB} Reglas</li><li>\u{1F4DA} Historia</li><li>\u{1F3C5} Records</li><li>\u{1F4C5} Calendario</li>';
+    info.extra.forEach(function(e){html+='<li>'+e+'</li>';});
+    html+='</ul>';
+    aside.innerHTML=html;
+    panel.style.display="";panel.style.gap="0";
+    panel.insertBefore(aside,panel.firstChild);
+    aside.querySelectorAll(".v336-mf button").forEach(function(b){
+      b.addEventListener("click",function(){aside.querySelectorAll(".v336-mf button").forEach(function(o){o.classList.remove("active");});b.classList.add("active");});
+    });
+  });
+  /* Asegurar panel-X flex cuando se muestra */
+  var style=document.createElement("style");
+  style.textContent='html body[class*="v317-show-"] [id^="panel-"]:not(#panel-inicio){display:flex !important;gap:0 !important;align-items:flex-start;}';
+  document.head.appendChild(style);
+}
+if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",setup);}else{setup();}
+setTimeout(setup,500);setTimeout(setup,2000);
+})();
+</script>
 </body>
 </html>
 
