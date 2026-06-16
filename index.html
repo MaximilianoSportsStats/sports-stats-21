@@ -18693,6 +18693,61 @@ if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded"
 setTimeout(populate,500);setTimeout(populate,2000);
 })();
 </script>
+
+<style id="v332-chat-css">
+#v332-chat{position:fixed;bottom:20px;right:20px;z-index:9999;font-family:inherit;}
+#v332-chat-bubble{width:60px;height:60px;border-radius:50%;background:linear-gradient(135deg,#c0392b,#a32f24);color:#fff;border:none;cursor:pointer;font-size:28px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(192,57,43,0.4);transition:transform .2s,box-shadow .2s;}
+#v332-chat-bubble:hover{transform:scale(1.08);box-shadow:0 6px 24px rgba(192,57,43,0.6);}
+#v332-chat-window{position:absolute;bottom:74px;right:0;width:340px;max-width:calc(100vw - 40px);height:440px;max-height:calc(100vh - 120px);background:#fff;border-radius:16px;box-shadow:0 12px 40px rgba(0,0,0,0.18);display:none;flex-direction:column;overflow:hidden;}
+#v332-chat.v332-open #v332-chat-window{display:flex;animation:v332slide .25s ease;}
+@keyframes v332slide{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
+#v332-chat-header{background:linear-gradient(135deg,#c0392b,#a32f24);color:#fff;padding:16px 18px;display:flex;align-items:center;gap:12px;}
+#v332-chat-header .v332-avatar{width:36px;height:36px;border-radius:50%;background:#fff;color:#c0392b;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;}
+#v332-chat-header h4{margin:0;font-size:15px;font-weight:700;}
+#v332-chat-header .v332-status{font-size:11px;color:rgba(255,255,255,0.85);display:flex;align-items:center;gap:6px;}
+#v332-chat-header .v332-status::before{content:"";width:7px;height:7px;border-radius:50%;background:#22c55e;}
+#v332-chat-close{margin-left:auto;background:none;border:none;color:#fff;cursor:pointer;font-size:22px;line-height:1;opacity:0.85;}
+#v332-chat-close:hover{opacity:1;}
+#v332-chat-body{flex:1;overflow-y:auto;padding:16px;background:#f8f9fa;display:flex;flex-direction:column;gap:8px;}
+#v332-chat-body .v332-msg{padding:10px 14px;border-radius:16px;font-size:14px;line-height:1.45;max-width:80%;}
+#v332-chat-body .v332-msg.bot{background:#fff;border:1px solid #e5e7eb;align-self:flex-start;border-bottom-left-radius:4px;}
+#v332-chat-body .v332-msg.user{background:#c0392b;color:#fff;align-self:flex-end;border-bottom-right-radius:4px;}
+#v332-chat-footer{padding:12px;border-top:1px solid #eee;background:#fff;display:flex;gap:8px;}
+#v332-chat-input{flex:1;padding:10px 14px;border-radius:20px;border:1px solid #e5e7eb;font-size:14px;outline:none;}
+#v332-chat-input:focus{border-color:#c0392b;}
+#v332-chat-send{background:#c0392b;color:#fff;border:none;border-radius:20px;padding:10px 16px;font-size:13px;font-weight:600;cursor:pointer;}
+#v332-chat-send:hover{background:#a32f24;}
+</style>
+<script>
+(function(){if(window.__v332)return;window.__v332=true;
+function setup(){
+  if(document.getElementById("v332-chat"))return;
+  var wrap=document.createElement("div");
+  wrap.id="v332-chat";
+  wrap.innerHTML='<button id="v332-chat-bubble" title="Chatear con Max" aria-label="Abrir chat">\u{1F4AC}</button><div id="v332-chat-window"><div id="v332-chat-header"><div class="v332-avatar">M</div><div><h4>Max</h4><div class="v332-status">En l\u00ednea</div></div><button id="v332-chat-close" aria-label="Cerrar">\u00d7</button></div><div id="v332-chat-body"><div class="v332-msg bot">\u00a1Hola! Soy Max, el asistente de Sports Stats 21. \u00bfEn qu\u00e9 te puedo ayudar?</div><div class="v332-msg bot">Pod\u00e9s preguntarme por un deporte, estad\u00edsticas, c\u00f3mo armar tu perfil, o lo que necesites.</div></div><div id="v332-chat-footer"><input id="v332-chat-input" type="text" placeholder="Escrib\u00ed tu mensaje..."><button id="v332-chat-send">Enviar</button></div></div>';
+  document.body.appendChild(wrap);
+  var bubble=wrap.querySelector("#v332-chat-bubble");
+  var closeBtn=wrap.querySelector("#v332-chat-close");
+  var input=wrap.querySelector("#v332-chat-input");
+  var send=wrap.querySelector("#v332-chat-send");
+  var body=wrap.querySelector("#v332-chat-body");
+  bubble.addEventListener("click",function(){wrap.classList.toggle("v332-open");if(wrap.classList.contains("v332-open"))setTimeout(function(){input.focus();},250);});
+  closeBtn.addEventListener("click",function(){wrap.classList.remove("v332-open");});
+  function sendMsg(){
+    var txt=input.value.trim();if(!txt)return;
+    var um=document.createElement("div");um.className="v332-msg user";um.textContent=txt;body.appendChild(um);
+    input.value="";body.scrollTop=body.scrollHeight;
+    setTimeout(function(){
+      var bm=document.createElement("div");bm.className="v332-msg bot";bm.textContent="\u00a1Buena pregunta! Estoy en versi\u00f3n beta y todav\u00eda aprendiendo. Pronto voy a poder responderte sobre cualquier deporte. Mientras tanto, explor\u00e1 las secciones del sitio o escribinos a hola@sportsstats21.com.";body.appendChild(bm);body.scrollTop=body.scrollHeight;
+    },800);
+  }
+  send.addEventListener("click",sendMsg);
+  input.addEventListener("keydown",function(e){if(e.key==="Enter"){e.preventDefault();sendMsg();}});
+}
+if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",setup);}else{setup();}
+setTimeout(setup,500);
+})();
+</script>
 </body>
 </html>
 
