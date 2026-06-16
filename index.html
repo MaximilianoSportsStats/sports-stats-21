@@ -19712,6 +19712,51 @@ if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded"
 setTimeout(clean,500);setTimeout(clean,2000);
 })();
 </script>
+
+<style id="v348-soccer-fix-css">
+/* Hide v338 sidebar duplicate - use original #sidebar */
+html body .v338-soccer-sb{display:none !important;}
+/* Hide v336 sidebars duplicates too si #sidebar ya muestra */
+html body.v317-show-soccer .v336-sb{display:none !important;}
+/* Make panel-soccer take width and height for its content */
+html body.v317-show-soccer #panel-soccer{display:block !important;min-height:600px;width:100%;padding:0;gap:0;}
+/* My slides full width since sidebar is the original one */
+html body.v317-show-soccer .v338-slides{display:block !important;width:100%;padding:32px;min-height:600px;}
+/* Other sport panels - similar treatment */
+html body[class*="v317-show-"]:not(.v317-show-soccer) [id^="panel-"]:not(#panel-inicio):not(#panel-eventos){display:block !important;min-height:600px;width:100%;}
+</style>
+<script>
+(function(){if(window.__v348)return;window.__v348=true;
+function wireOldSidebar(){
+  var sb=document.getElementById("sidebar");if(!sb)return;
+  /* Make items clickable to navigate slides */
+  if(sb.dataset.v348Wired)return;sb.dataset.v348Wired="1";
+  /* Find ¿Qué es el Fútbol? button and items below */
+  sb.querySelectorAll("button,li,a").forEach(function(item){
+    var txt=(item.textContent||"").trim().toLowerCase();
+    var slide=null;
+    if(/qu[\u00e9e]\s*es\s*el\s*f[\u00fau]tbol|resumen/i.test(txt))slide="resumen";
+    else if(/historia/i.test(txt))slide="historia";
+    else if(/reglas/i.test(txt))slide="reglas";
+    else if(/competiciones/i.test(txt))slide="competiciones";
+    else if(/leyendas/i.test(txt))slide="leyendas";
+    else if(/records|r[\u00e9e]cords/i.test(txt))slide="records";
+    else if(/mundo|ligas.*copas|selecciones/i.test(txt))slide="mundo";
+    else if(/mundial(?!es)/i.test(txt))slide="mundiales";
+    if(slide){
+      item.style.cursor="pointer";
+      item.addEventListener("click",function(e){
+        e.preventDefault();
+        var slides=document.querySelector(".v338-slides");if(!slides)return;
+        slides.querySelectorAll(".v338-slide").forEach(function(s){s.classList.toggle("active",s.getAttribute("data-slide-id")===slide);});
+      });
+    }
+  });
+}
+if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",wireOldSidebar);}else{wireOldSidebar();}
+setTimeout(wireOldSidebar,500);setTimeout(wireOldSidebar,2000);
+})();
+</script>
 </body>
 </html>
 
