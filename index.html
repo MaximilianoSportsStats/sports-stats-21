@@ -18376,6 +18376,49 @@ html body.v326-mercado #v324-panel-masss21{display:none !important;}
   setTimeout(setup,2000);
 })();
 </script>
+
+<style id="v327-drawer-css">
+/* Drawer: flex column con footer sticky abajo */
+.v23-drawer,.drawer-menu,[class*="drawer"]{display:flex !important;flex-direction:column !important;}
+.v23-drawer > *:last-child,.drawer-menu > *:last-child{margin-top:auto !important;}
+/* Sticky para el footer del drawer "Sports Stats 21 · La red social..." */
+.v23-drawer .v23-footer,.drawer-footer,[class*="drawer-footer"]{position:sticky !important;bottom:0 !important;background:#fff !important;border-top:1px solid #eee !important;padding:14px 18px !important;font-size:12px !important;color:#999 !important;margin-top:auto !important;z-index:2 !important;}
+/* Items list area scrollable, footer fuera de scroll */
+.v23-drawer .v23-items,.drawer-items,[class*="drawer-content"]{flex:1 1 auto !important;overflow-y:auto !important;}
+/* Scrollbar pill custom - drawer */
+.v23-drawer::-webkit-scrollbar,.drawer-menu::-webkit-scrollbar,[class*="drawer"] ::-webkit-scrollbar{width:6px !important;height:6px !important;}
+.v23-drawer::-webkit-scrollbar-track,.drawer-menu::-webkit-scrollbar-track,[class*="drawer"] ::-webkit-scrollbar-track{background:transparent !important;}
+.v23-drawer::-webkit-scrollbar-thumb,.drawer-menu::-webkit-scrollbar-thumb,[class*="drawer"] ::-webkit-scrollbar-thumb{background:rgba(0,0,0,0.18) !important;border-radius:10px !important;}
+.v23-drawer::-webkit-scrollbar-thumb:hover,.drawer-menu::-webkit-scrollbar-thumb:hover,[class*="drawer"] ::-webkit-scrollbar-thumb:hover{background:rgba(192,57,43,0.6) !important;}
+/* Firefox */
+.v23-drawer,.drawer-menu,[class*="drawer"]{scrollbar-width:thin !important;scrollbar-color:rgba(0,0,0,0.18) transparent !important;}
+/* Global pill scrollbar (mas sutil que default) */
+::-webkit-scrollbar{width:8px;height:8px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:rgba(0,0,0,0.12);border-radius:10px;}
+::-webkit-scrollbar-thumb:hover{background:rgba(192,57,43,0.5);}
+</style>
+<script>
+/* v327 - FASE 1.4 Drawer footer sticky + scrollbar pill custom */
+(function(){if(window.__v327)return;window.__v327=true;
+  /* Detect drawer brand line "Sports Stats 21 ·" y marcarlo como footer */
+  function markFooter(){
+    var drawers=document.querySelectorAll(".v23-drawer,.drawer-menu,[class*=\"drawer\"]");
+    drawers.forEach(function(d){
+      var brandLine=Array.from(d.querySelectorAll("div,p,span,small")).find(function(el){
+        var t=(el.textContent||"").trim();
+        return /sports\s*stats\s*21.*red\s*social/i.test(t) && el.children.length<3;
+      });
+      if(brandLine && !brandLine.classList.contains("v23-footer")){
+        brandLine.classList.add("v23-footer");
+      }
+    });
+  }
+  if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",markFooter);}else{markFooter();}
+  setTimeout(markFooter,500);
+  setTimeout(markFooter,2000);
+})();
+</script>
 </body>
 </html>
 
