@@ -17846,6 +17846,43 @@ footer #v311-newsletter{border-bottom:1px solid #2a2a2a;margin-bottom:32px;}
   if(window.__v314)return;window.__v314=true;
 })();
 </script>
+
+<style id="v315-fix">
+#v311-newsletter{border-bottom:none !important;padding-bottom:48px !important;margin-bottom:24px !important;}
+#v312-newsletter-fix #v311-newsletter, footer #v311-newsletter{border-bottom:none !important;}
+#v314-newsletter-restyle #v311-newsletter{border-bottom:none !important;}
+</style>
+<script>
+/* v315 - REVERTIR v313 bug: scroll NO debe desbloquear v310-realnav */
+(function(){
+  if(window.__v315)return;window.__v315=true;
+  /* Remover v310-realnav que v313 puso por error - solo si user no clickeo de verdad */
+  if(!window.__userClickedReal){
+    document.body.classList.remove("v310-realnav");
+  }
+  /* Re-vigilar: si v310-realnav vuelve sin click real, sacarlo */
+  var iv=setInterval(function(){
+    if(window.__userClickedReal){clearInterval(iv);return;}
+    if(document.body.classList.contains("v310-realnav")){
+      document.body.classList.remove("v310-realnav");
+    }
+  },200);
+  /* Solo click trusted en boton de nav debe setear __userClickedReal */
+  document.addEventListener("click",function(e){
+    if(!e.isTrusted)return;
+    var target=e.target;
+    if(!target||!target.closest)return;
+    var navEl=target.closest(".sport-btn,.v56-item,.v26-has-dropdown,a[href],button.inicio-btn,.v23-drawer button,.drawer-menu button");
+    if(navEl){
+      window.__userClickedReal=true;
+      document.body.classList.add("v310-realnav");
+      clearInterval(iv);
+    }
+  },true);
+  /* Stop interval after 60s anyway */
+  setTimeout(function(){clearInterval(iv);},60000);
+})();
+</script>
 </body>
 </html>
 
