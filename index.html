@@ -18191,6 +18191,68 @@ footer #v311-newsletter .v311-success{color:#86efac !important;font-size:14px !i
   setTimeout(fixMercado,6000);
 })();
 </script>
+
+<style id="v323-masss21-nuke">
+/* Hide MasSS21 references hasta reconstruccion */
+[data-v323-hidden]{display:none !important;}
+</style>
+<script>
+/* v323 NUKE - destruir TODA referencia a MasSS21 actual */
+(function(){
+  if(window.__v323)return;window.__v323=true;
+  function nuke(){
+    /* 1. Drawer menu item */
+    var drawerItems=document.querySelectorAll(".v56-item,.v23-drawer li, .drawer-menu li");
+    drawerItems.forEach(function(item){
+      var t=(item.textContent||"").trim();
+      if(/m[áa]s sobre.{0,3}ss\s*21/i.test(t)){
+        item.setAttribute("data-v323-hidden","drawer");
+      }
+    });
+    /* 2. Top nav main menu - .v56-ul */
+    var topItems=document.querySelectorAll(".v56-ul li, .v26-main-nav li, .v26-main-nav button");
+    topItems.forEach(function(item){
+      var t=(item.textContent||"").trim();
+      if(/m[áa]s sobre.{0,3}ss\s*21/i.test(t)){
+        item.setAttribute("data-v323-hidden","topnav");
+      }
+    });
+    /* 3. Hero buttons */
+    var btns=document.querySelectorAll("button,a");
+    btns.forEach(function(btn){
+      var t=(btn.textContent||"").trim();
+      if(/m[áa]s sobre.{0,3}ss\s*21/i.test(t)){
+        /* Skip drawer items already marked */
+        if(btn.closest("[data-v323-hidden]"))return;
+        btn.setAttribute("data-v323-hidden","button");
+      }
+    });
+    /* 4. Any v87 element (was the original panel) */
+    var v87s=document.querySelectorAll("[id*=v87],[id*=masss21],[class*=masss21]");
+    v87s.forEach(function(el){
+      el.setAttribute("data-v323-hidden","v87");
+    });
+    /* 5. Remove any v317-show-masss21 class if it ever gets added */
+    document.body.classList.remove("v317-show-masss21");
+  }
+  if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",nuke);}else{nuke();}
+  setTimeout(nuke,500);
+  setTimeout(nuke,1500);
+  setTimeout(nuke,3000);
+  /* Also block any click that tries to navigate to masss21 */
+  document.addEventListener("click",function(e){
+    if(!e.isTrusted)return;
+    var target=e.target;
+    if(!target||!target.closest)return;
+    var t=(target.textContent||"").trim();
+    if(/m[áa]s sobre.{0,3}ss\s*21/i.test(t)){
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      console.log("[v323] blocked masss21 nav (rebuild pending)");
+    }
+  },true);
+})();
+</script>
 </body>
 </html>
 
