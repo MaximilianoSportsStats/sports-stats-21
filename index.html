@@ -17641,6 +17641,41 @@ body:not(.v304-clicked) #sidebar{display:none !important;}
   },0);
 })();
 </script>
+
+<script>
+/* v307 - FASE 1.1 brand "Sports Stats 21" con espacio correcto */
+(function(){
+  if(window.__v307)return;window.__v307=true;
+  function fix(){
+    /* Logo del header */
+    document.querySelectorAll(".logo, .v36-logo-clickable, .brand").forEach(function(el){
+      var walker=document.createTreeWalker(el,NodeFilter.SHOW_TEXT,null,false);
+      var node;
+      while((node=walker.nextNode())){
+        if(/SportsStats/.test(node.nodeValue)){
+          node.nodeValue=node.nodeValue.replace(/SportsStats(\s|21)/g,"Sports Stats$1");
+        }
+      }
+    });
+    /* Hero h1 - Sports<em>Stats</em>21 -> Sports <em>Stats</em> 21 */
+    document.querySelectorAll("h1,h2,h3").forEach(function(h){
+      if(/Sports<em>Stats/.test(h.innerHTML)){
+        h.innerHTML=h.innerHTML.replace(/Sports<em>Stats<\/em>/g,"Sports <em>Stats</em>");
+      }
+      var walker=document.createTreeWalker(h,NodeFilter.SHOW_TEXT,null,false);
+      var node;
+      while((node=walker.nextNode())){
+        if(/SportsStats/.test(node.nodeValue)){
+          node.nodeValue=node.nodeValue.replace(/SportsStats(\s|21)/g,"Sports Stats$1");
+        }
+      }
+    });
+  }
+  if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",fix);}else{fix();}
+  setTimeout(fix,500);
+  setTimeout(fix,2000);
+})();
+</script>
 </body>
 </html>
 
