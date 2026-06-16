@@ -18253,6 +18253,75 @@ footer #v311-newsletter .v311-success{color:#86efac !important;font-size:14px !i
   },true);
 })();
 </script>
+
+<style id="v324-masss21-css">
+/* Panel MasSS21 oculto por defecto, visible solo con body.v324-masss21 */
+#v324-panel-masss21{display:none;padding:40px 24px;max-width:1100px;margin:0 auto;}
+html body.v324-masss21 #v324-panel-masss21{display:block !important;}
+html body.v324-masss21 #panel-inicio{display:none !important;}
+/* Style placeholder */
+#v324-panel-masss21 h1{font-size:32px;color:#c0392b;margin:0 0 16px;font-weight:700;}
+#v324-panel-masss21 .lead{font-size:17px;line-height:1.6;color:#444;max-width:760px;margin:0 0 32px;}
+#v324-panel-masss21 .v324-placeholder{background:#f7f7f9;border:1px dashed #ccc;padding:24px;border-radius:10px;text-align:center;color:#888;font-size:14px;}
+</style>
+<script>
+/* v324 - FASE 5.1 reconstruir MasSS21 (chasis) */
+(function(){
+  if(window.__v324)return;window.__v324=true;
+  function setup(){
+    /* 1. Re-activar menu items (sacar data-v323-hidden) */
+    document.querySelectorAll("[data-v323-hidden]").forEach(function(el){
+      el.removeAttribute("data-v323-hidden");
+    });
+    /* 2. Crear panel-masss21 si no existe */
+    var panel=document.getElementById("v324-panel-masss21");
+    if(!panel){
+      var inicio=document.getElementById("panel-inicio");
+      if(!inicio||!inicio.parentNode)return;
+      panel=document.createElement("section");
+      panel.id="v324-panel-masss21";
+      panel.innerHTML="<h1>\u{1F31F} M\u00e1s Sobre Sports Stats 21</h1>"+
+        "<p class=\"lead\">Sports Stats 21 es la red social de los deportes. Una plataforma \u00fanica para seguir, comparar y conectar alrededor de tus disciplinas favoritas.</p>"+
+        "<div class=\"v324-placeholder\">Pr\u00f3ximamente: equipo, misi\u00f3n, FAQ, roadmap, contacto, prensa y m\u00e1s.</div>";
+      inicio.parentNode.insertBefore(panel,inicio.nextSibling);
+    }
+    /* 3. Wire click en menu MasSS21 + hero button */
+    document.body.addEventListener("click",handleClick,true);
+  }
+  /* 4. Handler que reemplaza el bloqueo de v323 */
+  function handleClick(e){
+    if(!e.isTrusted)return;
+    var target=e.target;
+    if(!target||!target.closest)return;
+    var navEl=target.closest(".v56-item, .v23-drawer li, button, a, [data-v324-masss21]");
+    if(!navEl)return;
+    var txt=(navEl.textContent||"").trim();
+    /* MasSS21 click → switch */
+    if(/m[áa]s sobre.{0,3}ss\s*21/i.test(txt)){
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      document.body.classList.add("v324-masss21");
+      /* Clear all sport classes too */
+      ["soccer","tennis","f1","nba","ufc","baseball","hockey","nfl","rugby","golf","padel","acuaticos","otros","athletics","cycling","volley","cricket","eventos"].forEach(function(s){document.body.classList.remove("v317-show-"+s);});
+      window.scrollTo({top:0,behavior:"smooth"});
+      return;
+    }
+    /* Inicio click → exit MasSS21 mode */
+    if(/inicio/i.test(txt) && !/(deport|m[áa]s sobre)/i.test(txt)){
+      document.body.classList.remove("v324-masss21");
+      return;
+    }
+    /* Click on sport-btn → also exit MasSS21 */
+    if(navEl.classList && navEl.classList.contains("sport-btn")){
+      document.body.classList.remove("v324-masss21");
+      return;
+    }
+  }
+  if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",setup);}else{setup();}
+  setTimeout(setup,500);
+  setTimeout(setup,2000);
+})();
+</script>
 </body>
 </html>
 
