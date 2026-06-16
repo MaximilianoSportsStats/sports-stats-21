@@ -17593,6 +17593,54 @@ body:not(.v304-clicked) #sidebar{display:none !important;}
   setTimeout(function(){document.body.classList.remove("v304-clicked");},2000);
 })();
 </script>
+
+<script>
+/* v306 - interceptar switchSport para bloquear auto-nav antes de primer click real */
+(function(){
+  if(window.__v306)return;window.__v306=true;
+  window.__userClicked=false;
+  document.addEventListener("click",function(e){if(e.isTrusted)window.__userClicked=true;},true);
+  document.addEventListener("keydown",function(e){if(e.isTrusted)window.__userClicked=true;},true);
+  /* Wait for switchSport definition, then wrap */
+  function wrap(){
+    if(typeof window.switchSport!=="function")return false;
+    if(window.switchSport.__wrapped)return true;
+    var orig=window.switchSport;
+    var wrapped=function(sport){
+      if(!window.__userClicked){
+        console.log("[v306] blocked auto switchSport:",sport);
+        return;
+      }
+      return orig.apply(this,arguments);
+    };
+    wrapped.__wrapped=true;
+    window.switchSport=wrapped;
+    return true;
+  }
+  /* Try immediately and at intervals until found */
+  if(!wrap()){
+    var tries=0;
+    var iv=setInterval(function(){
+      tries++;
+      if(wrap()||tries>40){clearInterval(iv);}
+    },50);
+  }
+  /* Also override classList.add on panel-soccer to block .active before user click */
+  setTimeout(function(){
+    var ps=document.getElementById("panel-soccer");
+    if(!ps)return;
+    var origAdd=ps.classList.add.bind(ps.classList);
+    ps.classList.add=function(){
+      var args=Array.from(arguments);
+      if(!window.__userClicked && args.includes("active")){
+        console.log("[v306] blocked panel-soccer.active");
+        return;
+      }
+      return origAdd.apply(null,arguments);
+    };
+  },0);
+})();
+</script>
 </body>
 </html>
 
