@@ -18566,6 +18566,76 @@ html body.v326-mercado #v324-panel-masss21{display:none !important;}
   setTimeout(populate,2000);
 })();
 </script>
+
+<style id="v330-css">
+#v324-panel-masss21 .v330-faq{margin-top:24px;}
+#v324-panel-masss21 .v330-faq details{background:#f8f9fa;border:1px solid #e5e7eb;border-radius:10px;padding:0;margin-bottom:8px;transition:background .15s;}
+#v324-panel-masss21 .v330-faq details[open]{background:#fff;box-shadow:0 2px 8px rgba(0,0,0,0.04);}
+#v324-panel-masss21 .v330-faq summary{padding:16px 20px;font-weight:600;color:#1a1a1a;cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;font-size:15px;}
+#v324-panel-masss21 .v330-faq summary::-webkit-details-marker{display:none;}
+#v324-panel-masss21 .v330-faq summary::after{content:"+";color:#c0392b;font-size:22px;font-weight:300;}
+#v324-panel-masss21 .v330-faq details[open] summary::after{content:"\u2212";}
+#v324-panel-masss21 .v330-faq .v330-answer{padding:0 20px 18px;font-size:14px;line-height:1.6;color:#555;}
+#v324-panel-masss21 .v330-roadmap{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-top:24px;}
+#v324-panel-masss21 .v330-quarter{background:#fff;border:1px solid #e5e7eb;border-top:4px solid #c0392b;border-radius:10px;padding:20px;}
+#v324-panel-masss21 .v330-quarter h3{margin:0 0 12px;font-size:15px;color:#c0392b;text-transform:uppercase;letter-spacing:.5px;}
+#v324-panel-masss21 .v330-quarter ul{margin:0;padding-left:18px;font-size:13px;color:#555;line-height:1.7;}
+#v324-panel-masss21 .v330-press{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin-top:24px;}
+#v324-panel-masss21 .v330-press-card{background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:18px;text-align:center;}
+#v324-panel-masss21 .v330-press-card .v330-press-icon{font-size:32px;margin-bottom:8px;}
+#v324-panel-masss21 .v330-press-card h4{margin:0 0 6px;font-size:14px;color:#1a1a1a;}
+#v324-panel-masss21 .v330-press-card p{margin:0;font-size:12px;color:#888;line-height:1.5;}
+#v324-panel-masss21 .v330-press-card a{display:inline-block;margin-top:10px;font-size:12px;color:#c0392b;text-decoration:none;font-weight:600;}
+#v324-panel-masss21 .v330-press-card a:hover{text-decoration:underline;}
+</style>
+<script>
+/* v330 - FASE 5.4 FAQ + Roadmap + Prensa */
+(function(){if(window.__v330)return;window.__v330=true;
+function populate(){
+  var panel=document.getElementById("v324-panel-masss21");if(!panel)return;
+  if(panel.querySelector("[data-v330-section]"))return;
+  var html="";
+  /* FAQ */
+  html+='<section class="v328-section" data-v330-section="faq"><h2>\u2753 Preguntas frecuentes</h2><p>Las dudas m\u00e1s comunes resueltas en 30 segundos.</p><div class="v330-faq">';
+  var faqs=[
+    {q:"\u00bfQu\u00e9 es Sports Stats 21?",a:"Sports Stats 21 es la red social de los deportes. Una plataforma para seguir, comparar y conectar con tus deportes y deportistas favoritos, con data hist\u00f3rica desde 1888."},
+    {q:"\u00bfEs gratis?",a:"S\u00ed, el acceso b\u00e1sico es 100% gratis. Pr\u00f3ximamente tendremos planes premium con features adicionales para clubes y reclutadores profesionales."},
+    {q:"\u00bfQu\u00e9 deportes cubren?",a:"15 deportes principales (F\u00fatbol, Tenis, Basketball, F1, NFL, UFC, MLB, NHL, Rugby, Golf, Atletismo, Nataci\u00f3n, Ciclismo, Volleyball, P\u00e1del) m\u00e1s 12 disciplinas en Otros Deportes y mega-eventos globales."},
+    {q:"\u00bfPuedo crear mi propio perfil deportivo?",a:"S\u00ed. Pr\u00f3ximamente vas a poder armar tu perfil de jugador amateur con tus stats, partidos jugados, equipo y ligas. Ideal para mostrar tu talento a scouts."},
+    {q:"\u00bfLas estad\u00edsticas son oficiales?",a:"Usamos fuentes oficiales (FIFA, NBA, ATP, etc.) y data abierta. En el footer ten\u00e9s acceso al detalle de fuentes de datos."},
+    {q:"\u00bfTienen app m\u00f3vil?",a:"Por ahora somos solo web (responsive). App nativa iOS/Android est\u00e1 en el roadmap para 2028."},
+    {q:"\u00bfC\u00f3mo me suscribo al newsletter?",a:"Bajando hasta el footer encontras la caja del newsletter. Recib\u00edmos un mail cada lunes con lo mejor de la semana."}
+  ];
+  faqs.forEach(function(f){html+='<details><summary>'+f.q+'</summary><div class="v330-answer">'+f.a+'</div></details>';});
+  html+='</div></section>';
+  /* Roadmap */
+  html+='<section class="v328-section" data-v330-section="roadmap"><h2>\u{1F5FA}\uFE0F Roadmap del producto</h2><p>Lo que viene en los pr\u00f3ximos meses. Las fechas son estimadas y se actualizan con el feedback de la comunidad.</p><div class="v330-roadmap">';
+  var qs=[
+    {q:"Q3 2026",items:["Estabilizaci\u00f3n post-lanzamiento","Newsletter semanal automatizada","Reto diario expandido"]},
+    {q:"Q4 2026",items:["Login + perfiles de usuario","Sistema de Favoritos persistente","Notificaciones por mail"]},
+    {q:"Q1 2027",items:["Integraci\u00f3n APIs oficiales","Resultados en vivo reales","Stats jugadores poblados"]},
+    {q:"Q2 2027",items:["Feed social de amigos","Comentarios en noticias","Blogs propios de usuarios"]},
+    {q:"H2 2027",items:["Modo Reclutador","Centros Deportivos con mapa","Comparador avanzado"]},
+    {q:"2028+",items:["App nativa iOS/Android","Streaming amateur","Sports Stats Cup"]}
+  ];
+  qs.forEach(function(q){html+='<div class="v330-quarter"><h3>'+q.q+'</h3><ul>';q.items.forEach(function(it){html+='<li>'+it+'</li>';});html+='</ul></div>';});
+  html+='</div></section>';
+  /* Prensa */
+  html+='<section class="v328-section" data-v330-section="prensa"><h2>\u{1F4F0} Prensa & Press kit</h2><p>Recursos para periodistas, bloggers e influencers que quieran cubrir Sports Stats 21.</p><div class="v330-press">';
+  var press=[
+    {icon:"\u{1F4C4}",t:"Fact sheet",d:"PDF con datos clave del proyecto.",link:"Descargar"},
+    {icon:"\u{1F5BC}\uFE0F",t:"Logos",d:"Logos en alta resoluci\u00f3n PNG/SVG.",link:"Descargar"},
+    {icon:"\u{1F4F8}",t:"Screenshots",d:"Capturas de la plataforma en uso.",link:"Ver"},
+    {icon:"\u{1F4E7}",t:"Contacto prensa",d:"Escrib\u00ed para entrevistas o consultas.",link:"prensa@sportsstats21.com"}
+  ];
+  press.forEach(function(p){html+='<div class="v330-press-card"><div class="v330-press-icon">'+p.icon+'</div><h4>'+p.t+'</h4><p>'+p.d+'</p><a href="#">'+p.link+'</a></div>';});
+  html+='</div></section>';
+  panel.insertAdjacentHTML("beforeend",html);
+}
+if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",populate);}else{populate();}
+setTimeout(populate,500);setTimeout(populate,2000);
+})();
+</script>
 </body>
 </html>
 
