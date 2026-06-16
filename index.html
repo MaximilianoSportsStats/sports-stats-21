@@ -19789,6 +19789,48 @@ setTimeout(ensureSlideVisible,500);setTimeout(ensureSlideVisible,2000);
 document.addEventListener("click",function(e){if(e.isTrusted)setTimeout(ensureSlideVisible,200);},true);
 })();
 </script>
+
+<script>
+/* v350 - REMOVER v29-todos-page del DOM permanentemente + asegurar panel-soccer visible */
+(function(){if(window.__v350)return;window.__v350=true;
+function nuke(){
+  /* Remover v29-todos-page entero del DOM */
+  var todos=document.getElementById("v29-todos-page");
+  if(todos)todos.remove();
+  /* Remover v35-nb-page tambien */
+  var nb=document.getElementById("v35-nb-page");
+  if(nb)nb.remove();
+  /* Remover v25-intro (la seccion vieja "Que es Sports Stats 21" que ya esta en MasSS21) */
+  var intro=document.getElementById("v25-intro");
+  if(intro)intro.remove();
+  /* Tambien remover v16-news-section y similar viejas */
+  ["v16-news-section","v25-blogs-section","v17-updates-widget","v27-noticias-header","v27-blogs-header"].forEach(function(id){
+    var el=document.getElementById(id);if(el)el.remove();
+  });
+}
+if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",nuke);}else{nuke();}
+/* Tambien ejecutar al cargar y luego periodicamente por si el sitio los recrea */
+setTimeout(nuke,500);setTimeout(nuke,2000);setTimeout(nuke,5000);
+/* Cuando user click en sport-btn, asegurar que panel-soccer sea visible y nuke todos otra vez */
+document.addEventListener("click",function(e){
+  if(!e.isTrusted)return;
+  var btn=e.target.closest && e.target.closest(".sport-btn");
+  if(!btn)return;
+  setTimeout(function(){
+    nuke();
+    /* Si entramos a soccer, asegurar panel-soccer visible */
+    if(document.body.classList.contains("v317-show-soccer")){
+      var ps=document.getElementById("panel-soccer");
+      if(ps){ps.style.setProperty("display","block","important");ps.style.setProperty("min-height","600px","important");}
+      var slides=document.querySelector(".v338-slides");
+      if(slides){slides.style.setProperty("display","block","important");slides.style.setProperty("width","100%","important");}
+    }
+  },200);
+  setTimeout(nuke,500);
+  setTimeout(nuke,1500);
+},true);
+})();
+</script>
 </body>
 </html>
 
