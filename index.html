@@ -17789,6 +17789,30 @@ html body:not(.v310-realnav) .v114-tenis-sidebar{display:none !important;}
   setTimeout(create,2000);
 })();
 </script>
+
+<style id="v312-newsletter-fix">
+#v311-newsletter{background:transparent !important;border-top:none !important;padding:48px 24px 32px !important;margin-bottom:16px;}
+#v311-newsletter h3{color:#fff !important;}
+footer #v311-newsletter{border-bottom:1px solid #2a2a2a;margin-bottom:32px;}
+</style>
+<script>
+/* v312 - FASE 2.1.fix mover newsletter dentro del footer negro */
+(function(){
+  if(window.__v312)return;window.__v312=true;
+  function move(){
+    var nl=document.getElementById("v311-newsletter");
+    var footer=document.querySelector("footer");
+    if(!nl||!footer)return;
+    /* Si ya esta dentro del footer no mover */
+    if(footer.contains(nl) && footer.firstElementChild===nl)return;
+    /* Mover como primer hijo del footer */
+    footer.insertBefore(nl,footer.firstChild);
+  }
+  if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",move);}else{move();}
+  setTimeout(move,500);
+  setTimeout(move,2000);
+})();
+</script>
 </body>
 </html>
 
