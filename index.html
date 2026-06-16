@@ -18477,6 +18477,95 @@ html body.v326-mercado #v324-panel-masss21{display:none !important;}
   setTimeout(populate,2000);
 })();
 </script>
+
+<style id="v329-mass-css">
+#v324-panel-masss21 .v329-team-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px;margin-top:24px;}
+#v324-panel-masss21 .v329-team-card{background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:20px;text-align:center;transition:transform .2s,box-shadow .2s;}
+#v324-panel-masss21 .v329-team-card:hover{transform:translateY(-3px);box-shadow:0 6px 18px rgba(0,0,0,0.08);}
+#v324-panel-masss21 .v329-avatar{width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,#c0392b,#a32f24);color:#fff;font-size:32px;font-weight:700;display:flex;align-items:center;justify-content:center;margin:0 auto 14px;letter-spacing:1px;}
+#v324-panel-masss21 .v329-team-card h3{margin:0 0 4px;font-size:16px;color:#1a1a1a;font-weight:700;}
+#v324-panel-masss21 .v329-team-card .v329-role{font-size:12px;color:#c0392b;text-transform:uppercase;letter-spacing:.5px;font-weight:600;margin-bottom:10px;}
+#v324-panel-masss21 .v329-team-card p{font-size:13px;color:#666;line-height:1.5;margin:0;}
+/* Embajadores - card horizontal con icono grande */
+#v324-panel-masss21 .v329-amb-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-top:24px;}
+#v324-panel-masss21 .v329-amb-card{background:linear-gradient(135deg,#1a1a1a,#2a2a2a);color:#fff;border-radius:12px;padding:22px;display:flex;gap:16px;align-items:center;}
+#v324-panel-masss21 .v329-amb-icon{font-size:42px;flex-shrink:0;}
+#v324-panel-masss21 .v329-amb-card h3{margin:0 0 4px;font-size:16px;color:#fff;}
+#v324-panel-masss21 .v329-amb-card p{margin:0;font-size:13px;color:rgba(255,255,255,0.7);line-height:1.45;}
+/* Testimonios - quote cards */
+#v324-panel-masss21 .v329-test-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;margin-top:24px;}
+#v324-panel-masss21 .v329-test-card{background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:24px;position:relative;}
+#v324-panel-masss21 .v329-test-card::before{content:"\201C";position:absolute;top:8px;left:14px;font-size:48px;color:#c0392b;opacity:0.3;line-height:1;font-family:Georgia,serif;}
+#v324-panel-masss21 .v329-test-quote{font-size:14px;color:#444;line-height:1.6;margin:8px 0 16px;font-style:italic;padding-left:22px;}
+#v324-panel-masss21 .v329-test-author{display:flex;gap:12px;align-items:center;padding-top:14px;border-top:1px solid #f0f0f0;}
+#v324-panel-masss21 .v329-test-mini{width:40px;height:40px;border-radius:50%;background:#f0f0f0;display:flex;align-items:center;justify-content:center;font-size:18px;}
+#v324-panel-masss21 .v329-test-info strong{display:block;font-size:13px;color:#1a1a1a;}
+#v324-panel-masss21 .v329-test-info small{font-size:12px;color:#888;}
+</style>
+<script>
+/* v329 - FASE 5.3 Equipo + Embajadores + Testimonios */
+(function(){if(window.__v329)return;window.__v329=true;
+  function populate(){
+    var panel=document.getElementById("v324-panel-masss21");
+    if(!panel)return;
+    if(panel.querySelector("[data-v329-section]"))return;
+    
+    var html="";
+    /* Equipo */
+    html+='<section class="v328-section" data-v329-section="equipo">';
+    html+='<h2>\u{1F465} Nuestro equipo</h2>';
+    html+='<p>Un equipo chico, multidisciplinario, apasionado por el deporte y la tecnolog\u00eda. Argentinos y chilenos trabajando en remoto desde Sudam\u00e9rica.</p>';
+    html+='<div class="v329-team-grid">';
+    var team=[
+      {ini:"MV",name:"Maximiliano Valenzuela",role:"Founder & CEO",bio:"Apasionado por el deporte amateur. Vision producto y estrategia."},
+      {ini:"AM",name:"Ana Mart\u00ednez",role:"CTO",bio:"Lider t\u00e9cnica, arquitectura y datos en tiempo real."},
+      {ini:"DR",name:"Diego Rodr\u00edguez",role:"Head of Content",bio:"Periodista deportivo, cura noticias y blogs editoriales."},
+      {ini:"LS",name:"Luc\u00eda Silva",role:"Head of Product",bio:"UX/UI lead, dise\u00f1o de experiencia y testing con usuarios."},
+      {ini:"JC",name:"Joaqu\u00edn C\u00e1ceres",role:"Data Engineer",bio:"Pipelines de datos, APIs FIFA/NBA/ATP, scraping \u00e9tico."},
+      {ini:"SV",name:"Sof\u00eda Vargas",role:"Community Manager",bio:"Conecta con jugadores amateurs y clubes locales."}
+    ];
+    team.forEach(function(m){
+      html+='<div class="v329-team-card"><div class="v329-avatar">'+m.ini+'</div><h3>'+m.name+'</h3><div class="v329-role">'+m.role+'</div><p>'+m.bio+'</p></div>';
+    });
+    html+='</div></section>';
+    /* Embajadores */
+    html+='<section class="v328-section" data-v329-section="embajadores">';
+    html+='<h2>\u2B50 Embajadores deportivos</h2>';
+    html+='<p>Deportistas, periodistas y entrenadores que nos acompa\u00f1an y avalan el proyecto desde el d\u00eda uno.</p>';
+    html+='<div class="v329-amb-grid">';
+    var amb=[
+      {icon:"\u26BD",name:"Capitanes de Liga Amateur",desc:"Referentes de ligas barriales argentinas y chilenas que ayudan a poblar data hist\u00f3rica."},
+      {icon:"\u{1F3BE}",name:"Coaches de academias",desc:"Entrenadores que usan la plataforma para mostrar el desarrollo de sus alumnos."},
+      {icon:"\u{1F3A4}",name:"Periodistas deportivos",desc:"Colaboran con an\u00e1lisis y editoriales para Noticias y Blogs."},
+      {icon:"\u{1F3C6}",name:"Ex-profesionales",desc:"Jugadores retirados que aportan testimonios y mentor\u00edas a la comunidad."}
+    ];
+    amb.forEach(function(a){
+      html+='<div class="v329-amb-card"><div class="v329-amb-icon">'+a.icon+'</div><div><h3>'+a.name+'</h3><p>'+a.desc+'</p></div></div>';
+    });
+    html+='</div></section>';
+    /* Testimonios */
+    html+='<section class="v328-section" data-v329-section="testimonios">';
+    html+='<h2>\u{1F4AC} Testimonios</h2>';
+    html+='<p>Lo que dicen quienes ya usan Sports Stats 21 todos los d\u00edas.</p>';
+    html+='<div class="v329-test-grid">';
+    var tests=[
+      {q:"Por fin un lugar donde puedo guardar mis stats de la liga de los s\u00e1bados. Antes era todo a mano en un cuaderno.",icon:"\u26BD",name:"Mart\u00edn G.",role:"Jugador amateur, Buenos Aires"},
+      {q:"Sigo a 30 deportes distintos y este es el primer sitio que me funciona como hub para todo. El ticker en vivo es genial.",icon:"\u{1F3CB}\uFE0F",name:"Camila R.",role:"Fan multideporte, Santiago"},
+      {q:"Uso el modo Reclutador para buscar talento universitario. La data hist\u00f3rica de NCAA me ahorra horas.",icon:"\u{1F50D}",name:"Roberto K.",role:"Scout, Madrid"},
+      {q:"Como community manager de un club, la herramienta de comparar y los reportes son fundamentales.",icon:"\u{1F4E2}",name:"Florencia M.",role:"CM de club juvenil"}
+    ];
+    tests.forEach(function(t){
+      html+='<div class="v329-test-card"><p class="v329-test-quote">'+t.q+'</p><div class="v329-test-author"><div class="v329-test-mini">'+t.icon+'</div><div class="v329-test-info"><strong>'+t.name+'</strong><small>'+t.role+'</small></div></div></div>';
+    });
+    html+='</div></section>';
+    
+    panel.insertAdjacentHTML("beforeend",html);
+  }
+  if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",populate);}else{populate();}
+  setTimeout(populate,500);
+  setTimeout(populate,2000);
+})();
+</script>
 </body>
 </html>
 
