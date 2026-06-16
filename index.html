@@ -19702,6 +19702,35 @@ if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded"
 setTimeout(clean,500);setTimeout(clean,2000);setTimeout(clean,5000);
 })();
 </script>
+
+<style id="v346-drawer-fix-css">
+/* OVERRIDE v345 que era muy amplio. Solo ocultar UL hermano DIRECTO de v56-ul (no nested) */
+html body aside.v36-side ul:not(#v56-ul){display:revert !important;}
+html body aside.v36-side > .v344-items > ul:not(#v56-ul){display:none !important;}
+html body aside.v36-side > div.v344-items > ul:not(#v56-ul){display:none !important;}
+/* Asegurar sub-lists DENTRO de v56-ul respeten su display normal */
+html body aside.v36-side #v56-ul ul{display:revert !important;}
+html body aside.v36-side #v56-ul ul.v56-sub-list{display:revert !important;}
+</style>
+<script>
+(function(){if(window.__v346)return;window.__v346=true;
+function restore(){
+  /* Remove cualquier inline display:none que v345 puso en sub-lists dentro de v56-ul */
+  var side=document.querySelector("aside.v36-side");if(!side)return;
+  var v56=side.querySelector("#v56-ul");if(!v56)return;
+  /* Limpiar inline style display:none de sub-uls dentro de v56-ul */
+  v56.querySelectorAll("ul").forEach(function(ul){
+    if(ul.style.display==="none")ul.style.display="";
+  });
+  /* Pero asegurar que UL orphan hermano sigue oculto */
+  Array.from(side.querySelectorAll("aside.v36-side > .v344-items > ul, aside.v36-side > div.v344-items > ul")).forEach(function(ul){
+    if(ul.id!=="v56-ul"){ul.style.display="none";}
+  });
+}
+if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",restore);}else{restore();}
+setTimeout(restore,500);setTimeout(restore,2000);setTimeout(restore,5000);
+})();
+</script>
 </body>
 </html>
 
