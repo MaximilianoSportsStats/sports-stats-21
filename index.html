@@ -18636,6 +18636,63 @@ if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded"
 setTimeout(populate,500);setTimeout(populate,2000);
 })();
 </script>
+
+<style id="v331-css">
+#v324-panel-masss21 .v331-sust{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px;margin-top:24px;}
+#v324-panel-masss21 .v331-sust-card{background:linear-gradient(135deg,#dcfce7,#bbf7d0);border-radius:12px;padding:22px;color:#1a1a1a;}
+#v324-panel-masss21 .v331-sust-card .v331-icon{font-size:28px;margin-bottom:8px;}
+#v324-panel-masss21 .v331-sust-card h3{margin:0 0 8px;font-size:16px;}
+#v324-panel-masss21 .v331-sust-card p{margin:0;font-size:13px;line-height:1.5;color:#365;}
+#v324-panel-masss21 .v331-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;margin-top:24px;}
+#v324-panel-masss21 .v331-stat{background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:24px;text-align:center;}
+#v324-panel-masss21 .v331-stat .v331-num{font-size:36px;font-weight:800;color:#c0392b;line-height:1;margin-bottom:6px;}
+#v324-panel-masss21 .v331-stat .v331-label{font-size:13px;color:#666;text-transform:uppercase;letter-spacing:.5px;font-weight:600;}
+#v324-panel-masss21 .v331-contact{background:#1a1a1a;color:#fff;border-radius:14px;padding:32px;margin-top:24px;display:grid;grid-template-columns:1fr 1fr;gap:24px;}
+@media(max-width:640px){#v324-panel-masss21 .v331-contact{grid-template-columns:1fr;}}
+#v324-panel-masss21 .v331-contact h3{color:#fff;margin:0 0 12px;font-size:18px;}
+#v324-panel-masss21 .v331-contact p,#v324-panel-masss21 .v331-contact a{color:rgba(255,255,255,0.8);font-size:14px;line-height:1.7;}
+#v324-panel-masss21 .v331-contact a{color:#fff;font-weight:600;text-decoration:none;display:block;margin:4px 0;}
+#v324-panel-masss21 .v331-contact a:hover{color:#ff8a7a;}
+#v324-panel-masss21 .v331-form{display:flex;flex-direction:column;gap:10px;}
+#v324-panel-masss21 .v331-form input,#v324-panel-masss21 .v331-form textarea{padding:12px 14px;border-radius:8px;border:1px solid rgba(255,255,255,0.18);background:rgba(255,255,255,0.06);color:#fff;font-size:14px;font-family:inherit;}
+#v324-panel-masss21 .v331-form input::placeholder,#v324-panel-masss21 .v331-form textarea::placeholder{color:rgba(255,255,255,0.4);}
+#v324-panel-masss21 .v331-form button{padding:12px;border-radius:8px;border:none;background:#fff;color:#1a1a1a;font-weight:700;cursor:pointer;font-size:14px;}
+#v324-panel-masss21 .v331-form button:hover{background:#e2e8f0;}
+</style>
+<script>
+(function(){if(window.__v331)return;window.__v331=true;
+function populate(){
+  var panel=document.getElementById("v324-panel-masss21");if(!panel)return;
+  if(panel.querySelector("[data-v331-section]"))return;
+  var html="";
+  /* Sustentabilidad */
+  html+='<section class="v328-section" data-v331-section="sust"><h2>\u{1F33F} Sustentabilidad & compromiso</h2><p>El deporte mueve millones. Lo que hagamos como plataforma tambi\u00e9n importa.</p><div class="v331-sust">';
+  var sust=[
+    {icon:"\u{1F30D}",t:"Hosting verde",d:"Servidores con energ\u00eda renovable. Footprint de carbono medido y compensado."},
+    {icon:"\u2696\uFE0F",t:"Inclusi\u00f3n",d:"Cobertura igualitaria de deportes femeninos, paral\u00edmpicos y comunitarios."},
+    {icon:"\u{1F91D}",t:"Open data",d:"Aportamos datasets p\u00fablicos para investigadores y educadores."},
+    {icon:"\u{1F4DA}",t:"Educaci\u00f3n",d:"Programa de stats para escuelas con licencia gratuita."}
+  ];
+  sust.forEach(function(s){html+='<div class="v331-sust-card"><div class="v331-icon">'+s.icon+'</div><h3>'+s.t+'</h3><p>'+s.d+'</p></div>';});
+  html+='</div></section>';
+  /* Reportes de impacto */
+  html+='<section class="v328-section" data-v331-section="reportes"><h2>\u{1F4CA} Reportes de impacto</h2><p>N\u00fameros que reflejan lo que la comunidad construye con nosotros.</p><div class="v331-stats">';
+  var stats=[
+    {n:"50K+",l:"Usuarios beta"},{n:"15",l:"Deportes"},{n:"139",l:"Selecciones"},{n:"1888",l:"Data desde"},{n:"6",l:"Idiomas"},{n:"24/7",l:"Resultados live"}
+  ];
+  stats.forEach(function(s){html+='<div class="v331-stat"><div class="v331-num">'+s.n+'</div><div class="v331-label">'+s.l+'</div></div>';});
+  html+='</div></section>';
+  /* Contacto */
+  html+='<section class="v328-section" data-v331-section="contacto"><h2>\u{1F4EC} Cont\u00e1ctanos</h2><p>Estamos para escucharte. Sugerencias, partnerships, prensa o consultas.</p><div class="v331-contact"><div><h3>Canales directos</h3><p>Soporte general:</p><a href="#">hola@sportsstats21.com</a><p style="margin-top:10px;">Prensa:</p><a href="#">prensa@sportsstats21.com</a><p style="margin-top:10px;">Partnerships:</p><a href="#">partners@sportsstats21.com</a><p style="margin-top:10px;">Carreras:</p><a href="#">jobs@sportsstats21.com</a></div><form class="v331-form" onsubmit="return false;"><h3>Mand\u00e1 un mensaje</h3><input type="text" placeholder="Tu nombre" required><input type="email" placeholder="Nombre.apellido@email.com" required><textarea rows="4" placeholder="Tu mensaje..." required></textarea><button type="submit">Enviar mensaje</button></form></div></section>';
+  panel.insertAdjacentHTML("beforeend",html);
+  /* wire form */
+  var form=panel.querySelector(".v331-form");
+  if(form){form.addEventListener("submit",function(e){e.preventDefault();var btn=form.querySelector("button");btn.textContent="\u2713 Mensaje enviado";btn.style.background="#86efac";});}
+}
+if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",populate);}else{populate();}
+setTimeout(populate,500);setTimeout(populate,2000);
+})();
+</script>
 </body>
 </html>
 
