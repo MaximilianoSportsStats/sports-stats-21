@@ -18099,6 +18099,53 @@ footer #v311-newsletter .v311-success{color:#86efac !important;font-size:14px !i
   setTimeout(fix,2000);
 })();
 </script>
+
+<script>
+/* v321 - FASE 2.2.b: agregar Mercado al submenu Deportes del drawer */
+(function(){
+  if(window.__v321)return;window.__v321=true;
+  function addMercado(){
+    /* Find sub-list of Deportes */
+    var subLists=document.querySelectorAll(".v56-sub-list");
+    subLists.forEach(function(ul){
+      var items=Array.from(ul.querySelectorAll(".v56-sub-item"));
+      var texts=items.map(function(li){return (li.textContent||"").trim();});
+      /* Verify this is the Deportes sub-list: has Profesionales */
+      if(!texts.some(function(t){return /profesionales/i.test(t);}))return;
+      /* Already has Mercado? */
+      if(texts.some(function(t){return /mercado/i.test(t);}))return;
+      /* Find Comparar item */
+      var comparar=items.find(function(li){return /comparar/i.test(li.textContent||"");});
+      if(!comparar)return;
+      /* Clone Amateur as template */
+      var amateur=items.find(function(li){return /amateur/i.test(li.textContent||"");});
+      if(!amateur)return;
+      var mercado=amateur.cloneNode(true);
+      mercado.innerHTML="\u{1F935}Mercado";
+      mercado.setAttribute("data-v321-mercado","1");
+      /* Wire click */
+      mercado.addEventListener("click",function(e){
+        e.preventDefault();
+        /* Scroll a la seccion Mercado del Inicio o, si existe, panel-mercado */
+        var pm=document.getElementById("panel-mercado");
+        if(pm){
+          document.body.classList.add("v317-show-mercado");
+          pm.scrollIntoView({behavior:"smooth",block:"start"});
+          return;
+        }
+        var sec=document.getElementById("v164-mercado-wrap");
+        if(sec){sec.scrollIntoView({behavior:"smooth",block:"start"});return;}
+        alert("Mercado completo: pr\u00f3ximamente.");
+      });
+      /* Insert before Comparar */
+      comparar.parentNode.insertBefore(mercado,comparar);
+    });
+  }
+  if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",addMercado);}else{addMercado();}
+  setTimeout(addMercado,500);
+  setTimeout(addMercado,2000);
+})();
+</script>
 </body>
 </html>
 
