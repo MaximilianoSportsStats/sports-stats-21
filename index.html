@@ -17676,6 +17676,27 @@ body:not(.v304-clicked) #sidebar{display:none !important;}
   setTimeout(fix,2000);
 })();
 </script>
+
+<script>
+/* v308 - FASE 1.2 renombrar Estadisticas Deportes -> Deportes en menu */
+(function(){
+  if(window.__v308)return;window.__v308=true;
+  function fix(){
+    document.querySelectorAll(".v56-item button,.v26-has-dropdown,.v56-item").forEach(function(el){
+      var walker=document.createTreeWalker(el,NodeFilter.SHOW_TEXT,null,false);
+      var node;
+      while((node=walker.nextNode())){
+        if(/Estad[ií]sticas\s*Deportes/.test(node.nodeValue)){
+          node.nodeValue=node.nodeValue.replace(/Estad[ií]sticas\s*Deportes/g,"Deportes");
+        }
+      }
+    });
+  }
+  if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",fix);}else{fix();}
+  setTimeout(fix,500);
+  setTimeout(fix,2000);
+})();
+</script>
 </body>
 </html>
 
