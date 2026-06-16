@@ -17697,6 +17697,36 @@ body:not(.v304-clicked) #sidebar{display:none !important;}
   setTimeout(fix,2000);
 })();
 </script>
+
+<script>
+/* v309 - FASE 1.3 wire onclick a 5 sport-btn sin handler */
+(function(){
+  if(window.__v309)return;window.__v309=true;
+  /* Map por texto del boton (normalizado sin emoji) a switchSport key */
+  var map={"atletismo":"athletics","ciclismo":"cycling","volleyball":"volley","cricket":"cricket","eventos globales":"eventos"};
+  function wire(){
+    document.querySelectorAll(".sport-btn").forEach(function(btn){
+      if(btn.getAttribute("onclick"))return;
+      var txt=(btn.textContent||"").trim().toLowerCase().replace(/[^a-z\sñáéíóúü]/g,"").trim();
+      Object.keys(map).forEach(function(key){
+        if(txt.indexOf(key)>=0){
+          var sport=map[key];
+          btn.setAttribute("onclick","switchSport('"+sport+"',this)");
+          /* Tambien wire directo en case switchSport no exista todavia */
+          btn.addEventListener("click",function(e){
+            if(typeof window.switchSport==="function"){
+              try{window.switchSport(sport,btn);}catch(_){}
+            }
+          });
+        }
+      });
+    });
+  }
+  if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",wire);}else{wire();}
+  setTimeout(wire,500);
+  setTimeout(wire,2000);
+})();
+</script>
 </body>
 </html>
 
