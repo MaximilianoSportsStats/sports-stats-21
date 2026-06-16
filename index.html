@@ -18000,6 +18000,27 @@ html body.v317-show-soccer #panel-inicio,html body.v317-show-tennis #panel-inici
   },true);
 })();
 </script>
+
+<style id="v318-fix">
+/* SIDEBAR FUTBOL hide en Inicio (no v317-show-*) */
+html body:not([class*="v317-show-"]) #sidebar,html body:not([class*="v317-show-"]) .v114-tenis-sidebar,html body:not([class*="v317-show-"]) [class*="v229-sidebar"]{display:none !important;}
+/* Mostrar sidebar segun deporte */
+html body.v317-show-soccer #sidebar{display:block !important;}
+html body.v317-show-tennis .v114-tenis-sidebar{display:block !important;}
+/* NEWSLETTER estilo v274 original */
+footer #v311-newsletter h3{color:#fff !important;margin:0 0 8px !important;font-size:17px !important;font-weight:600 !important;letter-spacing:0 !important;}
+footer #v311-newsletter p{font-size:15px !important;line-height:1.55 !important;max-width:580px !important;color:rgba(255,255,255,0.7) !important;margin:0 0 20px !important;}
+footer #v311-newsletter .v311-form{display:flex !important;gap:8px !important;flex-wrap:wrap !important;max-width:580px !important;margin:0 !important;justify-content:flex-start !important;}
+footer #v311-newsletter input[type=email]{padding:10px 14px !important;border-radius:8px !important;border:1px solid rgba(255,255,255,0.18) !important;background:rgba(255,255,255,0.05) !important;color:#fff !important;font-size:14px !important;flex:1 !important;min-width:200px !important;}
+footer #v311-newsletter input[type=email]::placeholder{color:rgba(255,255,255,0.4) !important;}
+footer #v311-newsletter button{padding:10px 22px !important;border-radius:8px !important;border:none !important;background:#fff !important;color:#1a1a1a !important;font-size:14px !important;font-weight:600 !important;cursor:pointer !important;transition:background .15s !important;}
+footer #v311-newsletter button:hover{background:#e2e8f0 !important;}
+footer #v311-newsletter .v311-success{color:#86efac !important;font-size:14px !important;text-align:left !important;max-width:580px !important;}
+</style>
+<script>
+/* v318 - hide sidebar Futbol en Inicio + estilo newsletter original */
+(function(){if(window.__v318)return;window.__v318=true;})();
+</script>
 </body>
 </html>
 
