@@ -19636,6 +19636,48 @@ if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded"
 setTimeout(wire,500);setTimeout(wire,2000);setTimeout(wire,5000);
 })();
 </script>
+
+<style id="v344-drawer-css">
+/* Drawer: aside.v36-side estructura real */
+html body aside.v36-side{display:flex !important;flex-direction:column !important;height:100vh !important;max-height:100vh !important;overflow:hidden !important;}
+/* La parte que tiene los items (todo lo que NO es el footer) debe scrollear */
+html body aside.v36-side > *:not(.v36-foot){flex:0 0 auto !important;}
+html body aside.v36-side > nav,html body aside.v36-side > ul,html body aside.v36-side > .v36-items{flex:1 1 auto !important;overflow-y:auto !important;min-height:0 !important;}
+/* Footer .v36-foot sticky abajo */
+html body aside.v36-side .v36-foot{position:sticky !important;bottom:0 !important;background:#fff !important;border-top:1px solid #eee !important;padding:14px 18px !important;font-size:12px !important;color:#888 !important;margin-top:auto !important;z-index:5 !important;flex-shrink:0 !important;}
+/* Scrollbar pill custom (drawer y elementos hijos) */
+html body aside.v36-side::-webkit-scrollbar,html body aside.v36-side *::-webkit-scrollbar{width:6px !important;height:6px !important;}
+html body aside.v36-side::-webkit-scrollbar-track,html body aside.v36-side *::-webkit-scrollbar-track{background:transparent !important;}
+html body aside.v36-side::-webkit-scrollbar-thumb,html body aside.v36-side *::-webkit-scrollbar-thumb{background:rgba(0,0,0,0.2) !important;border-radius:10px !important;transition:background .15s !important;}
+html body aside.v36-side::-webkit-scrollbar-thumb:hover,html body aside.v36-side *::-webkit-scrollbar-thumb:hover{background:#c0392b !important;}
+html body aside.v36-side,html body aside.v36-side *{scrollbar-width:thin !important;scrollbar-color:rgba(0,0,0,0.2) transparent !important;}
+</style>
+<script>
+/* v344 - wrap items en contenedor scrollable si no existe ya */
+(function(){if(window.__v344)return;window.__v344=true;
+function wrapItems(){
+  var side=document.querySelector("aside.v36-side");if(!side)return;
+  if(side.dataset.v344Done)return;
+  var foot=side.querySelector(".v36-foot");
+  if(!foot)return;
+  /* Si el primer hijo no es ya un wrapper, envolver TODO lo que NO es .v36-foot en un div scrollable */
+  if(!side.querySelector(".v344-items")){
+    var wrapper=document.createElement("div");
+    wrapper.className="v344-items";
+    wrapper.style.cssText="flex:1 1 auto;overflow-y:auto;min-height:0;padding-bottom:8px;";
+    /* Mover todos los nodos pre-foot al wrapper */
+    var node=side.firstChild;
+    var toMove=[];
+    while(node && node!==foot){toMove.push(node);node=node.nextSibling;}
+    toMove.forEach(function(n){wrapper.appendChild(n);});
+    side.insertBefore(wrapper,foot);
+  }
+  side.dataset.v344Done="1";
+}
+if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",wrapItems);}else{wrapItems();}
+setTimeout(wrapItems,500);setTimeout(wrapItems,2000);setTimeout(wrapItems,5000);
+})();
+</script>
 </body>
 </html>
 
