@@ -17941,6 +17941,65 @@ footer #v311-newsletter{border-bottom:1px solid rgba(255,255,255,0.08) !importan
   },true);
 })();
 </script>
+
+<style id="v317-clean-lock">
+/* Panel Inicio SIEMPRE visible - no depende de ninguna clase */
+html body #panel-inicio{display:block !important;visibility:visible !important;opacity:1 !important;}
+/* Demas paneles ocultos por defecto */
+html body [id^="panel-"]:not(#panel-inicio){display:none !important;}
+/* Solo desbloquear panel especifico cuando body tiene clase v317-show-{sport} */
+html body.v317-show-soccer #panel-soccer,html body.v317-show-tennis #panel-tennis,html body.v317-show-f1 #panel-f1,html body.v317-show-nba #panel-nba,html body.v317-show-ufc #panel-ufc,html body.v317-show-baseball #panel-baseball,html body.v317-show-hockey #panel-hockey,html body.v317-show-nfl #panel-nfl,html body.v317-show-rugby #panel-rugby,html body.v317-show-golf #panel-golf,html body.v317-show-padel #panel-padel,html body.v317-show-acuaticos #panel-acuaticos,html body.v317-show-otros #panel-otros{display:block !important;visibility:visible !important;}
+/* Cuando se muestra deporte, ocultar Inicio */
+html body.v317-show-soccer #panel-inicio,html body.v317-show-tennis #panel-inicio,html body.v317-show-f1 #panel-inicio,html body.v317-show-nba #panel-inicio,html body.v317-show-ufc #panel-inicio,html body.v317-show-baseball #panel-inicio,html body.v317-show-hockey #panel-inicio,html body.v317-show-nfl #panel-inicio,html body.v317-show-rugby #panel-inicio,html body.v317-show-golf #panel-inicio,html body.v317-show-padel #panel-inicio,html body.v317-show-acuaticos #panel-inicio,html body.v317-show-otros #panel-inicio{display:none !important;}
+</style>
+<script>
+/* v317 - cleanup: bloquear .click() programatico en sport-btn + lock CSS simple */
+(function(){
+  if(window.__v317)return;window.__v317=true;
+  /* Block programmatic .click() on sport-btn for first 5 seconds */
+  var t0=Date.now();
+  var origClick=HTMLElement.prototype.click;
+  HTMLElement.prototype.click=function(){
+    if(Date.now()-t0<5000 && this.classList && this.classList.contains("sport-btn")){
+      console.log("[v317] blocked sport-btn.click() during startup");
+      return;
+    }
+    return origClick.apply(this,arguments);
+  };
+  /* Real click on sport-btn manages v317-show-{sport} class */
+  var SPORTS=["soccer","tennis","f1","nba","ufc","baseball","hockey","nfl","rugby","golf","padel","acuaticos","otros","athletics","cycling","volley","cricket","eventos"];
+  function clearAll(){
+    SPORTS.forEach(function(s){document.body.classList.remove("v317-show-"+s);});
+  }
+  document.addEventListener("click",function(e){
+    if(!e.isTrusted)return;
+    var target=e.target;
+    if(!target||!target.closest)return;
+    var sportBtn=target.closest(".sport-btn");
+    if(sportBtn){
+      var txt=(sportBtn.textContent||"").toLowerCase();
+      var oc=(sportBtn.getAttribute("onclick")||"").match(/switchSport\(['"]([^'"]+)/);
+      if(/todos/.test(txt)){clearAll();return;}
+      var sport=oc?oc[1]:null;
+      if(!sport){
+        if(/atletismo/.test(txt))sport="athletics";
+        else if(/ciclismo/.test(txt))sport="cycling";
+        else if(/volleyball/.test(txt))sport="volley";
+        else if(/cricket/.test(txt))sport="cricket";
+        else if(/eventos/.test(txt))sport="eventos";
+      }
+      clearAll();
+      if(sport)document.body.classList.add("v317-show-"+sport);
+      return;
+    }
+    /* Click en Inicio del menu o drawer */
+    var navEl=target.closest(".v56-item,.v26-has-dropdown,.drawer-menu li,.v23-drawer button,a[href]");
+    if(navEl && /inicio/i.test(navEl.textContent||"")){
+      clearAll();
+    }
+  },true);
+})();
+</script>
 </body>
 </html>
 
