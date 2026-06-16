@@ -19057,6 +19057,143 @@ if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded"
 setTimeout(setup,500);setTimeout(setup,2000);
 })();
 </script>
+
+<style id="v338-soccer-css">
+.v338-soccer-sb{display:none;width:240px;background:#fff;border-right:1px solid #e5e7eb;padding:20px 16px;height:100vh;overflow-y:auto;position:sticky;top:0;flex-shrink:0;}
+html body.v317-show-soccer .v338-soccer-sb{display:block !important;}
+.v338-soccer-sb h3{margin:0 0 6px;color:#c0392b;font-size:13px;text-transform:uppercase;letter-spacing:.5px;}
+.v338-soccer-sb .v338-mf{display:flex;gap:4px;margin-bottom:14px;}
+.v338-soccer-sb .v338-mf button{flex:1;padding:6px;border-radius:6px;border:1px solid #e5e7eb;background:#fff;font-weight:700;cursor:pointer;font-size:13px;}
+.v338-soccer-sb .v338-mf button.active{background:#c0392b;color:#fff;border-color:#c0392b;}
+.v338-soccer-sb ul{list-style:none;padding:0;margin:0;}
+.v338-soccer-sb li{padding:7px 10px;border-radius:6px;cursor:pointer;font-size:13px;color:#444;margin-bottom:2px;}
+.v338-soccer-sb li:hover{background:#f8f0ef;color:#c0392b;}
+.v338-soccer-sb .v338-section{font-weight:700;color:#1a1a1a;margin-top:14px;font-size:11px;text-transform:uppercase;letter-spacing:.5px;cursor:default;padding:4px 10px;}
+.v338-soccer-sb .v338-section:hover{background:transparent;}
+.v338-soccer-sb .v338-collapse::after{content:"\u25BE";float:right;font-size:10px;}
+.v338-soccer-sb .v338-collapse.v338-open::after{content:"\u25B4";}
+.v338-soccer-sb .v338-sub{display:none;padding-left:8px;}
+.v338-soccer-sb .v338-collapse.v338-open + .v338-sub{display:block;}
+.v338-slides{flex:1;padding:32px;}
+.v338-slides h1{color:#c0392b;font-size:32px;margin:0 0 8px;}
+.v338-slides .v338-sub-title{color:#888;font-size:15px;margin-bottom:24px;}
+.v338-slides .v338-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:20px 0;}
+.v338-slides .v338-stat{background:linear-gradient(135deg,#c0392b,#a32f24);color:#fff;border-radius:12px;padding:18px;text-align:center;}
+.v338-slides .v338-stat .v338-num{font-size:30px;font-weight:800;line-height:1;}
+.v338-slides .v338-stat .v338-lbl{font-size:11px;text-transform:uppercase;letter-spacing:.5px;margin-top:4px;opacity:0.9;}
+.v338-slide{display:none;}
+.v338-slide.active{display:block;}
+.v338-slides h2{font-size:22px;color:#1a1a1a;margin:32px 0 12px;}
+.v338-slides h3{font-size:16px;color:#c0392b;margin:18px 0 8px;}
+.v338-slides p{color:#444;line-height:1.7;margin:0 0 12px;}
+.v338-slides ul{color:#444;line-height:1.8;margin:0 0 12px;}
+</style>
+<script>
+(function(){if(window.__v338)return;window.__v338=true;
+function build(){
+  var ps=document.getElementById("panel-soccer");if(!ps)return;
+  if(ps.querySelector(".v338-soccer-sb"))return;
+  ps.innerHTML="";
+  ps.style.display="";ps.style.gap="0";ps.style.alignItems="flex-start";
+  var sb=document.createElement("aside");sb.className="v338-soccer-sb";
+  sb.innerHTML='<h3>F\u00fatbol</h3><div class="v338-mf"><button class="active">M</button><button>F</button></div><ul>'+
+    '<li class="v338-collapse v338-open" data-slide="resumen">\u2753 \u00bfQu\u00e9 es el F\u00fatbol?</li>'+
+    '<ul class="v338-sub">'+
+    '<li data-slide="resumen">\u{1F4D6} Resumen general</li>'+
+    '<li data-slide="historia">\u{1F4DA} Historia</li>'+
+    '<li data-slide="reglas">\u{1F4CB} Reglas FIFA</li>'+
+    '<li data-slide="competiciones">\u{1F3C6} Competiciones</li>'+
+    '<li data-slide="leyendas">\u{1F31F} Leyendas</li>'+
+    '<li data-slide="records">\u{1F3C5} Records Hist\u00f3ricos</li>'+
+    '<li data-slide="mundo">\u{1F30D} Ligas, Copas y Selecciones</li>'+
+    '</ul>'+
+    '<li>\u{1F4F0} \u00daltima hora</li>'+
+    '<li>\u26BD Resultados de la jornada</li>'+
+    '<li>\u{1F525} Top fichajes</li>'+
+    '<li>\u{1F691} Lesiones y ausencias</li>'+
+    '<li>\u{1F4CA} Estad\u00edsticas destacadas</li>'+
+    '<li>\u{1F4C5} Pr\u00f3ximos partidos</li>'+
+    '<li>\u{1F3C6} Especial Champions</li>'+
+    '<li>\u{1F30D} Mundial Femenino 2027</li>'+
+    '<li>\u{1F3C6} Mundial Copa</li>'+
+    '<li>\u{1F3C6} Mundial Sub-20</li>'+
+    '<li>\u{1F4CA} FIFA Ranking</li>'+
+    '<li>\u{1F3BD} Selecci\u00f3n Nacional</li>'+
+    '<li>\u{1F3C6} Eurocopa</li>'+
+    '<li>\u{1F3C6} Nations League</li>'+
+    '</ul>'+
+    '<div style="margin-top:18px;display:flex;gap:6px;"><button style="flex:1;padding:8px;border-radius:6px;border:1px solid #e5e7eb;background:#fff;font-size:12px;font-weight:600;cursor:pointer;">\u2B50 Favoritos</button><button style="flex:1;padding:8px;border-radius:6px;border:1px solid #c0392b;background:#c0392b;color:#fff;font-size:12px;font-weight:600;cursor:pointer;">+ Seguir</button></div>';
+  var slides=document.createElement("div");slides.className="v338-slides";
+  slides.innerHTML=buildSlides();
+  ps.appendChild(sb);ps.appendChild(slides);
+  /* Wire clicks */
+  sb.addEventListener("click",function(e){
+    var li=e.target.closest("li");if(!li)return;
+    if(li.classList.contains("v338-collapse")){li.classList.toggle("v338-open");return;}
+    var slide=li.getAttribute("data-slide");
+    if(!slide)return;
+    slides.querySelectorAll(".v338-slide").forEach(function(s){s.classList.toggle("active",s.getAttribute("data-slide-id")===slide);});
+  });
+  sb.querySelectorAll(".v338-mf button").forEach(function(b){
+    b.addEventListener("click",function(){sb.querySelectorAll(".v338-mf button").forEach(function(o){o.classList.remove("active");});b.classList.add("active");});
+  });
+}
+function buildSlides(){
+  var h='';
+  /* Resumen */
+  h+='<div class="v338-slide active" data-slide-id="resumen">';
+  h+='<h1>\u26BD F\u00fatbol Masculino</h1><div class="v338-sub-title">El deporte rey \u00b7 4 mil millones de seguidores \u00b7 211 federaciones FIFA</div>';
+  h+='<div class="v338-stats"><div class="v338-stat"><div class="v338-num">1863</div><div class="v338-lbl">Reglas FA</div></div><div class="v338-stat"><div class="v338-num">4B+</div><div class="v338-lbl">Seguidores</div></div><div class="v338-stat"><div class="v338-num">211</div><div class="v338-lbl">Federaciones</div></div><div class="v338-stat"><div class="v338-num">5</div><div class="v338-lbl">Brasil Mundiales</div></div></div>';
+  h+='<h2>\u{1F4D6} Una mirada al f\u00fatbol</h2><p>El f\u00fatbol asociaci\u00f3n, conocido como soccer en EE.UU., es el deporte m\u00e1s popular del mundo. Lo juegan 250 millones de personas en m\u00e1s de 200 pa\u00edses.</p>';
+  h+='<h2>\u{1F3C6} Las grandes potencias</h2><p>Brasil (5 Mundiales), Alemania (4), Italia (4), Argentina (3), Francia (2), Uruguay (2), Inglaterra (1), Espa\u00f1a (1).</p>';
+  h+='<h2>\u{1F31F} Figuras del f\u00fatbol actual</h2><p>Messi, Cristiano, Mbapp\u00e9, Haaland, Vinicius, Bellingham, Lamine Yamal, Pedri.</p>';
+  h+='</div>';
+  /* Historia */
+  h+='<div class="v338-slide" data-slide-id="historia"><h1>\u{1F4DA} Historia global del F\u00fatbol</h1>';
+  h+='<p>El f\u00fatbol moderno naci\u00f3 en Inglaterra en 1863 con la fundaci\u00f3n de la Football Association (FA). Pero formas de juego con pelota se conoc\u00edan desde la antig\u00fcedad: el cuju chino (siglo III a.C.), el tsuchu, el harpastum romano.</p>';
+  h+='<h2>Siglo XIX - Codificaci\u00f3n</h2><ul><li>1863: FA fundada en Londres, primeras reglas.</li><li>1871: FA Cup, la copa m\u00e1s antigua.</li><li>1888: Football League (Inglaterra), primera liga profesional.</li><li>1904: FIFA fundada en Par\u00eds con 7 pa\u00edses.</li></ul>';
+  h+='<h2>Siglo XX - Expansi\u00f3n global</h2><ul><li>1930: Primer Mundial en Uruguay (Uruguay campe\u00f3n).</li><li>1955: Copa de Europa (hoy Champions League).</li><li>1958: Pel\u00e9 con 17 a\u00f1os gana su primer Mundial.</li><li>1970: Mundial M\u00e9xico, Brasil tricampe\u00f3n.</li><li>1986: Maradona y los goles del siglo.</li></ul>';
+  h+='<h2>Siglo XXI - Era global</h2><ul><li>2002: Mundial Korea/Jap\u00f3n, primera vez en Asia.</li><li>2010: Sud\u00e1frica, primer Mundial en \u00c1frica.</li><li>2022: Qatar, primer Mundial en Medio Oriente.</li><li>2026: USA/Canad\u00e1/M\u00e9xico, 48 selecciones.</li><li>2030: Espa\u00f1a/Portugal/Marruecos + partidos centenarios.</li></ul></div>';
+  /* Reglas */
+  h+='<div class="v338-slide" data-slide-id="reglas"><h1>\u{1F4CB} Reglas FIFA</h1>';
+  h+='<p>El reglamento oficial est\u00e1 compuesto por 17 reglas mantenidas por la IFAB (International Football Association Board).</p>';
+  h+='<h3>1. Terreno de juego</h3><p>100-110m largo x 64-75m ancho. C\u00e9sped natural o sint\u00e9tico.</p>';
+  h+='<h3>2. Bal\u00f3n</h3><p>Circunferencia 68-70cm, peso 410-450g.</p>';
+  h+='<h3>3. Jugadores</h3><p>11 vs 11, m\u00ednimo 7 para continuar. 5 cambios.</p>';
+  h+='<h3>4. Duraci\u00f3n</h3><p>2 tiempos de 45 min + descuentos. Pr\u00f3rroga 2x15 si empate en eliminatorias.</p>';
+  h+='<h3>11. Fuera de juego (Offside)</h3><p>Jugador m\u00e1s adelantado que el pen\u00faltimo defensor en el momento del pase.</p>';
+  h+='<h3>VAR (desde 2018)</h3><p>Revisi\u00f3n por video para: gol, penal, roja directa, identidad jugador. No revisa amarillas.</p></div>';
+  /* Competiciones */
+  h+='<div class="v338-slide" data-slide-id="competiciones"><h1>\u{1F3C6} Competiciones</h1>';
+  h+='<h2>Selecciones</h2><ul><li>Mundial FIFA (1930-2030) cada 4 a\u00f1os</li><li>Eurocopa (UEFA) - cada 4 a\u00f1os</li><li>Copa Am\u00e9rica (CONMEBOL) - irregular</li><li>Copa \u00c1frica, Copa Asia, Concacaf Gold Cup</li><li>Nations League UEFA</li></ul>';
+  h+='<h2>Clubes - Europa</h2><ul><li>UEFA Champions League - lo m\u00e1s grande</li><li>UEFA Europa League</li><li>Conference League (3er nivel)</li><li>Mundial de Clubes FIFA</li></ul>';
+  h+='<h2>Clubes - Sudam\u00e9rica</h2><ul><li>Copa Libertadores</li><li>Copa Sudamericana</li><li>Recopa Sudamericana</li></ul></div>';
+  /* Leyendas */
+  h+='<div class="v338-slide" data-slide-id="leyendas"><h1>\u{1F31F} Leyendas del F\u00fatbol</h1>';
+  h+='<ul><li><b>Pel\u00e9 (Brasil)</b> - 3 Mundiales (58/62/70), 1281 goles oficiales</li><li><b>Diego Maradona (Argentina)</b> - Mundial 86, mano de Dios + gol del siglo</li><li><b>Lionel Messi (Argentina)</b> - 8 Ballon d\u2019Or, Mundial 2022, 47 trofeos</li><li><b>Cristiano Ronaldo (Portugal)</b> - 5 Ballon d\u2019Or, top goleador internacional</li><li><b>Johan Cruyff (Holanda)</b> - F\u00fatbol Total, 3 Ballon d\u2019Or</li><li><b>Franz Beckenbauer (Alemania)</b> - \u00fanico campe\u00f3n como jugador y DT</li><li><b>Alfredo Di Stefano</b> - 5 Copas de Europa Real Madrid</li><li><b>Zinedine Zidane (Francia)</b> - Mundial 98, Champions 2002</li><li><b>Ronaldo Naz\u00e1rio (Brasil)</b> - 2 Mundiales, 3 Ballon d\u2019Or</li><li><b>Ronaldinho</b> - Mundial 2002, Ballon d\u2019Or 2005</li></ul></div>';
+  /* Records */
+  h+='<div class="v338-slide" data-slide-id="records"><h1>\u{1F3C5} Records Hist\u00f3ricos</h1>';
+  h+='<h2>Goleadores</h2><p>Cristiano Ronaldo: 130+ goles en selecciones (record). Messi: 100+ en Argentina. Pel\u00e9 reclama 1281.</p>';
+  h+='<h2>Mundiales ganados (selecci\u00f3n)</h2><p>Brasil 5, Italia 4, Alemania 4, Argentina 3, Francia 2, Uruguay 2.</p>';
+  h+='<h2>Champions League</h2><p>Real Madrid: 15 t\u00edtulos. AC Milan: 7. Liverpool y Bayern: 6 cada uno.</p>';
+  h+='<h2>Premier League</h2><p>Manchester United: 20 t\u00edtulos. Liverpool: 19. Arsenal: 13.</p>';
+  h+='<h2>La Liga</h2><p>Real Madrid: 36 t\u00edtulos. Barcelona: 27. Atl\u00e9tico: 11.</p></div>';
+  /* Mundo */
+  h+='<div class="v338-slide" data-slide-id="mundo"><h1>\u{1F30D} Ligas, Copas y Selecciones</h1>';
+  h+='<h2>Top 5 Ligas Europeas</h2><ul><li><b>Premier League (Inglaterra)</b> - 20 equipos, fundada 1888</li><li><b>La Liga (Espa\u00f1a)</b> - 20 equipos, fundada 1929</li><li><b>Serie A (Italia)</b> - 20 equipos, scudettos</li><li><b>Bundesliga (Alemania)</b> - 18 equipos, 50+1 rule</li><li><b>Ligue 1 (Francia)</b> - 18 equipos, era PSG</li></ul>';
+  h+='<h2>UEFA - Europa (52 selecciones)</h2><p>Espa\u00f1a, Francia, Alemania, Italia, Inglaterra, Holanda, B\u00e9lgica, Portugal, Croacia, Suiza, Polonia, Ucrania, Suecia, Dinamarca, Noruega, y 37 m\u00e1s.</p>';
+  h+='<h2>CONMEBOL - Sudam\u00e9rica (10)</h2><p>Argentina (3 Mundiales), Brasil (5), Uruguay (2), Chile, Colombia, Ecuador, Paraguay, Per\u00fa, Bolivia, Venezuela.</p>';
+  h+='<h2>CONCACAF - Norte/Centro/Caribe (14)</h2><p>USA, M\u00e9xico, Canad\u00e1, Costa Rica, Honduras, Panam\u00e1, Jamaica, Trinidad y Tobago, Hait\u00ed, Cuba, Rep\u00fablica Dominicana, Nicaragua, Guatemala, El Salvador.</p>';
+  h+='<h2>AFC - Asia (29)</h2><p>Jap\u00f3n, Corea del Sur, China, Australia, Arabia Saud\u00ed, Ir\u00e1n, Irak, Qatar, EAU, Kuwait, Bahrein, Om\u00e1n, Jordania, Tailandia, Vietnam, Indonesia, Malasia, Filipinas, Singapur, India, y m\u00e1s.</p>';
+  h+='<h2>OFC - Ocean\u00eda (7)</h2><p>Nueva Zelanda, Fiji, Papua, Tahit\u00ed, Nueva Caledonia, Vanuatu, Islas Salom\u00f3n.</p>';
+  h+='<h2>CAF - \u00c1frica (27)</h2><p>Nigeria, Egipto, Marruecos, Sud\u00e1frica, Senegal, Ghana, Camer\u00fan, Costa de Marfil, Mal\u00ed, Burkina Faso, Argelia, T\u00fanez, y m\u00e1s.</p>';
+  h+='<h2>Otros tipos de F\u00fatbol</h2><ul><li>\u{1F451} Kings League (de Pique)</li><li>\u{1F3DD}\uFE0F Futbol Playa</li><li>\u{1F3DF}\uFE0F Futsal (sala)</li><li>\u26BD F\u00fatbol 5, 7, 9</li></ul></div>';
+  return h;
+}
+if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",build);}else{build();}
+setTimeout(build,500);setTimeout(build,2000);
+})();
+</script>
 </body>
 </html>
 
