@@ -19695,6 +19695,36 @@ document.addEventListener("click",function(e){if(!e.isTrusted)return;var t=e.tar
 setInterval(function(){if((location.hash==="#inicio"||location.hash==="") && document.body.classList.contains("v357-active")){if(!window.__v358LastSportClick || Date.now()-window.__v358LastSportClick>3000){document.body.classList.remove("v357-active");}}},2000);
 })();
 </script>
+
+<style id="v359-css">
+/* Gap between ticker and hero */
+.v100-ticker,#v100-ticker,#ticker,.live-ticker{margin-bottom:18px !important;}
+/* Force hide v357 page when Inicio is the active panel */
+body:not(.v359-user-sport) #v357-page{display:none !important;}
+body:not(.v359-user-sport) #v355-page{display:none !important;}
+</style>
+<script>
+(function(){if(window.__v359)return;window.__v359=true;
+/* Init: clean state */
+document.body.classList.remove("v357-active");
+document.body.classList.remove("v359-user-sport");
+Array.from(document.body.classList).forEach(function(c){if(c.indexOf("v317-show-")===0 && c!=="v317-show-inicio")document.body.classList.remove(c);if(c==="v356-hide-inicio")document.body.classList.remove(c);});
+window.__v355Sport=null;
+/* Block all programmatic clicks on sport-btn */
+document.addEventListener("click",function(e){if(!e.isTrusted){var b=e.target.closest && e.target.closest(".sport-btn");if(b){e.stopImmediatePropagation && e.stopImmediatePropagation();e.preventDefault && e.preventDefault();}}},true);
+/* Mark user-sport flag only on real trusted clicks */
+document.addEventListener("click",function(e){if(!e.isTrusted)return;var b=e.target.closest && e.target.closest(".sport-btn");if(!b)return;var txt=(b.textContent||"").toLowerCase().trim();if(/todos/i.test(txt)){document.body.classList.remove("v359-user-sport");document.body.classList.remove("v357-active");}else{document.body.classList.add("v359-user-sport");}window.__v359LastUserClick=Date.now();},true);
+/* Watchdog every 250ms */
+setInterval(function(){
+var lastClick=window.__v359LastUserClick||0;
+var sincelast=Date.now()-lastClick;
+if(!document.body.classList.contains("v359-user-sport") && document.body.classList.contains("v357-active")){document.body.classList.remove("v357-active");}
+if(sincelast>5000 && document.body.classList.contains("v357-active") && !document.body.classList.contains("v359-user-sport")){document.body.classList.remove("v357-active");}
+},250);
+/* MutationObserver on body to instantly remove v357-active if no user-sport flag */
+new MutationObserver(function(muts){muts.forEach(function(m){if(m.attributeName==="class"){if(document.body.classList.contains("v357-active") && !document.body.classList.contains("v359-user-sport")){document.body.classList.remove("v357-active");}}});}).observe(document.body,{attributes:true,attributeFilter:["class"]});
+})();
+</script>
 </body>
 </html>
 
