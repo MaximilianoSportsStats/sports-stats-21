@@ -19883,6 +19883,74 @@ setInterval(applyAll,5000);
 setTimeout(applyAll,1500);setTimeout(applyAll,3500);
 })();
 </script>
+
+<script>
+/* v380a: expand keywords for emoji-text match */
+(function(){if(window.__v380)return;window.__v380=true;
+var U="https://images.unsplash.com/photo-";var Q="?w=900&q=80&auto=format&fit=crop";
+var KW=[
+  /* CRICKET (priority) */
+  {rx:/cricket|ipl|t20|ashes/i,img:"1531415074968-036ba1b575da"},
+  /* Tags primero (mas confiable) */
+  {rx:/^F1$|f1[\s\-]|verstappen|monaco|m\u00f3naco|norris|leclerc|red bull|ferrari|mclaren|pole/i,img:"1530549387789-4c1017266635"},
+  {rx:/^NBA$|nba[\s\-]|basketball|lakers|warriors|celtics|lebron|curry|tip-off|tipoff|playoff/i,img:"1540747913346-19e32dc3e97e"},
+  {rx:/^NFL$|nfl[\s\-]|chiefs|super bowl|mahomes|brady|cowboys|patriots/i,img:"1543326727-cf6c39e8f84c"},
+  {rx:/tenis|tennis|alcaraz|sinner|roland|garros|zverev|djokovic|nadal|federer|grand slam/i,img:"1531415074968-036ba1b575da"},
+  {rx:/mundial|fifa|messi|cristiano|world cup|qatar|2026|albiceleste|argentina|brasil|seleccion/i,img:"1574629810360-7efbbe195018"},
+  {rx:/champions|psg|real madrid|barcelona|mbapp|vinicius|bellingham|semifinal/i,img:"1551958219-acbc608c6377"},
+  {rx:/premier|liverpool|man city|man utd|arsenal|chelsea|salah|anfield/i,img:"1521587760476-6c12a4b040da"},
+  {rx:/la liga|laliga|atletico|atl\u00e9tico|bayern|sevilla|valencia/i,img:"1521587760476-6c12a4b040da"},
+  {rx:/mlb|yankees|dodgers|world series|judge|ohtani|baseball/i,img:"1551698618-1dfe5d97d256"},
+  {rx:/nhl|stanley|panthers|hockey|maple leafs|oilers/i,img:"1577003811926-53b288a6e5d0"},
+  {rx:/golf|pga|masters|tiger|mcilroy|scheffler/i,img:"1593341646782-e0b495cff86d"},
+  {rx:/p\u00e1del|padel/i,img:"1531415074968-036ba1b575da"},
+  {rx:/rugby|six nations|all blacks|world rugby/i,img:"1587280501635-68a0e82cd5ff"},
+  {rx:/^F\u00FAtbol$|futbol[\s\-]|f\u00fatbol[\s\-]|gol|t\u00e1ctic|tactic/i,img:"1574629810360-7efbbe195018"},
+  /* Editorial - last priority */
+  {rx:/blog|an\u00e1lisis|analisis|opinion|opini\u00f3n|editorial/i,img:"1454165804606-c3d57bc86b40"},
+  {rx:/podcast|talks|entrevista|conversaci\u00f3n|conversacion|micr\u00f3fono|microfono/i,img:"1478737270239-2f02b77fc618"},
+  {rx:/fichaje|libre|rumor|valor|contrato|pr\u00e9stamo|prestamo|renovaci\u00f3n|renovacion|inversi\u00f3n|inversion|patrocinio|sub-21/i,img:"1554224155-6726b3ff858f"}
+];
+var DEFAULT_IMG="1574629810360-7efbbe195018";
+window.__v380_picker=function(text){for(var i=0;i<KW.length;i++){if(KW[i].rx.test(text))return KW[i].img;}return DEFAULT_IMG;};
+/* Override v379 pickImg by patching ensureBg via setInterval */
+function applyAll(){
+  document.querySelectorAll(".v100-news-big,.v100-news-mini").forEach(function(card){
+    var bg=card.querySelector(".v379-bg");
+    if(!bg){bg=document.createElement("div");bg.className="v379-bg";card.insertBefore(bg,card.firstChild);}
+    var tag=(card.querySelector(".v100-news-tag,.v100-news-tag-mini")||{}).textContent||"";
+    var h=(card.querySelector("h3,h4")||{}).textContent||"";
+    var p=(card.querySelector("p")||{}).textContent||"";
+    var img=window.__v380_picker(tag+" "+h+" "+p);
+    var url=U+img+Q;
+    if(bg.style.backgroundImage.indexOf(img)<0){bg.style.backgroundImage="url("+url+")";}
+  });
+}
+setInterval(applyAll,5000);
+setTimeout(applyAll,1000);setTimeout(applyAll,3000);
+})();
+/* v380b: wire v99-cta buttons */
+(function(){if(window.__v380b)return;window.__v380b=true;
+document.addEventListener("click",function(e){
+  if(!e.isTrusted)return;
+  var btn=e.target.closest && e.target.closest(".v99-cta");
+  if(!btn)return;
+  e.preventDefault();
+  var t=(btn.textContent||"").toLowerCase();
+  if(/explorar/.test(t)){
+    var soc=Array.from(document.querySelectorAll(".sport-btn")).find(function(b){return /switchSport\(['\"]soccer/.test(b.getAttribute("onclick")||"");});
+    if(soc)soc.click();window.scrollTo({top:0,behavior:"smooth"});
+  } else if(/vivo/.test(t)){
+    var liveBtn=document.querySelector("[data-v26id=\"vivo\"],[data-v26id=\"envivo\"]");
+    if(liveBtn){liveBtn.click();}else{var ticker=document.querySelector(".v100-ticker,#ticker");if(ticker)ticker.scrollIntoView({behavior:"smooth"});}
+  } else if(/informaci/.test(t)){
+    var nw=document.getElementById("v100-noticias-wrap");if(nw)nw.scrollIntoView({behavior:"smooth"});
+  } else if(/comparar|reclutador|conectar|perfil|centros/.test(t)){
+    alert("Pr\u00f3ximamente: "+btn.textContent.replace(/[\u2192\u2190]/g,"").trim());
+  }
+},true);
+})();
+</script>
 </body>
 </html>
 
