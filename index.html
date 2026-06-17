@@ -19829,6 +19829,77 @@ setInterval(applyAll,400);
 setInterval(rotate,8000);
 })();
 </script>
+
+<script>
+/* v371: hijack dot clicks + hide emoji inline + initial bg layer with image */
+(function(){if(window.__v371)return;window.__v371=true;
+var EMOJI_RX=/^[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}\u{FE0F}\u200D]+$/u;
+function hideEmojis(){
+  document.querySelectorAll(".v100-news-big > div,.v100-news-mini > div").forEach(function(d){
+    if(d.classList.contains("v370-bg")||d.classList.contains("v365-bg"))return;
+    var t=(d.textContent||"").trim();
+    if(t.length>=1 && t.length<=8 && EMOJI_RX.test(t))d.style.display="none";
+  });
+}
+/* Hijack dot clicks - set offset based on which dot, then apply v370 */
+document.addEventListener("click",function(e){
+  var dot=e.target.closest && e.target.closest(".v100-dot-nav");
+  if(!dot)return;
+  /* Find dot index */
+  var siblings=Array.from(dot.parentElement.children).filter(function(c){return c.classList.contains("v100-dot-nav");});
+  var idx=siblings.indexOf(dot);
+  if(idx<0)return;
+  /* Set state offset to map dot 0->0, 1->1, ..., 5->5 (cap to 10) */
+  var STATE=window.__v370STATE||{offset:0};
+  STATE.offset=idx%10;
+  window.__v370STATE=STATE;
+  /* Force immediate apply */
+  if(window.__v370apply)window.__v370apply();
+  /* Active dot UI: clear others, set this one */
+  siblings.forEach(function(s){s.classList.remove("active");});
+  dot.classList.add("active");
+  /* Also hide emojis right after */
+  setTimeout(hideEmojis,50);setTimeout(hideEmojis,200);
+  /* Prevent native handler from re-rendering */
+  /* Dont stopPropagation - dots still update natively, but mine wins */
+},true);
+/* Continuous emoji hide */
+setInterval(hideEmojis,400);
+setTimeout(hideEmojis,500);setTimeout(hideEmojis,2000);
+})();
+</script>
+<script>
+/* v371b: PATCH v370 - expose STATE+apply globally and fix initial layer */
+(function(){if(window.__v371b)return;window.__v371b=true;
+function tryPatch(){
+  if(typeof window.__v370!=="undefined"){
+    /* v370 already ran - try to find its STATE/apply by re-init pattern */
+    return;
+  }
+}
+/* Override ensureLayers to ALWAYS keep an image on the active layer */
+/* Wait for v370 to be ready then patch its setCardBg */
+setTimeout(function(){
+  if(!window.__v370)return;
+  /* Find all v370-bg layers and ensure they have a valid bg-image */
+  setInterval(function(){
+    document.querySelectorAll(".v100-news-big,.v100-news-mini").forEach(function(card){
+      var bgs=card.querySelectorAll(":scope > .v370-bg");
+      if(bgs.length===0)return;
+      /* If active bg has no image, copy from inactive */
+      var active=Array.from(bgs).find(function(b){return b.dataset.active==="1";});
+      var inactive=Array.from(bgs).find(function(b){return b.dataset.active==="0";});
+      if(active && (!active.style.backgroundImage||active.style.backgroundImage==="none"||active.style.backgroundImage==="")){
+        if(inactive && inactive.style.backgroundImage && inactive.style.backgroundImage!=="none"){
+          active.style.backgroundImage=inactive.style.backgroundImage;
+          active.classList.remove("v370-out");
+        }
+      }
+    });
+  },300);
+},1500);
+})();
+</script>
 </body>
 </html>
 
