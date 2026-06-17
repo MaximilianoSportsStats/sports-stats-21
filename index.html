@@ -19796,11 +19796,25 @@ setInterval(applyAll,800);
 #v100-noticias-wrap{margin-top:40px !important;}
 </style>
 
-<style id="v367-css">
-/* Ocultar emoji div (primer div sin class) en cards Noticias/Blogs/Podcast/Mercado */
-.v100-news-big > div:first-of-type,
-.v100-news-mini > div:first-of-type{display:none !important;}
-</style>
+
+
+<script>
+/* v368: hide emoji-only divs in news cards (preserve v365-bg image) */
+(function(){if(window.__v368)return;window.__v368=true;
+var EMOJI_RX=/^[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}\u{FE0F}\u200D]+$/u;
+function hideEmojis(){
+  document.querySelectorAll(".v100-news-big > div,.v100-news-mini > div").forEach(function(d){
+    if(d.classList.contains("v365-bg"))return;
+    if(d.classList.contains("v100-news-big"))return;
+    var t=(d.textContent||"").trim();
+    if(t.length>=1 && t.length<=8 && EMOJI_RX.test(t)){d.style.display="none";}
+  });
+}
+if(document.readyState!=="loading")hideEmojis();else document.addEventListener("DOMContentLoaded",hideEmojis);
+setInterval(hideEmojis,800);
+setTimeout(hideEmojis,500);setTimeout(hideEmojis,2000);setTimeout(hideEmojis,4000);
+})();
+</script>
 </body>
 </html>
 
