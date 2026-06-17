@@ -819,66 +819,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Inter','Segoe UI
     <div class="inicio-feature"><span class="num">130+</span><span class="label">A&ntilde;os de historia</span></div>
     <div class="inicio-feature"><span class="num">M / F</span><span class="label">Toggle por liga</span></div>
   </div>
-      <section class="inicio-panels">
-    <article class="inicio-panel">
-      <div class="inicio-panel-icon">&#128202;</div>
-      <h3>&iquest;Qu&eacute; es Sports Stats 21?</h3>
-      <p>La plataforma definitiva con estad&iacute;sticas de 15 deportes principales y m&aacute;s de 250 disciplinas adicionales. Desde f&uacute;tbol y NBA hasta deportes regionales y emergentes. Datos hist&oacute;ricos desde 1888 hasta hoy.</p>
-    </article>
-    <article class="inicio-panel">
-      <div class="inicio-panel-icon">&#9917;</div>
-      <h3>Explora deportes profesionales</h3>
-      <p>Sum&eacute;rgete en NBA, NFL, MLB, NHL, F1, Champions League, La Liga, Premier y todas las grandes ligas del mundo. Tablas de posiciones, r&eacute;cords, leyendas, campeones hist&oacute;ricos y data en vivo.</p>
-      <button class="inicio-panel-btn" onclick="var b=document.querySelectorAll('.sport-btn')[1];if(b)b.click()">Empezar a explorar &rarr;</button>
-    </article>
-    <article class="inicio-panel">
-      <div class="inicio-panel-icon">&#127971;</div>
-      <h3>Crea o explora Ligas Locales</h3>
-      <p>Inicia tu propia liga amateur con amigos del barrio o explora las ligas locales activas en tu zona. Sistema completo: equipos, calendarios, resultados y rankings personalizados.</p>
-      <button class="inicio-panel-btn" onclick="alert('Liga Local: anda a cualquier deporte y elige tu pa\u00EDs para crear o ver ligas locales')">Ver Ligas Locales &rarr;</button>
-    </article>
-    <article class="inicio-panel">
-      <div class="inicio-panel-icon">&#127919;</div>
-      <h3>Recluta y descubre talento</h3>
-      <p>Si reclutas para un club, academia o federaci&oacute;n, accede a la base completa de jugadores en ligas locales, juveniles y escolares de todo el mundo. Filtros por edad, posici&oacute;n, pa&iacute;s y nivel. Data al alcance de scouts profesionales.</p>
-      <button class="inicio-panel-btn" onclick="alert('Modo Reclutador: pr\u00F3ximamente. Recibir\u00E1s acceso a perfiles verificados de jugadores con stats hist\u00F3ricos.')">Modo Reclutador &rarr;</button>
-    </article>
-    <article class="inicio-panel">
-      <div class="inicio-panel-icon">&#128100;</div>
-      <h3>Crea tu perfil de Jugador</h3>
-      <p>Amateur, semi-pro o profesional &mdash; arma tu perfil deportivo con todas las ligas en las que has participado, estad&iacute;sticas hist&oacute;ricas, fotos y videos. Tu CV deportivo en un solo lugar, visible para reclutadores y clubes.</p>
-      <button class="inicio-panel-btn" onclick="if(typeof openLoginModal==='function')openLoginModal();else{var l=document.querySelector('.login-btn');if(l)l.click()}">Crear mi perfil &rarr;</button>
-    </article>
-    <article class="inicio-panel">
-      <div class="inicio-panel-icon">&#129309;</div>
-      <h3>Conecta con deportistas</h3>
-      <p>La esencia de Sports Stats: la red social del deporte. Conecta con jugadores, equipos y reclutadores de cualquier disciplina. Sigue a tus referentes, manda mensajes a clubes, encuentra compa&ntilde;eros para tu liga local y recibe invitaciones de scouts. Todo en un mismo lugar.</p>
-      <button class="inicio-panel-btn" onclick="alert('Conecta: pr\u00F3ximamente. Vas a poder seguir jugadores, mandar mensajes, recibir invitaciones de clubes y armar tu red deportiva.')">Conectar &rarr;</button>
-    </article>
-    <article class="inicio-panel">
-      <div class="inicio-panel-icon">&#128240;</div>
-      <h3>Blog y Noticias</h3>
-      <p>Cobertura diaria del mundo deportivo: an&aacute;lisis post-partido, fichajes, lesiones, hist&oacute;ricos y opini&oacute;n. Filtros por deporte, liga y equipo. Suscr&iacute;bete para recibir un digest diario en tu mail.</p>
-      <button class="inicio-panel-btn" onclick="alert('Blog y Noticias: pr\u00F3ximamente. Tendremos cobertura editorial diaria de todos los deportes con filtros por equipo, liga y categor\u00EDa.')">Leer m&aacute;s &rarr;</button>
-    </article>
-    <article class="inicio-panel">
-      <div class="inicio-panel-icon">&#9878;</div>
-      <h3>Compara stats</h3>
-      <p>Selecciona dos jugadores, dos equipos o dos ligas del mismo deporte y compara sus n&uacute;meros lado a lado: t&iacute;tulos, goles, promedios, hist&oacute;ricos, rachas. Ideal para debates: Messi vs Cristiano, Real Madrid vs Bayern, Premier vs La Liga.</p>
-      <button class="inicio-panel-btn" onclick="alert('Comparador: pr\u00F3ximamente. Vas a poder comparar 2 jugadores, equipos o ligas del mismo deporte con todas sus stats lado a lado.')">Comparar &rarr;</button>
-    </article>
-    <article class="inicio-panel">
-      <div class="inicio-panel-icon">&#127381;</div>
-      <h3>Novedades</h3>
-      <ul>
-        <li>15 deportes principales + Otros Deportes (250+ disciplinas)</li>
-        <li>Eventos Globales (Olympics, Mundiales, Grand Slams, Tour de France)</li>
-        <li>Toggle M / F en cada liga (WSL, Liga F, NWSL, Mundial 2023)</li>
-        <li>Liga Escolar al lado de Liga Local</li>
-        <li>Carrusel de fotos en Inicio + logo nuevo</li>
-      </ul>
-    </article>
-  </section>
+      
     </div>
     <script>
 function goInicio(btn){
@@ -19961,6 +19902,44 @@ if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded"
 setTimeout(nuke,500);setTimeout(nuke,1500);setTimeout(nuke,3000);
 /* Re-nuke en cada click */
 document.addEventListener("click",function(e){if(e.isTrusted)setTimeout(nuke,200);},true);
+})();
+</script>
+
+<script>
+/* v354 - fix sport tracking: usar SOLO el ultimo sport clickeado, no el primero en classList */
+(function(){if(window.__v354)return;window.__v354=true;
+window.__v354LastSport=null;
+function activateSport(){
+  var c=document.getElementById("v351-sport-content");if(!c)return;
+  var sport=window.__v354LastSport;
+  if(!sport){
+    var cls=Array.from(document.body.classList).find(function(cl){return cl.indexOf("v317-show-")===0 && cl!=="v317-show-inicio";});
+    if(cls)sport=cls.replace("v317-show-","");
+  }
+  if(!sport){c.querySelectorAll(".v351-slide").forEach(function(s){s.classList.remove("active");});return;}
+  c.querySelectorAll(".v351-slide").forEach(function(s){s.classList.toggle("active",s.getAttribute("data-sport")===sport);});
+}
+document.addEventListener("click",function(e){
+  if(!e.isTrusted)return;
+  var btn=e.target.closest && e.target.closest(".sport-btn");
+  if(!btn)return;
+  var txt=(btn.textContent||"").toLowerCase().trim();
+  var oc=(btn.getAttribute("onclick")||"").match(/switchSport\(['"]([^'"]+)/);
+  var sport=oc?oc[1]:null;
+  if(!sport){
+    if(/atletismo/i.test(txt))sport="athletics";
+    else if(/ciclismo/i.test(txt))sport="cycling";
+    else if(/volleyball|voley/i.test(txt))sport="volley";
+    else if(/cricket/i.test(txt))sport="cricket";
+    else if(/eventos/i.test(txt))sport="eventos";
+    else if(/todos/i.test(txt))sport=null;
+  }
+  window.__v354LastSport=sport;
+  setTimeout(activateSport,100);
+  setTimeout(activateSport,300);
+},true);
+if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",activateSport);}else{activateSport();}
+setTimeout(activateSport,500);
 })();
 </script>
 </body>
