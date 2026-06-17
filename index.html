@@ -19786,6 +19786,15 @@ setInterval(rotate,5500);
 setInterval(applyAll,800);
 })();
 </script>
+
+<style id="v366-css">
+/* Separar secciones Inicio con linea sutil + 60px de espacio */
+#v100-noticias-wrap,#v100-blogs-wrap,#v100-podcast-wrap,#v164-mercado-wrap{margin-top:60px !important;margin-bottom:60px !important;padding-top:30px !important;position:relative;}
+/* Linea horizontal arriba de cada seccion excepto la primera */
+#v100-blogs-wrap::before,#v100-podcast-wrap::before,#v164-mercado-wrap::before{content:"";display:block;position:absolute;top:0;left:50%;transform:translateX(-50%);width:80%;max-width:900px;height:1px;background:linear-gradient(to right,transparent 0%,#e5e7eb 20%,#e5e7eb 80%,transparent 100%);}
+/* Tambien hacer el primero un poco mas suave */
+#v100-noticias-wrap{margin-top:40px !important;}
+</style>
 </body>
 </html>
 
