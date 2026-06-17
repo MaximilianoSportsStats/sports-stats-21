@@ -19822,19 +19822,30 @@ document.addEventListener("click",function(e){
 
 
 
-<style id="v382-css">
+
+
+
+<style id="v383-css">
+/* Esconder puntos nativos */
+.v100-dots,.v100-dot-nav{display:none !important;}
+/* Card structure */
 .v100-news-big,.v100-news-mini{position:relative !important;overflow:hidden !important;border-radius:14px !important;}
 .v100-news-big{max-height:380px !important;}
-.v100-news-mini{max-height:118px !important;}
-.v382-bg{position:absolute !important;inset:0 !important;background-size:cover !important;background-position:center !important;filter:brightness(0.55) !important;z-index:0 !important;pointer-events:none !important;}
-.v100-news-big > *:not(.v382-bg),.v100-news-mini > *:not(.v382-bg){position:relative;z-index:1;}
-.v382-emoji-hide{display:none !important;}
+.v100-news-mini{max-height:380px !important;height:380px !important;}
+.v100-news-mini-col{display:flex !important;flex-direction:column !important;gap:14px !important;}
+.v100-news-mini-col .v100-news-mini{flex:1 1 auto;height:auto !important;max-height:none !important;min-height:120px;}
+.v383-bg{position:absolute !important;inset:0 !important;background-size:cover !important;background-position:center !important;filter:brightness(0.55) !important;z-index:0 !important;pointer-events:none !important;}
+.v100-news-big > *:not(.v383-bg),.v100-news-mini > *:not(.v383-bg){position:relative;z-index:1;}
+.v383-emoji-hide{display:none !important;}
+/* MIS dots */
+.v383-dots{display:flex !important;gap:8px;justify-content:center;margin-top:14px;}
+.v383-dot{width:10px;height:10px;border-radius:50%;background:#cbd5e1;cursor:pointer;border:none;padding:0;transition:all .25s;}
+.v383-dot.act{background:#c0392b;width:28px;border-radius:5px;}
 .inicio-panel .v99-cta{min-width:170px;height:42px;padding:0 22px;font-size:14px;font-weight:600;border-radius:10px;cursor:pointer;margin-top:18px;}
 </style>
 <script>
-(function(){if(window.__v382)return;window.__v382=true;
+(function(){if(window.__v383)return;window.__v383=true;
 var U="https://images.unsplash.com/photo-";var Q="?w=900&q=80&auto=format&fit=crop";
-/* 8 entries por categoria, IMAGENES UNICAS (32 total) */
 var D={
   noticias:[
     ["NBA","Lakers ganan en doble OT","LeBron 45 pts y triple-doble vs Warriors. Curry erro el triple del empate.","1546519638-68e109498ffc"],
@@ -19843,28 +19854,28 @@ var D={
     ["NFL","Resumen semana NFL","Playoffs, lesiones, MVPs en disputa y los partidos que definen las divisiones.","1485395037613-e83d5c1f5290"],
     ["Premier","Liverpool vence al City","Doblete de Salah, recital de Mac Allister y Reds a 3 puntos del titulo.","1577467014381-aa7c13e9e6a8"],
     ["Champions","PSG vs Real, semifinal","Mbappe y Vinicius cara a cara en Paris por la final europea.","1526232761682-d26e85bcf7ff"],
-    ["MLB","Yankees lideran la Americana","Judge llega a 30 HR antes del All-Star Break con 65 partidos jugados.","1566577739112-5180d4bf9390"],
-    ["NHL","Stanley Cup definida en 7","Panthers vencen a Oilers en una final electrizante en Florida.","1547347298-4074fc3086f0"]
+    ["MLB","Yankees lideran la Americana","Judge llega a 30 HR antes del All-Star Break.","1566577739112-5180d4bf9390"],
+    ["NHL","Stanley Cup definida en 7","Panthers vencen a Oilers en Florida.","1547347298-4074fc3086f0"]
   ],
   blogs:[
-    ["Analisis","Por que la NBA es mas global que nunca","Jugadores de 40+ paises, partidos en Paris, Tokio y Lima.","1518614368389-1b09e6bd1c0f"],
-    ["Historico","El dia que Argentina conquisto Qatar","Reconstruccion de la epica final ante Francia, 12 anos despues.","1518895949257-7621c3c786d7"],
-    ["Opinion","Por que el padel esta conquistando el mundo","De Espana al planeta: el deporte de moda se volvio fenomeno.","1554068865-24cecd4e34b8"],
-    ["Entrevista","Conversacion exclusiva con un protagonista","Su carrera, su dia a dia y la vision sobre el futuro del deporte.","1531404610614-68f9e73e35db"],
-    ["Stats","La era de los analytics","Como los datos cambiaron la forma de entrenar y jugar.","1551288049-bebda4e38f71"],
-    ["Tactica","El 4-2-3-1 que conquista","Por que la formacion mas usada del 2026 funciona en todas las ligas.","1542751371-adc38448a05e"],
-    ["Cultura","Hinchadas que mueven al mundo","Boca, Galatasaray, Liverpool: las atmosferas mas pasionales.","1551958219-acbc608c6377"],
-    ["Negocio","El dinero detras del deporte","Patrocinios y derechos de TV que rompen records.","1450101499163-c8848c66ca85"]
+    ["Analisis","Por que la NBA es mas global","Jugadores de 40+ paises, partidos en Paris, Tokio y Lima.","1518614368389-1b09e6bd1c0f"],
+    ["Historico","El dia que Argentina conquisto Qatar","Reconstruccion de la epica final ante Francia.","1518895949257-7621c3c786d7"],
+    ["Opinion","Por que el padel conquista el mundo","De Espana al planeta: el deporte de moda.","1554068865-24cecd4e34b8"],
+    ["Entrevista","Conversacion exclusiva con un protagonista","Su carrera y la vision sobre el futuro del deporte.","1531404610614-68f9e73e35db"],
+    ["Stats","La era de los analytics","Como los datos cambiaron entrenamiento y juego.","1551288049-bebda4e38f71"],
+    ["Tactica","El 4-2-3-1 que conquista","Por que la formacion funciona en todas las ligas.","1542751371-adc38448a05e"],
+    ["Cultura","Hinchadas que mueven al mundo","Boca, Galatasaray, Liverpool: las mas pasionales.","1551958219-acbc608c6377"],
+    ["Negocio","El dinero detras del deporte","Patrocinios que rompen records ano tras ano.","1450101499163-c8848c66ca85"]
   ],
   podcast:[
-    ["SS21","Conversaciones con la elite","Charlas con los grandes del deporte mundial. Episodio semanal.","1478737270239-2f02b77fc618"],
-    ["Tenis","Quien hereda a Djokovic","Lucia Ferreira con Alcaraz, Sinner y la nueva generacion. 35 min.","1505666287802-931dc83948e9"],
-    ["Cricket","El renacer del cricket en Asia","Ravi Mehta explora el boom del deporte en India y Pakistan. 47 min.","1531415074968-036ba1b575da"],
-    ["Futbol","Analisis tactico: Premier League 24/25","Diego Martin repasa lo mejor de la temporada. 55 min.","1543326727-cf6c39e8f84c"],
-    ["Futbol","La Albiceleste rumbo a 2026","Analisis de las eliminatorias con Andres Iniesta Lopez. 42 min.","1521587760476-6c12a4b040da"],
-    ["Basketball","NBA Tip-Off: previa de la temporada","Sara Diaz presenta a las franquicias. 38 min.","1518614368389-1b09e6bd1c0f"],
-    ["F1","Pretemporada en Bahrein","Lucas Mora analiza los nuevos monoplazas. 32 min.","1530549387789-4c1017266635"],
-    ["Femenino","Voces protagonistas","Carmen Lopez con grandes del deporte femenino mundial. 40 min.","1571019613454-1cb2f99b2d8b"]
+    ["SS21","Conversaciones con la elite","Charlas con los grandes del deporte mundial.","1478737270239-2f02b77fc618"],
+    ["Tenis","Quien hereda a Djokovic","Lucia Ferreira con Alcaraz, Sinner y la nueva generacion.","1505666287802-931dc83948e9"],
+    ["Cricket","El renacer del cricket en Asia","Ravi Mehta explora el boom en India y Pakistan.","1531415074968-036ba1b575da"],
+    ["Futbol","Analisis tactico: Premier League","Diego Martin repasa lo mejor de la temporada.","1543326727-cf6c39e8f84c"],
+    ["Futbol","La Albiceleste rumbo a 2026","Eliminatorias con Andres Iniesta Lopez.","1521587760476-6c12a4b040da"],
+    ["Basketball","NBA Tip-Off: previa","Sara Diaz presenta a las franquicias.","1518614368389-1b09e6bd1c0f"],
+    ["F1","Pretemporada en Bahrein","Lucas Mora analiza los nuevos monoplazas.","1530549387789-4c1017266635"],
+    ["Femenino","Voces protagonistas","Carmen Lopez con grandes del deporte femenino.","1571019613454-1cb2f99b2d8b"]
   ],
   mercado:[
     ["Fichajes","Top fichajes de la semana","Los movimientos mas resonantes del mercado europeo y sudamericano.","1554224155-6726b3ff858f"],
@@ -19878,46 +19889,40 @@ var D={
   ]
 };
 var EMOJI_RX=/^[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}\u{FE0F}\u200D]+$/u;
+var STATE={noticias:0,blogs:0,podcast:0,mercado:0};
 function url(id){return "url("+U+id+Q+")";}
-function ensureBg(card){var bg=card.querySelector(".v382-bg");if(!bg){bg=document.createElement("div");bg.className="v382-bg";card.insertBefore(bg,card.firstChild);}return bg;}
-function hideEmojiIn(card){
-  Array.from(card.children).forEach(function(d){
-    if(d.tagName!=="DIV"||d.classList.contains("v382-bg")||d.classList.contains("v382-emoji-hide"))return;
-    var t=(d.textContent||"").trim();
-    if(t.length>=1 && t.length<=6 && EMOJI_RX.test(t)){
-      d.classList.add("v382-emoji-hide");
-    }
-  });
+function ensureBg(card){var bg=card.querySelector(".v383-bg");if(!bg){bg=document.createElement("div");bg.className="v383-bg";card.insertBefore(bg,card.firstChild);}return bg;}
+function hideEmojiIn(card){Array.from(card.children).forEach(function(d){if(d.tagName!=="DIV"||d.classList.contains("v383-bg")||d.classList.contains("v383-emoji-hide"))return;var t=(d.textContent||"").trim();if(t.length>=1 && t.length<=6 && EMOJI_RX.test(t))d.classList.add("v383-emoji-hide");});}
+function setCard(card,entry,isBig){if(!card||!entry)return;hideEmojiIn(card);var bg=ensureBg(card);var newUrl=url(entry[3]);if(bg.style.backgroundImage!==newUrl)bg.style.backgroundImage=newUrl;var tagSel=isBig?".v100-news-tag":".v100-news-tag-mini";var tag=card.querySelector(tagSel);if(tag&&tag.textContent!==entry[0])tag.textContent=entry[0];var hSel=isBig?"h3":"h4";var h=card.querySelector(hSel);if(h&&h.textContent!==entry[1])h.textContent=entry[1];var p=card.querySelector("p");if(p&&p.textContent!==entry[2])p.textContent=entry[2];}
+function ensureDots(wrap,cat){
+  var existing=wrap.querySelector(".v383-dots");if(existing)return existing;
+  var sec=wrap.querySelector(".v100-news-sec")||wrap;
+  var dotsBox=document.createElement("div");dotsBox.className="v383-dots";dotsBox.dataset.cat=cat;
+  for(var i=0;i<8;i++){
+    var d=document.createElement("button");d.className="v383-dot"+(i===0?" act":"");d.dataset.i=i;
+    d.addEventListener("click",function(e){if(!e.isTrusted)return;var idx=parseInt(this.dataset.i);STATE[cat]=idx;applyAll();});
+    dotsBox.appendChild(d);
+  }
+  sec.appendChild(dotsBox);
+  return dotsBox;
 }
-function setCard(card,entry,isBig){
-  if(!card||!entry)return;
-  hideEmojiIn(card);
-  var bg=ensureBg(card);
-  var newUrl=url(entry[3]);
-  if(bg.style.backgroundImage!==newUrl)bg.style.backgroundImage=newUrl;
-  var tagSel=isBig?".v100-news-tag":".v100-news-tag-mini";
-  var tag=card.querySelector(tagSel);if(tag&&tag.textContent!==entry[0])tag.textContent=entry[0];
-  var hSel=isBig?"h3":"h4";
-  var h=card.querySelector(hSel);if(h&&h.textContent!==entry[1])h.textContent=entry[1];
-  var p=card.querySelector("p");if(p&&p.textContent!==entry[2])p.textContent=entry[2];
-}
-var STATE={offset:0};
+function updateDotsActive(dotsBox,activeIdx){Array.from(dotsBox.children).forEach(function(d,i){d.classList.toggle("act",i===activeIdx);});}
 function applyAll(){
   Object.keys(D).forEach(function(cat){
     var wrapId=cat==="mercado"?"v164-mercado-wrap":"v100-"+cat+"-wrap";
     var w=document.getElementById(wrapId);if(!w)return;
-    var pool=D[cat];var n=pool.length;
+    var pool=D[cat];var n=pool.length;var off=STATE[cat]%n;
     var big=w.querySelector(".v100-news-big");
     var minis=w.querySelectorAll(".v100-news-mini");
-    setCard(big,pool[STATE.offset%n],true);
-    minis.forEach(function(m,i){setCard(m,pool[(STATE.offset+i+1)%n],false);});
+    setCard(big,pool[off],true);
+    minis.forEach(function(m,i){setCard(m,pool[(off+i+1)%n],false);});
+    var dotsBox=ensureDots(w,cat);
+    updateDotsActive(dotsBox,off);
   });
 }
-function rotate(){STATE.offset=(STATE.offset+1)%8;applyAll();}
+function rotate(){Object.keys(STATE).forEach(function(c){STATE[c]=(STATE[c]+1)%8;});applyAll();}
 document.addEventListener("click",function(e){
   if(!e.isTrusted)return;
-  var dot=e.target.closest && e.target.closest(".v100-dot-nav");
-  if(dot){var sibs=Array.from(dot.parentElement.children).filter(function(c){return c.classList.contains("v100-dot-nav");});var i=sibs.indexOf(dot);if(i>=0){STATE.offset=i%8;applyAll();}return;}
   var cta=e.target.closest && e.target.closest(".v99-cta");
   if(cta){e.preventDefault();var t=(cta.textContent||"").toLowerCase();
     if(/explorar/.test(t)){var soc=Array.from(document.querySelectorAll(".sport-btn")).find(function(b){return /switchSport\(['\"]soccer/.test(b.getAttribute("onclick")||"");});if(soc)soc.click();window.scrollTo({top:0,behavior:"smooth"});}
@@ -19928,7 +19933,6 @@ document.addEventListener("click",function(e){
 },true);
 if(document.readyState!=="loading")applyAll();else document.addEventListener("DOMContentLoaded",applyAll);
 setTimeout(applyAll,1000);setTimeout(applyAll,3000);
-/* IDEMPOTENTE: cada 500ms re-aplica. Pero solo cambia DOM si valor difiere. */
 setInterval(applyAll,500);
 setInterval(rotate,8000);
 })();
