@@ -19907,6 +19907,62 @@ setTimeout(activate,500);setTimeout(activate,2000);
 document.addEventListener("click",function(e){if(e.isTrusted)setTimeout(activate,150);},true);
 })();
 </script>
+
+<script>
+/* v353 - eliminar "Que es SS21" del Inicio + matar duplicados en sport pages */
+(function(){if(window.__v353)return;window.__v353=true;
+function nuke(){
+  /* 1. ELIMINAR cualquier elemento "Que es Sports Stats 21" del Inicio */
+  var headings=Array.from(document.querySelectorAll("h1,h2,h3,h4"));
+  headings.forEach(function(h){
+    var t=(h.textContent||"").trim();
+    if(/qu[\u00e9e]\s*es\s*Sports\s*Stats\s*21/i.test(t)){
+      /* Subir al ancestro section o article que contenga esto + las stats */
+      var ancestor=h;
+      for(var i=0;i<6;i++){
+        var p=ancestor.parentElement;
+        if(!p||p.tagName==="BODY"||p.id==="panel-inicio"||p.id==="v324-panel-masss21")break;
+        ancestor=p;
+      }
+      /* Solo eliminar si NO esta dentro del MasSS21 (ahi si va) */
+      if(!ancestor.closest("#v324-panel-masss21")){
+        ancestor.style.setProperty("display","none","important");
+        try{ancestor.remove();}catch(e){}
+      }
+    }
+  });
+  /* 2. ELIMINAR cards v29-todos-card y grids - antes "Todos los Deportes" */
+  document.querySelectorAll(".v29-todos-card,.v29-todos-grid,.v29-todos,.v29-todos-page,#v29-todos-page").forEach(function(el){
+    try{el.remove();}catch(e){el.style.setProperty("display","none","important");}
+  });
+  /* 3. ELIMINAR cards "SEGUIDORES" antiguas (top de panel-soccer original) */
+  document.querySelectorAll("div,section,article").forEach(function(el){
+    var t=(el.textContent||"").trim();
+    if(el.children.length<6 && /^\d+(\.\d+)?[KM]?\s*SEGUIDORES/i.test(t.replace(/[\u{1F300}-\u{1FAFF}\u2600-\u27BF\s]+/gu,""))){
+      try{el.remove();}catch(e){el.style.setProperty("display","none","important");}
+    }
+  });
+  /* 4. Ocultar sidebar duplicado #league-nav (mantener solo #sidebar) */
+  var ln=document.getElementById("league-nav");
+  var sb=document.getElementById("sidebar");
+  if(ln && sb && ln!==sb){
+    /* Si league-nav esta DENTRO de sidebar, no tocar. Si esta separado, ocultar */
+    if(!sb.contains(ln) && !ln.contains(sb))ln.style.setProperty("display","none","important");
+  }
+  /* 5. Reforzar v351 visibility */
+  var v351=document.getElementById("v351-sport-content");
+  if(v351 && Array.from(document.body.classList).some(function(c){return c.indexOf("v317-show-")===0 && c!=="v317-show-inicio";})){
+    v351.style.setProperty("display","block","important");
+    v351.style.setProperty("min-height","600px","important");
+    v351.style.setProperty("flex","1","important");
+  }
+}
+if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",nuke);}else{nuke();}
+setTimeout(nuke,500);setTimeout(nuke,1500);setTimeout(nuke,3000);
+/* Re-nuke en cada click */
+document.addEventListener("click",function(e){if(e.isTrusted)setTimeout(nuke,200);},true);
+})();
+</script>
 </body>
 </html>
 
