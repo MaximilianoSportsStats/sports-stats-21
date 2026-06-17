@@ -19959,6 +19959,97 @@ html body .inicio-panel p{flex:1 1 auto !important;margin-bottom:0 !important;}
 html body .inicio-panel .v99-cta{margin-top:28px !important;align-self:flex-start !important;display:inline-flex !important;align-items:center !important;justify-content:center !important;min-width:200px !important;width:200px !important;height:46px !important;padding:0 !important;font-size:14px !important;font-weight:600 !important;border-radius:10px !important;background:#c0392b !important;color:#fff !important;border:none !important;cursor:pointer !important;text-align:center !important;}
 html body .inicio-panel .v99-cta:hover{background:#a32f24 !important;}
 </style>
+
+<script>
+/* v386: traducir cards Inicio + headers + placeholder, leyendo localStorage v30-lang */
+(function(){if(window.__v386)return;window.__v386=true;
+function getLang(){return (localStorage.getItem("v30-lang")||"es").toLowerCase();}
+
+/* Headers de seccion */
+var H={
+  noticias:{es:"📰 NOTICIAS",en:"📰 NEWS",de:"📰 NACHRICHTEN",fr:"📰 ACTUALITÉS",it:"📰 NOTIZIE",pt:"📰 NOTÍCIAS"},
+  blogs:{es:"📝 BLOGS",en:"📝 BLOGS",de:"📝 BLOGS",fr:"📝 BLOGS",it:"📝 BLOG",pt:"📝 BLOGS"},
+  podcast:{es:"🎙 PODCAST",en:"🎙 PODCAST",de:"🎙 PODCAST",fr:"🎙 PODCAST",it:"🎙 PODCAST",pt:"🎙 PODCAST"},
+  mercado:{es:"🤵 MERCADO",en:"🤵 MARKET",de:"🤵 MARKT",fr:"🤵 MARCHÉ",it:"🤵 MERCATO",pt:"🤵 MERCADO"}
+};
+var HS={
+  noticias:{es:"Lo último en notas y actualidad deportiva",en:"The latest sports news and updates",de:"Die neuesten Sportnachrichten und Updates",fr:"Les dernières actualités sportives",it:"Le ultime notizie sportive",pt:"As últimas notícias esportivas"},
+  blogs:{es:"Opinión, análisis, tácticas y entrevistas",en:"Opinion, analysis, tactics and interviews",de:"Meinung, Analyse, Taktik und Interviews",fr:"Opinion, analyse, tactiques et interviews",it:"Opinione, analisi, tattica e interviste",pt:"Opinião, análise, táticas e entrevistas"},
+  podcast:{es:"Análisis, entrevistas y previas semanales",en:"Analysis, interviews and weekly previews",de:"Analysen, Interviews und wöchentliche Vorschauen",fr:"Analyses, interviews et avant-matchs hebdomadaires",it:"Analisi, interviste e anteprime settimanali",pt:"Análises, entrevistas e prévias semanais"},
+  mercado:{es:"Fichajes, rumores y movimientos del mercado",en:"Transfers, rumors and market moves",de:"Transfers, Gerüchte und Marktbewegungen",fr:"Transferts, rumeurs et mouvements du marché",it:"Trasferimenti, voci e movimenti del mercato",pt:"Transferências, rumores e movimentos do mercado"}
+};
+
+/* Search placeholder + login button + ticker label */
+var STATIC={
+  search:{es:"Buscar deportes, ligas, equipos, jugadores...",en:"Search sports, leagues, teams, players...",de:"Sportarten, Ligen, Teams, Spieler suchen...",fr:"Rechercher sports, ligues, équipes, joueurs...",it:"Cerca sport, leghe, squadre, giocatori...",pt:"Buscar esportes, ligas, equipes, jogadores..."},
+  login:{es:"Iniciar Sesión",en:"Sign In",de:"Anmelden",fr:"Connexion",it:"Accedi",pt:"Entrar"}
+};
+
+/* DATA para v383 cards en cada idioma. Solo titulos y subs varian; tags se mantienen */
+var DATA_TR={
+  noticias:{
+    en:[["NBA","Lakers win in double OT","LeBron 45 pts and triple-double vs Warriors. Curry missed the tying three.","1546519638-68e109498ffc"],["Tennis","Alcaraz back to the final","Beats Zverev in 4 sets and meets Sinner for the Paris crown.","1622279457486-3cf76b0d6e7e"],["F1","Verstappen dominates Monaco","Pole, win and fastest lap. Leads the championship by 95 points.","1518998053901-5348d3961a04"],["NFL","NFL Week Recap","Playoffs, injuries, MVPs in dispute and the games that define divisions.","1485395037613-e83d5c1f5290"],["Premier","Liverpool beat City","Salah brace, Mac Allister masterclass and Reds 3 points from title.","1577467014381-aa7c13e9e6a8"],["Champions","PSG vs Real, fiery semifinal","Mbappé and Vinicius face to face in Paris for the European final.","1526232761682-d26e85bcf7ff"],["MLB","Yankees lead the American","Judge hits 30 HR before the All-Star Break in 65 games.","1566577739112-5180d4bf9390"],["NHL","Stanley Cup decided in 7","Panthers beat Oilers in Florida.","1547347298-4074fc3086f0"]],
+    de:[["NBA","Lakers gewinnen in doppelter OT","LeBron 45 Pkt und Triple-Double gegen Warriors.","1546519638-68e109498ffc"],["Tennis","Alcaraz erneut im Finale","Schlägt Zverev in 4 Sätzen und trifft auf Sinner in Paris.","1622279457486-3cf76b0d6e7e"],["F1","Verstappen dominiert Monaco","Pole, Sieg und schnellste Runde. Führt mit 95 Punkten.","1518998053901-5348d3961a04"],["NFL","NFL Wochenrückblick","Playoffs, Verletzungen, MVPs und entscheidende Spiele.","1485395037613-e83d5c1f5290"],["Premier","Liverpool schlägt City","Salah Doppelpack und Reds 3 Punkte vom Titel entfernt.","1577467014381-aa7c13e9e6a8"],["Champions","PSG gegen Real, brisantes Halbfinale","Mbappé und Vinicius im Pariser Duell.","1526232761682-d26e85bcf7ff"],["MLB","Yankees führen die Liga","Judge erreicht 30 HR vor der All-Star Pause.","1566577739112-5180d4bf9390"],["NHL","Stanley Cup in Spiel 7 entschieden","Panthers schlagen Oilers in Florida.","1547347298-4074fc3086f0"]],
+    fr:[["NBA","Lakers gagnent en double prolongation","LeBron 45 pts et triple-double face aux Warriors.","1546519638-68e109498ffc"],["Tennis","Alcaraz de retour en finale","Bat Zverev en 4 sets et affronte Sinner à Paris.","1622279457486-3cf76b0d6e7e"],["F1","Verstappen domine Monaco","Pole, victoire et meilleur tour. Mène avec 95 points.","1518998053901-5348d3961a04"],["NFL","Résumé semaine NFL","Playoffs, blessures, MVP et matchs décisifs.","1485395037613-e83d5c1f5290"],["Premier","Liverpool bat City à Anfield","Doublé de Salah, récital de Mac Allister.","1577467014381-aa7c13e9e6a8"],["Champions","PSG vs Real, demi-finale brûlante","Mbappé et Vinicius face à face à Paris.","1526232761682-d26e85bcf7ff"],["MLB","Yankees dominent la Ligue Américaine","Judge atteint 30 HR avant le All-Star Break.","1566577739112-5180d4bf9390"],["NHL","Stanley Cup décidée en 7","Panthers battent les Oilers en Floride.","1547347298-4074fc3086f0"]],
+    it:[["NBA","Lakers vincono al doppio OT","LeBron 45 pt e tripla doppia vs Warriors.","1546519638-68e109498ffc"],["Tennis","Alcaraz torna in finale","Batte Zverev in 4 set e sfida Sinner a Parigi.","1622279457486-3cf76b0d6e7e"],["F1","Verstappen domina Monaco","Pole, vittoria e giro più veloce. Guida con 95 punti.","1518998053901-5348d3961a04"],["NFL","Riepilogo settimana NFL","Playoff, infortuni, MVP in lotta e partite decisive.","1485395037613-e83d5c1f5290"],["Premier","Liverpool batte il City","Doppietta Salah, e Reds a 3 punti dal titolo.","1577467014381-aa7c13e9e6a8"],["Champions","PSG vs Real, semifinale di fuoco","Mbappé e Vinicius a Parigi per la finale europea.","1526232761682-d26e85bcf7ff"],["MLB","Yankees guidano l'Americana","Judge raggiunge 30 HR prima dell'All-Star Break.","1566577739112-5180d4bf9390"],["NHL","Stanley Cup decisa in gara 7","Panthers battono gli Oilers in Florida.","1547347298-4074fc3086f0"]],
+    pt:[["NBA","Lakers vencem em prorrogação dupla","LeBron 45 pts e triple-double contra os Warriors.","1546519638-68e109498ffc"],["Tênis","Alcaraz de volta à final","Vence Zverev em 4 sets e enfrenta Sinner em Paris.","1622279457486-3cf76b0d6e7e"],["F1","Verstappen domina em Mônaco","Pole, vitória e volta rápida. Lidera com 95 pontos.","1518998053901-5348d3961a04"],["NFL","Resumo semana NFL","Playoffs, lesões, MVPs em disputa e jogos decisivos.","1485395037613-e83d5c1f5290"],["Premier","Liverpool vence o City","Dobradinha de Salah e Reds a 3 pontos do título.","1577467014381-aa7c13e9e6a8"],["Champions","PSG vs Real, semifinal de fogo","Mbappé e Vinicius cara a cara em Paris.","1526232761682-d26e85bcf7ff"],["MLB","Yankees lideram a Americana","Judge atinge 30 HR antes do All-Star Break.","1566577739112-5180d4bf9390"],["NHL","Stanley Cup decidida em 7","Panthers vencem os Oilers na Flórida.","1547347298-4074fc3086f0"]]
+  },
+  blogs:{
+    en:[["Analysis","Why the NBA is more global","Players from 40+ countries, games in Paris, Tokyo and Lima.","1518614368389-1b09e6bd1c0f"],["Historic","The day Argentina conquered Qatar","Reconstruction of the epic final vs France.","1518895949257-7621c3c786d7"],["Opinion","Why padel is conquering the world","From Spain to the planet: a moda sport.","1554068865-24cecd4e34b8"],["Interview","Exclusive talk with a protagonist","Their career and vision for the future.","1531404610614-68f9e73e35db"],["Stats","The era of analytics","How data changed training and the game.","1551288049-bebda4e38f71"],["Tactics","The 4-2-3-1 conquering","Why the most used formation works.","1542751371-adc38448a05e"],["Culture","Fans that move the world","Boca, Galatasaray, Liverpool: the most passionate.","1551958219-acbc608c6377"],["Business","The money behind sport","Sponsorships breaking records every year.","1450101499163-c8848c66ca85"]],
+    de:[["Analyse","Warum die NBA globaler ist","Spieler aus 40+ Ländern, Spiele in Paris, Tokio und Lima.","1518614368389-1b09e6bd1c0f"],["Historisch","Argentiniens Triumph in Katar","Rekonstruktion des epischen Finales gegen Frankreich.","1518895949257-7621c3c786d7"],["Meinung","Warum Padel die Welt erobert","Von Spanien aus: der Sport der Stunde.","1554068865-24cecd4e34b8"],["Interview","Exklusives Gespräch mit einem Protagonisten","Karriere und Zukunftsvision.","1531404610614-68f9e73e35db"],["Statistik","Das Zeitalter der Analytics","Wie Daten Training und Spiel verändern.","1551288049-bebda4e38f71"],["Taktik","Das 4-2-3-1 dominiert","Warum die meistgenutzte Formation funktioniert.","1542751371-adc38448a05e"],["Kultur","Fans die die Welt bewegen","Boca, Galatasaray, Liverpool.","1551958219-acbc608c6377"],["Business","Das Geld hinter dem Sport","Sponsoren-Deals brechen Rekorde.","1450101499163-c8848c66ca85"]],
+    fr:[["Analyse","Pourquoi la NBA est plus mondiale","Joueurs de 40+ pays, matchs à Paris, Tokyo et Lima.","1518614368389-1b09e6bd1c0f"],["Historique","Le jour où l'Argentine a conquis le Qatar","Reconstruction de la finale épique vs France.","1518895949257-7621c3c786d7"],["Opinion","Pourquoi le padel conquiert le monde","De l'Espagne au monde: le sport à la mode.","1554068865-24cecd4e34b8"],["Interview","Entretien exclusif","Sa carrière et sa vision du futur.","1531404610614-68f9e73e35db"],["Stats","L'ère des analytics","Comment les données ont changé le sport.","1551288049-bebda4e38f71"],["Tactique","Le 4-2-3-1 qui conquiert","Pourquoi cette formation fonctionne.","1542751371-adc38448a05e"],["Culture","Supporters qui bougent le monde","Boca, Galatasaray, Liverpool.","1551958219-acbc608c6377"],["Business","L'argent derrière le sport","Sponsorings qui battent des records.","1450101499163-c8848c66ca85"]],
+    it:[["Analisi","Perché l'NBA è più globale","Giocatori da 40+ paesi, partite a Parigi, Tokyo e Lima.","1518614368389-1b09e6bd1c0f"],["Storico","Il giorno in cui l'Argentina conquistò il Qatar","Ricostruzione della finale epica vs Francia.","1518895949257-7621c3c786d7"],["Opinione","Perché il padel conquista il mondo","Dalla Spagna al mondo: lo sport del momento.","1554068865-24cecd4e34b8"],["Intervista","Conversazione esclusiva","Carriera e visione per il futuro.","1531404610614-68f9e73e35db"],["Stats","L'era degli analytics","Come i dati hanno cambiato lo sport.","1551288049-bebda4e38f71"],["Tattica","Il 4-2-3-1 che conquista","Perché la formazione più usata funziona.","1542751371-adc38448a05e"],["Cultura","Tifoserie che muovono il mondo","Boca, Galatasaray, Liverpool.","1551958219-acbc608c6377"],["Business","I soldi dietro lo sport","Sponsorizzazioni che battono record.","1450101499163-c8848c66ca85"]],
+    pt:[["Análise","Por que a NBA está mais global","Jogadores de 40+ países, jogos em Paris, Tóquio e Lima.","1518614368389-1b09e6bd1c0f"],["Histórico","O dia em que a Argentina conquistou Catar","Reconstrução da final épica vs França.","1518895949257-7621c3c786d7"],["Opinião","Por que o padel conquista o mundo","Da Espanha ao mundo: o esporte do momento.","1554068865-24cecd4e34b8"],["Entrevista","Conversa exclusiva","Sua carreira e visão de futuro.","1531404610614-68f9e73e35db"],["Stats","A era do analytics","Como os dados mudaram o esporte.","1551288049-bebda4e38f71"],["Tática","O 4-2-3-1 que conquista","Por que a formação mais usada funciona.","1542751371-adc38448a05e"],["Cultura","Torcidas que movem o mundo","Boca, Galatasaray, Liverpool.","1551958219-acbc608c6377"],["Negócio","O dinheiro por trás do esporte","Patrocínios que quebram recordes.","1450101499163-c8848c66ca85"]]
+  }
+};
+/* podcast y mercado fallback al ES de v383 */
+
+function applyHeaders(){
+  var lang=getLang();
+  ["noticias","blogs","podcast","mercado"].forEach(function(cat){
+    var wrapId=cat==="mercado"?"v164-mercado-wrap":"v100-"+cat+"-wrap";
+    var w=document.getElementById(wrapId);if(!w)return;
+    var h=w.querySelector("h2,h3");
+    if(h&&H[cat]&&H[cat][lang])h.textContent=H[cat][lang];
+    var sub=w.querySelector(".v100-news-sub,.section-sub,h4");
+    if(sub&&HS[cat]&&HS[cat][lang])sub.textContent=HS[cat][lang];
+  });
+  /* Search placeholder */
+  var search=document.querySelector("#v25-search-bar input,input[type=search]");
+  if(search&&STATIC.search[lang])search.placeholder=STATIC.search[lang];
+  /* documentElement.lang */
+  document.documentElement.lang=lang;
+}
+
+/* Override v383 setCard data by patching D global if exists */
+function applyCardsLang(){
+  var lang=getLang();
+  if(lang==="es")return; /* default - v383 uses ES */
+  if(!window.D||!DATA_TR.noticias[lang])return;
+  /* Replace D[cat] entries with translated versions */
+  ["noticias","blogs"].forEach(function(cat){
+    if(DATA_TR[cat]&&DATA_TR[cat][lang]){window.D[cat]=DATA_TR[cat][lang];}
+  });
+}
+
+function applyAll(){applyHeaders();applyCardsLang();}
+
+/* On localStorage change OR custom event */
+window.addEventListener("storage",function(e){if(e.key==="v30-lang")applyAll();});
+/* Hook into lang picker click */
+document.addEventListener("click",function(e){
+  if(!e.isTrusted)return;
+  var item=e.target.closest && e.target.closest("[data-lang]");
+  if(item){setTimeout(applyAll,300);}
+  /* Also: clicking ANY child of #v30-lang */
+  var langArea=e.target.closest && e.target.closest("#v30-lang");
+  if(langArea){setTimeout(applyAll,300);}
+},true);
+if(document.readyState!=="loading")applyAll();else document.addEventListener("DOMContentLoaded",applyAll);
+setTimeout(applyAll,1500);setTimeout(applyAll,3500);
+setInterval(applyAll,2000);
+})();
+</script>
 </body>
 </html>
 
