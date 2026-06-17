@@ -19684,6 +19684,17 @@ if(document.readyState!=="loading")build();
 else document.addEventListener("DOMContentLoaded",build);
 })();
 </script>
+
+<script>
+(function(){if(window.__v358)return;window.__v358=true;
+document.body.classList.remove("v357-active");
+Array.from(document.body.classList).forEach(function(c){if(c.indexOf("v317-show-")===0 && c!=="v317-show-inicio")document.body.classList.remove(c);if(c==="v356-hide-inicio")document.body.classList.remove(c);});
+window.__v355Sport=null;
+document.addEventListener("click",function(e){if(!e.isTrusted){var b=e.target.closest && e.target.closest(".sport-btn");if(b){e.stopImmediatePropagation && e.stopImmediatePropagation();}return;}},true);
+document.addEventListener("click",function(e){if(!e.isTrusted)return;var t=e.target;if(!t.closest)return;var btn=t.closest(".sport-btn");if(btn && /todos/i.test(btn.textContent||"")){document.body.classList.remove("v357-active");var p=document.getElementById("v357-page");if(p){var sec=p.querySelector("#v357-sec");if(sec)sec.innerHTML="";}}var inicio=t.closest("[data-v26id=\"inicio\"],.v56-item[data-v26id=\"inicio\"]");if(inicio){document.body.classList.remove("v357-active");}window.__v358LastSportClick=btn?Date.now():window.__v358LastSportClick;},true);
+setInterval(function(){if((location.hash==="#inicio"||location.hash==="") && document.body.classList.contains("v357-active")){if(!window.__v358LastSportClick || Date.now()-window.__v358LastSportClick>3000){document.body.classList.remove("v357-active");}}},2000);
+})();
+</script>
 </body>
 </html>
 
