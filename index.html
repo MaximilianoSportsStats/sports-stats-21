@@ -19685,6 +19685,43 @@ setTimeout(wrapItems,500);setTimeout(wrapItems,2000);setTimeout(wrapItems,5000);
 aside.v36-side > ul:not(#v56-ul){display:none !important;}
 #v36-foot ~ ul,#v36-body ~ ul{display:none !important;}
 </style>
+
+<script>
+/* v373: sync body class v317-show-X when sport-btn clicked */
+(function(){if(window.__v373)return;window.__v373=true;
+function applyShow(sport){
+  if(!sport)return;
+  /* Remove all v317-show-X classes */
+  Array.from(document.body.classList).forEach(function(c){if(c.indexOf("v317-show-")===0)document.body.classList.remove(c);});
+  /* Add new */
+  document.body.classList.add("v317-show-"+sport);
+}
+document.addEventListener("click",function(e){
+  if(!e.isTrusted)return;
+  var btn=e.target.closest && e.target.closest(".sport-btn");
+  if(!btn)return;
+  var oc=(btn.getAttribute("onclick")||"").match(/switchSport\(['"]([^'"]+)/);
+  var sport=oc?oc[1]:null;
+  var txt=(btn.textContent||"").toLowerCase().trim();
+  if(!sport){
+    if(/todos|inicio/.test(txt)){applyShow("inicio");return;}
+    if(/atletismo/.test(txt))sport="athletics";
+    else if(/ciclismo/.test(txt))sport="cycling";
+    else if(/volleyball|voley/.test(txt))sport="volley";
+    else if(/cricket/.test(txt))sport="cricket";
+    else if(/otros/.test(txt))sport="otros";
+    else if(/eventos/.test(txt))sport="eventos";
+  }
+  if(sport)setTimeout(function(){applyShow(sport);},50);
+},true);
+/* Also handle Inicio drawer click */
+document.addEventListener("click",function(e){
+  if(!e.isTrusted)return;
+  var inicio=e.target.closest && e.target.closest("[data-v26id=\"inicio\"]");
+  if(inicio)setTimeout(function(){applyShow("inicio");},50);
+},true);
+})();
+</script>
 </body>
 </html>
 
