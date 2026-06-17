@@ -19937,6 +19937,19 @@ setInterval(applyAll,500);
 setInterval(rotate,8000);
 })();
 </script>
+
+<style id="v384-css">
+/* Gap ticker + linea separadora entre secciones */
+.v100-ticker,#v100-ticker,#ticker,.live-ticker{margin-bottom:24px !important;}
+html body #v100-noticias-wrap,html body #v100-blogs-wrap,html body #v100-podcast-wrap,html body #v164-mercado-wrap{margin-top:60px !important;margin-bottom:60px !important;padding-top:30px !important;position:relative;}
+html body #v100-noticias-wrap{margin-top:40px !important;}
+html body #v100-blogs-wrap::before,html body #v100-podcast-wrap::before,html body #v164-mercado-wrap::before{content:"" !important;display:block !important;position:absolute !important;top:0 !important;left:50% !important;transform:translateX(-50%) !important;width:80% !important;max-width:900px !important;height:1px !important;background:linear-gradient(to right,transparent 0%,#e5e7eb 20%,#e5e7eb 80%,transparent 100%) !important;}
+/* Fix Mercado y todas las mini-col: forzar flex equal a big con MAXIMA especificidad */
+html body #v164-mercado-wrap .v100-news-mini-col,html body #v100-noticias-wrap .v100-news-mini-col,html body #v100-blogs-wrap .v100-news-mini-col,html body #v100-podcast-wrap .v100-news-mini-col{display:flex !important;flex-direction:column !important;gap:14px !important;height:100% !important;}
+html body #v164-mercado-wrap .v100-news-mini-col .v100-news-mini,html body #v100-noticias-wrap .v100-news-mini-col .v100-news-mini,html body #v100-blogs-wrap .v100-news-mini-col .v100-news-mini,html body #v100-podcast-wrap .v100-news-mini-col .v100-news-mini{flex:1 1 0 !important;min-height:0 !important;height:auto !important;max-height:none !important;}
+/* Big card y grid */
+html body #v164-mercado-wrap .v100-news-grid,html body #v100-noticias-wrap .v100-news-grid,html body #v100-blogs-wrap .v100-news-grid,html body #v100-podcast-wrap .v100-news-grid{align-items:stretch !important;}
+</style>
 </body>
 </html>
 
