@@ -19810,58 +19810,7 @@ document.addEventListener("click",function(e){
 })();
 </script>
 
-<style id="v377-css">
-/* Hide emoji div (immediate child of card that is NOT v377-bg) */
-.v100-news-big > div:not(.v377-bg):first-of-type,
-.v100-news-mini > div:not(.v377-bg):first-of-type{display:none !important;}
-/* Background layer */
-.v100-news-big,.v100-news-mini{position:relative;overflow:hidden;border-radius:14px;}
-.v377-bg{position:absolute;inset:0;background-size:cover;background-position:center;filter:brightness(0.55);z-index:0;pointer-events:none;}
-.v100-news-big > *:not(.v377-bg),.v100-news-mini > *:not(.v377-bg){position:relative;z-index:1;}
-</style>
-<script>
-(function(){if(window.__v377)return;window.__v377=true;
-var U="https://images.unsplash.com/photo-";
-var Q="?w=900&q=80&auto=format&fit=crop";
-var noticias=["1574629810360-7efbbe195018","1551958219-acbc608c6377","1540747913346-19e32dc3e97e","1543326727-cf6c39e8f84c","1521587760476-6c12a4b040da","1530549387789-4c1017266635","1531415074968-036ba1b575da","1551698618-1dfe5d97d256","1577003811926-53b288a6e5d0","1593341646782-e0b495cff86d"];
-var blogs=["1454165804606-c3d57bc86b40","1455390582262-044cdead277a","1486312338219-ce68d2c6f44d","1499750310107-5fef28a66643","1517816743773-6e0fd518b4a6","1488190211105-8b0e65b80b4e","1457369804613-52c61a468e7d","1517245386807-bb43f82c33c4","1432888622747-4eb9a8efeb07","1450101499163-c8848c66ca85"];
-var podcast=["1478737270239-2f02b77fc618","1590602847861-f357a9332bbc","1487180144351-b8472da7d491","1605000797499-95a51c5269ae","1581325454559-31ad6eea7d5d","1598488035139-bdbb2231ce04","1581368135153-a506cf13b1e1","1493225457124-a3eb161ffa5f","1607734834509-516c1497f8d0","1518972559570-7cc1309f3229"];
-var mercado=["1554224155-6726b3ff858f","1565514020179-026b92b84bb6","1611974789855-9c2a0a7236a3","1592495981488-69a7b6b8a59f","1574607383476-f517f260d30b","1535980028886-d5c98dcfaf4e","1556761175-4b46a572b786","1559526324-4b87b5e36e44","1612611741090-9d1c2acdb37d","1573164574001-518958d9baa2"];
-function getCat(card){
-  var w=card.closest("[id$=-wrap]");if(!w)return noticias;
-  if(w.id.indexOf("blogs")>=0)return blogs;
-  if(w.id.indexOf("podcast")>=0)return podcast;
-  if(w.id.indexOf("mercado")>=0)return mercado;
-  return noticias;
-}
-function ensureBg(card,idx){
-  var bg=card.querySelector(".v377-bg");
-  if(!bg){bg=document.createElement("div");bg.className="v377-bg";card.insertBefore(bg,card.firstChild);}
-  var pool=getCat(card);
-  var url=U+pool[idx%pool.length]+Q;
-  if(bg.style.backgroundImage.indexOf(pool[idx%pool.length])<0){
-    bg.style.backgroundImage="url("+url+")";
-  }
-}
-var OFFSET=0;
-function applyAll(){
-  ["v100-noticias-wrap","v100-blogs-wrap","v100-podcast-wrap","v164-mercado-wrap"].forEach(function(id){
-    var w=document.getElementById(id);if(!w)return;
-    var big=w.querySelector(".v100-news-big");
-    var minis=w.querySelectorAll(".v100-news-mini");
-    if(big)ensureBg(big,OFFSET);
-    minis.forEach(function(m,i){ensureBg(m,OFFSET+i+1);});
-  });
-}
-function init(){applyAll();}
-if(document.readyState!=="loading")init();else document.addEventListener("DOMContentLoaded",init);
-/* ONE slow interval - 10 segundos, no observers */
-setInterval(function(){OFFSET=(OFFSET+1)%10;applyAll();},10000);
-/* 2 safety re-runs only at start */
-setTimeout(init,2000);
-setTimeout(init,5000);
-})();
-</script>
+
 
 <style id="v378-css">
 /* Gap entre ticker y hero */
@@ -19871,6 +19820,69 @@ setTimeout(init,5000);
 #v100-blogs-wrap::before,#v100-podcast-wrap::before,#v164-mercado-wrap::before{content:"";display:block;position:absolute;top:0;left:50%;transform:translateX(-50%);width:80%;max-width:900px;height:1px;background:linear-gradient(to right,transparent 0%,#e5e7eb 20%,#e5e7eb 80%,transparent 100%);}
 #v100-noticias-wrap{margin-top:40px !important;}
 </style>
+
+<style id="v379-css">
+/* Card relative + overflow for bg layer */
+.v100-news-big,.v100-news-mini{position:relative !important;overflow:hidden !important;border-radius:14px !important;}
+/* Bg layer absolute behind content */
+.v379-bg{position:absolute !important;inset:0 !important;background-size:cover !important;background-position:center !important;filter:brightness(0.55) !important;z-index:0 !important;pointer-events:none !important;}
+/* Hide emoji - 2do DIV directo (1ero ahora es v379-bg) */
+.v100-news-big > div:nth-of-type(2),
+.v100-news-mini > div:nth-of-type(2){display:none !important;}
+/* Tag y content above bg */
+.v100-news-big > *:not(.v379-bg),.v100-news-mini > *:not(.v379-bg){position:relative;z-index:1;}
+</style>
+<script>
+(function(){if(window.__v379)return;window.__v379=true;
+var U="https://images.unsplash.com/photo-";var Q="?w=900&q=80&auto=format&fit=crop";
+/* Mapeo keywords -> image */
+var KW=[
+  {rx:/lakers|nba|basketball|warriors|celtics|lebron|curry/i,img:"1540747913346-19e32dc3e97e"},
+  {rx:/verstappen|f1|monaco|m\u00f3naco|norris|leclerc|red bull|ferrari|mclaren/i,img:"1530549387789-4c1017266635"},
+  {rx:/alcaraz|sinner|roland|garros|tenis|tennis|zverev|djokovic|nadal|federer/i,img:"1531415074968-036ba1b575da"},
+  {rx:/nfl|chiefs|super bowl|mahomes|brady|cowboys|patriots/i,img:"1543326727-cf6c39e8f84c"},
+  {rx:/mundial|fifa|messi|cristiano|world cup|qatar|2026/i,img:"1574629810360-7efbbe195018"},
+  {rx:/champions|psg|real madrid|barcelona|mbapp|vinicius|bellingham/i,img:"1551958219-acbc608c6377"},
+  {rx:/premier|liverpool|man city|man utd|arsenal|chelsea|salah/i,img:"1521587760476-6c12a4b040da"},
+  {rx:/la liga|laliga|atletico|atl\u00e9tico|bayern/i,img:"1521587760476-6c12a4b040da"},
+  {rx:/mlb|yankees|dodgers|world series|judge|ohtani/i,img:"1551698618-1dfe5d97d256"},
+  {rx:/nhl|stanley|panthers|hockey|maple leafs|oilers/i,img:"1577003811926-53b288a6e5d0"},
+  {rx:/golf|pga|masters|tiger|mcilroy/i,img:"1593341646782-e0b495cff86d"},
+  {rx:/p\u00e1del|padel/i,img:"1531415074968-036ba1b575da"},
+  {rx:/rugby|six nations|all blacks/i,img:"1587280501635-68a0e82cd5ff"},
+  {rx:/blog|tactica|t\u00e1ctica|analisis|an\u00e1lisis|opinion|opini\u00f3n/i,img:"1454165804606-c3d57bc86b40"},
+  {rx:/podcast|talks|entrevista|conversaci\u00f3n|micr\u00f3fono/i,img:"1478737270239-2f02b77fc618"},
+  {rx:/fichaje|libre|rumor|valor|contrato|pr\u00e9stamo|renovaci\u00f3n|inversi\u00f3n|patrocinio|sub-21/i,img:"1554224155-6726b3ff858f"}
+];
+var DEFAULT_IMG="1574629810360-7efbbe195018";
+function pickImg(text){
+  for(var i=0;i<KW.length;i++){if(KW[i].rx.test(text))return KW[i].img;}
+  return DEFAULT_IMG;
+}
+function ensureBg(card,text){
+  var bg=card.querySelector(".v379-bg");
+  if(!bg){bg=document.createElement("div");bg.className="v379-bg";card.insertBefore(bg,card.firstChild);}
+  var img=pickImg(text);
+  var url=U+img+Q;
+  if(bg.style.backgroundImage.indexOf(img)<0){bg.style.backgroundImage="url("+url+")";}
+}
+function applyAll(){
+  ["v100-noticias-wrap","v100-blogs-wrap","v100-podcast-wrap","v164-mercado-wrap"].forEach(function(id){
+    var w=document.getElementById(id);if(!w)return;
+    var big=w.querySelector(".v100-news-big");
+    var minis=w.querySelectorAll(".v100-news-mini");
+    if(big){var txt=(big.querySelector("h3")||{}).textContent||"";var sub=(big.querySelector("p")||{}).textContent||"";var tag=(big.querySelector(".v100-news-tag")||{}).textContent||"";ensureBg(big,tag+" "+txt+" "+sub);}
+    minis.forEach(function(m){var txt=(m.querySelector("h4")||{}).textContent||"";var sub=(m.querySelector("p")||{}).textContent||"";var tag=(m.querySelector(".v100-news-tag-mini")||{}).textContent||"";ensureBg(m,tag+" "+txt+" "+sub);});
+  });
+}
+function init(){applyAll();}
+if(document.readyState!=="loading")init();else document.addEventListener("DOMContentLoaded",init);
+/* Re-apply solo cada 5s para captar cambios de carrusel nativo */
+setInterval(applyAll,5000);
+/* Initial extra calls al cargar */
+setTimeout(applyAll,1500);setTimeout(applyAll,3500);
+})();
+</script>
 </body>
 </html>
 
