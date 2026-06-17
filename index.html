@@ -19722,6 +19722,93 @@ document.addEventListener("click",function(e){
 },true);
 })();
 </script>
+
+<style id="v374-css">
+/* Force panel-X visible when user picked sport - bypass any rule that hides */
+html body.v374-show-soccer #panel-soccer,
+html body.v374-show-tennis #panel-tennis,
+html body.v374-show-f1 #panel-f1,
+html body.v374-show-nba #panel-nba,
+html body.v374-show-ufc #panel-ufc,
+html body.v374-show-baseball #panel-baseball,
+html body.v374-show-hockey #panel-hockey,
+html body.v374-show-nfl #panel-nfl,
+html body.v374-show-rugby #panel-rugby,
+html body.v374-show-golf #panel-golf,
+html body.v374-show-padel #panel-padel,
+html body.v374-show-acuaticos #panel-acuaticos,
+html body.v374-show-athletics #panel-athletics,
+html body.v374-show-cycling #panel-cycling,
+html body.v374-show-volley #panel-volley,
+html body.v374-show-cricket #panel-cricket,
+html body.v374-show-otros #panel-otros,
+html body.v374-show-eventos #panel-eventos{display:flex !important;flex-direction:column;width:100%;}
+/* Hide Inicio sections when sport active */
+html body[class*="v374-show-"] #panel-inicio,
+html body[class*="v374-show-"] #heroCarousel,
+html body[class*="v374-show-"] #v100-noticias-wrap,
+html body[class*="v374-show-"] #v100-blogs-wrap,
+html body[class*="v374-show-"] #v100-podcast-wrap,
+html body[class*="v374-show-"] #v164-mercado-wrap,
+html body[class*="v374-show-"] #v99-retos{display:none !important;}
+/* Hide other sport panels when one is active */
+html body[class*="v374-show-"] [id^="panel-"]:not(#panel-inicio){display:none !important;}
+html body.v374-show-soccer #panel-soccer,
+html body.v374-show-tennis #panel-tennis,
+html body.v374-show-f1 #panel-f1,
+html body.v374-show-nba #panel-nba,
+html body.v374-show-ufc #panel-ufc,
+html body.v374-show-baseball #panel-baseball,
+html body.v374-show-hockey #panel-hockey,
+html body.v374-show-nfl #panel-nfl,
+html body.v374-show-rugby #panel-rugby,
+html body.v374-show-golf #panel-golf,
+html body.v374-show-padel #panel-padel,
+html body.v374-show-acuaticos #panel-acuaticos,
+html body.v374-show-athletics #panel-athletics,
+html body.v374-show-cycling #panel-cycling,
+html body.v374-show-volley #panel-volley,
+html body.v374-show-cricket #panel-cricket,
+html body.v374-show-otros #panel-otros,
+html body.v374-show-eventos #panel-eventos{display:flex !important;}
+</style>
+<script>
+(function(){if(window.__v374)return;window.__v374=true;
+function applyShow(sport){
+  if(!sport){
+    Array.from(document.body.classList).forEach(function(c){if(c.indexOf("v374-show-")===0)document.body.classList.remove(c);});
+    return;
+  }
+  Array.from(document.body.classList).forEach(function(c){if(c.indexOf("v374-show-")===0)document.body.classList.remove(c);});
+  document.body.classList.add("v374-show-"+sport);
+  /* Also activate panel.active */
+  document.querySelectorAll("[id^=panel-]").forEach(function(p){p.classList.remove("active");});
+  var p=document.getElementById("panel-"+sport);if(p)p.classList.add("active");
+  window.scrollTo(0,0);
+}
+document.addEventListener("click",function(e){
+  if(!e.isTrusted)return;
+  var btn=e.target.closest && e.target.closest(".sport-btn");
+  if(btn){
+    var oc=(btn.getAttribute("onclick")||"").match(/switchSport\(['"]([^'"]+)/);
+    var sport=oc?oc[1]:null;
+    var txt=(btn.textContent||"").toLowerCase().trim();
+    if(!sport){
+      if(/todos|inicio/.test(txt)){applyShow(null);return;}
+      if(/atletismo/.test(txt))sport="athletics";
+      else if(/ciclismo/.test(txt))sport="cycling";
+      else if(/volleyball|voley/.test(txt))sport="volley";
+      else if(/cricket/.test(txt))sport="cricket";
+      else if(/otros/.test(txt))sport="otros";
+      else if(/eventos/.test(txt))sport="eventos";
+    }
+    if(sport)setTimeout(function(){applyShow(sport);},30);
+  }
+  var inicio=e.target.closest && e.target.closest("[data-v26id=\"inicio\"]");
+  if(inicio)setTimeout(function(){applyShow(null);},30);
+},true);
+})();
+</script>
 </body>
 </html>
 
