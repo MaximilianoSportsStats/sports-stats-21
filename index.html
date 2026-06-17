@@ -19553,6 +19553,56 @@ if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded"
 setTimeout(activate,500);setTimeout(activate,2000);
 })();
 </script>
+
+<style id="v356-css">
+#v355-page.v356-on{display:flex !important;gap:0;align-items:flex-start;max-width:1400px;margin:0 auto;}
+.v356-hide-inicio #v100-noticias-wrap,.v356-hide-inicio #v100-blogs-wrap,.v356-hide-inicio #v100-podcast-wrap,.v356-hide-inicio #v164-mercado-wrap,.v356-hide-inicio #v99-retos,.v356-hide-inicio #heroCarousel,.v356-hide-inicio footer{display:none !important;}
+</style>
+<script>
+(function(){if(window.__v356)return;window.__v356=true;
+function click(e){
+  var btn=e.target.closest && e.target.closest(".sport-btn");if(!btn)return;
+  var oc=(btn.getAttribute("onclick")||"").match(/switchSport\(['"]([^'"]+)/);
+  if(!oc){
+    var t=(btn.textContent||"").toLowerCase().trim();
+    if(/atletismo/.test(t))oc=[null,"athletics"];
+    else if(/ciclismo/.test(t))oc=[null,"cycling"];
+    else if(/volleyball|voley/.test(t))oc=[null,"volley"];
+    else if(/cricket/.test(t))oc=[null,"cricket"];
+    else if(/otros/.test(t))oc=[null,"otros"];
+    else if(/eventos/.test(t))oc=[null,"eventos"];
+    else if(/todos/.test(t)){
+      /* Back to Inicio */
+      var p=document.getElementById("v355-page");if(p)p.classList.remove("v356-on");
+      document.body.classList.remove("v356-hide-inicio");
+      return;
+    }
+  }
+  if(!oc)return;
+  window.__v355Sport=oc[1];
+  if(typeof window.__v355Sport==="string"){
+    setTimeout(function(){
+      var p=document.getElementById("v355-page");
+      if(p){p.classList.add("v356-on");document.body.classList.add("v356-hide-inicio");}
+      /* trigger v355 render */
+      var evt=new Event("v356render");window.dispatchEvent(evt);
+    },150);
+  }
+}
+document.addEventListener("click",click,true);
+/* Bridge to v355 render */
+window.addEventListener("v356render",function(){
+  if(typeof window.__v355Sport!=="string")return;
+  /* Force v355 build+render by re-dispatching */
+  var p=document.getElementById("v355-page");
+  if(!p){/* v355 hasn't built yet - wait for it */setTimeout(function(){window.dispatchEvent(new Event("v356render"));},300);return;}
+  /* Find v355 render function indirectly: trigger by simulating its own activate */
+  /* The v355 script reads window.__v355Sport then calls render. We force a re-activate by adding/removing class. */
+  document.body.classList.add("v317-show-"+window.__v355Sport);
+  setTimeout(function(){document.body.classList.remove("v317-show-"+window.__v355Sport);},2000);
+});
+})();
+</script>
 </body>
 </html>
 
