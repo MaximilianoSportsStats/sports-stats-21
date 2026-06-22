@@ -20228,6 +20228,52 @@ setInterval(walkAll,400);
 var lastL=getLang();setInterval(function(){var c=getLang();if(c!==lastL){lastL=c;walkAll();setTimeout(walkAll,150);}},150);
 })();
 </script>
+
+<style id="v392-css">
+/* Forzar visibilidad de search + lang picker */
+html body #v25-search-bar,html body #v30-lang{display:flex !important;visibility:visible !important;opacity:1 !important;}
+</style>
+<script>
+/* v392: traducir elementos con children (h1/h2/h3 con <em>) usando textContent flat */
+(function(){if(window.__v392)return;window.__v392=true;
+function getTR(){
+  /* Reuse TR from v391 by reading its script */
+  if(window.__v391TR)return window.__v391TR;
+  var s;Array.from(document.scripts).forEach(function(x){if((x.textContent||"").indexOf("__v391=true")>=0)s=x.textContent;});
+  if(!s)return null;
+  var m=s.match(/var TR=({[\s\S]+?});/);
+  if(!m)return null;
+  try{window.__v391TR=eval("("+m[1]+")");return window.__v391TR;}catch(e){return null;}
+}
+function getLang(){return (localStorage.getItem("v30-lang")||"es").toLowerCase();}
+function translate(text,TR){
+  if(!text||!TR)return text;var t=text.trim();var lang=getLang();
+  /* Build reverse if needed */
+  if(!window.__v391REV){window.__v391REV={};Object.keys(TR).forEach(function(es){Object.keys(TR[es]).forEach(function(l){window.__v391REV[TR[es][l]]=es;});});}
+  var REV=window.__v391REV;
+  if(lang==="es"){if(REV[t])return REV[t];return text;}
+  if(TR[t]&&TR[t][lang])return TR[t][lang];
+  if(REV[t]){var es=REV[t];if(TR[es]&&TR[es][lang])return TR[es][lang];}
+  return text;
+}
+function walkWithChildren(){
+  var TR=getTR();if(!TR)return;
+  /* Walk h1/h2/h3/h4/h5 - if textContent matches a key, replace */
+  document.querySelectorAll("h1,h2,h3,h4,h5,p,span,button,a").forEach(function(el){
+    var t=(el.textContent||"").trim();if(!t||t.length<3)return;
+    var nt=translate(t,TR);
+    if(nt===t)return;
+    /* If element has children but flat textContent matches, replace textContent (wipes em but shows right text) */
+    el.textContent=nt;
+  });
+}
+document.addEventListener("click",function(e){if(!e.isTrusted)return;var la=e.target.closest && e.target.closest("#v30-lang");if(la){walkWithChildren();setTimeout(walkWithChildren,100);setTimeout(walkWithChildren,300);setTimeout(walkWithChildren,700);}},true);
+if(document.readyState!=="loading")walkWithChildren();else document.addEventListener("DOMContentLoaded",walkWithChildren);
+setTimeout(walkWithChildren,1500);setTimeout(walkWithChildren,3500);
+setInterval(walkWithChildren,500);
+var lastL=getLang();setInterval(function(){var c=getLang();if(c!==lastL){lastL=c;walkWithChildren();setTimeout(walkWithChildren,150);}},150);
+})();
+</script>
 </body>
 </html>
 
