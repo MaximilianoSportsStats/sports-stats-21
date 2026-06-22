@@ -20081,6 +20081,23 @@ setTimeout(walkAndTranslate,1500);setTimeout(walkAndTranslate,3500);
 setInterval(walkAndTranslate,1500);
 })();
 </script>
+
+<style id="v389-css">
+/* Drawer scroll + scrollbar pill custom */
+html body aside#v36-side{display:flex !important;flex-direction:column !important;overflow:hidden !important;}
+html body aside#v36-side #v36-body,html body aside#v36-side > div:not(.v36-foot):not(#v36-foot){flex:1 1 auto !important;overflow-y:auto !important;overflow-x:hidden !important;min-height:0 !important;}
+/* If no separate body wrapper, make the UL scrollable */
+html body aside#v36-side > ul#v56-ul{flex:1 1 auto !important;overflow-y:auto !important;overflow-x:hidden !important;min-height:0 !important;}
+/* Footer always sticky at bottom */
+html body aside#v36-side #v36-foot,html body aside#v36-side .v36-foot{flex:0 0 auto !important;position:sticky !important;bottom:0 !important;background:inherit !important;border-top:1px solid #e5e7eb !important;z-index:5 !important;}
+/* Scrollbar pill visible custom */
+html body aside#v36-side *::-webkit-scrollbar{width:8px !important;}
+html body aside#v36-side *::-webkit-scrollbar-track{background:transparent !important;}
+html body aside#v36-side *::-webkit-scrollbar-thumb{background:#cbd5e1 !important;border-radius:8px !important;}
+html body aside#v36-side *::-webkit-scrollbar-thumb:hover{background:#94a3b8 !important;}
+/* Firefox scrollbar */
+html body aside#v36-side *{scrollbar-width:thin !important;scrollbar-color:#cbd5e1 transparent !important;}
+</style>
 </body>
 </html>
 
