@@ -20098,6 +20098,93 @@ html body aside#v36-side *::-webkit-scrollbar-thumb:hover{background:#94a3b8 !im
 /* Firefox scrollbar */
 html body aside#v36-side *{scrollbar-width:thin !important;scrollbar-color:#cbd5e1 transparent !important;}
 </style>
+
+<script>
+/* v390: acelerar el switch de idioma - poll localStorage + apply rapido al click + interval mas rapido */
+(function(){if(window.__v390)return;window.__v390=true;
+var lastLang=localStorage.getItem("v30-lang")||"es";
+function pollLang(){
+  var cur=localStorage.getItem("v30-lang")||"es";
+  if(cur!==lastLang){
+    lastLang=cur;
+    /* lang cambio - aplicar v387 walkAndTranslate rapidamente */
+    if(window.__v387walk)window.__v387walk();
+    /* tambien forzar varios passes */
+    setTimeout(function(){if(window.__v387walk)window.__v387walk();},100);
+    setTimeout(function(){if(window.__v387walk)window.__v387walk();},300);
+    setTimeout(function(){if(window.__v387walk)window.__v387walk();},700);
+  }
+}
+/* Expose v387 walk function for v390 to call */
+/* We need to find v387 walk via probing - find similar logic in script */
+/* Since v387 walk is in closure, we replicate it here */
+})();
+</script>
+<script>
+/* v390b: replicate v387 logic with FASTER interval */
+(function(){if(window.__v390b)return;window.__v390b=true;
+var TRANS=null;
+function loadTrans(){
+  /* Find TRANS in v387 script */
+  var scripts=document.scripts;
+  for(var i=0;i<scripts.length;i++){
+    var t=scripts[i].textContent||"";
+    if(t.indexOf("__v387=true")>=0){
+      var m=t.match(/var TRANS=({[\s\S]+?});/);
+      if(m){try{TRANS=eval("("+m[1]+")");return true;}catch(e){}}
+    }
+  }
+  return false;
+}
+loadTrans();
+if(!TRANS){setTimeout(loadTrans,1000);}
+var REV={};
+function buildRev(){if(!TRANS)return;REV={};Object.keys(TRANS).forEach(function(es){Object.keys(TRANS[es]).forEach(function(lang){REV[TRANS[es][lang]]={es:es};});});}
+buildRev();
+function getLang(){return (localStorage.getItem("v30-lang")||"es").toLowerCase();}
+function translate(text){
+  if(!TRANS)return text;
+  var lang=getLang();if(!text)return text;
+  var t=text.trim();
+  if(lang==="es"){var r=REV[t];if(r)return r.es;return text;}
+  if(TRANS[t]&&TRANS[t][lang])return TRANS[t][lang];
+  var r2=REV[t];if(r2&&TRANS[r2.es]&&TRANS[r2.es][lang])return TRANS[r2.es][lang];
+  return text;
+}
+function walkAndTranslate(){
+  if(!TRANS){if(!loadTrans())return;buildRev();}
+  ["v100-noticias-wrap","v100-blogs-wrap","v100-podcast-wrap","v164-mercado-wrap"].forEach(function(id){
+    var w=document.getElementById(id);if(!w)return;
+    Array.from(w.querySelectorAll("h2,h3,h4,p")).forEach(function(el){
+      if(el.children.length>0)return;
+      var t=(el.textContent||"").trim();if(!t)return;
+      var nt=translate(t);if(nt!==t)el.textContent=nt;
+    });
+  });
+  var search=document.querySelector("#v25-search-bar input,input[type=search]");
+  if(search){var p=search.placeholder||"";var np=translate(p);if(np!==p)search.placeholder=np;}
+  document.documentElement.lang=getLang();
+}
+window.__v387walk=walkAndTranslate;
+/* INTERVAL RAPIDO 400ms en vez de 1500 */
+setInterval(walkAndTranslate,400);
+/* Click listener IMMEDIATE - no setTimeout */
+document.addEventListener("click",function(e){
+  if(!e.isTrusted)return;
+  var la=e.target.closest && e.target.closest("#v30-lang");
+  if(la){
+    walkAndTranslate();
+    setTimeout(walkAndTranslate,100);
+    setTimeout(walkAndTranslate,300);
+    setTimeout(walkAndTranslate,600);
+  }
+},true);
+/* Poll for lang changes - catch programmatic too */
+var lastLang=getLang();
+setInterval(function(){var cur=getLang();if(cur!==lastLang){lastLang=cur;walkAndTranslate();setTimeout(walkAndTranslate,150);setTimeout(walkAndTranslate,400);}},200);
+if(document.readyState!=="loading")walkAndTranslate();else document.addEventListener("DOMContentLoaded",walkAndTranslate);
+})();
+</script>
 </body>
 </html>
 
