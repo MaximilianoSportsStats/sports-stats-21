@@ -20854,6 +20854,69 @@ document.addEventListener("click",function(e){
 console.log("[v500] Deportes shell loaded — clean rebuild ready");
 })();
 </script>
+
+<script>
+(function(){if(window.__v500b)return;window.__v500b=true;
+
+/* v500b — fix hide panels using INLINE display:none (CSS losing to legacy specificity) */
+var HIDDEN_PANELS=["panel-inicio","panel-soccer","panel-hockey","panel-tennis","panel-basketball","panel-baseball","panel-football","panel-racing","panel-golf","panel-combat","panel-rugby","panel-cricket","panel-volleyball","panel-athletics","panel-swimming","panel-padel"];
+
+function hideAllOldPanels(){
+  HIDDEN_PANELS.forEach(function(id){
+    var p=document.getElementById(id);
+    if(p){p.dataset.v500WasDisplay=p.style.display||"";p.style.setProperty("display","none","important");}
+  });
+}
+
+function restoreOldPanels(){
+  HIDDEN_PANELS.forEach(function(id){
+    var p=document.getElementById(id);
+    if(p){
+      var prev=p.dataset.v500WasDisplay;
+      if(prev)p.style.display=prev;
+      else p.style.removeProperty("display");
+    }
+  });
+}
+
+/* Watchdog: keep panels hidden while v500-active */
+setInterval(function(){
+  if(document.body.classList.contains("v500-active")){
+    HIDDEN_PANELS.forEach(function(id){
+      var p=document.getElementById(id);
+      if(p && getComputedStyle(p).display!=="none"){p.style.setProperty("display","none","important");}
+    });
+    /* Make sure v500-shell stays visible */
+    var sh=document.getElementById("v500-shell");
+    if(sh && getComputedStyle(sh).display==="none"){sh.style.setProperty("display","block","important");}
+  }
+},300);
+
+/* Hook into v500 lifecycle via class observation */
+var lastActive=document.body.classList.contains("v500-active");
+new MutationObserver(function(){
+  var nowActive=document.body.classList.contains("v500-active");
+  if(nowActive && !lastActive){hideAllOldPanels();}
+  else if(!nowActive && lastActive){restoreOldPanels();}
+  lastActive=nowActive;
+}).observe(document.body,{attributes:true,attributeFilter:["class"]});
+
+/* Also hook back to Inicio when click .sport-btn with Todos/Inicio */
+document.addEventListener("click",function(e){
+  var btn=e.target.closest(".sport-btn");
+  if(btn){
+    var onc=btn.getAttribute("onclick")||"";
+    if(/switchSport\([\'\"]?(?:todos|inicio)/.test(onc)){
+      document.body.classList.remove("v500-active");
+      Array.from(document.body.classList).forEach(function(c){if(/^v500-sport-/.test(c))document.body.classList.remove(c);});
+      restoreOldPanels();
+    }
+  }
+},true);
+
+console.log("[v500b] panel hide watchdog ready");
+})();
+</script>
 </body>
 </html>
 
