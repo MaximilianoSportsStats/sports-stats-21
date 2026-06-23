@@ -20888,6 +20888,184 @@ setInterval(function(){
 console.log("[v500] Deportes shell v2 — isTrusted only + sidebar hide + MasSS21 detect");
 })();
 </script>
+
+<style id="v501-css">
+/* v501 — kill old Futbol sidebar + Todos page */
+body.v500-active .v147-acerca,body.v500-active .v147-acerca-sub,body.v500-active [class*="v147-side"],body.v500-active [class*="v147-acerca"],body.v500-active [class*="v149-side"],body.v500-active [class*="v161-side"],body.v500-active [class*="v162-side"],body.v500-active [class*="-acerca"],body.v500-active .sport-sidebar,body.v500-active .league-nav,body.v500-active #v149-mf,body.v500-active [class*="v149-mf"],body.v500-active [class*="v161-mf"],body.v500-active aside:not(.v36-side):not(#v500-shell):not(#v500-shell *){display:none !important;visibility:hidden !important;}
+/* Todos los Deportes page — kill */
+#v29-todos-page,#v120-todos-page,[class*="todos-deportes"],[class*="v29-todos"]{display:none !important;visibility:hidden !important;}
+
+.v501-resumen{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px;margin-bottom:32px;}
+.v501-stat{background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:24px;box-shadow:0 1px 3px rgba(0,0,0,0.04);}
+.v501-stat-num{font-size:36px;font-weight:800;color:#dc2626;line-height:1;letter-spacing:-0.02em;}
+.v501-stat-lbl{font-size:14px;color:#6b7280;margin-top:8px;font-weight:600;}
+.v501-stat-sub{font-size:13px;color:#9ca3af;margin-top:4px;}
+
+.v501-section{margin-bottom:40px;}
+.v501-section-title{font-size:22px;font-weight:700;color:#111827;margin:0 0 16px;display:flex;align-items:center;gap:8px;}
+.v501-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;}
+.v501-card{background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:16px;transition:transform 0.15s,box-shadow 0.15s;}
+.v501-card:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,0.08);}
+.v501-card-name{font-weight:700;color:#111827;font-size:16px;margin-bottom:4px;}
+.v501-card-sub{font-size:13px;color:#6b7280;}
+.v501-card-tag{display:inline-block;background:#fef2f2;color:#dc2626;padding:2px 8px;border-radius:6px;font-size:11px;font-weight:600;margin-top:8px;}
+
+.v501-mf{display:inline-flex;background:#f3f4f6;border-radius:999px;padding:4px;margin-bottom:24px;}
+.v501-mf-btn{padding:8px 20px;border-radius:999px;border:none;background:none;cursor:pointer;font-weight:700;font-size:14px;color:#6b7280;font-family:inherit;}
+.v501-mf-btn.act{background:#dc2626;color:#fff;}
+</style>
+
+<script>
+(function(){if(window.__v501)return;window.__v501=true;
+
+/* === 1. Redirect Deportes/Todos clicks to Futbol === */
+document.addEventListener("click",function(e){
+  if(!e.isTrusted)return;
+  /* sport-btn "todos" → redirect to soccer */
+  var btn=e.target.closest(".sport-btn");
+  if(btn){
+    var onc=btn.getAttribute("onclick")||"";
+    var m=onc.match(/switchSport\([\'\"]?(\w+)/);
+    if(m && m[1]==="todos"){
+      e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();
+      var sBtn=Array.from(document.querySelectorAll(".sport-btn")).find(function(b){return /switchSport\([\'\"]?soccer/.test(b.getAttribute("onclick")||"");});
+      if(sBtn){setTimeout(function(){sBtn.click();},30);}
+      return false;
+    }
+  }
+  /* main menu Deportes → redirect */
+  var menuItem=e.target.closest("[data-v26id]");
+  if(menuItem && menuItem.dataset.v26id==="deportes"){
+    e.preventDefault();
+    setTimeout(function(){
+      var sBtn=Array.from(document.querySelectorAll(".sport-btn")).find(function(b){return /switchSport\([\'\"]?soccer/.test(b.getAttribute("onclick")||"");});
+      if(sBtn)sBtn.click();
+    },30);
+  }
+},true);
+
+/* === 2. Watchdog kill old sidebar elements === */
+function killOldSidebar(){
+  if(!document.body.classList.contains("v500-active"))return;
+  document.querySelectorAll("aside,nav,div").forEach(function(el){
+    if(!el || el.id==="v500-shell" || el.closest("#v500-shell"))return;
+    if(el.classList.contains("v36-side") || el.closest(".v36-side"))return;
+    if(el.id==="ticker" || el.closest("#v25-ticker") || el.id==="v25-ticker")return;
+    var t=(el.textContent||"").toUpperCase();
+    if(t.length>0 && t.length<6000 && t.indexOf("MUNDIAL")>=0 && (t.indexOf("EUROPA")>=0 || t.indexOf("UEFA")>=0 || t.indexOf("PREMIER")>=0)){
+      var r=el.getBoundingClientRect();
+      if(r.left<450 && r.width<600 && r.height>200){
+        el.style.setProperty("display","none","important");
+      }
+    }
+  });
+  /* Also kill "Todos los Deportes" content */
+  document.querySelectorAll("h1,h2,h3").forEach(function(h){
+    var tx=(h.textContent||"").trim();
+    if(/^[\u2B50\u2605]?\s*Todos los Deportes$/i.test(tx)){
+      var p=h.closest("section,div");
+      if(p && !p.closest("#v500-shell") && !p.id.indexOf("panel-inicio")===0){p.style.setProperty("display","none","important");}
+    }
+  });
+}
+setInterval(killOldSidebar,500);
+document.addEventListener("DOMContentLoaded",killOldSidebar);
+
+/* === 3. Populate Futbol Resumen tab === */
+var FUTBOL_RESUMEN={
+  stats:[
+    {n:"4 mil M",l:"Seguidores",s:"deporte más popular del mundo"},
+    {n:"211",l:"Federaciones",s:"miembros FIFA"},
+    {n:"32",l:"Selecciones",s:"Mundial Qatar 2022 (48 en 2026)"},
+    {n:"5",l:"Confederaciones",s:"UEFA, CONMEBOL, CONCACAF, AFC, CAF, OFC"}
+  ],
+  leyendas:[
+    {n:"Pelé",s:"3x Mundial · Brasil",t:"GOAT"},
+    {n:"Diego Maradona",s:"Mundial 86 · Argentina",t:"D10S"},
+    {n:"Lionel Messi",s:"8 Balones de Oro · Mundial 2022",t:"GOAT"},
+    {n:"Cristiano Ronaldo",s:"5 Balones de Oro · 5 Champions",t:"CR7"},
+    {n:"Johan Cruyff",s:"3 Balones de Oro · Holanda",t:"Leyenda"},
+    {n:"Zinedine Zidane",s:"Balón de Oro · Mundial 98",t:"Zizou"},
+    {n:"Ronaldo Nazário",s:"2 Mundiales · Brasil",t:"R9"},
+    {n:"Franz Beckenbauer",s:"Kaiser · Mundial 74",t:"Leyenda"}
+  ],
+  topLigas:[
+    {n:"Premier League",s:"Inglaterra · 20 clubes"},
+    {n:"La Liga",s:"España · 20 clubes"},
+    {n:"Bundesliga",s:"Alemania · 18 clubes"},
+    {n:"Serie A",s:"Italia · 20 clubes"},
+    {n:"Ligue 1",s:"Francia · 18 clubes"},
+    {n:"Brasileirão",s:"Brasil · 20 clubes"},
+    {n:"Liga Argentina",s:"Argentina · 28 clubes"},
+    {n:"MLS",s:"USA · 30 clubes"}
+  ],
+  competiciones:[
+    {n:"Mundial FIFA",s:"cada 4 años · 1930→2030"},
+    {n:"Champions League",s:"UEFA · 5 Reales seguidos 56-60"},
+    {n:"Copa Libertadores",s:"CONMEBOL · 7 Independientes"},
+    {n:"Eurocopa",s:"UEFA · España 4x"},
+    {n:"Copa América",s:"CONMEBOL · 15 Argentinas/Uruguayos"},
+    {n:"Mundial Femenino",s:"FIFA · USA 4x"}
+  ]
+};
+
+function renderFutbolResumen(){
+  var html="";
+  /* M/F toggle */
+  html+='<div class="v501-mf"><button class="v501-mf-btn act" data-mf="m">Masculino</button><button class="v501-mf-btn" data-mf="f">Femenino</button></div>';
+  /* Stats */
+  html+='<div class="v501-resumen">';
+  FUTBOL_RESUMEN.stats.forEach(function(s){
+    html+='<div class="v501-stat"><div class="v501-stat-num">'+s.n+'</div><div class="v501-stat-lbl">'+s.l+'</div><div class="v501-stat-sub">'+s.s+'</div></div>';
+  });
+  html+='</div>';
+  /* Top ligas */
+  html+='<div class="v501-section"><h2 class="v501-section-title">🏆 Top Ligas</h2><div class="v501-grid">';
+  FUTBOL_RESUMEN.topLigas.forEach(function(l){
+    html+='<div class="v501-card"><div class="v501-card-name">'+l.n+'</div><div class="v501-card-sub">'+l.s+'</div></div>';
+  });
+  html+='</div></div>';
+  /* Competiciones */
+  html+='<div class="v501-section"><h2 class="v501-section-title">⚽ Competiciones Principales</h2><div class="v501-grid">';
+  FUTBOL_RESUMEN.competiciones.forEach(function(c){
+    html+='<div class="v501-card"><div class="v501-card-name">'+c.n+'</div><div class="v501-card-sub">'+c.s+'</div></div>';
+  });
+  html+='</div></div>';
+  /* Leyendas */
+  html+='<div class="v501-section"><h2 class="v501-section-title">⭐ Leyendas del Fútbol</h2><div class="v501-grid">';
+  FUTBOL_RESUMEN.leyendas.forEach(function(p){
+    html+='<div class="v501-card"><div class="v501-card-name">'+p.n+'</div><div class="v501-card-sub">'+p.s+'</div><span class="v501-card-tag">'+p.t+'</span></div>';
+  });
+  html+='</div></div>';
+  return html;
+}
+
+/* Hook into v500 renderContent — extend when Futbol+Resumen */
+function injectContent(){
+  if(!document.body.classList.contains("v500-sport-soccer"))return;
+  var c=document.getElementById("v500-content");
+  if(!c)return;
+  /* Only modify if Resumen active and not yet populated */
+  var existing=c.querySelector(".v501-resumen");
+  /* Detect current tab from active button */
+  var act=document.querySelector("#v500-tabs .v500-tab.act");
+  var currentLabel=act?act.textContent.trim():"";
+  if(currentLabel==="Resumen" && !existing){
+    c.innerHTML='<div class="v500-tabpane act">'+renderFutbolResumen()+'</div>';
+    /* Wire M/F toggle */
+    c.querySelectorAll(".v501-mf-btn").forEach(function(b){
+      b.addEventListener("click",function(){
+        c.querySelectorAll(".v501-mf-btn").forEach(function(x){x.classList.remove("act");});
+        b.classList.add("act");
+      });
+    });
+  }
+}
+setInterval(injectContent,400);
+
+console.log("[v501] redirect+sidebar killer+Futbol Resumen poblado");
+})();
+</script>
 </body>
 </html>
 
