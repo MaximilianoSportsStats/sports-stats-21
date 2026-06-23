@@ -20279,6 +20279,60 @@ setInterval(walkAll,400);
 var lastL=getLang();setInterval(function(){var c=getLang();if(c!==lastL){lastL=c;walkAll();setTimeout(walkAll,150);}},150);
 })();
 </script>
+
+<script>
+(function(){if(window.__v395)return;window.__v395=true;
+/* Nombres de idiomas en cada idioma */
+var LN={
+  es:{es:"Español",en:"Spanish",de:"Spanisch",fr:"Espagnol",it:"Spagnolo",pt:"Espanhol"},
+  en:{es:"Inglés",en:"English",de:"Englisch",fr:"Anglais",it:"Inglese",pt:"Inglês"},
+  de:{es:"Alemán",en:"German",de:"Deutsch",fr:"Allemand",it:"Tedesco",pt:"Alemão"},
+  fr:{es:"Francés",en:"French",de:"Französisch",fr:"Français",it:"Francese",pt:"Francês"},
+  it:{es:"Italiano",en:"Italian",de:"Italienisch",fr:"Italien",it:"Italiano",pt:"Italiano"},
+  pt:{es:"Portugués",en:"Portuguese",de:"Portugiesisch",fr:"Portugais",it:"Portoghese",pt:"Português"}
+};
+function getLang(){return (localStorage.getItem("v30-lang")||"es").toLowerCase();}
+function updatePicker(){
+  var picker=document.getElementById("v30-lang");if(!picker)return;
+  var lang=getLang();
+  /* For each button with data-code, update its last text node */
+  picker.querySelectorAll("button[data-code]").forEach(function(btn){
+    var code=btn.dataset.code;
+    if(!LN[code]||!LN[code][lang])return;
+    var label=LN[code][lang];
+    /* Find last text node (after the flag span) */
+    var lastText=null;
+    btn.childNodes.forEach(function(n){if(n.nodeType===3)lastText=n;});
+    if(lastText){
+      if(lastText.textContent.trim()!==label)lastText.textContent=label;
+    } else {
+      /* No text node - append one */
+      btn.appendChild(document.createTextNode(label));
+    }
+  });
+  /* Also: top label of picker (selected language) - it might be a separate button or first button */
+  /* Pattern: a div/button at top with the current selected lang. If it has data-code matching current lang, already handled. */
+  /* If there is a separate display element (e.g. .v30-current or button without data-code), update by current lang */
+  var displayEl=picker.querySelector(".v30-current,.v30-selected,.v30-current-label,.v30-top");
+  if(!displayEl){
+    /* Try first button without data-code */
+    var firstBtn=picker.querySelector(":scope > button:not([data-code])");
+    if(firstBtn)displayEl=firstBtn;
+  }
+  if(displayEl){
+    var curLabel=LN[lang]?LN[lang][lang]:lang;
+    var lastText2=null;
+    displayEl.childNodes.forEach(function(n){if(n.nodeType===3)lastText2=n;});
+    if(lastText2&&lastText2.textContent.trim()!==curLabel)lastText2.textContent=curLabel;
+  }
+}
+document.addEventListener("click",function(e){if(!e.isTrusted)return;var la=e.target.closest && e.target.closest("#v30-lang");if(la){updatePicker();setTimeout(updatePicker,80);setTimeout(updatePicker,250);setTimeout(updatePicker,600);}},true);
+if(document.readyState!=="loading")updatePicker();else document.addEventListener("DOMContentLoaded",updatePicker);
+setTimeout(updatePicker,800);setTimeout(updatePicker,2500);
+setInterval(updatePicker,500);
+var lastL=getLang();setInterval(function(){var c=getLang();if(c!==lastL){lastL=c;updatePicker();}},150);
+})();
+</script>
 </body>
 </html>
 
