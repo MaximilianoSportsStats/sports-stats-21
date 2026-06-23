@@ -20882,6 +20882,77 @@ renameInicioHeader();
 console.log("[v703] Noticias page lista");
 })();
 </script>
+
+<script>
+(function(){if(window.__v703b)return;window.__v703b=true;
+/* v703b — hotfix: usar inline style.setProperty para vencer CSS legacy alta specificity */
+var HIDE_IDS=["panel-inicio","panel-mercado","v87-page-masss21","panel-soccer","panel-basketball","panel-tennis","panel-football","panel-baseball","panel-hockey","panel-racing","panel-golf","panel-combat","panel-rugby","panel-cricket","panel-volleyball","panel-athletics","panel-swimming","panel-padel","v25-ticker","v700-shell"];
+var saved={};
+function hideOthers(){HIDE_IDS.forEach(function(id){var el=document.getElementById(id);if(el){saved[id]=el.style.cssText;el.style.setProperty("display","none","important");}});}
+function restoreOthers(){HIDE_IDS.forEach(function(id){var el=document.getElementById(id);if(el){el.style.cssText=saved[id]||"";}});saved={};}
+function showPanel(id){var el=document.getElementById(id);if(el)el.style.setProperty("display","block","important");}
+function hidePanel(id){var el=document.getElementById(id);if(el)el.style.removeProperty("display");}
+
+/* Replace v703 show/hide with inline-style versions */
+var origShow=null;
+function shoNoticias(){var p=document.getElementById("panel-v703-noticias");if(!p)return;hideOthers();showPanel("panel-v703-noticias");document.body.classList.add("v703-noticias");window.scrollTo(0,0);}
+function hideNoticias(){restoreOthers();hidePanel("panel-v703-noticias");document.body.classList.remove("v703-noticias");}
+
+/* Hijack click - more lenient matching */
+document.addEventListener("click",function(e){
+  if(!e.isTrusted)return;
+  var li=e.target.closest("li,button,a");if(!li)return;
+  var txt=(li.textContent||"").trim().replace(/\s+/g," ");
+  /* If in drawer/menu */
+  var inMenu=!!li.closest(".v36-side, nav.menu, .drawer, [class*=\"drawer\"], [class*=\"v56\"]");
+  if(inMenu){
+    if(/Noticias$/i.test(txt) && txt.length<25){e.preventDefault();shoNoticias();return;}
+    if(/Inicio$/i.test(txt) && txt.length<15){hideNoticias();return;}
+    if(/Más Sobre|MasSS|Mercado/i.test(txt)){hideNoticias();return;}
+  }
+  /* sport-btn click */
+  var sb=e.target.closest(".sport-btn");
+  if(sb)hideNoticias();
+},true);
+
+/* Reload panel content if empty */
+function ensureContent(){
+  var p=document.getElementById("panel-v703-noticias");
+  if(!p)return;
+  if(p.innerHTML.length<200){
+    /* Trigger v703 build by calling its functions if available */
+    /* But v703 functions are in closure. Lets just rebuild manually */
+    var NEWS=[{t:"Messi rompe record con Inter Miami",s:"Dos goles ante LA Galaxy - record historico MLS",d:"hace 2h",cat:"Futbol",img:"https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=600"},{t:"Real Madrid vs Barcelona Clasico en Mayo",s:"La Liga confirma fecha decisiva por el titulo",d:"hace 3h",cat:"Futbol",img:"https://images.unsplash.com/photo-1551958219-acbc608c6377?w=600"},{t:"NBA Finals Lakers vs Celtics",s:"Vuelve la rivalidad historica tras 16 anos",d:"hace 5h",cat:"Basketball",img:"https://images.unsplash.com/photo-1546519638-68e109498ffc?w=600"},{t:"Verstappen gana en Monaco",s:"Red Bull domina el gran premio mas prestigioso",d:"hace 6h",cat:"F1",img:"https://images.unsplash.com/photo-1583900985737-6d0495555783?w=600"},{t:"Alcaraz vence a Sinner en Wimbledon",s:"Segundo titulo del espanol en el All England",d:"hace 8h",cat:"Tenis",img:"https://images.unsplash.com/photo-1542144582-1ba00456b5e3?w=600"},{t:"Super Bowl LX Chiefs van por su cuarto titulo",s:"Mahomes lidera al equipo a nuevo Super Bowl",d:"hace 9h",cat:"NFL",img:"https://images.unsplash.com/photo-1485395037613-e83d5c1f5290?w=600"},{t:"Mundial 2026 favoritos Argentina/Brasil/Francia",s:"FIFA publica ranking antes del sorteo",d:"hace 12h",cat:"Futbol",img:"https://images.unsplash.com/photo-1606925797300-0b35e9d1794e?w=600"},{t:"Doncic firma extension millonaria Mavericks",s:"Contrato 5 anos 345M el mas grande NBA",d:"hace 14h",cat:"Basketball",img:"https://images.unsplash.com/photo-1504450758481-7338eba7524a?w=600"},{t:"Tour Francia 2026 Pogacar va por el cuarto",s:"Esloveno favorito de la carrera mas dura",d:"hace 1d",cat:"Ciclismo",img:"https://images.unsplash.com/photo-1502764613149-7f1d229e230f?w=600"},{t:"World Series Yankees vs Dodgers",s:"Primera final dos franquicias en 25 anos",d:"hace 1d",cat:"Beisbol",img:"https://images.unsplash.com/photo-1508098682722-e99c43a406b2?w=600"},{t:"Champions PSG eliminado por Bayern",s:"Alemanes ganan 3-1 doblete Kane",d:"hace 1d",cat:"Futbol",img:"https://images.unsplash.com/photo-1522778034537-20a2486be803?w=600"},{t:"Sinner recupera el numero 1 ATP",s:"Italiano supera a Alcaraz tras Roland Garros",d:"hace 2d",cat:"Tenis",img:"https://images.unsplash.com/photo-1554068865-24cecd4e34b8?w=600"},{t:"Joshua noquea Fury en peso pesado",s:"Britanico recupera todos los cinturones",d:"hace 2d",cat:"Combate",img:"https://images.unsplash.com/photo-1517466787929-bc90951d0974?w=600"},{t:"Vinicius Jr renueva Real Madrid hasta 2030",s:"Clausula rescision 1000M millones",d:"hace 2d",cat:"Futbol",img:"https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=600"},{t:"Stanley Cup Oilers vs Panthers",s:"McDavid va por su primer titulo",d:"hace 3d",cat:"Hockey",img:"https://images.unsplash.com/photo-1515703407324-5f51c2a86d34?w=600"},{t:"Pogacar gana el Giro de Italia",s:"Tercer Grand Tour consecutivo del esloveno",d:"hace 3d",cat:"Ciclismo",img:"https://images.unsplash.com/photo-1471506480208-91b3a4cc78be?w=600"},{t:"Aguero se retira oficialmente",s:"El Kun anuncia su decision tras temporada Independiente",d:"hace 3d",cat:"Futbol",img:"https://images.unsplash.com/photo-1551958214-2d59cc951b0c?w=600"},{t:"Curry rompe record de triples",s:"415 triples superando su propia marca",d:"hace 4d",cat:"Basketball",img:"https://images.unsplash.com/photo-1577471488278-16eec37ffcc2?w=600"},{t:"Ferrari domina Practicas GP Italia",s:"Leclerc y Sainz 1-2 en Monza",d:"hace 4d",cat:"F1",img:"https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=600"},{t:"Boca Juniors campeon Libertadores 2026",s:"Vence 2-1 a Palmeiras en Maracana",d:"hace 5d",cat:"Futbol",img:"https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=600"}];
+    var html='<h1 class="v703-h">📰 Noticias</h1><p class="v703-sub">Lo último del mundo deportivo · 24/7</p><div class="v703-filters" id="v703b-filters"></div><div class="v703-grid" id="v703b-grid"></div>';
+    p.innerHTML=html;
+    var CATS=["Todos","Futbol","Basketball","F1","Tenis","NFL","Beisbol","Hockey","Ciclismo","Combate"];
+    var curCat="Todos";
+    var fEl=document.getElementById("v703b-filters");
+    function rdF(){fEl.innerHTML="";CATS.forEach(function(c){var b=document.createElement("button");b.className="v703-filter"+(c===curCat?" act":"");b.textContent=c;b.addEventListener("click",function(){curCat=c;rdF();rdG();});fEl.appendChild(b);});}
+    function rdG(){var g=document.getElementById("v703b-grid");var items=curCat==="Todos"?NEWS:NEWS.filter(function(n){return n.cat===curCat;});g.innerHTML=items.map(function(n){return '<div class="v703-card"><div class="v703-card-img" style="background-image:url(\''+n.img+'\')"></div><div class="v703-card-body"><span class="v703-card-cat">'+n.cat+'</span><h3 class="v703-card-title">'+n.t+'</h3><p class="v703-card-sub">'+n.s+'</p><div class="v703-card-date">'+n.d+'</div></div></div>';}).join("");}
+    rdF();rdG();
+  }
+}
+
+/* Hook into MutationObserver to ensure panel exists */
+function ensurePanel(){
+  if(document.getElementById("panel-v703-noticias"))return;
+  var p=document.createElement("div");
+  p.id="panel-v703-noticias";
+  p.style.display="none";
+  var a=document.getElementById("panel-inicio");
+  if(a&&a.parentNode)a.parentNode.insertBefore(p,a);else document.body.appendChild(p);
+}
+ensurePanel();
+setInterval(ensurePanel,2000);
+
+/* Wire show to also ensure content */
+var origSho=shoNoticias;
+shoNoticias=function(){ensurePanel();ensureContent();hideOthers();showPanel("panel-v703-noticias");document.body.classList.add("v703-noticias");window.scrollTo(0,0);};
+
+console.log("[v703b] hotfix inline-style + content ensure");
+})();
+</script>
 </body>
 </html>
 
