@@ -21066,6 +21066,144 @@ setInterval(injectContent,400);
 console.log("[v501] redirect+sidebar killer+Futbol Resumen poblado");
 })();
 </script>
+
+<style id="v502-css">
+/* v502 — Robust shell activation + sport sidebar + per-sport content */
+body.v500-active main.has-shell,body.v500-active{}
+#v500-shell.v502-with-side{display:grid;grid-template-columns:240px 1fr;gap:32px;}
+@media (max-width:900px){#v500-shell.v502-with-side{grid-template-columns:1fr;}}
+.v502-side{position:sticky;top:20px;align-self:start;background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:16px;max-height:calc(100vh - 100px);overflow-y:auto;}
+.v502-side h3{margin:0 0 12px;font-size:11px;font-weight:700;color:#9ca3af;letter-spacing:0.08em;text-transform:uppercase;}
+.v502-side-list{list-style:none;padding:0;margin:0;}
+.v502-side-item{display:block;width:100%;text-align:left;background:none;border:none;padding:8px 12px;border-radius:8px;cursor:pointer;font-size:14px;font-weight:500;color:#374151;font-family:inherit;transition:background 0.15s,color 0.15s;}
+.v502-side-item:hover{background:#fef2f2;color:#dc2626;}
+.v502-side-item.act{background:#dc2626;color:#fff;}
+.v502-side-group{margin-bottom:18px;}
+</style>
+
+<script>
+(function(){if(window.__v502)return;window.__v502=true;
+
+/* === Sidebar per sport === */
+var SPORT_SIDEBAR={
+  soccer:[{g:"Competiciones",items:["Mundial FIFA","Champions League","Libertadores","Eurocopa","Copa América"]},{g:"Top 5 Ligas",items:["Premier League","La Liga","Bundesliga","Serie A","Ligue 1"]},{g:"Más",items:["Selecciones","Leyendas","Records","Mercado"]}],
+  basketball:[{g:"Profesional",items:["NBA","EuroLeague","ACB","LNB"]},{g:"Internacional",items:["FIBA Mundial","Olímpicos","EuroBasket"]},{g:"Más",items:["3x3","WNBA","Universitaria NCAA","Leyendas"]}],
+  tennis:[{g:"Grand Slams",items:["Australian Open","Roland Garros","Wimbledon","US Open"]},{g:"Circuitos",items:["ATP Tour","WTA Tour","Masters 1000","WTA 1000"]},{g:"Por equipos",items:["Davis Cup","Billie Jean King Cup","Laver Cup"]}],
+  football:[{g:"NFL",items:["Super Bowl","NFC","AFC","Playoffs"]},{g:"Universitario",items:["College Football Playoff","NCAA","Bowl Games"]},{g:"Variantes",items:["Arena Football","Flag Football"]}],
+  baseball:[{g:"MLB",items:["World Series","American League","National League","All-Star Game"]},{g:"Internacional",items:["World Baseball Classic","Serie del Caribe","Premier12"]},{g:"Otras ligas",items:["NPB Japón","KBO Corea","LMP México"]}],
+  hockey:[{g:"Hockey hielo",items:["NHL","KHL","Liiga","Mundial IIHF"]},{g:"Variantes",items:["Hockey césped","Hockey sala","Rink hockey","Bandy"]},{g:"Mujeres",items:["PWHL","Mundial femenino"]}],
+  racing:[{g:"Fórmula",items:["F1","F2","F3","Formula E","IndyCar"]},{g:"Rally y resistencia",items:["WRC","Dakar","Le Mans","NASCAR"]},{g:"Otros",items:["MotoGP","Touring Cars","Karting"]}],
+  golf:[{g:"Majors",items:["The Masters","PGA Championship","US Open","The Open"]},{g:"Tours",items:["PGA Tour","DP World Tour","LPGA","LIV Golf"]},{g:"Equipos",items:["Ryder Cup","Solheim Cup","Presidents Cup"]}],
+  combat:[{g:"MMA",items:["UFC","ONE Championship","Bellator","PFL"]},{g:"Boxeo",items:["WBC","WBA","IBF","WBO"]},{g:"Otros",items:["Muay Thai","K-1","Karate Combat","BJJ"]}],
+  rugby:[{g:"Internacional",items:["Rugby World Cup","Six Nations","Rugby Championship","British Lions"]},{g:"Variantes",items:["Rugby Union","Rugby League","Rugby Sevens"]},{g:"Ligas",items:["Premiership","Top 14","URC","Super Rugby"]}],
+  cricket:[{g:"Internacional",items:["Cricket World Cup","T20 World Cup","Champions Trophy","The Ashes"]},{g:"Ligas T20",items:["IPL India","BBL Australia","CPL Caribe","PSL Pakistán"]},{g:"Formatos",items:["Test","ODI","T20"]}],
+  volleyball:[{g:"Internacional",items:["Mundial FIVB","Nations League","Juegos Olímpicos"]},{g:"Variantes",items:["Vóley sala","Beach Volleyball","Snow Volleyball","Sitting Volleyball"]},{g:"Ligas top",items:["SuperLega Italia","PlusLiga Polonia","V.League Japón"]}],
+  athletics:[{g:"Eventos",items:["Mundial de Atletismo","Diamond League","Olímpicos","Indoor World"]},{g:"Maratones",items:["Boston","London","Berlin","Chicago","NY","Tokyo"]},{g:"Disciplinas",items:["Pista","Campo","Ruta","Cross","Marcha"]}],
+  swimming:[{g:"Eventos",items:["Mundial Acuáticos","Olímpicos","Pan Pacíficos"]},{g:"Disciplinas",items:["Piscina","Aguas abiertas","Saltos","Sincronizada"]},{g:"Variantes",items:["Para natación","Waterpolo"]}],
+  padel:[{g:"Circuitos",items:["Premier Padel","World Padel Tour","Pro Tour"]},{g:"Master 1000",items:["Madrid","Roma","Doha","México"]},{g:"Más",items:["Ranking","Selecciones","Reglas"]}]
+};
+
+/* === Robust activation via body class MutationObserver === */
+function detectSportFromBody(){
+  var cls=document.body.className;
+  var m=cls.match(/v32-view-(\w+)/);
+  if(!m)return null;
+  var v=m[1];
+  /* known sports */
+  var SPORTS=["soccer","basketball","tennis","football","baseball","hockey","racing","golf","combat","rugby","cricket","volleyball","athletics","swimming","padel"];
+  if(SPORTS.indexOf(v)>=0)return v;
+  if(v==="todos")return "soccer"; /* Todos redirige a Futbol */
+  return null;
+}
+
+function ensureShellBuilt(){
+  if(document.getElementById("v500-shell"))return;
+  /* Build using same template as v500 */
+  var shell=document.createElement("div");
+  shell.id="v500-shell";
+  shell.innerHTML='<div class="v502-side" id="v500-side"></div><div id="v500-main"><div class="v500-hero"><span class="v500-hero-emoji" id="v500-emoji">⚽</span><h1 class="v500-hero-name" id="v500-name">Fútbol</h1><div class="v500-hero-tags" id="v500-tags"></div></div><div class="v500-tabs" id="v500-tabs"></div><div id="v500-content"></div></div>';
+  shell.classList.add("v502-with-side");
+  var anchor=document.getElementById("panel-soccer")||document.getElementById("panel-inicio");
+  if(anchor && anchor.parentNode)anchor.parentNode.insertBefore(shell,anchor);
+  else document.body.appendChild(shell);
+}
+
+function renderSideForSport(sportId){
+  var side=document.getElementById("v500-side");
+  if(!side)return;
+  var groups=SPORT_SIDEBAR[sportId]||[];
+  var html="";
+  groups.forEach(function(g){
+    html+='<div class="v502-side-group"><h3>'+g.g+'</h3><ul class="v502-side-list">';
+    g.items.forEach(function(it){
+      html+='<li><button class="v502-side-item">'+it+'</button></li>';
+    });
+    html+='</ul></div>';
+  });
+  side.innerHTML=html;
+}
+
+var lastSport=null;
+function syncFromBody(){
+  var sport=detectSportFromBody();
+  /* If sport detected and not in MasSS21 */
+  var p=document.getElementById("v87-page-masss21");
+  if(p && getComputedStyle(p).display!=="none")sport=null;
+  
+  if(sport){
+    /* Activate shell */
+    if(!document.body.classList.contains("v500-active") || lastSport!==sport){
+      document.body.classList.add("v500-active");
+      Array.from(document.body.classList).forEach(function(c){if(/^v500-sport-/.test(c))document.body.classList.remove(c);});
+      document.body.classList.add("v500-sport-"+sport);
+      ensureShellBuilt();
+      renderSideForSport(sport);
+      /* Update hero */
+      var SPORTS_DATA={soccer:{n:"Fútbol",e:"⚽",tags:["Equipo","Olímpico"]},basketball:{n:"Basketball",e:"🏀",tags:["Equipo","Olímpico"]},tennis:{n:"Tenis",e:"🎾",tags:["Individual","Olímpico"]},football:{n:"Fútbol Americano",e:"🏈",tags:["Equipo"]},baseball:{n:"Beisbol",e:"⚾",tags:["Equipo","Olímpico"]},hockey:{n:"Hockey",e:"🏒",tags:["Equipo","Olímpico","Invierno"]},racing:{n:"Automovilismo",e:"🏎️",tags:["Motor","Individual"]},golf:{n:"Golf",e:"⛳",tags:["Individual"]},combat:{n:"Combate",e:"🥊",tags:["Combate","Individual","Olímpico"]},rugby:{n:"Rugby",e:"🏉",tags:["Equipo","Olímpico"]},cricket:{n:"Cricket",e:"🏏",tags:["Equipo"]},volleyball:{n:"Volleyball",e:"🏐",tags:["Equipo","Olímpico"]},athletics:{n:"Atletismo",e:"🏃",tags:["Individual","Olímpico"]},swimming:{n:"Natación",e:"🏊",tags:["Acuático","Olímpico"]},padel:{n:"Pádel",e:"🎾",tags:["Individual"]}};
+      var sp=SPORTS_DATA[sport];
+      var emoji=document.getElementById("v500-emoji");if(emoji)emoji.textContent=sp.e;
+      var name=document.getElementById("v500-name");if(name)name.textContent=sp.n;
+      var tags=document.getElementById("v500-tags");
+      if(tags){tags.innerHTML="";sp.tags.forEach(function(t){var s=document.createElement("span");s.className="v500-tag";s.textContent=t;tags.appendChild(s);});}
+      /* Re-render tabs */
+      var tabs=document.getElementById("v500-tabs");
+      if(tabs){
+        var TAB_LABELS=[{k:"resumen",label:"Resumen"},{k:"ligas",label:"Ligas y Eventos"},{k:"records",label:"Records"},{k:"rankings",label:"Rankings"},{k:"calendario",label:"Calendario"},{k:"historia",label:"Historia"},{k:"variantes",label:"Variantes"}];
+        tabs.innerHTML="";
+        TAB_LABELS.forEach(function(t){
+          var b=document.createElement("button");
+          b.className="v500-tab"+(t.k==="resumen"?" act":"");
+          b.textContent=t.label;
+          b.dataset.tabk=t.k;
+          b.addEventListener("click",function(){
+            tabs.querySelectorAll(".v500-tab").forEach(function(x){x.classList.remove("act");});
+            b.classList.add("act");
+            var c=document.getElementById("v500-content");
+            if(c){c.innerHTML='<div class="v500-tabpane act"><div class="v500-empty"><span class="v500-empty-emoji">'+sp.e+'</span><p>Sección <strong>'+t.label+'</strong> de '+sp.n+'</p><p style="font-size:13px;color:#cbd5e1;margin-top:8px;">Contenido en construcción</p></div></div>';}
+          });
+          tabs.appendChild(b);
+        });
+      }
+      lastSport=sport;
+    }
+  }else{
+    if(document.body.classList.contains("v500-active")){
+      document.body.classList.remove("v500-active");
+      Array.from(document.body.classList).forEach(function(c){if(/^v500-sport-/.test(c))document.body.classList.remove(c);});
+      lastSport=null;
+    }
+  }
+}
+
+/* React to body class changes */
+new MutationObserver(syncFromBody).observe(document.body,{attributes:true,attributeFilter:["class"]});
+/* Also run periodically as safety */
+setInterval(syncFromBody,500);
+syncFromBody();
+
+console.log("[v502] robust shell activation + sidebar per sport");
+})();
+</script>
 </body>
 </html>
 
