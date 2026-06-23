@@ -20694,10 +20694,17 @@ console.log("v402 DB size:",ALL.length);
 })();
 </script>
 
-<style>
-/* v500 — Deportes shell limpio */
-body.v500-active #panel-soccer,body.v500-active #panel-hockey,body.v500-active #panel-tennis,body.v500-active #panel-basketball,body.v500-active #panel-baseball,body.v500-active #panel-football,body.v500-active #panel-racing,body.v500-active #panel-golf,body.v500-active #panel-combat,body.v500-active #panel-rugby,body.v500-active #panel-cricket,body.v500-active #panel-volleyball,body.v500-active #panel-athletics,body.v500-active #panel-swimming,body.v500-active #panel-padel{display:none !important;}
-body.v500-active #panel-inicio{display:none !important;}
+
+
+
+
+<style id="v500-css">
+/* v500 v2 — Deportes shell, isTrusted only, hide sidebar viejo */
+body.v500-active #panel-inicio,body.v500-active #panel-soccer,body.v500-active #panel-hockey,body.v500-active #panel-tennis,body.v500-active #panel-basketball,body.v500-active #panel-baseball,body.v500-active #panel-football,body.v500-active #panel-racing,body.v500-active #panel-golf,body.v500-active #panel-combat,body.v500-active #panel-rugby,body.v500-active #panel-cricket,body.v500-active #panel-volleyball,body.v500-active #panel-athletics,body.v500-active #panel-swimming,body.v500-active #panel-padel{display:none !important;}
+/* Hide viejo sidebar Futbol (v147) y M/F toggle */
+body.v500-active [class*="v147-"],body.v500-active [id*="v147-"],body.v500-active .v149-mf,body.v500-active [class*="v149-mf"],body.v500-active .v161-toggle,body.v500-active .sport-sidebar,body.v500-active .sport-side{display:none !important;}
+/* Hide ticker en deportes */
+body.v500-active #v25-ticker,body.v500-active .v25-ticker,body.v500-active #ticker{display:none !important;}
 body.v500-active #v500-shell{display:block !important;}
 
 #v500-shell{display:none;max-width:1400px;margin:0 auto;padding:0 24px;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#1f2937;}
@@ -20706,34 +20713,18 @@ body.v500-active #v500-shell{display:block !important;}
 .v500-hero-name{font-size:42px;font-weight:800;letter-spacing:-0.02em;margin:0;color:#111827;}
 .v500-hero-tags{display:flex;gap:8px;margin-left:auto;flex-wrap:wrap;}
 .v500-tag{display:inline-block;padding:4px 12px;border-radius:999px;background:#f3f4f6;color:#4b5563;font-size:12px;font-weight:600;letter-spacing:0.03em;text-transform:uppercase;}
-
 .v500-tabs{display:flex;gap:4px;overflow-x:auto;border-bottom:2px solid #e5e7eb;margin-bottom:32px;padding-bottom:0;-webkit-overflow-scrolling:touch;}
 .v500-tab{flex:0 0 auto;padding:14px 22px;background:none;border:none;cursor:pointer;font-size:15px;font-weight:600;color:#6b7280;border-bottom:3px solid transparent;margin-bottom:-2px;transition:color 0.15s,border-color 0.15s;font-family:inherit;}
 .v500-tab:hover{color:#dc2626;}
 .v500-tab.act{color:#dc2626;border-bottom-color:#dc2626;}
-
 .v500-tabpane{display:none;min-height:400px;}
 .v500-tabpane.act{display:block;}
-
-.v500-card{background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:24px;margin-bottom:16px;box-shadow:0 1px 3px rgba(0,0,0,0.04);}
-.v500-card h3{margin:0 0 12px;font-size:20px;font-weight:700;color:#111827;}
-.v500-card p{margin:0 0 8px;font-size:15px;line-height:1.6;color:#4b5563;}
 .v500-empty{text-align:center;padding:80px 24px;color:#9ca3af;font-size:16px;}
 .v500-empty-emoji{font-size:48px;margin-bottom:16px;display:block;}
-
-@media (max-width:768px){
-.v500-hero{padding:24px 0 16px;}
-.v500-hero-emoji{font-size:42px;}
-.v500-hero-name{font-size:28px;}
-.v500-tag{font-size:11px;}
-.v500-tab{padding:12px 16px;font-size:14px;}
-}
 </style>
 
 <script>
 (function(){if(window.__v500)return;window.__v500=true;
-
-/* v500 — Deportes shell limpio basado en PDF blueprint */
 
 var SPORTS={
   soccer:{n:"Fútbol",e:"⚽",tags:["Equipo","Olímpico"]},
@@ -20763,19 +20754,27 @@ var TAB_LABELS=[
   {k:"variantes",label:"Variantes"}
 ];
 
+var HIDDEN_PANELS=["panel-inicio","panel-soccer","panel-hockey","panel-tennis","panel-basketball","panel-baseball","panel-football","panel-racing","panel-golf","panel-combat","panel-rugby","panel-cricket","panel-volleyball","panel-athletics","panel-swimming","panel-padel"];
+
 var currentSport=null;
 var currentTab="resumen";
 
+function isInMasSS21(){
+  /* MasSS21 detect: page text or class */
+  var p=document.getElementById("v87-page-masss21");
+  if(p && getComputedStyle(p).display!=="none")return true;
+  if(document.body.className.indexOf("v32-view-masss21")>=0)return true;
+  return false;
+}
+
 function buildShell(){
-  if(document.getElementById("v500-shell"))return document.getElementById("v500-shell");
+  if(document.getElementById("v500-shell"))return;
   var shell=document.createElement("div");
   shell.id="v500-shell";
   shell.innerHTML="<div class=\"v500-hero\"><span class=\"v500-hero-emoji\" id=\"v500-emoji\">⚽</span><h1 class=\"v500-hero-name\" id=\"v500-name\">Fútbol</h1><div class=\"v500-hero-tags\" id=\"v500-tags\"></div></div><div class=\"v500-tabs\" id=\"v500-tabs\"></div><div id=\"v500-content\"></div>";
-  /* Insert near panel-soccer if exists, otherwise body */
   var anchor=document.getElementById("panel-soccer")||document.getElementById("panel-inicio");
   if(anchor && anchor.parentNode){anchor.parentNode.insertBefore(shell,anchor);}
   else{document.body.appendChild(shell);}
-  return shell;
 }
 
 function renderTabs(){
@@ -20786,7 +20785,6 @@ function renderTabs(){
     var b=document.createElement("button");
     b.className="v500-tab"+(t.k===currentTab?" act":"");
     b.textContent=t.label;
-    b.dataset.tab=t.k;
     b.addEventListener("click",function(){currentTab=t.k;renderTabs();renderContent();});
     tabs.appendChild(b);
   });
@@ -20808,58 +20806,8 @@ function renderHero(){
   var tags=document.getElementById("v500-tags");
   if(emoji)emoji.textContent=sp.e;
   if(name)name.textContent=sp.n;
-  if(tags){tags.innerHTML="";sp.tags.forEach(function(t){var span=document.createElement("span");span.className="v500-tag";span.textContent=t;tags.appendChild(span);});}
+  if(tags){tags.innerHTML="";sp.tags.forEach(function(t){var s=document.createElement("span");s.className="v500-tag";s.textContent=t;tags.appendChild(s);});}
 }
-
-function showSport(id){
-  if(!SPORTS[id])return;
-  currentSport=id;
-  currentTab="resumen";
-  buildShell();
-  document.body.classList.add("v500-active");
-  /* Clear other v500-X classes */
-  Array.from(document.body.classList).forEach(function(c){if(/^v500-sport-/.test(c))document.body.classList.remove(c);});
-  document.body.classList.add("v500-sport-"+id);
-  renderHero();
-  renderTabs();
-  renderContent();
-}
-
-function hideShell(){
-  document.body.classList.remove("v500-active");
-  Array.from(document.body.classList).forEach(function(c){if(/^v500-sport-/.test(c))document.body.classList.remove(c);});
-  currentSport=null;
-}
-
-/* Wire click handlers on sport-btn — capture phase to act before legacy scripts */
-document.addEventListener("click",function(e){
-  var btn=e.target.closest(".sport-btn");
-  if(btn){
-    var onc=btn.getAttribute("onclick")||"";
-    var m=onc.match(/switchSport\([\'\"]?(\w+)/);
-    if(m){
-      var id=m[1];
-      if(id==="todos"||id==="inicio"){hideShell();return;}
-      if(SPORTS[id]){setTimeout(function(){showSport(id);},80);}
-    }
-  }
-  /* Inicio button in main menu */
-  var inicioBtn=e.target.closest("[data-v26id=\"inicio\"], .v56-item");
-  if(inicioBtn){
-    var txt=(inicioBtn.textContent||"").trim().toLowerCase();
-    if(txt==="inicio"||txt.indexOf("🏠")===0){hideShell();}
-  }
-},true);
-
-console.log("[v500] Deportes shell loaded — clean rebuild ready");
-})();
-</script>
-
-<script>
-(function(){if(window.__v500b)return;window.__v500b=true;
-
-/* v500b — fix hide panels using INLINE display:none (CSS losing to legacy specificity) */
-var HIDDEN_PANELS=["panel-inicio","panel-soccer","panel-hockey","panel-tennis","panel-basketball","panel-baseball","panel-football","panel-racing","panel-golf","panel-combat","panel-rugby","panel-cricket","panel-volleyball","panel-athletics","panel-swimming","panel-padel"];
 
 function hideAllOldPanels(){
   HIDDEN_PANELS.forEach(function(id){
@@ -20879,42 +20827,65 @@ function restoreOldPanels(){
   });
 }
 
-/* Watchdog: keep panels hidden while v500-active */
-setInterval(function(){
-  if(document.body.classList.contains("v500-active")){
-    HIDDEN_PANELS.forEach(function(id){
-      var p=document.getElementById(id);
-      if(p && getComputedStyle(p).display!=="none"){p.style.setProperty("display","none","important");}
-    });
-    /* Make sure v500-shell stays visible */
-    var sh=document.getElementById("v500-shell");
-    if(sh && getComputedStyle(sh).display==="none"){sh.style.setProperty("display","block","important");}
-  }
-},300);
+function showSport(id){
+  if(!SPORTS[id])return;
+  if(isInMasSS21())return;
+  currentSport=id;
+  currentTab="resumen";
+  buildShell();
+  document.body.classList.add("v500-active");
+  Array.from(document.body.classList).forEach(function(c){if(/^v500-sport-/.test(c))document.body.classList.remove(c);});
+  document.body.classList.add("v500-sport-"+id);
+  hideAllOldPanels();
+  renderHero();renderTabs();renderContent();
+}
 
-/* Hook into v500 lifecycle via class observation */
-var lastActive=document.body.classList.contains("v500-active");
-new MutationObserver(function(){
-  var nowActive=document.body.classList.contains("v500-active");
-  if(nowActive && !lastActive){hideAllOldPanels();}
-  else if(!nowActive && lastActive){restoreOldPanels();}
-  lastActive=nowActive;
-}).observe(document.body,{attributes:true,attributeFilter:["class"]});
+function hideShell(){
+  document.body.classList.remove("v500-active");
+  Array.from(document.body.classList).forEach(function(c){if(/^v500-sport-/.test(c))document.body.classList.remove(c);});
+  currentSport=null;
+  restoreOldPanels();
+}
 
-/* Also hook back to Inicio when click .sport-btn with Todos/Inicio */
+/* Capture-phase click — ONLY isTrusted events (real user clicks) */
 document.addEventListener("click",function(e){
+  if(!e.isTrusted)return; /* block programmatic clicks */
   var btn=e.target.closest(".sport-btn");
   if(btn){
     var onc=btn.getAttribute("onclick")||"";
-    if(/switchSport\([\'\"]?(?:todos|inicio)/.test(onc)){
-      document.body.classList.remove("v500-active");
-      Array.from(document.body.classList).forEach(function(c){if(/^v500-sport-/.test(c))document.body.classList.remove(c);});
-      restoreOldPanels();
+    var m=onc.match(/switchSport\([\'\"]?(\w+)/);
+    if(m){
+      var id=m[1];
+      if(id==="todos"||id==="inicio"){hideShell();return;}
+      if(SPORTS[id]){setTimeout(function(){showSport(id);},80);}
+    }
+  }
+  /* Main menu Inicio item */
+  var menuItem=e.target.closest(".v56-item,[data-v26id]");
+  if(menuItem){
+    var dataId=menuItem.dataset.v26id||"";
+    var txt=(menuItem.textContent||"").trim().toLowerCase();
+    if(dataId==="inicio"||dataId==="masss21"||/^inicio$|^🏠/.test(txt)||/sobre ss/.test(txt)){
+      hideShell();
     }
   }
 },true);
 
-console.log("[v500b] panel hide watchdog ready");
+/* Watchdog: panels stay hidden while active, but also detect leave-deportes view */
+setInterval(function(){
+  if(document.body.classList.contains("v500-active")){
+    /* If user navigated away (MasSS21), auto-hide */
+    if(isInMasSS21()){hideShell();return;}
+    HIDDEN_PANELS.forEach(function(id){
+      var p=document.getElementById(id);
+      if(p && getComputedStyle(p).display!=="none"){p.style.setProperty("display","none","important");}
+    });
+    var sh=document.getElementById("v500-shell");
+    if(sh && getComputedStyle(sh).display==="none"){sh.style.setProperty("display","block","important");}
+  }
+},400);
+
+console.log("[v500] Deportes shell v2 — isTrusted only + sidebar hide + MasSS21 detect");
 })();
 </script>
 </body>
