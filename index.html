@@ -20953,6 +20953,56 @@ shoNoticias=function(){ensurePanel();ensureContent();hideOthers();showPanel("pan
 console.log("[v703b] hotfix inline-style + content ensure");
 })();
 </script>
+
+<style id="v704-css">
+/* v704 - alineacion mas agresiva */
+.v36-side li,.v36-side button,.v36-side a{display:flex !important;align-items:center !important;}
+.v36-side li > span:first-child,.v36-side button > span:first-child,.v56-sub-item > span:first-child,.v56-item > span:first-child,.v56-item .v36-emoji,.v56-sub-item .v36-emoji{display:inline-flex !important;align-items:center !important;justify-content:center !important;width:32px !important;min-width:32px !important;max-width:32px !important;flex:0 0 32px !important;font-size:18px !important;line-height:1 !important;text-align:center !important;margin-right:4px !important;}
+/* Mismo size para emoji 📍 que es naturalmente mas chico */
+</style>
+<script>
+(function(){if(window.__v704)return;window.__v704=true;
+/* Move Mas Sobre SS 21 to be LAST in main UL */
+function moveMasSobreToEnd(){
+  var sides=document.querySelectorAll(".v36-side");
+  sides.forEach(function(side){
+    var uls=side.querySelectorAll("ul");
+    uls.forEach(function(ul){
+      var lis=ul.children;
+      var masItem=null;
+      for(var i=0;i<lis.length;i++){
+        var t=(lis[i].textContent||"").trim();
+        if(/Mas Sobre SS\s*21|Más Sobre SS\s*21/.test(t) && t.length<30){masItem=lis[i];break;}
+      }
+      if(masItem && ul.lastElementChild!==masItem){ul.appendChild(masItem);}
+    });
+  });
+}
+moveMasSobreToEnd();
+setInterval(moveMasSobreToEnd,1500);
+
+/* Force re-applying flex alignment to all drawer items */
+function fixAlign(){
+  document.querySelectorAll(".v36-side li, .v36-side button").forEach(function(el){
+    /* If element has 2 children: emoji + text, force flex */
+    var spans=el.querySelectorAll(":scope > span");
+    if(spans.length>=2){
+      spans[0].style.setProperty("flex","0 0 32px","important");
+      spans[0].style.setProperty("width","32px","important");
+      spans[0].style.setProperty("text-align","center","important");
+      spans[0].style.setProperty("display","inline-flex","important");
+      spans[0].style.setProperty("align-items","center","important");
+      spans[0].style.setProperty("justify-content","center","important");
+      spans[0].style.setProperty("font-size","18px","important");
+      spans[0].style.setProperty("line-height","1","important");
+    }
+  });
+}
+fixAlign();
+setInterval(fixAlign,1500);
+console.log("[v704] reorder + align fix");
+})();
+</script>
 </body>
 </html>
 
