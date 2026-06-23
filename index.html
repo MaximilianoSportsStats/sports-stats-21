@@ -20693,6 +20693,167 @@ setInterval(rebindSearch,1500);
 console.log("v402 DB size:",ALL.length);
 })();
 </script>
+
+<style>
+/* v500 — Deportes shell limpio */
+body.v500-active #panel-soccer,body.v500-active #panel-hockey,body.v500-active #panel-tennis,body.v500-active #panel-basketball,body.v500-active #panel-baseball,body.v500-active #panel-football,body.v500-active #panel-racing,body.v500-active #panel-golf,body.v500-active #panel-combat,body.v500-active #panel-rugby,body.v500-active #panel-cricket,body.v500-active #panel-volleyball,body.v500-active #panel-athletics,body.v500-active #panel-swimming,body.v500-active #panel-padel{display:none !important;}
+body.v500-active #panel-inicio{display:none !important;}
+body.v500-active #v500-shell{display:block !important;}
+
+#v500-shell{display:none;max-width:1400px;margin:0 auto;padding:0 24px;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#1f2937;}
+.v500-hero{display:flex;align-items:center;gap:18px;padding:32px 0 24px;border-bottom:1px solid #e5e7eb;margin-bottom:24px;}
+.v500-hero-emoji{font-size:56px;line-height:1;}
+.v500-hero-name{font-size:42px;font-weight:800;letter-spacing:-0.02em;margin:0;color:#111827;}
+.v500-hero-tags{display:flex;gap:8px;margin-left:auto;flex-wrap:wrap;}
+.v500-tag{display:inline-block;padding:4px 12px;border-radius:999px;background:#f3f4f6;color:#4b5563;font-size:12px;font-weight:600;letter-spacing:0.03em;text-transform:uppercase;}
+
+.v500-tabs{display:flex;gap:4px;overflow-x:auto;border-bottom:2px solid #e5e7eb;margin-bottom:32px;padding-bottom:0;-webkit-overflow-scrolling:touch;}
+.v500-tab{flex:0 0 auto;padding:14px 22px;background:none;border:none;cursor:pointer;font-size:15px;font-weight:600;color:#6b7280;border-bottom:3px solid transparent;margin-bottom:-2px;transition:color 0.15s,border-color 0.15s;font-family:inherit;}
+.v500-tab:hover{color:#dc2626;}
+.v500-tab.act{color:#dc2626;border-bottom-color:#dc2626;}
+
+.v500-tabpane{display:none;min-height:400px;}
+.v500-tabpane.act{display:block;}
+
+.v500-card{background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:24px;margin-bottom:16px;box-shadow:0 1px 3px rgba(0,0,0,0.04);}
+.v500-card h3{margin:0 0 12px;font-size:20px;font-weight:700;color:#111827;}
+.v500-card p{margin:0 0 8px;font-size:15px;line-height:1.6;color:#4b5563;}
+.v500-empty{text-align:center;padding:80px 24px;color:#9ca3af;font-size:16px;}
+.v500-empty-emoji{font-size:48px;margin-bottom:16px;display:block;}
+
+@media (max-width:768px){
+.v500-hero{padding:24px 0 16px;}
+.v500-hero-emoji{font-size:42px;}
+.v500-hero-name{font-size:28px;}
+.v500-tag{font-size:11px;}
+.v500-tab{padding:12px 16px;font-size:14px;}
+}
+</style>
+
+<script>
+(function(){if(window.__v500)return;window.__v500=true;
+
+/* v500 — Deportes shell limpio basado en PDF blueprint */
+
+var SPORTS={
+  soccer:{n:"Fútbol",e:"⚽",tags:["Equipo","Olímpico"]},
+  basketball:{n:"Basketball",e:"🏀",tags:["Equipo","Olímpico"]},
+  tennis:{n:"Tenis",e:"🎾",tags:["Individual","Olímpico"]},
+  football:{n:"Fútbol Americano",e:"🏈",tags:["Equipo"]},
+  baseball:{n:"Beisbol",e:"⚾",tags:["Equipo","Olímpico"]},
+  hockey:{n:"Hockey",e:"🏒",tags:["Equipo","Olímpico","Invierno"]},
+  racing:{n:"Automovilismo",e:"🏎️",tags:["Motor","Individual"]},
+  golf:{n:"Golf",e:"⛳",tags:["Individual"]},
+  combat:{n:"Combate",e:"🥊",tags:["Combate","Individual","Olímpico"]},
+  rugby:{n:"Rugby",e:"🏉",tags:["Equipo","Olímpico"]},
+  cricket:{n:"Cricket",e:"🏏",tags:["Equipo"]},
+  volleyball:{n:"Volleyball",e:"🏐",tags:["Equipo","Olímpico"]},
+  athletics:{n:"Atletismo",e:"🏃",tags:["Individual","Olímpico"]},
+  swimming:{n:"Natación",e:"🏊",tags:["Acuático","Olímpico"]},
+  padel:{n:"Pádel",e:"🎾",tags:["Individual"]}
+};
+
+var TAB_LABELS=[
+  {k:"resumen",label:"Resumen"},
+  {k:"ligas",label:"Ligas y Eventos"},
+  {k:"records",label:"Records"},
+  {k:"rankings",label:"Rankings"},
+  {k:"calendario",label:"Calendario"},
+  {k:"historia",label:"Historia"},
+  {k:"variantes",label:"Variantes"}
+];
+
+var currentSport=null;
+var currentTab="resumen";
+
+function buildShell(){
+  if(document.getElementById("v500-shell"))return document.getElementById("v500-shell");
+  var shell=document.createElement("div");
+  shell.id="v500-shell";
+  shell.innerHTML="<div class=\"v500-hero\"><span class=\"v500-hero-emoji\" id=\"v500-emoji\">⚽</span><h1 class=\"v500-hero-name\" id=\"v500-name\">Fútbol</h1><div class=\"v500-hero-tags\" id=\"v500-tags\"></div></div><div class=\"v500-tabs\" id=\"v500-tabs\"></div><div id=\"v500-content\"></div>";
+  /* Insert near panel-soccer if exists, otherwise body */
+  var anchor=document.getElementById("panel-soccer")||document.getElementById("panel-inicio");
+  if(anchor && anchor.parentNode){anchor.parentNode.insertBefore(shell,anchor);}
+  else{document.body.appendChild(shell);}
+  return shell;
+}
+
+function renderTabs(){
+  var tabs=document.getElementById("v500-tabs");
+  if(!tabs)return;
+  tabs.innerHTML="";
+  TAB_LABELS.forEach(function(t){
+    var b=document.createElement("button");
+    b.className="v500-tab"+(t.k===currentTab?" act":"");
+    b.textContent=t.label;
+    b.dataset.tab=t.k;
+    b.addEventListener("click",function(){currentTab=t.k;renderTabs();renderContent();});
+    tabs.appendChild(b);
+  });
+}
+
+function renderContent(){
+  var c=document.getElementById("v500-content");
+  if(!c||!currentSport)return;
+  var sp=SPORTS[currentSport];
+  var tabLabel=(TAB_LABELS.find(function(t){return t.k===currentTab;})||{}).label||"";
+  c.innerHTML="<div class=\"v500-tabpane act\"><div class=\"v500-empty\"><span class=\"v500-empty-emoji\">"+sp.e+"</span><p>Sección <strong>"+tabLabel+"</strong> de "+sp.n+"</p><p style=\"font-size:13px;color:#cbd5e1;margin-top:8px;\">Contenido en construcción</p></div></div>";
+}
+
+function renderHero(){
+  if(!currentSport)return;
+  var sp=SPORTS[currentSport];
+  var emoji=document.getElementById("v500-emoji");
+  var name=document.getElementById("v500-name");
+  var tags=document.getElementById("v500-tags");
+  if(emoji)emoji.textContent=sp.e;
+  if(name)name.textContent=sp.n;
+  if(tags){tags.innerHTML="";sp.tags.forEach(function(t){var span=document.createElement("span");span.className="v500-tag";span.textContent=t;tags.appendChild(span);});}
+}
+
+function showSport(id){
+  if(!SPORTS[id])return;
+  currentSport=id;
+  currentTab="resumen";
+  buildShell();
+  document.body.classList.add("v500-active");
+  /* Clear other v500-X classes */
+  Array.from(document.body.classList).forEach(function(c){if(/^v500-sport-/.test(c))document.body.classList.remove(c);});
+  document.body.classList.add("v500-sport-"+id);
+  renderHero();
+  renderTabs();
+  renderContent();
+}
+
+function hideShell(){
+  document.body.classList.remove("v500-active");
+  Array.from(document.body.classList).forEach(function(c){if(/^v500-sport-/.test(c))document.body.classList.remove(c);});
+  currentSport=null;
+}
+
+/* Wire click handlers on sport-btn — capture phase to act before legacy scripts */
+document.addEventListener("click",function(e){
+  var btn=e.target.closest(".sport-btn");
+  if(btn){
+    var onc=btn.getAttribute("onclick")||"";
+    var m=onc.match(/switchSport\([\'\"]?(\w+)/);
+    if(m){
+      var id=m[1];
+      if(id==="todos"||id==="inicio"){hideShell();return;}
+      if(SPORTS[id]){setTimeout(function(){showSport(id);},80);}
+    }
+  }
+  /* Inicio button in main menu */
+  var inicioBtn=e.target.closest("[data-v26id=\"inicio\"], .v56-item");
+  if(inicioBtn){
+    var txt=(inicioBtn.textContent||"").trim().toLowerCase();
+    if(txt==="inicio"||txt.indexOf("🏠")===0){hideShell();}
+  }
+},true);
+
+console.log("[v500] Deportes shell loaded — clean rebuild ready");
+})();
+</script>
 </body>
 </html>
 
