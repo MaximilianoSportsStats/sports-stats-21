@@ -20486,6 +20486,30 @@ setInterval(ensureUI,600);
 html body #v30-lang{display:none !important;visibility:hidden !important;width:0 !important;height:0 !important;overflow:hidden !important;}
 html body #v25-search-bar{display:none !important;visibility:hidden !important;width:0 !important;height:0 !important;overflow:hidden !important;}
 </style>
+
+<script>
+(function(){if(window.__v400)return;window.__v400=true;
+var TR={
+  "La red social de los deportes":{en:"The social network of sports",de:"Das soziale Netzwerk des Sports",fr:"Le réseau social du sport",it:"Il social network dello sport",pt:"A rede social dos esportes"},
+  "Navega data, crea tu liga, arma tu perfil y conecta con deportistas de todo el mundo.":{en:"Browse data, create your league, build your profile and connect with athletes worldwide.",de:"Daten erkunden, deine Liga erstellen, dein Profil aufbauen und mit Sportlern weltweit verbinden.",fr:"Naviguez dans les données, créez votre ligue, montez votre profil et connectez-vous avec des sportifs.",it:"Naviga i dati, crea la tua lega, costruisci il tuo profilo e connettiti con atleti globali.",pt:"Navegue por dados, crie sua liga, monte seu perfil e conecte-se com atletas do mundo todo."}
+};
+var REV={};Object.keys(TR).forEach(function(es){Object.keys(TR[es]).forEach(function(l){REV[TR[es][l]]=es;});});
+function getLang(){return (localStorage.getItem("v30-lang")||"es").toLowerCase();}
+function translate(t){if(!t)return null;t=t.trim();var lang=getLang();if(lang==="es"){if(REV[t])return REV[t];return null;}if(TR[t]&&TR[t][lang])return TR[t][lang];if(REV[t]){var es=REV[t];if(TR[es]&&TR[es][lang])return TR[es][lang];}return null;}
+function walk(){
+  document.querySelectorAll(".tagline,.inicio-hero-content p,.inicio-hero-content h1,.inicio-hero-content h2,.inicio-hero-content h3,.hero-section .tagline").forEach(function(el){
+    if(el.children.length>0)return;
+    var t=(el.textContent||"").trim();
+    var nt=translate(t);if(nt&&nt!==t)el.textContent=nt;
+  });
+}
+document.addEventListener("click",function(e){if(!e.isTrusted)return;var la=e.target.closest && (e.target.closest("#v30-lang")||e.target.closest("#v398-picker"));if(la){walk();setTimeout(walk,80);setTimeout(walk,250);setTimeout(walk,600);}},true);
+if(document.readyState!=="loading")walk();else document.addEventListener("DOMContentLoaded",walk);
+setTimeout(walk,800);setTimeout(walk,2500);
+setInterval(walk,400);
+var lastL=getLang();setInterval(function(){var c=getLang();if(c!==lastL){lastL=c;walk();setTimeout(walk,150);}},150);
+})();
+</script>
 </body>
 </html>
 
