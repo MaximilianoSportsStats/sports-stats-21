@@ -20391,6 +20391,95 @@ setInterval(walkAll,300);
 var lastL=getLang();setInterval(function(){var c=getLang();if(c!==lastL){lastL=c;walkAll();setTimeout(walkAll,150);}},150);
 })();
 </script>
+
+<style id="v398-css">
+.v398-search{display:flex;align-items:center;background:#fff;border:1px solid #d1d5db;border-radius:24px;padding:6px 14px;gap:8px;height:40px;width:280px;}
+.v398-search input{border:none;outline:none;background:transparent;font-size:14px;width:100%;}
+.v398-picker{position:relative;display:flex;align-items:center;}
+.v398-picker-btn{display:flex;align-items:center;gap:8px;background:#fff;border:1px solid #d1d5db;border-radius:24px;padding:6px 14px;height:40px;cursor:pointer;font-size:14px;font-weight:500;color:#1a1a1a;}
+.v398-picker-btn:hover{background:#f8f8f8;border-color:#c0392b;}
+.v398-picker-arrow{font-size:10px;color:#999;}
+.v398-picker-dropdown{position:absolute;top:calc(100% + 6px);right:0;background:#fff;border:1px solid #e5e7eb;border-radius:12px;box-shadow:0 4px 12px rgba(0,0,0,0.08);min-width:180px;padding:6px;display:none;z-index:9999;}
+.v398-picker-dropdown.open{display:block;}
+.v398-picker-opt{display:flex;align-items:center;gap:10px;padding:10px 14px;border:none;background:transparent;width:100%;cursor:pointer;border-radius:8px;font-size:14px;font-weight:500;color:#1a1a1a;}
+.v398-picker-opt:hover{background:#f5f5f5;}
+.v398-picker-opt.active{background:#c0392b;color:#fff;}
+.v398-flag{font-size:18px;line-height:1;}
+/* hide native if exists */
+#v25-search-bar:has(input[type=search]){display:none !important;}
+#v30-lang button[data-code]{display:none !important;}
+</style>
+<script>
+(function(){if(window.__v398)return;window.__v398=true;
+var LN={
+  es:{es:"Español",en:"Spanish",de:"Spanisch",fr:"Espagnol",it:"Spagnolo",pt:"Espanhol"},
+  en:{es:"Inglés",en:"English",de:"Englisch",fr:"Anglais",it:"Inglese",pt:"Inglês"},
+  de:{es:"Alemán",en:"German",de:"Deutsch",fr:"Allemand",it:"Tedesco",pt:"Alemão"},
+  fr:{es:"Francés",en:"French",de:"Französisch",fr:"Français",it:"Francese",pt:"Francês"},
+  it:{es:"Italiano",en:"Italian",de:"Italienisch",fr:"Italien",it:"Italiano",pt:"Italiano"},
+  pt:{es:"Portugués",en:"Portuguese",de:"Portugiesisch",fr:"Portugais",it:"Portoghese",pt:"Português"}
+};
+var FLAGS={es:"🇪🇸",en:"🇬🇧",de:"🇩🇪",fr:"🇫🇷",it:"🇮🇹",pt:"🇵🇹"};
+var SEARCH_PH={es:"Buscar deportes, ligas, equipos, jugadores...",en:"Search sports, leagues, teams, players...",de:"Sportarten, Ligen, Teams, Spieler suchen...",fr:"Rechercher sports, ligues, équipes, joueurs...",it:"Cerca sport, leghe, squadre, giocatori...",pt:"Buscar esportes, ligas, equipes, jogadores..."};
+function getLang(){return (localStorage.getItem("v30-lang")||"es").toLowerCase();}
+function ensureUI(){
+  var metaNav=document.querySelector(".meta-nav");if(!metaNav)return;
+  /* SEARCH BAR */
+  if(!document.getElementById("v398-search-bar")){
+    var s=document.createElement("div");s.id="v398-search-bar";s.className="v398-search";
+    s.innerHTML="\u{1F50D} <input type=\"text\" id=\"v398-search-input\" />";
+    var loginBtn=metaNav.querySelector(".login-btn");
+    if(loginBtn)metaNav.insertBefore(s,loginBtn);else metaNav.appendChild(s);
+  }
+  /* PICKER */
+  if(!document.getElementById("v398-picker")){
+    var p=document.createElement("div");p.id="v398-picker";p.className="v398-picker";
+    p.innerHTML="<button class=\"v398-picker-btn\" type=\"button\" id=\"v398-pbtn\"><span class=\"v398-flag\" id=\"v398-pflag\">🇪🇸</span><span id=\"v398-plabel\">Español</span><span class=\"v398-picker-arrow\">▼</span></button><div class=\"v398-picker-dropdown\" id=\"v398-pdrop\"></div>";
+    var loginBtn=metaNav.querySelector(".login-btn");
+    if(loginBtn)metaNav.insertBefore(p,loginBtn);else metaNav.appendChild(p);
+    /* Add options */
+    var drop=p.querySelector("#v398-pdrop");
+    ["es","en","de","fr","it","pt"].forEach(function(c){
+      var b=document.createElement("button");b.type="button";b.className="v398-picker-opt";b.dataset.code=c;
+      b.innerHTML="<span class=\"v398-flag\">"+FLAGS[c]+"</span><span class=\"v398-opt-label\" data-code=\""+c+"\">"+LN[c].es+"</span>";
+      b.addEventListener("click",function(e){
+        e.stopPropagation();
+        localStorage.setItem("v30-lang",c);
+        document.documentElement.lang=c;
+        drop.classList.remove("open");
+        updateUI();
+      });
+      drop.appendChild(b);
+    });
+    /* Toggle dropdown */
+    p.querySelector("#v398-pbtn").addEventListener("click",function(e){
+      e.stopPropagation();
+      drop.classList.toggle("open");
+    });
+    /* Close on outside click */
+    document.addEventListener("click",function(e){if(!p.contains(e.target))drop.classList.remove("open");});
+  }
+  updateUI();
+}
+function updateUI(){
+  var lang=getLang();
+  var pflag=document.getElementById("v398-pflag");if(pflag)pflag.textContent=FLAGS[lang];
+  var plabel=document.getElementById("v398-plabel");if(plabel)plabel.textContent=LN[lang][lang];
+  /* Update options labels to current language */
+  document.querySelectorAll(".v398-opt-label").forEach(function(el){
+    var c=el.dataset.code;if(c&&LN[c]&&LN[c][lang])el.textContent=LN[c][lang];
+  });
+  /* Mark active */
+  document.querySelectorAll(".v398-picker-opt").forEach(function(b){b.classList.toggle("active",b.dataset.code===lang);});
+  /* Search placeholder */
+  var inp=document.getElementById("v398-search-input");if(inp)inp.placeholder=SEARCH_PH[lang]||SEARCH_PH.es;
+  document.documentElement.lang=lang;
+}
+if(document.readyState!=="loading")ensureUI();else document.addEventListener("DOMContentLoaded",ensureUI);
+setTimeout(ensureUI,500);setTimeout(ensureUI,1500);setTimeout(ensureUI,3500);
+setInterval(ensureUI,600);
+})();
+</script>
 </body>
 </html>
 
