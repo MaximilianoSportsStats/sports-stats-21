@@ -20825,6 +20825,13 @@ document.addEventListener("click",function(e){if(!e.isTrusted)return;if(inMass()
 console.log("[v700] shell deportes UNICO + Futbol Resumen poblado");
 })();
 </script>
+
+<style id="v701-css">
+/* v701 — hide sidebar viejo cuando v700 shell esta activo */
+body.v700-active aside#sidebar,body.v700-active aside.sidebar,body.v700-active aside.v336-sb,body.v700-active aside[class*="v336-sb"],body.v700-active aside[class*="-soccer-sb"],body.v700-active aside.v338-soccer-sb{display:none !important;visibility:hidden !important;}
+/* Tambien hide los v147-acerca / v149 si aparecen */
+body.v700-active [class*="v147-acerca"],body.v700-active [class*="v149-mf"]{display:none !important;}
+</style>
 </body>
 </html>
 
