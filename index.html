@@ -20832,6 +20832,15 @@ body.v700-active aside#sidebar,body.v700-active aside.sidebar,body.v700-active a
 /* Tambien hide los v147-acerca / v149 si aparecen */
 body.v700-active [class*="v147-acerca"],body.v700-active [class*="v149-mf"]{display:none !important;}
 </style>
+
+<style id="v702-css">
+/* v702 — fix alineacion items submenu drawer (emojis vs texto) */
+.v56-sub-item,li.v56-sub-item{display:flex !important;align-items:center !important;gap:12px !important;}
+.v56-sub-item > span:first-child,li.v56-sub-item > span:first-child{flex:0 0 28px !important;width:28px !important;display:inline-flex !important;align-items:center !important;justify-content:center !important;font-size:18px !important;line-height:1 !important;}
+/* Mismo fix para los main items con .v36-emoji */
+.v36-side li,.v36-side button{display:flex !important;align-items:center !important;gap:12px !important;}
+.v36-side .v36-emoji{flex:0 0 28px !important;width:28px !important;display:inline-flex !important;align-items:center !important;justify-content:center !important;font-size:20px !important;line-height:1 !important;}
+</style>
 </body>
 </html>
 
