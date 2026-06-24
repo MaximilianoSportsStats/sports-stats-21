@@ -21167,6 +21167,61 @@ window.addEventListener("resize",matchWidth);
 console.log("[v707] width match exact");
 })();
 </script>
+
+<style id="v708-css">
+#panel-v708-blogs{display:none;max-width:1400px;margin:0 auto;padding:32px 24px;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;}
+.v708-h{font-size:42px;font-weight:800;color:#111827;letter-spacing:-0.02em;margin:0 0 8px;}
+.v708-sub{color:#6b7280;font-size:16px;margin:0 0 28px;}
+.v708-filters{display:flex;gap:8px;overflow-x:auto;margin-bottom:32px;padding-bottom:8px;-webkit-overflow-scrolling:touch;}
+.v708-filter{flex:0 0 auto;padding:8px 18px;border-radius:999px;background:#f3f4f6;color:#374151;border:none;font-weight:600;cursor:pointer;font-size:14px;font-family:inherit;}
+.v708-filter.act{background:#dc2626;color:#fff;}
+.v708-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px;}
+.v708-card{background:#fff;border:1px solid #e5e7eb;border-radius:14px;overflow:hidden;cursor:pointer;transition:transform 0.15s,box-shadow 0.15s;display:flex;flex-direction:column;}
+.v708-card:hover{transform:translateY(-3px);box-shadow:0 10px 25px rgba(0,0,0,0.08);}
+.v708-card-img{height:170px;background-size:cover;background-position:center;background-color:#e5e7eb;}
+.v708-card-body{padding:16px;display:flex;flex-direction:column;flex:1;}
+.v708-card-cat{display:inline-block;background:#fef2f2;color:#dc2626;padding:3px 10px;border-radius:6px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:8px;align-self:flex-start;}
+.v708-card-title{font-weight:700;font-size:16px;color:#111827;line-height:1.35;margin:0 0 8px;}
+.v708-card-sub{font-size:13px;color:#6b7280;line-height:1.5;margin:0 0 12px;flex:1;}
+.v708-meta{display:flex;justify-content:space-between;align-items:center;border-top:1px solid #f3f4f6;padding-top:10px;}
+.v708-author{display:flex;align-items:center;gap:6px;font-size:12px;color:#374151;}
+.v708-avatar{width:24px;height:24px;border-radius:50%;background:#dc2626;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;}
+.v708-read{font-size:11px;color:#9ca3af;}
+@media (max-width:600px){.v708-h{font-size:30px;}}
+</style>
+<script>
+(function(){if(window.__v708)return;window.__v708=true;
+var BLOGS=[{"t":"El renacer de Messi en MLS: analisis tactico","s":"Como Inter Miami ha construido su sistema alrededor del 10","a":"Juan Perez","r":"6 min","d":"hace 1h","cat":"Futbol","img":"https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=600"},{"t":"NBA Finals: por que los Celtics dominaran 2026","s":"Las claves del juego de Tatum y Brown para repetir titulo","a":"Maria Lopez","r":"8 min","d":"hace 3h","cat":"Basketball","img":"https://images.unsplash.com/photo-1546519638-68e109498ffc?w=600"},{"t":"Verstappen vs Hamilton: el legado generacional","s":"Comparativa entre el holandes y el ingles en numeros","a":"Carlos Ruiz","r":"10 min","d":"hace 5h","cat":"F1","img":"https://images.unsplash.com/photo-1583900985737-6d0495555783?w=600"},{"t":"Alcaraz: el heredero natural de Nadal","s":"Diferencias y similitudes entre el murciano y su mentor","a":"Ana Garcia","r":"7 min","d":"hace 7h","cat":"Tenis","img":"https://images.unsplash.com/photo-1542144582-1ba00456b5e3?w=600"},{"t":"NFL: la era Mahomes solo esta empezando","s":"Tres Super Bowls antes de los 30 y va por mas","a":"Roberto Silva","r":"9 min","d":"hace 12h","cat":"NFL","img":"https://images.unsplash.com/photo-1485395037613-e83d5c1f5290?w=600"},{"t":"Mundial 2026: el formato 48 selecciones a debate","s":"Pros y contras de la expansion mas grande en la historia","a":"Luisa Mendoza","r":"12 min","d":"hace 1d","cat":"Futbol","img":"https://images.unsplash.com/photo-1606925797300-0b35e9d1794e?w=600"},{"t":"Doncic: el genio europeo que conquisto la NBA","s":"Su estilo unico y por que es el futuro de la liga","a":"Diego Mora","r":"8 min","d":"hace 1d","cat":"Basketball","img":"https://images.unsplash.com/photo-1504450758481-7338eba7524a?w=600"},{"t":"Pogacar: el rey del ciclismo mundial","s":"Como el esloveno revoluciono las grandes vueltas","a":"Pedro Vega","r":"11 min","d":"hace 2d","cat":"Ciclismo","img":"https://images.unsplash.com/photo-1502764613149-7f1d229e230f?w=600"},{"t":"World Series 2026: los Yankees buscan venganza","s":"Despues de perder hace dos anos los Bombers regresan","a":"Sofia Reyes","r":"6 min","d":"hace 2d","cat":"Beisbol","img":"https://images.unsplash.com/photo-1508098682722-e99c43a406b2?w=600"},{"t":"Sinner: el italiano que cambio el tenis moderno","s":"Como rompio el dominio del Big Three definitivamente","a":"Ana Garcia","r":"9 min","d":"hace 3d","cat":"Tenis","img":"https://images.unsplash.com/photo-1554068865-24cecd4e34b8?w=600"},{"t":"Tyson Fury vs Joshua: el combate del siglo","s":"Analisis tactico del peso pesado mas esperado","a":"Manuel Torres","r":"8 min","d":"hace 3d","cat":"Combate","img":"https://images.unsplash.com/photo-1517466787929-bc90951d0974?w=600"},{"t":"Vinicius Jr: del Flamengo al GOAT del Real Madrid","s":"La transformacion del brasileno en la mejor liga","a":"Carolina Diaz","r":"10 min","d":"hace 4d","cat":"Futbol","img":"https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=600"},{"t":"NHL Playoffs: McDavid y la maldicion de Edmonton","s":"Por que el mejor jugador no levanta la Stanley Cup","a":"Eduardo Rojas","r":"7 min","d":"hace 4d","cat":"Hockey","img":"https://images.unsplash.com/photo-1515703407324-5f51c2a86d34?w=600"},{"t":"Tour de France: 7 candidatos al amarillo 2026","s":"Quien tiene chances reales de derrotar a Pogacar","a":"Pedro Vega","r":"9 min","d":"hace 5d","cat":"Ciclismo","img":"https://images.unsplash.com/photo-1471506480208-91b3a4cc78be?w=600"},{"t":"Curry: el sniper que cambio la NBA para siempre","s":"Como su juego perimetral revoluciono el basketball","a":"Maria Lopez","r":"11 min","d":"hace 5d","cat":"Basketball","img":"https://images.unsplash.com/photo-1577471488278-16eec37ffcc2?w=600"},{"t":"Ferrari en 2026: el regreso del Cavallino?","s":"Las claves del nuevo proyecto F1 de la Scuderia","a":"Carlos Ruiz","r":"8 min","d":"hace 6d","cat":"F1","img":"https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=600"},{"t":"Atletico Madrid: la era post-Simeone que se viene","s":"Quien sera el proximo entrenador del Cholo","a":"Pablo Sanchez","r":"10 min","d":"hace 1sem","cat":"Futbol","img":"https://images.unsplash.com/photo-1551958219-acbc608c6377?w=600"},{"t":"WNBA: la liga femenina nunca fue mas grande","s":"Records de audiencia y nuevas estrellas que emergen","a":"Sofia Reyes","r":"7 min","d":"hace 1sem","cat":"Basketball","img":"https://images.unsplash.com/photo-1574680096145-d05b474e2155?w=600"},{"t":"Boca vs River: el Superclasico mas importante del 2026","s":"Que esta en juego en el partido mas esperado del ano","a":"Diego Mora","r":"9 min","d":"hace 1sem","cat":"Futbol","img":"https://images.unsplash.com/photo-1551958214-2d59cc951b0c?w=600"},{"t":"Marathons 2026: como Kenia sigue dominando","s":"El fenomeno africano en las grandes maratones del mundo","a":"Luisa Mendoza","r":"8 min","d":"hace 2sem","cat":"Atletismo","img":"https://images.unsplash.com/photo-1461896836934-ffe607ba8211?w=600"},{"t":"PSG sin Mbappe: identidad y nuevo proyecto","s":"Como reconstruir despues de la salida del frances","a":"Pablo Sanchez","r":"10 min","d":"hace 2sem","cat":"Futbol","img":"https://images.unsplash.com/photo-1522778034537-20a2486be803?w=600"},{"t":"UFC: la era post-McGregor que nunca llego","s":"Quienes son las verdaderas estrellas del MMA actual","a":"Manuel Torres","r":"7 min","d":"hace 2sem","cat":"Combate","img":"https://images.unsplash.com/photo-1517466787929-bc90951d0974?w=600"}];
+var CATS=["Todos","Futbol","Basketball","F1","Tenis","NFL","Beisbol","Hockey","Ciclismo","Combate","Atletismo"];
+var ST={cat:"Todos"};
+function ensure(){if(document.getElementById("panel-v708-blogs"))return;var p=document.createElement("div");p.id="panel-v708-blogs";p.style.display="none";var a=document.getElementById("panel-inicio");if(a&&a.parentNode)a.parentNode.insertBefore(p,a);else document.body.appendChild(p);}
+function content(){var p=document.getElementById("panel-v708-blogs");if(!p||p.innerHTML.length>200)return;
+  p.innerHTML='<h1 class="v708-h">✍️ Blogs</h1><p class="v708-sub">Análisis, opiniones y voces del deporte mundial</p><div class="v708-filters" id="v708-filters"></div><div class="v708-grid" id="v708-grid"></div>';
+  rdF();rdG();
+}
+function rdF(){var f=document.getElementById("v708-filters");if(!f)return;f.innerHTML="";CATS.forEach(function(c){var b=document.createElement("button");b.className="v708-filter"+(c===ST.cat?" act":"");b.textContent=c;b.addEventListener("click",function(){ST.cat=c;rdF();rdG();});f.appendChild(b);});}
+function rdG(){var g=document.getElementById("v708-grid");if(!g)return;var items=ST.cat==="Todos"?BLOGS:BLOGS.filter(function(b){return b.cat===ST.cat;});g.innerHTML=items.map(function(b){var initials=b.a.split(" ").map(function(n){return n[0];}).join("").substring(0,2);return '<div class="v708-card"><div class="v708-card-img" style="background-image:url(\''+b.img+'\')"></div><div class="v708-card-body"><span class="v708-card-cat">'+b.cat+'</span><h3 class="v708-card-title">'+b.t+'</h3><p class="v708-card-sub">'+b.s+'</p><div class="v708-meta"><div class="v708-author"><div class="v708-avatar">'+initials+'</div>'+b.a+' · '+b.d+'</div><div class="v708-read">📖 '+b.r+'</div></div></div></div>';}).join("");}
+var HIDE=["panel-inicio","panel-mercado","v87-page-masss21","panel-soccer","panel-basketball","panel-tennis","panel-football","panel-baseball","panel-hockey","panel-racing","panel-golf","panel-combat","panel-rugby","panel-cricket","panel-volleyball","panel-athletics","panel-swimming","panel-padel","v25-ticker","v700-shell","panel-v703-noticias"];
+var saved={};
+function hideAll(){HIDE.forEach(function(id){var e=document.getElementById(id);if(e){saved[id]=e.style.cssText;e.style.setProperty("display","none","important");}});}
+function restoreAll(){HIDE.forEach(function(id){var e=document.getElementById(id);if(e){e.style.cssText=saved[id]||"";}});saved={};}
+function show(){ensure();content();hideAll();var p=document.getElementById("panel-v708-blogs");if(p)p.style.setProperty("display","block","important");document.body.classList.add("v708-blogs");window.scrollTo(0,0);}
+function hide(){restoreAll();var p=document.getElementById("panel-v708-blogs");if(p)p.style.removeProperty("display");document.body.classList.remove("v708-blogs");}
+document.addEventListener("click",function(e){
+  if(!e.isTrusted)return;
+  var li=e.target.closest("li,button,a");if(!li)return;
+  var inMenu=!!li.closest(".v36-side, nav.menu, .drawer, [class*=\"drawer\"], [class*=\"v56\"]");
+  var txt=(li.textContent||"").trim().replace(/\s+/g," ");
+  if(inMenu){
+    if(/Blogs$/i.test(txt) && txt.length<20){e.preventDefault();show();return;}
+    if(/Inicio$|Más Sobre|MasSS|Mercado|Noticias$|Podcast$|Artículos$|Articulos$|Seguidos$|Reclutar$|Centros/i.test(txt) && txt.length<30){hide();return;}
+  }
+  var sb=e.target.closest(".sport-btn");if(sb)hide();
+},true);
+ensure();setInterval(ensure,2000);
+console.log("[v708] Blogs page");
+})();
+</script>
 </body>
 </html>
 
