@@ -21547,6 +21547,32 @@ document.addEventListener("DOMContentLoaded",init);
 console.log("[v713] CTAs+footer wired");
 })();
 </script>
+
+<script>
+(function(){if(window.__v714)return;window.__v714=true;
+/* v714 - FIX width Encuesta usando setProperty important (v706 css con !important ganaba contra v707 inline) */
+function fixWidth(){
+  var reto=document.getElementById("v99-retos");
+  var enc=document.getElementById("v705-encuesta");
+  if(!reto||!enc)return;
+  var r=reto.getBoundingClientRect();
+  var rect=reto.getBoundingClientRect();
+  /* Apply exact same width and left position via setProperty important */
+  enc.style.setProperty("max-width",r.width+"px","important");
+  enc.style.setProperty("width",r.width+"px","important");
+  enc.style.setProperty("margin-left","auto","important");
+  enc.style.setProperty("margin-right","auto","important");
+  enc.style.setProperty("margin-top","24px","important");
+  enc.style.setProperty("margin-bottom","24px","important");
+  enc.style.setProperty("box-sizing","border-box","important");
+}
+fixWidth();
+setInterval(fixWidth,500);
+window.addEventListener("resize",fixWidth);
+document.addEventListener("DOMContentLoaded",fixWidth);
+console.log("[v714] width fix definitivo");
+})();
+</script>
 </body>
 </html>
 
