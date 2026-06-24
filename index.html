@@ -21325,6 +21325,60 @@ ensure();setInterval(ensure,2000);
 console.log("[v710] Articulos page");
 })();
 </script>
+
+<style id="v711-css">
+#panel-v711-seguidos{display:none;max-width:1400px;margin:0 auto;padding:32px 24px;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;}
+.v711-h{font-size:42px;font-weight:800;color:#111827;letter-spacing:-0.02em;margin:0 0 8px;}
+.v711-sub{color:#6b7280;font-size:16px;margin:0 0 28px;}
+.v711-stats{display:flex;gap:24px;margin-bottom:32px;padding:18px 24px;background:#fef2f2;border-radius:14px;}
+.v711-stat-num{font-size:24px;font-weight:800;color:#dc2626;line-height:1;}
+.v711-stat-lbl{font-size:12px;color:#6b7280;margin-top:4px;font-weight:600;}
+.v711-filters{display:flex;gap:8px;overflow-x:auto;margin-bottom:24px;padding-bottom:8px;}
+.v711-filter{flex:0 0 auto;padding:8px 18px;border-radius:999px;background:#f3f4f6;color:#374151;border:none;font-weight:600;cursor:pointer;font-size:14px;font-family:inherit;}
+.v711-filter.act{background:#dc2626;color:#fff;}
+.v711-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;}
+.v711-card{background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:18px;display:flex;flex-direction:column;align-items:center;text-align:center;transition:transform 0.15s,box-shadow 0.15s;}
+.v711-card:hover{transform:translateY(-3px);box-shadow:0 10px 25px rgba(0,0,0,0.08);}
+.v711-avatar{width:80px;height:80px;border-radius:50%;background-size:cover;background-position:center;border:3px solid #fef2f2;margin-bottom:12px;}
+.v711-name{font-weight:700;font-size:16px;color:#111827;margin:0 0 2px;}
+.v711-handle{font-size:12px;color:#9ca3af;margin-bottom:8px;}
+.v711-club{font-size:13px;color:#374151;margin-bottom:10px;}
+.v711-meta{display:flex;gap:14px;font-size:11px;color:#9ca3af;margin-bottom:14px;}
+.v711-follow{width:100%;padding:8px 14px;background:#fff;color:#dc2626;border:1.5px solid #dc2626;border-radius:8px;font-weight:700;font-size:13px;cursor:pointer;font-family:inherit;transition:all 0.15s;}
+.v711-follow:hover{background:#dc2626;color:#fff;}
+.v711-follow.following{background:#dc2626;color:#fff;}
+@media (max-width:600px){.v711-h{font-size:30px;}}
+</style>
+<script>
+(function(){if(window.__v711)return;window.__v711=true;
+var SEG=[{"n":"Lionel Messi","h":"@leomessi","ty":"Jugador","c":"⚽ Inter Miami","cat":"Futbol","fol":"485M","last":"Publico hace 2h","img":"https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=300"},{"n":"Real Madrid CF","h":"@realmadrid","ty":"Club","c":"⚽ La Liga","cat":"Futbol","fol":"150M","last":"Publico hace 4h","img":"https://images.unsplash.com/photo-1551958219-acbc608c6377?w=300"},{"n":"Luka Doncic","h":"@luka7doncic","ty":"Jugador","c":"🏀 Dallas Mavericks","cat":"Basketball","fol":"12M","last":"Publico hace 1d","img":"https://images.unsplash.com/photo-1504450758481-7338eba7524a?w=300"},{"n":"Max Verstappen","h":"@maxverstappen1","ty":"Piloto","c":"🏎️ Red Bull Racing","cat":"F1","fol":"24M","last":"Publico hace 8h","img":"https://images.unsplash.com/photo-1583900985737-6d0495555783?w=300"},{"n":"Carlos Alcaraz","h":"@carlosalcaraz","ty":"Jugador","c":"🎾 ATP Tour","cat":"Tenis","fol":"6.8M","last":"Publico hace 5h","img":"https://images.unsplash.com/photo-1542144582-1ba00456b5e3?w=300"},{"n":"Patrick Mahomes","h":"@patrickmahomes","ty":"Jugador","c":"🏈 Kansas City Chiefs","cat":"NFL","fol":"4.2M","last":"Publico hace 1d","img":"https://images.unsplash.com/photo-1485395037613-e83d5c1f5290?w=300"},{"n":"FC Barcelona","h":"@fcbarcelona","ty":"Club","c":"⚽ La Liga","cat":"Futbol","fol":"112M","last":"Publico hace 3h","img":"https://images.unsplash.com/photo-1606925797300-0b35e9d1794e?w=300"},{"n":"Stephen Curry","h":"@stephencurry30","ty":"Jugador","c":"🏀 Golden State Warriors","cat":"Basketball","fol":"55M","last":"Publico hace 1d","img":"https://images.unsplash.com/photo-1577471488278-16eec37ffcc2?w=300"},{"n":"Lewis Hamilton","h":"@lewishamilton","ty":"Piloto","c":"🏎️ Ferrari","cat":"F1","fol":"38M","last":"Publico hace 12h","img":"https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=300"},{"n":"Cristiano Ronaldo","h":"@cristiano","ty":"Jugador","c":"⚽ Al Nassr","cat":"Futbol","fol":"640M","last":"Publico hace 1h","img":"https://images.unsplash.com/photo-1551958219-acbc608c6377?w=300"},{"n":"Pep Guardiola","h":"@pepteam","ty":"DT","c":"⚽ Manchester City","cat":"Futbol","fol":"5M","last":"Publico hace 2d","img":"https://images.unsplash.com/photo-1522778034537-20a2486be803?w=300"},{"n":"Mookie Betts","h":"@mookiebetts","ty":"Jugador","c":"⚾ LA Dodgers","cat":"Beisbol","fol":"2.1M","last":"Publico hace 3d","img":"https://images.unsplash.com/photo-1508098682722-e99c43a406b2?w=300"},{"n":"Connor McDavid","h":"@cmcdavid97","ty":"Jugador","c":"🏒 Edmonton Oilers","cat":"Hockey","fol":"850K","last":"Publico hace 4d","img":"https://images.unsplash.com/photo-1515703407324-5f51c2a86d34?w=300"},{"n":"Tadej Pogacar","h":"@tadejpogacar","ty":"Ciclista","c":"🚴 UAE Team Emirates","cat":"Ciclismo","fol":"3.5M","last":"Publico hace 5d","img":"https://images.unsplash.com/photo-1502764613149-7f1d229e230f?w=300"},{"n":"Manchester United","h":"@manutd","ty":"Club","c":"⚽ Premier League","cat":"Futbol","fol":"180M","last":"Publico hace 5h","img":"https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=300"},{"n":"Iga Swiatek","h":"@iga_swiatek","ty":"Jugadora","c":"🎾 WTA Tour","cat":"Tenis","fol":"3.8M","last":"Publico hace 1d","img":"https://images.unsplash.com/photo-1554068865-24cecd4e34b8?w=300"},{"n":"Aaron Judge","h":"@aaronjudge","ty":"Jugador","c":"⚾ NY Yankees","cat":"Beisbol","fol":"2.7M","last":"Publico hace 6h","img":"https://images.unsplash.com/photo-1508098682722-e99c43a406b2?w=300"},{"n":"DAZN","h":"@dazn","ty":"Medio","c":"📺 Streaming Deportivo","cat":"Medios","fol":"15M","last":"Publico hace 2h","img":"https://images.unsplash.com/photo-1577471488278-16eec37ffcc2?w=300"},{"n":"ESPN","h":"@espn","ty":"Medio","c":"📺 Sports Network","cat":"Medios","fol":"50M","last":"Publico hace 1h","img":"https://images.unsplash.com/photo-1485395037613-e83d5c1f5290?w=300"},{"n":"Tyson Fury","h":"@tyson_fury","ty":"Jugador","c":"🥊 Heavyweight","cat":"Combate","fol":"9M","last":"Publico hace 1sem","img":"https://images.unsplash.com/photo-1517466787929-bc90951d0974?w=300"}];
+var CATS=["Todos","Futbol","Basketball","F1","Tenis","NFL","Beisbol","Hockey","Ciclismo","Combate","Medios"];
+var ST={cat:"Todos"};
+function ensure(){if(document.getElementById("panel-v711-seguidos"))return;var p=document.createElement("div");p.id="panel-v711-seguidos";p.style.display="none";var a=document.getElementById("panel-inicio");if(a&&a.parentNode)a.parentNode.insertBefore(p,a);else document.body.appendChild(p);}
+function content(){var p=document.getElementById("panel-v711-seguidos");if(!p||p.innerHTML.length>200)return;p.innerHTML='<h1 class="v711-h">👥 Seguidos</h1><p class="v711-sub">Tu red en SS21 · Jugadores, clubes, técnicos y medios deportivos</p><div class="v711-stats"><div><div class="v711-stat-num">'+SEG.length+'</div><div class="v711-stat-lbl">Seguidos</div></div><div><div class="v711-stat-num">28</div><div class="v711-stat-lbl">Te siguen</div></div><div><div class="v711-stat-num">142</div><div class="v711-stat-lbl">Publicaciones</div></div></div><div class="v711-filters" id="v711-filters"></div><div class="v711-grid" id="v711-grid"></div>';rdF();rdG();}
+function rdF(){var f=document.getElementById("v711-filters");if(!f)return;f.innerHTML="";CATS.forEach(function(c){var b=document.createElement("button");b.className="v711-filter"+(c===ST.cat?" act":"");b.textContent=c;b.addEventListener("click",function(){ST.cat=c;rdF();rdG();});f.appendChild(b);});}
+function rdG(){var g=document.getElementById("v711-grid");if(!g)return;var items=ST.cat==="Todos"?SEG:SEG.filter(function(s){return s.cat===ST.cat;});g.innerHTML=items.map(function(s){return '<div class="v711-card"><div class="v711-avatar" style="background-image:url(\''+s.img+'\')"></div><h3 class="v711-name">'+s.n+'</h3><div class="v711-handle">'+s.h+'</div><div class="v711-club">'+s.c+'</div><div class="v711-meta"><span>👤 '+s.fol+'</span><span>· '+s.last+'</span></div><button class="v711-follow following">✓ Siguiendo</button></div>';}).join("");}
+var HIDE=["panel-inicio","panel-mercado","v87-page-masss21","panel-soccer","panel-basketball","panel-tennis","panel-football","panel-baseball","panel-hockey","panel-racing","panel-golf","panel-combat","panel-rugby","panel-cricket","panel-volleyball","panel-athletics","panel-swimming","panel-padel","v25-ticker","v700-shell","panel-v703-noticias","panel-v708-blogs","panel-v709-podcast","panel-v710-articulos"];
+var saved={};
+function hideAll(){HIDE.forEach(function(id){var e=document.getElementById(id);if(e){saved[id]=e.style.cssText;e.style.setProperty("display","none","important");}});}
+function restoreAll(){HIDE.forEach(function(id){var e=document.getElementById(id);if(e){e.style.cssText=saved[id]||"";}});saved={};}
+function show(){ensure();content();hideAll();var p=document.getElementById("panel-v711-seguidos");if(p)p.style.setProperty("display","block","important");window.scrollTo(0,0);}
+function hide(){restoreAll();var p=document.getElementById("panel-v711-seguidos");if(p)p.style.removeProperty("display");}
+document.addEventListener("click",function(e){
+  if(!e.isTrusted)return;
+  var li=e.target.closest("li,button,a");if(!li)return;
+  var inMenu=!!li.closest(".v36-side, nav.menu, .drawer, [class*=\"drawer\"], [class*=\"v56\"]");
+  var txt=(li.textContent||"").trim().replace(/\s+/g," ");
+  if(inMenu){
+    if(/Seguidos$/i.test(txt) && txt.length<20){e.preventDefault();show();return;}
+    if(/Inicio$|Más Sobre|MasSS|Mercado|Noticias$|Blogs$|Podcast$|Artículos$|Articulos$|Reclutar$|Centros/i.test(txt) && txt.length<30){hide();return;}
+  }
+  var sb=e.target.closest(".sport-btn");if(sb)hide();
+},true);
+ensure();setInterval(ensure,2000);
+console.log("[v711] Seguidos page");
+})();
+</script>
 </body>
 </html>
 
