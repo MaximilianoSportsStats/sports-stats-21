@@ -21573,6 +21573,85 @@ document.addEventListener("DOMContentLoaded",fixWidth);
 console.log("[v714] width fix definitivo");
 })();
 </script>
+
+<script>
+(function(){if(window.__v715)return;window.__v715=true;
+/* v715 - Routing unificado: cuando v709/v710/v711/v712 hide() resetean panel-v708-blogs etc, mi watchdog 200ms lo re-asserta */
+var ROUTES={Noticias:"panel-v703-noticias",Blogs:"panel-v708-blogs",Podcast:"panel-v709-podcast",Articulos:"panel-v710-articulos",Articulos2:"panel-v710-articulos",Seguidos:"panel-v711-seguidos",Reclutar:"panel-v712-reclutar"};
+var ALL_SECTION_PANELS=["panel-v703-noticias","panel-v708-blogs","panel-v709-podcast","panel-v710-articulos","panel-v711-seguidos","panel-v712-reclutar"];
+var ALL_OTHER_PANELS=["panel-inicio","panel-mercado","v87-page-masss21","panel-soccer","panel-basketball","panel-tennis","panel-football","panel-baseball","panel-hockey","panel-racing","panel-golf","panel-combat","panel-rugby","panel-cricket","panel-volleyball","panel-athletics","panel-swimming","panel-padel","v25-ticker","v700-shell"];
+
+window.__v715_target=null;
+
+function applyVis(){
+  var target=window.__v715_target;
+  if(!target)return;
+  /* Show target, hide everything else */
+  ALL_SECTION_PANELS.forEach(function(id){
+    var e=document.getElementById(id);if(!e)return;
+    if(id===target)e.style.setProperty("display","block","important");
+    else e.style.setProperty("display","none","important");
+  });
+  ALL_OTHER_PANELS.forEach(function(id){
+    var e=document.getElementById(id);if(!e)return;
+    e.style.setProperty("display","none","important");
+  });
+}
+
+function clearTarget(){
+  window.__v715_target=null;
+  ALL_SECTION_PANELS.forEach(function(id){
+    var e=document.getElementById(id);if(!e)return;
+    e.style.removeProperty("display");
+  });
+  ALL_OTHER_PANELS.forEach(function(id){
+    var e=document.getElementById(id);if(!e)return;
+    e.style.removeProperty("display");
+  });
+}
+
+/* Watchdog: cada 200ms reasserta la visibilidad correcta - vence a v709/v710/v711/v712 hide() */
+setInterval(applyVis,200);
+
+/* Click router - corre LATER que v708-v712, no preventDefault asi v708/etc CONSTRUYEN el contenido */
+document.addEventListener("click",function(e){
+  if(!e.isTrusted)return;
+  var li=e.target.closest("li,button,a");
+  if(!li)return;
+  /* sport-btn → exit section */
+  if(li.closest(".sport-btn")){clearTarget();return;}
+  var inMenu=!!li.closest(".v36-side, nav.menu, .drawer, [class*=\"drawer\"], [class*=\"v56\"]");
+  if(!inMenu)return;
+  var txt=(li.textContent||"").trim().replace(/\s+/g," ");
+  /* Match section */
+  var target=null;
+  if(/Noticias$/i.test(txt) && txt.length<25)target="panel-v703-noticias";
+  else if(/Blogs$/i.test(txt) && txt.length<20)target="panel-v708-blogs";
+  else if(/Podcast$/i.test(txt) && txt.length<20)target="panel-v709-podcast";
+  else if(/Art[íi]culos$/i.test(txt) && txt.length<20)target="panel-v710-articulos";
+  else if(/Seguidos$/i.test(txt) && txt.length<20)target="panel-v711-seguidos";
+  else if(/Reclutar$/i.test(txt) && txt.length<20)target="panel-v712-reclutar";
+  if(target){
+    window.__v715_target=target;
+    /* No preventDefault - dejamos que v708/etc CONSTRUYAN content */
+    /* Aplicar inmediato y en delays para vencer hide() de los otros scripts */
+    applyVis();
+    setTimeout(applyVis,50);
+    setTimeout(applyVis,150);
+    setTimeout(applyVis,300);
+    setTimeout(applyVis,600);
+    window.scrollTo(0,0);
+    return;
+  }
+  /* Inicio/Mercado/MasSS → clear */
+  if(/Inicio$|Más Sobre|MasSS|Mercado|Centros/i.test(txt) && txt.length<30){
+    clearTarget();
+  }
+},true);
+
+console.log("[v715] routing unificado + watchdog 200ms");
+})();
+</script>
 </body>
 </html>
 
