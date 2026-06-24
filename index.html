@@ -21272,6 +21272,59 @@ ensure();setInterval(ensure,2000);
 console.log("[v709] Podcast page");
 })();
 </script>
+
+<style id="v710-css">
+#panel-v710-articulos{display:none;max-width:1400px;margin:0 auto;padding:32px 24px;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;}
+.v710-h{font-size:42px;font-weight:800;color:#111827;letter-spacing:-0.02em;margin:0 0 8px;}
+.v710-sub{color:#6b7280;font-size:16px;margin:0 0 28px;}
+.v710-filters{display:flex;gap:8px;overflow-x:auto;margin-bottom:32px;padding-bottom:8px;}
+.v710-filter{flex:0 0 auto;padding:8px 18px;border-radius:999px;background:#f3f4f6;color:#374151;border:none;font-weight:600;cursor:pointer;font-size:14px;font-family:inherit;}
+.v710-filter.act{background:#dc2626;color:#fff;}
+.v710-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:24px;}
+.v710-card{background:#fff;border:1px solid #e5e7eb;border-radius:14px;overflow:hidden;cursor:pointer;display:flex;flex-direction:column;transition:transform 0.15s,box-shadow 0.15s;}
+.v710-card:hover{transform:translateY(-3px);box-shadow:0 10px 25px rgba(0,0,0,0.08);}
+.v710-card-img{height:180px;background-size:cover;background-position:center;}
+.v710-card-body{padding:18px;display:flex;flex-direction:column;flex:1;}
+.v710-card-type{display:inline-block;background:#1f2937;color:#fff;padding:3px 10px;border-radius:5px;font-size:10px;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;margin-bottom:10px;align-self:flex-start;}
+.v710-card-type.opinion{background:#7c3aed;}
+.v710-card-type.data{background:#0ea5e9;}
+.v710-card-type.historico{background:#d97706;}
+.v710-card-type.especial{background:#dc2626;}
+.v710-card-title{font-weight:700;font-size:17px;color:#111827;line-height:1.35;margin:0 0 12px;flex:1;}
+.v710-meta{display:flex;justify-content:space-between;align-items:center;font-size:12px;color:#9ca3af;border-top:1px solid #f3f4f6;padding-top:10px;}
+.v710-cat-tag{font-size:11px;font-weight:700;color:#dc2626;}
+@media (max-width:600px){.v710-h{font-size:30px;}}
+</style>
+<script>
+(function(){if(window.__v710)return;window.__v710=true;
+var ART=[{"t":"La evolucion tactica del futbol moderno: del catenaccio al gegenpressing","ty":"Analisis","a":"Hugo Sanchez","r":"15 min","d":"hace 1d","cat":"Futbol","img":"https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=600"},{"t":"Numeros que nadie te conto: el legado estadistico de Messi","ty":"Data","a":"Equipo SS21","r":"12 min","d":"hace 2d","cat":"Futbol","img":"https://images.unsplash.com/photo-1551958219-acbc608c6377?w=600"},{"t":"La era Curry: como un base cambio el basketball para siempre","ty":"Historico","a":"Roberto Salazar","r":"18 min","d":"hace 3d","cat":"Basketball","img":"https://images.unsplash.com/photo-1577471488278-16eec37ffcc2?w=600"},{"t":"Verstappen vs Hamilton: comparativa con todos los datos","ty":"Data","a":"Pablo Rivera","r":"14 min","d":"hace 4d","cat":"F1","img":"https://images.unsplash.com/photo-1583900985737-6d0495555783?w=600"},{"t":"Por que el tenis individual es el deporte mas mental","ty":"Opinion","a":"Camila Rojas","r":"11 min","d":"hace 5d","cat":"Tenis","img":"https://images.unsplash.com/photo-1542144582-1ba00456b5e3?w=600"},{"t":"NFL: la guerra fria entre conferencias - AFC vs NFC","ty":"Analisis","a":"Daniel Mora","r":"16 min","d":"hace 6d","cat":"NFL","img":"https://images.unsplash.com/photo-1485395037613-e83d5c1f5290?w=600"},{"t":"Mundial 2026: 48 selecciones, multiples sedes, un solo trofeo","ty":"Especial","a":"Equipo SS21","r":"22 min","d":"hace 1sem","cat":"Futbol","img":"https://images.unsplash.com/photo-1606925797300-0b35e9d1794e?w=600"},{"t":"La nueva NBA: como Doncic y Wembanyama redefinen el juego","ty":"Analisis","a":"Hugo Sanchez","r":"15 min","d":"hace 1sem","cat":"Basketball","img":"https://images.unsplash.com/photo-1504450758481-7338eba7524a?w=600"},{"t":"El ciclismo del siglo XXI: por que Pogacar es comparable a Merckx","ty":"Historico","a":"Andres Felipe","r":"19 min","d":"hace 1sem","cat":"Ciclismo","img":"https://images.unsplash.com/photo-1502764613149-7f1d229e230f?w=600"},{"t":"World Series 2025 review: numeros, momentos y heroes ineditos","ty":"Data","a":"Marcos Olivera","r":"13 min","d":"hace 1sem","cat":"Beisbol","img":"https://images.unsplash.com/photo-1508098682722-e99c43a406b2?w=600"},{"t":"Champions League: el nuevo formato analizado a fondo","ty":"Analisis","a":"Maria Sanchez","r":"17 min","d":"hace 2sem","cat":"Futbol","img":"https://images.unsplash.com/photo-1522778034537-20a2486be803?w=600"},{"t":"Sinner vs Alcaraz: la rivalidad que definira una decada","ty":"Especial","a":"Camila Rojas","r":"20 min","d":"hace 2sem","cat":"Tenis","img":"https://images.unsplash.com/photo-1554068865-24cecd4e34b8?w=600"},{"t":"Tyson Fury: anatomia del knockout perfecto","ty":"Analisis","a":"Roberto Silva","r":"14 min","d":"hace 2sem","cat":"Combate","img":"https://images.unsplash.com/photo-1517466787929-bc90951d0974?w=600"},{"t":"La transformacion brasileña: cómo Vinicius Jr llego al Madrid","ty":"Historico","a":"Carolina Diaz","r":"16 min","d":"hace 2sem","cat":"Futbol","img":"https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=600"},{"t":"NHL: el caso McDavid - el mejor jugador sin Stanley Cup","ty":"Opinion","a":"Eduardo Rojas","r":"12 min","d":"hace 3sem","cat":"Hockey","img":"https://images.unsplash.com/photo-1515703407324-5f51c2a86d34?w=600"},{"t":"Tour de France 2026: los 21 etapas de la edicion mas dura","ty":"Especial","a":"Andres Felipe","r":"21 min","d":"hace 3sem","cat":"Ciclismo","img":"https://images.unsplash.com/photo-1471506480208-91b3a4cc78be?w=600"},{"t":"Ferrari F1: dentro del nuevo proyecto Cavallino","ty":"Analisis","a":"Pablo Rivera","r":"15 min","d":"hace 3sem","cat":"F1","img":"https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=600"},{"t":"Boca-River: 100 años del Superclasico mas grande del mundo","ty":"Historico","a":"Diego Mora","r":"24 min","d":"hace 1mes","cat":"Futbol","img":"https://images.unsplash.com/photo-1551958219-acbc608c6377?w=600"},{"t":"WNBA: el crecimiento exponencial de la liga femenina","ty":"Data","a":"Sofia Reyes","r":"13 min","d":"hace 1mes","cat":"Basketball","img":"https://images.unsplash.com/photo-1574680096145-d05b474e2155?w=600"},{"t":"Maratones modernas: como Kenia se hizo de los podios","ty":"Especial","a":"Luisa Mendoza","r":"18 min","d":"hace 1mes","cat":"Atletismo","img":"https://images.unsplash.com/photo-1461896836934-ffe607ba8211?w=600"},{"t":"PSG: identidad despues de Mbappe y los proximos pasos","ty":"Opinion","a":"Pablo Sanchez","r":"14 min","d":"hace 1mes","cat":"Futbol","img":"https://images.unsplash.com/photo-1522778034537-20a2486be803?w=600"},{"t":"UFC: la nueva camada que reemplaza a McGregor","ty":"Analisis","a":"Manuel Torres","r":"13 min","d":"hace 1mes","cat":"Combate","img":"https://images.unsplash.com/photo-1517466787929-bc90951d0974?w=600"}];
+var CATS=["Todos","Futbol","Basketball","F1","Tenis","NFL","Beisbol","Hockey","Ciclismo","Combate","Atletismo"];
+var ST={cat:"Todos"};
+function ensure(){if(document.getElementById("panel-v710-articulos"))return;var p=document.createElement("div");p.id="panel-v710-articulos";p.style.display="none";var a=document.getElementById("panel-inicio");if(a&&a.parentNode)a.parentNode.insertBefore(p,a);else document.body.appendChild(p);}
+function content(){var p=document.getElementById("panel-v710-articulos");if(!p||p.innerHTML.length>200)return;p.innerHTML='<h1 class="v710-h">📄 Artículos</h1><p class="v710-sub">Análisis profundos, opiniones expertas y datos que cuentan historias</p><div class="v710-filters" id="v710-filters"></div><div class="v710-grid" id="v710-grid"></div>';rdF();rdG();}
+function rdF(){var f=document.getElementById("v710-filters");if(!f)return;f.innerHTML="";CATS.forEach(function(c){var b=document.createElement("button");b.className="v710-filter"+(c===ST.cat?" act":"");b.textContent=c;b.addEventListener("click",function(){ST.cat=c;rdF();rdG();});f.appendChild(b);});}
+function rdG(){var g=document.getElementById("v710-grid");if(!g)return;var items=ST.cat==="Todos"?ART:ART.filter(function(a){return a.cat===ST.cat;});g.innerHTML=items.map(function(a){var tyClass=(a.ty||"").toLowerCase();return '<div class="v710-card"><div class="v710-card-img" style="background-image:url(\''+a.img+'\')"></div><div class="v710-card-body"><span class="v710-card-type '+tyClass+'">'+a.ty+'</span><h3 class="v710-card-title">'+a.t+'</h3><div class="v710-meta"><span class="v710-cat-tag">'+a.cat+' · '+a.a+'</span><span>📖 '+a.r+' · '+a.d+'</span></div></div></div>';}).join("");}
+var HIDE=["panel-inicio","panel-mercado","v87-page-masss21","panel-soccer","panel-basketball","panel-tennis","panel-football","panel-baseball","panel-hockey","panel-racing","panel-golf","panel-combat","panel-rugby","panel-cricket","panel-volleyball","panel-athletics","panel-swimming","panel-padel","v25-ticker","v700-shell","panel-v703-noticias","panel-v708-blogs","panel-v709-podcast"];
+var saved={};
+function hideAll(){HIDE.forEach(function(id){var e=document.getElementById(id);if(e){saved[id]=e.style.cssText;e.style.setProperty("display","none","important");}});}
+function restoreAll(){HIDE.forEach(function(id){var e=document.getElementById(id);if(e){e.style.cssText=saved[id]||"";}});saved={};}
+function show(){ensure();content();hideAll();var p=document.getElementById("panel-v710-articulos");if(p)p.style.setProperty("display","block","important");window.scrollTo(0,0);}
+function hide(){restoreAll();var p=document.getElementById("panel-v710-articulos");if(p)p.style.removeProperty("display");}
+document.addEventListener("click",function(e){
+  if(!e.isTrusted)return;
+  var li=e.target.closest("li,button,a");if(!li)return;
+  var inMenu=!!li.closest(".v36-side, nav.menu, .drawer, [class*=\"drawer\"], [class*=\"v56\"]");
+  var txt=(li.textContent||"").trim().replace(/\s+/g," ");
+  if(inMenu){
+    if(/Artículos$|Articulos$/i.test(txt) && txt.length<20){e.preventDefault();show();return;}
+    if(/Inicio$|Más Sobre|MasSS|Mercado|Noticias$|Blogs$|Podcast$|Seguidos$|Reclutar$|Centros/i.test(txt) && txt.length<30){hide();return;}
+  }
+  var sb=e.target.closest(".sport-btn");if(sb)hide();
+},true);
+ensure();setInterval(ensure,2000);
+console.log("[v710] Articulos page");
+})();
+</script>
 </body>
 </html>
 
