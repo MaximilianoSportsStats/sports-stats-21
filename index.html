@@ -21140,6 +21140,33 @@ setInterval(ensureCountdown,1000);
 console.log("[v706] width+countdown");
 })();
 </script>
+
+<style id="v707-css">
+/* v707 - igualar exacto Encuesta = Reto Diario clonando posicion al runtime */
+#v705-encuesta{box-sizing:border-box !important;}
+</style>
+<script>
+(function(){if(window.__v707)return;window.__v707=true;
+function matchWidth(){
+  var reto=document.getElementById("v99-retos");
+  var enc=document.getElementById("v705-encuesta");
+  if(!reto||!enc)return;
+  var r=reto.getBoundingClientRect();
+  var p=getComputedStyle(reto);
+  /* Apply same effective width via margin matching */
+  enc.style.maxWidth=r.width+"px";
+  enc.style.width=r.width+"px";
+  enc.style.marginLeft=p.marginLeft;
+  enc.style.marginRight=p.marginRight;
+  enc.style.marginTop="24px";
+  enc.style.marginBottom="24px";
+}
+matchWidth();
+setInterval(matchWidth,1000);
+window.addEventListener("resize",matchWidth);
+console.log("[v707] width match exact");
+})();
+</script>
 </body>
 </html>
 
