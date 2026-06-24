@@ -21110,6 +21110,36 @@ setInterval(init,2000);
 console.log("[v705] encuesta diaria + reto colors");
 })();
 </script>
+
+<style id="v706-css">
+/* v706 - match Encuesta width con Reto Diario + countdown */
+#v705-encuesta{max-width:none !important;width:auto !important;margin:24px 0 !important;}
+.v706-countdown{text-align:center;margin-top:14px;font-size:14px;color:#374151;}
+.v706-countdown-time{color:#dc2626;font-weight:800;font-family:ui-monospace,monospace;font-size:16px;}
+</style>
+<script>
+(function(){if(window.__v706)return;window.__v706=true;
+function fmt(n){return String(n).padStart(2,"0");}
+function getRemaining(){var now=new Date();var mid=new Date(now);mid.setHours(24,0,0,0);var diff=mid-now;var h=Math.floor(diff/3600000);var m=Math.floor((diff%3600000)/60000);var s=Math.floor((diff%60000)/1000);return fmt(h)+":"+fmt(m)+":"+fmt(s);}
+function ensureCountdown(){
+  var enc=document.getElementById("v705-encuesta");
+  if(!enc)return;
+  var cd=document.getElementById("v706-countdown");
+  if(!cd){
+    cd=document.createElement("div");
+    cd.id="v706-countdown";
+    cd.className="v706-countdown";
+    cd.innerHTML='<span>⏰ Próxima encuesta en </span><span class="v706-countdown-time" id="v706-time">00:00:00</span>';
+    enc.appendChild(cd);
+  }
+  var t=document.getElementById("v706-time");
+  if(t)t.textContent=getRemaining();
+}
+ensureCountdown();
+setInterval(ensureCountdown,1000);
+console.log("[v706] width+countdown");
+})();
+</script>
 </body>
 </html>
 
