@@ -21437,6 +21437,116 @@ ensure();setInterval(ensure,2000);
 console.log("[v712] Reclutar page");
 })();
 </script>
+
+<script>
+(function(){if(window.__v713)return;window.__v713=true;
+
+/* v713 - Wire CTAs Inicio (8 botones rojos) + footer (links Producto/Soporte/Legal) a las paginas dedicadas */
+
+function navTo(target){
+  /* Helper: dispatch click on drawer item with matching text to trigger nav */
+  /* Better: use direct panel show by triggering known DOM event */
+  var li=Array.from(document.querySelectorAll(".v36-side li, .v36-side button, .v36-side a")).find(function(el){
+    var t=(el.textContent||"").trim().replace(/\s+/g," ");
+    return new RegExp("^"+target+"$","i").test(t) || new RegExp("^[📰📝🎙️📄👥🎯🏠📍✍️🤵🌟]\\s*"+target+"$","i").test(t);
+  });
+  if(li){
+    li.click();
+    /* Close drawer if open */
+    setTimeout(function(){
+      var closeBtn=document.querySelector(".v36-side .v36-close, .v36-side button[aria-label*=\"close\" i], .v36-toggle.open");
+      if(closeBtn)closeBtn.click();
+    },50);
+  }
+}
+
+/* CTA mapping: text on button → target section */
+var CTA_MAP={
+  "Explorar deportes":"soccer-shell",
+  "Ver en vivo":"En Vivo",
+  "Crear mi perfil":"Reclutar",
+  "Conectar":"Seguidos",
+  "Modo Reclutador":"Reclutar",
+  "Comparar":"soccer-shell",
+  "Ver Información":"Noticias",
+  "Buscar centros":"Centros Deportivos",
+  "Empezar a explorar":"soccer-shell",
+  "Crear cuenta":"Seguidos"
+};
+
+function wireCTA(){
+  document.querySelectorAll("#panel-inicio button, #panel-inicio a").forEach(function(btn){
+    if(btn.dataset.v713wired)return;
+    var t=(btn.textContent||"").trim().replace(/[→·\s]+$/g,"").trim();
+    /* Match against keys */
+    var target=null;
+    Object.keys(CTA_MAP).forEach(function(k){
+      if(t.indexOf(k)>=0||k.indexOf(t)>=0){target=CTA_MAP[k];}
+    });
+    if(target){
+      btn.dataset.v713wired="1";
+      btn.addEventListener("click",function(e){
+        if(target==="soccer-shell"){
+          /* trigger Futbol sport-btn */
+          var sBtn=Array.from(document.querySelectorAll(".sport-btn")).find(function(b){return /switchSport\([\'\"]?soccer/.test(b.getAttribute("onclick")||"");});
+          if(sBtn){e.preventDefault();sBtn.click();window.scrollTo(0,0);}
+        }else{
+          e.preventDefault();
+          navTo(target);
+        }
+      },true);
+    }
+  });
+}
+
+/* Footer mapping */
+var FOOTER_MAP={
+  "Deportes":"soccer-shell",
+  "Eventos Globales":"soccer-shell",
+  "Ligas Locales":"Reclutar",
+  "Mi Perfil":"Seguidos",
+  "Contacto":"Más Sobre SS 21",
+  "Centro de Ayuda":"Más Sobre SS 21",
+  "Sugerencias":"Más Sobre SS 21",
+  "Estado del Servicio":"Más Sobre SS 21",
+  "Historia":"Más Sobre SS 21",
+  "Sobre Nosotros":"Más Sobre SS 21",
+  "Trabaja con Nosotros":"Más Sobre SS 21",
+  "Prensa":"Más Sobre SS 21",
+  "Política de Privacidad":"Más Sobre SS 21",
+  "Términos y Condiciones":"Más Sobre SS 21",
+  "Política de Cookies":"Más Sobre SS 21",
+  "Derechos de Imagen":"Más Sobre SS 21"
+};
+
+function wireFooter(){
+  /* Footer is usually at the bottom of page */
+  document.querySelectorAll("footer a, footer button, [class*=\"footer\"] a, [class*=\"footer\"] button").forEach(function(link){
+    if(link.dataset.v713wired)return;
+    var t=(link.textContent||"").trim();
+    var target=FOOTER_MAP[t];
+    if(target){
+      link.dataset.v713wired="1";
+      link.addEventListener("click",function(e){
+        e.preventDefault();
+        if(target==="soccer-shell"){
+          var sBtn=Array.from(document.querySelectorAll(".sport-btn")).find(function(b){return /switchSport\([\'\"]?soccer/.test(b.getAttribute("onclick")||"");});
+          if(sBtn){sBtn.click();window.scrollTo(0,0);}
+        }else{
+          navTo(target);
+        }
+      },true);
+    }
+  });
+}
+
+function init(){wireCTA();wireFooter();}
+init();
+setInterval(init,2000);
+document.addEventListener("DOMContentLoaded",init);
+console.log("[v713] CTAs+footer wired");
+})();
+</script>
 </body>
 </html>
 
