@@ -21720,6 +21720,42 @@ setInterval(fillAll,800);
 console.log("[v718] backfill 4 secciones restantes");
 })();
 </script>
+
+<script>
+(function(){if(window.__v719)return;window.__v719=true;
+/* v719 - fix mareo navegacion: scroll top en cualquier navegacion drawer + cleanup race conditions */
+var lastTarget=null;
+function trackNav(){
+  var cur=window.__v715_target||null;
+  if(cur!==lastTarget){
+    /* Scroll to top SIEMPRE al cambiar de seccion (in or out) */
+    window.scrollTo({top:0,behavior:"instant"});
+    document.documentElement.scrollTop=0;
+    document.body.scrollTop=0;
+    lastTarget=cur;
+  }
+}
+setInterval(trackNav,100);
+
+/* Hook drawer item clicks to scroll top FIRST */
+document.addEventListener("click",function(e){
+  if(!e.isTrusted)return;
+  var li=e.target.closest("li,button,a");
+  if(!li)return;
+  var inMenu=!!li.closest(".v36-side, nav.menu, .drawer, [class*=\"drawer\"], [class*=\"v56\"]");
+  if(inMenu){
+    var txt=(li.textContent||"").trim();
+    if(/Inicio$|Noticias$|Blogs$|Podcast$|Art[íi]culos$|Seguidos$|Reclutar$|Más Sobre|MasSS|Mercado|Centros|Favoritos$|En Vivo$|Deportes$/i.test(txt) && txt.length<30){
+      window.scrollTo({top:0,behavior:"instant"});
+      document.documentElement.scrollTop=0;
+      document.body.scrollTop=0;
+    }
+  }
+},true);
+
+console.log("[v719] scroll top en navegacion drawer");
+})();
+</script>
 </body>
 </html>
 
