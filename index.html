@@ -22378,6 +22378,47 @@ document.addEventListener("click",function(e){
 },true);
 })();
 </script>
+
+<style>
+#v100-podcast, #v100-podcast-wrap { display:none !important; }
+</style>
+<script>
+(function(){
+if(window.__vCleanup)return;window.__vCleanup=true;
+// Desired order in Contenido y Comunidad submenu
+var DESIRED=["Seguidos","Noticias","Blogs","Artículos","Podcast","Reclutar","Centros Deportivos"];
+function normalize(s){
+  return (s||"").replace(/^[^\w]+/u,"").trim();
+}
+function reorder(){
+  var allUls=document.querySelectorAll("ul.v56-sub-list");
+  var targetUl=null;
+  for(var i=0;i<allUls.length;i++){
+    var ul=allUls[i];
+    var items=ul.querySelectorAll("li");
+    if(items.length<3)continue;
+    var hasNoticias=Array.from(items).some(function(li){return /Noticias/.test(li.textContent)});
+    var hasArticulos=Array.from(items).some(function(li){return /Art[íi]culos/.test(li.textContent)});
+    if(hasNoticias && hasArticulos){targetUl=ul;break;}
+  }
+  if(!targetUl)return;
+  var lis=Array.from(targetUl.querySelectorAll("li"));
+  // Build map: name -> li
+  var byName={};
+  lis.forEach(function(li){
+    var n=normalize(li.textContent);
+    byName[n]=li;
+  });
+  // Reorder
+  DESIRED.forEach(function(name){
+    var li=byName[name];
+    if(li)targetUl.appendChild(li);
+  });
+}
+reorder();
+setInterval(reorder, 500);
+})();
+</script>
 </body>
 </html>
 
