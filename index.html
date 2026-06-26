@@ -22269,6 +22269,60 @@ setInterval(function(){
 },150);
 })();
 </script>
+
+<script>
+(function(){
+if(window.__v727)return;window.__v727=true;
+function hideAllExcept(keepId){
+  document.querySelectorAll("[id^='panel-']").forEach(function(p){
+    if(p.id!==keepId)p.style.setProperty("display","none","important");
+  });
+  var keep=document.getElementById(keepId);
+  if(keep)keep.style.setProperty("display","block","important");
+}
+function showInicio(){
+  document.querySelectorAll("[id^='panel-']").forEach(function(p){
+    if(p.id!=="panel-inicio")p.style.setProperty("display","none","important");
+  });
+  var inicio=document.getElementById("panel-inicio");
+  if(inicio)inicio.style.removeProperty("display");
+}
+function gotoPanel(keepId){
+  hideAllExcept(keepId);
+  window.scrollTo({top:0,behavior:"instant"});
+  document.documentElement.scrollTop=0;document.body.scrollTop=0;
+  // Close drawer if open
+  var drawer=document.querySelector(".v36-side");
+  if(drawer){
+    drawer.classList.remove("v36-open","v34-open","open");
+    drawer.style.transform="";
+  }
+}
+// Capture-phase intercept (NO isTrusted check this time)
+document.addEventListener("click",function(e){
+  var li=e.target.closest("[data-v86-sub], li, button, a");
+  if(!li)return;
+  var sub=li.getAttribute && li.getAttribute("data-v86-sub");
+  var txt=(li.textContent||"").trim();
+  if(txt.length>50)return;
+  // Match by data-v86-sub attribute first
+  if(sub==="articulos" || /^\u{1F4DD}?\s*Art[\u00ed i]culos$/u.test(txt)){
+    e.stopPropagation();
+    gotoPanel("panel-v724-articulos");
+    return;
+  }
+  if(sub==="podcast" || /^\u{1F399}\u{FE0F}?\s*Podcast$/u.test(txt) || /^Podcast$/.test(txt)){
+    e.stopPropagation();
+    gotoPanel("panel-v724-podcast");
+    return;
+  }
+  if(/^\u{1F3E0}?\s*Inicio$/u.test(txt)){
+    showInicio();
+    window.scrollTo({top:0,behavior:"instant"});
+  }
+},true);
+})();
+</script>
 </body>
 </html>
 
