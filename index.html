@@ -21759,72 +21759,27 @@ console.log("[v719] scroll top en navegacion drawer");
 
 <script>
 (function(){
-if(window.__v720)return;window.__v720=true;
-var SECTION_IDS=["panel-v703-noticias","panel-v708-blogs","panel-v709-podcast","panel-v710-articulos","panel-v711-seguidos","panel-v712-reclutar"];
-function syncInicio(){
-  var t=window.__v715_target||"";
-  var inicio=document.getElementById("panel-inicio");
-  if(!inicio)return;
-  if(SECTION_IDS.indexOf(t)>-1){
-    inicio.style.setProperty("display","none","important");
-  } else {
-    if(inicio.style.display==="none" && inicio.style.getPropertyPriority("display")==="important"){
-      inicio.style.removeProperty("display");
-    }
-  }
-}
-setInterval(syncInicio, 100);
-syncInicio();
-})();
-</script>
-
-<script>
-(function(){
-if(window.__v721)return;window.__v721=true;
-var SECTION_IDS=["panel-v703-noticias","panel-v708-blogs","panel-v709-podcast","panel-v710-articulos","panel-v711-seguidos","panel-v712-reclutar"];
-function watchdog(){
-  var visibleSection=null;
-  for(var i=0;i<SECTION_IDS.length;i++){
-    var el=document.getElementById(SECTION_IDS[i]);
-    if(!el)continue;
-    if(el.style.display!=="none" && getComputedStyle(el).display!=="none"){
-      visibleSection=SECTION_IDS[i];break;
-    }
-  }
-  var inicio=document.getElementById("panel-inicio");
-  if(!inicio)return;
-  if(visibleSection){
-    inicio.style.setProperty("display","none","important");
-    SECTION_IDS.forEach(function(id){
-      if(id===visibleSection)return;
-      var e=document.getElementById(id);
-      if(e)e.style.setProperty("display","none","important");
-    });
-  } else {
-    if(inicio.style.display==="none" && inicio.style.getPropertyPriority("display")==="important"){
-      inicio.style.removeProperty("display");
-    }
-  }
-}
-setInterval(watchdog, 100);
-watchdog();
-})();
-</script>
-
-<script>
-(function(){
-if(window.__v722)return;window.__v722=true;
-var SECTION_IDS=["panel-v703-noticias","panel-v708-blogs","panel-v709-podcast","panel-v710-articulos","panel-v711-seguidos","panel-v712-reclutar"];
-function isVisible(el){
-  if(!el)return false;
-  if(el.style.display==="none")return false;
-  return getComputedStyle(el).display!=="none";
-}
+if(window.__v725)return;window.__v725=true;
+// MASTER SECTION ROUTER: panel-inicio se oculta cuando CUALQUIER seccion dedicada esta visible
+var SECTION_IDS=[
+  "panel-v703-noticias",
+  "panel-v708-blogs",
+  "panel-v709-podcast",
+  "panel-v710-articulos",
+  "panel-v711-seguidos",
+  "panel-v712-reclutar",
+  "panel-v723-centros",
+  "panel-v724-articulos",
+  "panel-v724-podcast"
+];
 function syncAll(){
   var visibleSection=null;
   for(var i=0;i<SECTION_IDS.length;i++){
     var el=document.getElementById(SECTION_IDS[i]);
-    if(isVisible(el)){visibleSection=SECTION_IDS[i];break;}
+    if(!el)continue;
+    if(el.style.display==="none")continue;
+    if(getComputedStyle(el).display==="none")continue;
+    visibleSection=SECTION_IDS[i];break;
   }
   var inicio=document.getElementById("panel-inicio");
   if(!inicio)return;
@@ -21844,20 +21799,18 @@ function syncAll(){
 function attach(){
   SECTION_IDS.forEach(function(id){
     var el=document.getElementById(id);
-    if(!el || el.__v722attached)return;
-    el.__v722attached=true;
-    var obs=new MutationObserver(syncAll);
-    obs.observe(el,{attributes:true,attributeFilter:["style","class"]});
+    if(!el || el.__v725attached)return;
+    el.__v725attached=true;
+    new MutationObserver(syncAll).observe(el,{attributes:true,attributeFilter:["style","class"]});
   });
   var inicio=document.getElementById("panel-inicio");
-  if(inicio && !inicio.__v722attached){
-    inicio.__v722attached=true;
-    var obs2=new MutationObserver(syncAll);
-    obs2.observe(inicio,{attributes:true,attributeFilter:["style","class"]});
+  if(inicio && !inicio.__v725attached){
+    inicio.__v725attached=true;
+    new MutationObserver(syncAll).observe(inicio,{attributes:true,attributeFilter:["style","class"]});
   }
 }
 attach();
-setInterval(function(){attach();syncAll();},200);
+setInterval(function(){attach();syncAll();},150);
 syncAll();
 })();
 </script>
