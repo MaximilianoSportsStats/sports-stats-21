@@ -21756,6 +21756,27 @@ document.addEventListener("click",function(e){
 console.log("[v719] scroll top en navegacion drawer");
 })();
 </script>
+
+<script>
+(function(){
+if(window.__v720)return;window.__v720=true;
+var SECTION_IDS=["panel-v703-noticias","panel-v708-blogs","panel-v709-podcast","panel-v710-articulos","panel-v711-seguidos","panel-v712-reclutar"];
+function syncInicio(){
+  var t=window.__v715_target||"";
+  var inicio=document.getElementById("panel-inicio");
+  if(!inicio)return;
+  if(SECTION_IDS.indexOf(t)>-1){
+    inicio.style.setProperty("display","none","important");
+  } else {
+    if(inicio.style.display==="none" && inicio.style.getPropertyPriority("display")==="important"){
+      inicio.style.removeProperty("display");
+    }
+  }
+}
+setInterval(syncInicio, 100);
+syncInicio();
+})();
+</script>
 </body>
 </html>
 
