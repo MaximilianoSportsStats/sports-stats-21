@@ -22339,6 +22339,24 @@ document.addEventListener("click",function(e){
   var txt=(li.textContent||"").trim();
   if(txt.length>50)return;
   // Match by data-v86-sub attribute first
+  if(sub==="blogs" || /^(?:[^\w])*Blogs$/u.test(txt) && txt.length<20){
+    e.preventDefault();
+    e.stopImmediatePropagation();
+    window.__showV724Content("blogs");
+    return;
+  }
+  if(sub==="noticias" || /^(?:[^\w])*Noticias$/u.test(txt) && txt.length<20){
+    e.preventDefault();
+    e.stopImmediatePropagation();
+    window.__showV724Content("noticias");
+    return;
+  }
+  if(sub==="seguidos" || /^(?:[^\w])*Seguidos$/u.test(txt) && txt.length<20){
+    e.preventDefault();
+    e.stopImmediatePropagation();
+    window.__showV724Content("seguidos");
+    return;
+  }
   if(sub==="articulos" || /^\u{1F4DD}?\s*Art[\u00ed i]culos$/u.test(txt)){
     e.preventDefault();
     e.stopImmediatePropagation();
