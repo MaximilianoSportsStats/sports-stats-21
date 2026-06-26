@@ -22108,6 +22108,272 @@ setInterval(function(){
 },150);
 })();
 </script>
+
+<style>
+.v724-page{padding:0 0 80px;background:#fafafa;min-height:100vh}
+.v724-page .v724-hero{text-align:center;padding:48px 20px 32px;background:linear-gradient(180deg,#fef2f2 0%,transparent 100%)}
+.v724-page .v724-hero h1{color:var(--primary);font-size:42px;margin:0 0 10px;font-weight:800;letter-spacing:.5px}
+.v724-page .v724-hero p{color:var(--muted);margin:0;font-size:17px;max-width:600px;margin-left:auto;margin-right:auto}
+.v724-page .v724-wrap{max-width:1200px;margin:0 auto;padding:0 24px}
+.v724-page .v724-filters{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:24px;justify-content:center}
+.v724-page .v724-filter{background:#fff;border:2px solid #e5e7eb;color:#374151;padding:8px 18px;border-radius:999px;font-size:14px;font-weight:600;cursor:pointer;transition:all .15s}
+.v724-page .v724-filter:hover{border-color:var(--primary);color:var(--primary)}
+.v724-page .v724-filter.v724-active{background:var(--primary);border-color:var(--primary);color:#fff}
+.v724-page .v724-featured{background:#fff;border:1px solid #e5e7eb;border-radius:16px;overflow:hidden;margin-bottom:32px;display:flex;flex-direction:row;box-shadow:0 2px 12px rgba(0,0,0,.04)}
+.v724-page .v724-featured-img{flex:0 0 360px;background:linear-gradient(135deg,#dc2626,#991b1b);display:flex;align-items:center;justify-content:center;font-size:120px;color:#fff}
+.v724-page .v724-featured-body{padding:32px;flex:1;display:flex;flex-direction:column;justify-content:center}
+.v724-page .v724-featured-tag{display:inline-block;background:var(--primary);color:#fff;padding:4px 14px;border-radius:999px;font-size:11px;font-weight:800;letter-spacing:1px;width:fit-content;margin-bottom:14px;text-transform:uppercase}
+.v724-page .v724-featured h2{font-size:28px;margin:0 0 12px;color:#111;line-height:1.2;font-weight:800}
+.v724-page .v724-featured-desc{color:#6b7280;margin:0 0 18px;font-size:15px;line-height:1.5}
+.v724-page .v724-featured-meta{display:flex;gap:14px;color:var(--muted);font-size:13px;margin-bottom:18px}
+.v724-page .v724-cta{background:var(--primary);color:#fff;border:none;padding:12px 24px;border-radius:8px;font-weight:700;cursor:pointer;font-size:14px;width:fit-content;transition:background .15s}
+.v724-page .v724-cta:hover{background:#991b1b}
+.v724-page .v724-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:18px}
+.v724-page .v724-card{background:#fff;border:1px solid #e5e7eb;border-radius:14px;overflow:hidden;cursor:pointer;transition:all .2s;display:flex;flex-direction:column}
+.v724-page .v724-card:hover{transform:translateY(-3px);box-shadow:0 12px 24px rgba(0,0,0,.08);border-color:var(--primary)}
+.v724-page .v724-card-img{height:140px;display:flex;align-items:center;justify-content:center;font-size:60px;background:linear-gradient(135deg,#fef2f2,#fee2e2);position:relative}
+.v724-page .v724-card-cat{position:absolute;top:10px;right:10px;background:rgba(255,255,255,.95);color:var(--primary);padding:4px 10px;border-radius:999px;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.5px}
+.v724-page .v724-card-body{padding:18px;flex:1;display:flex;flex-direction:column}
+.v724-page .v724-card h3{font-size:16px;margin:0 0 8px;color:#111;line-height:1.3;font-weight:700}
+.v724-page .v724-card p{color:#6b7280;font-size:13px;line-height:1.5;margin:0 0 12px;flex:1}
+.v724-page .v724-card-meta{display:flex;gap:10px;color:var(--muted);font-size:12px;margin-bottom:12px}
+.v724-page .v724-card-cta{background:var(--primary);color:#fff;border:none;padding:8px 16px;border-radius:6px;font-weight:600;cursor:pointer;font-size:13px;width:fit-content}
+.v724-page .v724-empty{text-align:center;padding:60px 20px;color:var(--muted);grid-column:1/-1}
+.v724-podcast-card .v724-card-img{background:linear-gradient(135deg,#1e293b,#0f172a);color:#fff}
+.v724-podcast-card .v724-card-cat{background:#fbbf24;color:#78350f}
+.v724-podcast-card .v724-duration{display:flex;align-items:center;gap:4px;color:#374151;font-size:12px;font-weight:600}
+.v724-podcast-card .v724-card-cta{background:#0f172a}
+.v724-podcast-card .v724-card-cta:hover{background:#1e293b}
+@media(max-width:760px){
+  .v724-page .v724-featured{flex-direction:column}
+  .v724-page .v724-featured-img{flex:0 0 200px;font-size:80px}
+  .v724-page .v724-featured-body{padding:24px}
+  .v724-page .v724-featured h2{font-size:22px}
+}
+</style>
+
+<script>
+(function(){
+if(window.__v724)return;window.__v724=true;
+
+var ARTICULOS=[
+{cat:"Tactica",e:"🎯",t:"La revolucion tactica de Pep Guardiola",d:"Un analisis profundo del 4-2-3-1 invertido y como Pep redefinio el rol del lateral en el futbol moderno.",a:"Diego Sanchez",m:"11 min",dep:"Futbol"},
+{cat:"Analisis",e:"📊",t:"Como el VAR cambio el futbol moderno",d:"De Russia 2018 a hoy: que ganamos, que perdimos y por que las polemicas son inevitables.",a:"Lucas Pereyra",m:"8 min",dep:"Futbol"},
+{cat:"Historico",e:"🏆",t:"El dia que Argentina conquisto Qatar",d:"La cronica completa de la final mas dramatica del siglo. Messi, Mbappe y un partido eterno.",a:"Ines Castro",m:"12 min",dep:"Futbol"},
+{cat:"Analisis",e:"🌍",t:"¿Por que la NBA es mas global que nunca?",d:"Wembanyama, Doncic, Jokic: la nueva generacion no nacio en EEUU. Como cambio el scouting global.",a:"Marcos Rivera",m:"9 min",dep:"Basketball"},
+{cat:"Entrevistas",e:"🎙",t:"Entrevista exclusiva: Lamine Yamal",d:"El joven crack del Barcelona habla de presion, sueños y la Eurocopa que cambio su vida.",a:"Carla Mendes",m:"7 min",dep:"Futbol"},
+{cat:"Opinion",e:"🏓",t:"Por que el padel esta conquistando el mundo",d:"De España a Latinoamerica, USA y Asia. El deporte que crece mas rapido y por que.",a:"Roberto Vidal",m:"6 min",dep:"Padel"},
+{cat:"Analisis",e:"🇱🇻",t:"El milagro Luka Doncic en Dallas",d:"Como un esloveno de 19 años se convirtio en el rostro del basquet europeo en NBA.",a:"Pedro Salgado",m:"10 min",dep:"Basketball"},
+{cat:"Historico",e:"🥊",t:"Ali vs Frazier: la trilogia eterna",d:"50 años despues, repasamos los 3 combates que definieron una era del boxeo.",a:"Federico Romero",m:"14 min",dep:"Boxeo"},
+{cat:"Tactica",e:"🎾",t:"El servicio de Sinner: deconstruccion",d:"Frame por frame: la mecanica del saque mas eficiente del circuito ATP 2025.",a:"Andrea Conti",m:"8 min",dep:"Tenis"},
+{cat:"Opinion",e:"💰",t:"Los sueldos de la F1 estan rotos",d:"Verstappen gana 70M. Un mecanico gana 60K. Donde se rompio el deporte premium.",a:"Mariano Costa",m:"7 min",dep:"F1"},
+{cat:"Analisis",e:"🏈",t:"NFL: por que los QBs viejos siguen ganando",d:"Mahomes, Allen, Burrow. Y al lado, veteranos como Rodgers, Wilson. Que les da edge.",a:"Tom Hudson",m:"9 min",dep:"NFL"},
+{cat:"Entrevistas",e:"🎤",t:"Charla con Carlos Alcaraz",d:"Último Wimbledon, presion mental y la rivalidad con Sinner. Honesto y sin filtros.",a:"María Lopez",m:"15 min",dep:"Tenis"},
+{cat:"Historico",e:"👻",t:"Cuando Maradona pinto la mano de Dios",d:"86 minutos despues del primer gol. Los detalles que casi nadie recuerda.",a:"Hector Pacheco",m:"11 min",dep:"Futbol"},
+{cat:"Tactica",e:"⚗️",t:"El press alto del PSG de Luis Enrique",d:"Como pasar de un equipo de estrellas a una maquina tactica. Datos y video.",a:"Olivier Dupont",m:"10 min",dep:"Futbol"},
+{cat:"Opinion",e:"🔥",t:"La era de los super-equipos en NBA esta muerta",d:"De Heatles a Warriors: por que ahora ganar es de los inteligentes, no de los millonarios.",a:"Jamal Brown",m:"8 min",dep:"Basketball"},
+{cat:"Analisis",e:"⚖️",t:"Por que Real Madrid gana siempre Champions",d:"El ADN europeo del club: 15 titulos no son casualidad. La mentalidad ganadora.",a:"Sergio Garcia",m:"12 min",dep:"Futbol"},
+{cat:"Entrevistas",e:"🇺🇸",t:"LeBron James a sus 41: una charla intima",d:"Familia, legado, retiro. El Rey reflexiona sobre su carrera y los proximos pasos.",a:"James Wright",m:"18 min",dep:"Basketball"},
+{cat:"Historico",e:"🇧🇷",t:"Pele, el rey eterno del futbol",d:"1281 goles. 3 Mundiales. Una vida dedicada al deporte. Su biografia completa.",a:"Joao Silva",m:"20 min",dep:"Futbol"}
+];
+
+var PODCASTS=[
+{cat:"Futbol",e:"🎤",t:"Analisis tactico: Premier League",d:"Diego Martin repasa lo mejor de la fecha 28 y mira hacia el sprint final del torneo ingles.",a:"Diego Martin",m:"45 min",dur:"45:12"},
+{cat:"Futbol",e:"🇦🇷",t:"La Albiceleste rumbo al 2026",d:"Eliminatorias, lesiones de Messi y como Argentina se prepara para defender el titulo mundial.",a:"Andres Iniesta Lopez",m:"38 min",dur:"38:45"},
+{cat:"NBA",e:"🏀",t:"NBA Tip-Off: previa de temporada",d:"Sara Diaz presenta las 30 franquicias, los favoritos al titulo y los rookies a seguir.",a:"Sara Diaz",m:"52 min",dur:"52:30"},
+{cat:"F1",e:"🏎️",t:"Pretemporada en Bahrein",d:"Lucas Mora analiza los nuevos monoplazas, el dominio de RB y la pelea por la P2 de constructores.",a:"Lucas Mora",m:"33 min",dur:"33:08"},
+{cat:"Tenis",e:"🎾",t:"Sinner vs Alcaraz: la rivalidad del decenio",d:"Carlos Soto desmenuza los 12 encuentros directos y proyecta como sera 2026 en el circuito ATP.",a:"Carlos Soto",m:"41 min",dur:"41:55"},
+{cat:"NFL",e:"🏈",t:"Camino al Super Bowl",d:"Tom Hudson y Mike Reyes hablan playoffs, candidatos y el shock de la conferencia AFC.",a:"Tom Hudson",m:"60 min",dur:"60:22"},
+{cat:"Boxeo",e:"🥊",t:"¿Quien es el GOAT del boxeo?",d:"Charla de pesos pesados con expertos. Ali, Tyson, Mayweather: votamos en vivo.",a:"Federico Romero",m:"47 min",dur:"47:18"},
+{cat:"MLB",e:"⚾",t:"Yankees vs Dodgers: pronostico 2026",d:"La rivalidad mas vieja del beisbol. Lineup, pitchers y prediccion serie mundial.",a:"Pablo Vega",m:"36 min",dur:"36:44"},
+{cat:"Atletismo",e:"🏃",t:"Hacia Los Angeles 2028",d:"Las jovenes promesas de la pista y campo que buscan oro en las proximas olimpiadas.",a:"Ana Torres",m:"42 min",dur:"42:11"},
+{cat:"Padel",e:"🏓",t:"El boom del padel mundial",d:"World Padel Tour, premios, salarios y por que es el deporte mas crece en el mundo.",a:"Roberto Vidal",m:"30 min",dur:"30:00"},
+{cat:"Golf",e:"⛳",t:"Majors 2026: previa completa",d:"Masters, US Open, The Open, PGA. Rory, Scheffler, Rahm: candidatos y outsiders.",a:"David Walsh",m:"55 min",dur:"55:33"},
+{cat:"UFC",e:"🥋",t:"UFC 312: analisis pre-pelea",d:"Cinturones en disputa, debutantes y previa de la cartelera principal del año.",a:"Joe Anderson",m:"39 min",dur:"39:07"},
+{cat:"Rugby",e:"🏉",t:"Six Nations: rumbo al 2026",d:"Pumas, Inglaterra, Francia, Irlanda. El torneo que mueve millones en europa.",a:"Liam OConnor",m:"44 min",dur:"44:50"},
+{cat:"NHL",e:"🏒",t:"Hockey sobre hielo en Norteamerica",d:"Maple Leafs, Bruins, Rangers: el Stanley Cup esta abierto. Carl Berg analiza.",a:"Carl Berg",m:"35 min",dur:"35:24"},
+{cat:"Olympics",e:"🏅",t:"Especial: 100 dias hacia LA 2028",d:"Como se preparan los paises latinos. Inversion, beca a atletas y candidatos a medalla.",a:"Patricia Gomez",m:"48 min",dur:"48:18"}
+];
+
+window.__ARTICULOS=ARTICULOS;
+window.__PODCASTS=PODCASTS;
+})();
+</script>
+
+<script>
+(function(){
+if(window.__v724render)return;window.__v724render=true;
+function build(){
+var ART=window.__ARTICULOS||[];
+var POD=window.__PODCASTS||[];
+if(!ART.length||!POD.length){setTimeout(build,300);return;}
+var main=document.querySelector("main")||document.body;
+
+// ===== ARTICULOS PANEL =====
+if(!document.getElementById("panel-v724-articulos")){
+  var pa=document.createElement("section");
+  pa.id="panel-v724-articulos";
+  pa.className="v724-page";
+  pa.style.display="none";
+  var cats=["Todos"];
+  ART.forEach(function(a){if(cats.indexOf(a.cat)<0)cats.push(a.cat)});
+  var featured=ART[0];
+  var rest=ART.slice(1);
+  var html='';
+  html+='<div class="v724-hero"><h1>📝 ARTICULOS</h1><p>Analisis profundos, opiniones, historicos y entrevistas exclusivas del mundo deportivo</p></div>';
+  html+='<div class="v724-wrap">';
+  html+='<div class="v724-filters" data-area="art">';
+  cats.forEach(function(c,i){html+='<button class="v724-filter'+(i===0?' v724-active':'')+'" data-cat="'+c+'">'+c+'</button>'});
+  html+='</div>';
+  html+='<div class="v724-featured">';
+  html+='<div class="v724-featured-img">'+featured.e+'</div>';
+  html+='<div class="v724-featured-body">';
+  html+='<span class="v724-featured-tag">🔥 Articulo destacado</span>';
+  html+='<h2>'+featured.t+'</h2>';
+  html+='<p class="v724-featured-desc">'+featured.d+'</p>';
+  html+='<div class="v724-featured-meta">✍️ '+featured.a+' • 📖 '+featured.m+' de lectura • '+featured.dep+'</div>';
+  html+='<button class="v724-cta">Leer articulo completo →</button>';
+  html+='</div></div>';
+  html+='<div class="v724-grid" id="v724-art-grid">';
+  rest.forEach(function(a){
+    html+='<div class="v724-card" data-cat="'+a.cat+'">';
+    html+='<div class="v724-card-img">'+a.e+'<span class="v724-card-cat">'+a.cat+'</span></div>';
+    html+='<div class="v724-card-body">';
+    html+='<h3>'+a.t+'</h3>';
+    html+='<p>'+a.d+'</p>';
+    html+='<div class="v724-card-meta">✍️ '+a.a+' • 📖 '+a.m+'</div>';
+    html+='<button class="v724-card-cta">Leer →</button>';
+    html+='</div></div>';
+  });
+  html+='</div></div>';
+  pa.innerHTML=html;
+  main.appendChild(pa);
+  pa.querySelector('[data-area="art"]').addEventListener("click",function(e){
+    var b=e.target.closest(".v724-filter");if(!b)return;
+    pa.querySelectorAll('[data-area="art"] .v724-filter').forEach(function(x){x.classList.remove("v724-active")});
+    b.classList.add("v724-active");
+    var cat=b.dataset.cat;
+    pa.querySelectorAll("#v724-art-grid .v724-card").forEach(function(c){
+      c.style.display=(cat==="Todos"||c.dataset.cat===cat)?"":"none";
+    });
+  });
+}
+
+// ===== PODCAST PANEL =====
+if(!document.getElementById("panel-v724-podcast")){
+  var pp=document.createElement("section");
+  pp.id="panel-v724-podcast";
+  pp.className="v724-page";
+  pp.style.display="none";
+  var pcats=["Todos"];
+  POD.forEach(function(p){if(pcats.indexOf(p.cat)<0)pcats.push(p.cat)});
+  var pfeatured=POD[0];
+  var prest=POD.slice(1);
+  var html2='';
+  html2+='<div class="v724-hero"><h1>🎙️ PODCAST</h1><p>Analisis, entrevistas y previas semanales con los mejores periodistas deportivos</p></div>';
+  html2+='<div class="v724-wrap">';
+  html2+='<div class="v724-filters" data-area="pod">';
+  pcats.forEach(function(c,i){html2+='<button class="v724-filter'+(i===0?' v724-active':'')+'" data-cat="'+c+'">'+c+'</button>'});
+  html2+='</div>';
+  html2+='<div class="v724-featured" style="background:linear-gradient(135deg,#0f172a,#1e293b);color:#fff;border-color:transparent">';
+  html2+='<div class="v724-featured-img" style="background:linear-gradient(135deg,#fbbf24,#d97706);color:#fff">'+pfeatured.e+'</div>';
+  html2+='<div class="v724-featured-body" style="color:#fff">';
+  html2+='<span class="v724-featured-tag" style="background:#fbbf24;color:#78350f">🔥 Episodio destacado</span>';
+  html2+='<h2 style="color:#fff">'+pfeatured.t+'</h2>';
+  html2+='<p class="v724-featured-desc" style="color:#cbd5e1">'+pfeatured.d+'</p>';
+  html2+='<div class="v724-featured-meta" style="color:#94a3b8">🎙️ '+pfeatured.a+' • 🕑 '+pfeatured.dur+' • '+pfeatured.cat+'</div>';
+  html2+='<button class="v724-cta" style="background:#fbbf24;color:#78350f">▶️ Reproducir episodio</button>';
+  html2+='</div></div>';
+  html2+='<div class="v724-grid" id="v724-pod-grid">';
+  prest.forEach(function(p){
+    html2+='<div class="v724-card v724-podcast-card" data-cat="'+p.cat+'">';
+    html2+='<div class="v724-card-img">'+p.e+'<span class="v724-card-cat">'+p.cat+'</span></div>';
+    html2+='<div class="v724-card-body">';
+    html2+='<h3>'+p.t+'</h3>';
+    html2+='<p>'+p.d+'</p>';
+    html2+='<div class="v724-card-meta">🎙️ '+p.a+' • <span class="v724-duration">🕑 '+p.dur+'</span></div>';
+    html2+='<button class="v724-card-cta">▶️ Reproducir</button>';
+    html2+='</div></div>';
+  });
+  html2+='</div></div>';
+  pp.innerHTML=html2;
+  main.appendChild(pp);
+  pp.querySelector('[data-area="pod"]').addEventListener("click",function(e){
+    var b=e.target.closest(".v724-filter");if(!b)return;
+    pp.querySelectorAll('[data-area="pod"] .v724-filter').forEach(function(x){x.classList.remove("v724-active")});
+    b.classList.add("v724-active");
+    var cat=b.dataset.cat;
+    pp.querySelectorAll("#v724-pod-grid .v724-card").forEach(function(c){
+      c.style.display=(cat==="Todos"||c.dataset.cat===cat)?"":"none";
+    });
+  });
+}
+}
+build();
+})();
+</script>
+
+<script>
+(function(){
+if(window.__v724router)return;window.__v724router=true;
+function hideAllExcept(keepId){
+  document.querySelectorAll("[id^='panel-']").forEach(function(p){
+    if(p.id!==keepId)p.style.setProperty("display","none","important");
+  });
+  var keep=document.getElementById(keepId);
+  if(keep)keep.style.setProperty("display","block","important");
+}
+function showInicio(){
+  document.querySelectorAll("[id^='panel-']").forEach(function(p){
+    if(p.id!=="panel-inicio")p.style.setProperty("display","none","important");
+  });
+  var inicio=document.getElementById("panel-inicio");
+  if(inicio){
+    inicio.style.removeProperty("display");
+  }
+}
+document.addEventListener("click",function(e){
+  if(!e.isTrusted)return;
+  var li=e.target.closest("li,button,a");
+  if(!li)return;
+  var txt=(li.textContent||"").trim();
+  if(txt.length>40)return;
+  if(/^📝?s*Art[íi]culos$/u.test(txt)){
+    hideAllExcept("panel-v724-articulos");
+    window.scrollTo({top:0,behavior:"instant"});
+    document.documentElement.scrollTop=0;document.body.scrollTop=0;
+    return;
+  }
+  if(/^🎙️?s*Podcast$/u.test(txt) || /^Podcast$/.test(txt)){
+    hideAllExcept("panel-v724-podcast");
+    window.scrollTo({top:0,behavior:"instant"});
+    document.documentElement.scrollTop=0;document.body.scrollTop=0;
+    return;
+  }
+  if(/^🏠?s*Inicio$/u.test(txt)){
+    showInicio();
+    window.scrollTo({top:0,behavior:"instant"});
+    return;
+  }
+},true);
+// Watchdog: si un v724 panel esta visible, asegurar que panel-inicio y otros section panels esten ocultos
+setInterval(function(){
+  var a=document.getElementById("panel-v724-articulos");
+  var p=document.getElementById("panel-v724-podcast");
+  var inicio=document.getElementById("panel-inicio");
+  if(!inicio)return;
+  var anyV724Visible=(a&&getComputedStyle(a).display!=="none")||(p&&getComputedStyle(p).display!=="none");
+  if(anyV724Visible){
+    inicio.style.setProperty("display","none","important");
+    // Also hide old v709 podcast and v710 articulos panels
+    var v709=document.getElementById("panel-v709-podcast");
+    var v710=document.getElementById("panel-v710-articulos");
+    if(v709)v709.style.setProperty("display","none","important");
+    if(v710)v710.style.setProperty("display","none","important");
+  }
+},150);
+})();
+</script>
 </body>
 </html>
 
