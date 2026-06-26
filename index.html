@@ -21794,7 +21794,13 @@ syncAll();
 #panel-v723-centros .v723-count{padding:8px 14px;background:#f3f4f6;border-radius:8px;font-size:14px;color:#374151;font-weight:600;display:flex;align-items:center;white-space:nowrap}
 #panel-v723-centros .v723-map{background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:18px;margin-bottom:24px}
 #panel-v723-centros .v723-map-title{font-size:14px;font-weight:700;color:#111;margin-bottom:12px;text-transform:uppercase;letter-spacing:.4px}
-#panel-v723-centros .v723-map-canvas{background:#dbeafe;border-radius:10px;overflow:hidden;height:420px;display:flex;align-items:center;justify-content:center}
+#panel-v723-centros .v723-map-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+#panel-v723-centros .v723-zoom-ctrl{display:flex;align-items:center;gap:6px;background:#f3f4f6;padding:4px;border-radius:8px}
+#panel-v723-centros .v723-zoom-ctrl button{width:32px;height:32px;border:none;background:#fff;border-radius:6px;cursor:pointer;font-size:18px;font-weight:700;color:#374151;display:flex;align-items:center;justify-content:center;transition:all .15s}
+#panel-v723-centros .v723-zoom-ctrl button:hover{background:var(--primary);color:#fff}
+#panel-v723-centros .v723-zoom-reset{width:auto !important;padding:0 12px !important;font-size:12px !important;font-weight:600 !important}
+#panel-v723-centros .v723-zoom-lvl{font-size:13px;font-weight:700;color:#111;min-width:48px;text-align:center}
+#panel-v723-centros .v723-map-canvas{background:#dbeafe;border-radius:10px;overflow:hidden;height:600px;display:flex;align-items:center;justify-content:center;cursor:grab;user-select:none}
 #panel-v723-centros .v723-map-canvas svg{width:100%;height:100%;display:block}
 #panel-v723-centros .v723-pin{transition:transform .15s}
 #panel-v723-centros .v723-pin:hover{transform:scale(1.15);transform-origin:center}
@@ -21865,7 +21871,7 @@ window.__CENTROS=CENTROS;
 
 <script>
 (function(){
-if(window.__v730)return;window.__v730=true;
+if(window.__v731)return;window.__v731=true;
 function go(){
 var CENTROS=window.__CENTROS||[];
 if(!CENTROS.length){setTimeout(go,300);return;}
@@ -21878,23 +21884,26 @@ panel.style.display="none";
 
 var DEPORTES=[];
 var CIUDADES=[];
+var PAISES=[];
 CENTROS.forEach(function(c){
   c.d.forEach(function(d){if(DEPORTES.indexOf(d)<0)DEPORTES.push(d)});
   if(CIUDADES.indexOf(c.c)<0)CIUDADES.push(c.c);
+  if(PAISES.indexOf(c.pais)<0)PAISES.push(c.pais);
 });
 DEPORTES.sort();
+var PAIS_NAMES={"AR":"Argentina","CL":"Chile","PE":"Peru","MX":"Mexico","CO":"Colombia","BR":"Brasil","UY":"Uruguay","ES":"Espana"};
 
-// City coords on SVG canvas (roughly geographic positions, viewBox 800x500)
+// City coords on a viewBox of 1000x600 (world map)
 var CITY_COORDS={
-  "Buenos Aires":{x:340,y:380, country:"AR"},
-  "Santiago":{x:295,y:385, country:"CL"},
-  "Lima":{x:240,y:280, country:"PE"},
-  "CDMX":{x:175,y:175, country:"MX"},
-  "Bogota":{x:255,y:235, country:"CO"},
-  "Sao Paulo":{x:380,y:340, country:"BR"},
-  "Montevideo":{x:355,y:395, country:"UY"},
-  "Madrid":{x:565,y:120, country:"ES"},
-  "Barcelona":{x:585,y:115, country:"ES"}
+  "Buenos Aires":{x:345,y:480},
+  "Santiago":{x:312,y:485},
+  "Lima":{x:295,y:380},
+  "CDMX":{x:215,y:285},
+  "Bogota":{x:300,y:340},
+  "Sao Paulo":{x:395,y:445},
+  "Montevideo":{x:362,y:495},
+  "Madrid":{x:535,y:215},
+  "Barcelona":{x:548,y:212}
 };
 function flagFor(c){var x=CENTROS.find(function(z){return z.c===c});return x?x.fl:"";}
 function countFor(c){return CENTROS.filter(function(z){return z.c===c}).length;}
@@ -21910,64 +21919,107 @@ function sec(emoji, title, key, inner){
 var depHtml='';
 DEPORTES.forEach(function(d){depHtml+='<label><input type="checkbox" data-f="d" value="'+d+'"> '+d+'</label>'});
 html+=sec('🏃','Deportes','d',depHtml);
+var paisHtml='';
+PAISES.forEach(function(p){paisHtml+='<label><input type="checkbox" data-f="pais" value="'+p+'"> '+(PAIS_NAMES[p]||p)+'</label>'});
+html+=sec('🌎','Pais','pais',paisHtml);
 var ambHtml='';
 ["Abierto","Cerrado","Mixto"].forEach(function(a){ambHtml+='<label><input type="checkbox" data-f="amb" value="'+a+'"> '+a+'</label>'});
 html+=sec('🏠','Ambiente','amb',ambHtml);
 var costHtml='';
 ["Gratis","Pagado"].forEach(function(c){costHtml+='<label><input type="checkbox" data-f="cost" value="'+c+'"> '+c+'</label>'});
 html+=sec('💰','Costo','cost',costHtml);
+var priceHtml='';
+[["$","Bajo (< $50)"],["$$","Medio ($50-150)"],["$$$","Alto ($150-300)"],["$$$$","Premium (> $300)"],["Free","Sin costo"]].forEach(function(r){priceHtml+='<label><input type="checkbox" data-f="p" value="'+r[0]+'"> '+r[1]+'</label>'});
+html+=sec('💵','Rango de precio','p',priceHtml);
 var ratHtml='';
-[["4.5","4.5+ estrellas"],["4","4+ estrellas"],["0","Todos"]].forEach(function(r){ratHtml+='<label><input type="radio" name="rat" data-f="rat" value="'+r[0]+'"'+(r[0]==="0"?" checked":"")+'> '+r[1]+'</label>'});
+[["4.5","4.5+ estrellas"],["4","4+ estrellas"],["3","3+ estrellas"],["0","Todos"]].forEach(function(r){ratHtml+='<label><input type="radio" name="rat" data-f="rat" value="'+r[0]+'"'+(r[0]==="0"?" checked":"")+'> '+r[1]+'</label>'});
 html+=sec('⭐','Rating',"rat",ratHtml);
 var hHtml='';
 ["Mañana","Tarde","Noche","24/7"].forEach(function(h){hHtml+='<label><input type="checkbox" data-f="h" value="'+h+'"> '+h+'</label>'});
 html+=sec('🕑','Horario','h',hHtml);
+var nivelHtml='';
+["Profesional","Amateur","Recreativo","Escolar"].forEach(function(n){nivelHtml+='<label><input type="checkbox" data-f="niv" value="'+n+'"> '+n+'</label>'});
+html+=sec('🏅','Nivel','niv',nivelHtml);
+var supHtml='';
+["Cesped natural","Cesped sintetico","Cemento","Arcilla","Madera","Acuatico"].forEach(function(s){supHtml+='<label><input type="checkbox" data-f="sup" value="'+s+'"> '+s+'</label>'});
+html+=sec('🏗️','Superficie','sup',supHtml);
+var servHtml='';
+["Estacionamiento","Vestuarios","Cafeteria","Wifi","Tienda","Lockers","Banos","Accesible"].forEach(function(s){servHtml+='<label><input type="checkbox" data-f="serv" value="'+s+'"> '+s+'</label>'});
+html+=sec('🛎️','Servicios','serv',servHtml);
+
 html+='<button class="v723-clear" type="button">✕ Limpiar filtros</button>';
 html+='</aside>';
 html+='<div class="v723-main">';
 // Search bar
 html+='<div class="v723-search"><input type="text" id="v723-q" placeholder="🔍 Buscar por nombre o ciudad..."><span class="v723-count" id="v723-count">'+CENTROS.length+' centros</span></div>';
-// SVG MAP
+// MAP with zoom controls
 html+='<div class="v723-map">';
-html+='<div class="v723-map-title">🗺️ Mapa interactivo</div>';
+html+='<div class="v723-map-header"><div class="v723-map-title">🗺️ Mapa Mundial</div><div class="v723-zoom-ctrl"><button class="v723-zoom-out" type="button">−</button><span class="v723-zoom-lvl" id="v723-zoom-lvl">100%</span><button class="v723-zoom-in" type="button">+</button><button class="v723-zoom-reset" type="button">Resetear</button></div></div>';
 html+='<div class="v723-map-canvas">';
-html+='<svg viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">';
-// Simple continent silhouettes
-html+='<defs><linearGradient id="ocean" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#dbeafe"/><stop offset="100%" stop-color="#bfdbfe"/></linearGradient></defs>';
-html+='<rect width="800" height="500" fill="url(#ocean)"/>';
-// North America
-html+='<path d="M 50 90 Q 80 70 130 80 L 180 90 L 200 130 L 220 180 L 200 210 L 170 220 L 140 200 L 110 180 L 90 150 Z" fill="#bbf7d0" stroke="#86efac" stroke-width="1"/>';
-// Central America to South America
-html+='<path d="M 200 210 L 230 250 L 250 290 L 270 340 L 290 380 L 310 420 L 340 430 L 380 410 L 400 380 L 410 340 L 400 290 L 390 250 L 360 220 L 320 200 L 280 195 L 240 200 Z" fill="#bbf7d0" stroke="#86efac" stroke-width="1"/>';
+// SVG with world map
+html+='<svg id="v723-svg" viewBox="0 0 1000 600" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">';
+html+='<defs><pattern id="v723-grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M 40 0 L 0 0 0 40" fill="none" stroke="#bfdbfe" stroke-width="0.5" opacity="0.5"/></pattern><radialGradient id="v723-ocean" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#dbeafe"/><stop offset="100%" stop-color="#93c5fd"/></radialGradient></defs>';
+html+='<rect width="1000" height="600" fill="url(#v723-ocean)"/>';
+html+='<rect width="1000" height="600" fill="url(#v723-grid)"/>';
+html+='<g id="v723-world">';
+// North America (more realistic)
+html+='<path d="M 100 130 Q 80 160 90 200 L 110 240 L 130 270 L 160 285 L 195 295 L 220 280 L 215 250 L 240 230 L 245 200 L 230 175 L 220 145 L 200 125 L 175 115 L 145 110 L 115 120 Z" fill="#86efac" stroke="#22c55e" stroke-width="1.5"/>';
+// Mexico tail
+html+='<path d="M 195 295 L 215 320 L 220 345 L 235 360 L 250 340 L 240 320 L 230 305 Z" fill="#86efac" stroke="#22c55e" stroke-width="1.5"/>';
+// Central America
+html+='<path d="M 235 360 L 260 380 L 275 390 L 285 380 L 280 365 L 260 355 Z" fill="#86efac" stroke="#22c55e" stroke-width="1.5"/>';
+// South America
+html+='<path d="M 285 380 L 305 400 L 320 430 L 335 460 L 355 490 L 370 515 L 365 535 L 345 530 L 325 510 L 305 480 L 290 450 L 285 420 Z" fill="#86efac" stroke="#22c55e" stroke-width="1.5"/>';
+// Brazil chunk
+html+='<path d="M 320 430 L 360 420 L 395 425 L 415 440 L 420 470 L 410 490 L 390 495 L 365 485 L 340 460 Z" fill="#86efac" stroke="#22c55e" stroke-width="1.5"/>';
 // Europe
-html+='<path d="M 530 90 Q 560 70 600 80 L 640 100 L 660 130 L 640 160 L 600 160 L 560 140 L 540 120 Z" fill="#bbf7d0" stroke="#86efac" stroke-width="1"/>';
+html+='<path d="M 510 200 Q 490 215 495 240 L 510 255 L 540 260 L 565 250 L 580 235 L 575 215 L 555 200 L 530 195 Z" fill="#86efac" stroke="#22c55e" stroke-width="1.5"/>';
+// UK & Ireland
+html+='<path d="M 490 185 L 500 200 L 495 215 L 485 215 L 480 200 Z" fill="#86efac" stroke="#22c55e" stroke-width="1.5"/>';
+// Africa
+html+='<path d="M 540 280 Q 530 320 545 360 L 565 395 L 590 410 L 615 395 L 625 360 L 620 320 L 605 290 L 585 275 L 560 275 Z" fill="#fde68a" stroke="#f59e0b" stroke-width="1.5"/>';
+// Asia (simplified blob)
+html+='<path d="M 620 150 Q 650 130 700 130 L 780 145 L 830 175 L 870 200 L 870 240 L 830 265 L 780 270 L 730 260 L 690 245 L 645 220 L 615 195 Z" fill="#fde68a" stroke="#f59e0b" stroke-width="1.5"/>';
+// India
+html+='<path d="M 730 260 L 745 290 L 745 320 L 730 325 L 720 300 Z" fill="#fde68a" stroke="#f59e0b" stroke-width="1.5"/>';
+// Australia
+html+='<path d="M 820 450 Q 800 460 805 480 L 825 495 L 860 500 L 885 490 L 890 470 L 875 455 L 845 448 Z" fill="#fcd34d" stroke="#d97706" stroke-width="1.5"/>';
+// Equator line  
+html+='<line x1="0" y1="360" x2="1000" y2="360" stroke="#dc2626" stroke-width="0.5" stroke-dasharray="3,3" opacity="0.3"/>';
 // Pins
 Object.keys(CITY_COORDS).forEach(function(city){
   var c=CITY_COORDS[city];
   var cnt=countFor(city);
   if(cnt<=0)return;
   html+='<g class="v723-pin" data-city="'+city+'" style="cursor:pointer">';
-  html+='<circle cx="'+c.x+'" cy="'+c.y+'" r="14" fill="#dc2626" stroke="#fff" stroke-width="3" opacity="0.95"/>';
-  html+='<text x="'+c.x+'" y="'+(c.y+5)+'" text-anchor="middle" font-size="13" font-weight="800" fill="#fff">'+cnt+'</text>';
-  html+='<text x="'+c.x+'" y="'+(c.y+30)+'" text-anchor="middle" font-size="11" font-weight="700" fill="#111" style="paint-order:stroke;stroke:#fff;stroke-width:3">'+city+'</text>';
+  // Pin shadow
+  html+='<ellipse cx="'+c.x+'" cy="'+(c.y+6)+'" rx="10" ry="3" fill="#000" opacity="0.2"/>';
+  // Pin shape (drop)
+  html+='<path d="M '+c.x+' '+(c.y-22)+' C '+(c.x-13)+' '+(c.y-22)+' '+(c.x-13)+' '+(c.y-3)+' '+c.x+' '+(c.y+5)+' C '+(c.x+13)+' '+(c.y-3)+' '+(c.x+13)+' '+(c.y-22)+' '+c.x+' '+(c.y-22)+' Z" fill="#dc2626" stroke="#fff" stroke-width="2"/>';
+  // Number inside
+  html+='<text x="'+c.x+'" y="'+(c.y-7)+'" text-anchor="middle" font-size="11" font-weight="800" fill="#fff">'+cnt+'</text>';
+  // City label below
+  html+='<rect x="'+(c.x-32)+'" y="'+(c.y+10)+'" width="64" height="16" rx="3" fill="#fff" stroke="#e5e7eb" opacity="0.95"/>';
+  html+='<text x="'+c.x+'" y="'+(c.y+22)+'" text-anchor="middle" font-size="10" font-weight="700" fill="#111">'+city+'</text>';
   html+='</g>';
 });
+html+='</g>';
 html+='</svg>';
 html+='</div>';
-html+='<div class="v723-map-hint">Haz click en un pin para filtrar por ciudad</div>';
+html+='<div class="v723-map-hint">📍 Haz click en un pin para filtrar por ciudad • Usa rueda del mouse o botones para zoom</div>';
 html+='</div>';
-html+='<div class="v723-grid" id="v723-grid"></div>';
 html+='</div></div>';
 
 panel.innerHTML=html;
 main.appendChild(panel);
 
+// === Filter helpers ===
 function getF(){
-  var f={d:[],amb:[],cost:[],rat:"0",h:[],city:null,q:""};
+  var f={d:[],pais:[],amb:[],cost:[],p:[],rat:"0",h:[],niv:[],sup:[],serv:[],city:null,q:""};
   panel.querySelectorAll('input[data-f]:checked').forEach(function(i){
     var k=i.dataset.f;
     if(k==="rat")f.rat=i.value;
-    else f[k].push(i.value);
+    else if(f[k])f[k].push(i.value);
   });
   var active=panel.querySelector(".v723-pin.v723-active");
   if(active)f.city=active.dataset.city;
@@ -21977,8 +22029,10 @@ function getF(){
 }
 function passes(c,f){
   if(f.d.length && !f.d.some(function(x){return c.d.indexOf(x)>-1}))return false;
+  if(f.pais.length && f.pais.indexOf(c.pais)<0)return false;
   if(f.amb.length && f.amb.indexOf(c.amb)<0)return false;
   if(f.cost.length && f.cost.indexOf(c.cost)<0)return false;
+  if(f.p.length && f.p.indexOf(c.p)<0)return false;
   if(parseFloat(f.rat) && c.rat<parseFloat(f.rat))return false;
   if(f.h.length && f.h.indexOf(c.h)<0)return false;
   if(f.city && c.c!==f.city)return false;
@@ -21988,63 +22042,114 @@ function passes(c,f){
 function render(){
   var f=getF();
   var list=CENTROS.filter(function(c){return passes(c,f)});
-  var grid=panel.querySelector("#v723-grid");
   panel.querySelector("#v723-count").textContent=list.length+" centros";
-  if(!list.length){
-    grid.innerHTML='<div class="v723-empty"><div class="v723-empty-emo">🔍</div><div>Sin resultados con esos filtros</div></div>';
-    return;
-  }
-  grid.innerHTML=list.map(function(c){
-    var tags='';
-    c.d.slice(0,3).forEach(function(d){tags+='<span class="v723-tag">'+d+'</span>'});
-    tags+='<span class="v723-tag v723-tag-amb">'+c.amb+'</span>';
-    tags+='<span class="v723-tag v723-tag-cost-'+c.cost+'">'+c.cost+'</span>';
-    return '<div class="v723-card">'+
-      '<div class="v723-card-img">'+c.e+'</div>'+
-      '<div class="v723-card-body">'+
-      '<h4>'+c.n+'</h4>'+
-      '<div class="v723-card-meta">'+c.fl+' '+c.c+' • '+c.h+'</div>'+
-      '<div class="v723-tags">'+tags+'</div>'+
-      '<div class="v723-foot"><span class="v723-rating">⭐ '+c.rat.toFixed(1)+'</span><span class="v723-price">'+c.p+'</span></div>'+
-      '</div></div>';
-  }).join("");
+  // Update pin numbers based on filter
+  Object.keys(CITY_COORDS).forEach(function(city){
+    var pin=panel.querySelector('.v723-pin[data-city="'+city+'"]');
+    if(!pin)return;
+    var cnt=list.filter(function(c){return c.c===city}).length;
+    var txt=pin.querySelector("text");
+    if(txt)txt.textContent=cnt;
+    if(cnt===0){pin.style.opacity="0.3"} else {pin.style.opacity="1"}
+  });
 }
-// Toggle collapsible sections
+
+// === Filter section toggle ===
 panel.querySelectorAll(".v723-fs-h").forEach(function(btn){
   btn.addEventListener("click",function(){
     var fs=btn.closest(".v723-fs");
     fs.classList.toggle("v723-fs-open");
   });
 });
-// Start with Deportes open
 var firstFs=panel.querySelector('.v723-fs[data-fs="d"]');
 if(firstFs)firstFs.classList.add("v723-fs-open");
+
+// === Filter events ===
 panel.addEventListener("change",render);
 panel.addEventListener("input",function(e){if(e.target.id==="v723-q")render();});
+
+// === Map zoom + pan ===
+var svgEl=panel.querySelector("#v723-svg");
+var worldG=panel.querySelector("#v723-world");
+var zoomLvl=1;
+var panX=0, panY=0;
+var minZoom=0.5, maxZoom=8;
+function applyTransform(){
+  worldG.setAttribute("transform","translate("+panX+","+panY+") scale("+zoomLvl+")");
+  panel.querySelector("#v723-zoom-lvl").textContent=Math.round(zoomLvl*100)+"%";
+}
+function zoomBy(delta, cx, cy){
+  var newZoom=Math.max(minZoom, Math.min(maxZoom, zoomLvl*delta));
+  if(typeof cx==="number"){
+    // Zoom centered on cx,cy in SVG coords
+    panX=cx-(cx-panX)*(newZoom/zoomLvl);
+    panY=cy-(cy-panY)*(newZoom/zoomLvl);
+  }
+  zoomLvl=newZoom;
+  applyTransform();
+}
+panel.querySelector(".v723-zoom-in").addEventListener("click",function(){zoomBy(1.4, 500, 300);});
+panel.querySelector(".v723-zoom-out").addEventListener("click",function(){zoomBy(1/1.4, 500, 300);});
+panel.querySelector(".v723-zoom-reset").addEventListener("click",function(){zoomLvl=1;panX=0;panY=0;applyTransform();});
+svgEl.addEventListener("wheel",function(e){
+  e.preventDefault();
+  var rect=svgEl.getBoundingClientRect();
+  var cx=(e.clientX-rect.left)/rect.width*1000;
+  var cy=(e.clientY-rect.top)/rect.height*600;
+  zoomBy(e.deltaY<0?1.15:1/1.15, cx, cy);
+},{passive:false});
+// Pan via drag
+var isDown=false, startX=0, startY=0, startPanX=0, startPanY=0;
+svgEl.addEventListener("mousedown",function(e){
+  if(e.target.closest(".v723-pin"))return;
+  isDown=true;
+  startX=e.clientX;startY=e.clientY;
+  startPanX=panX;startPanY=panY;
+  svgEl.style.cursor="grabbing";
+});
+window.addEventListener("mousemove",function(e){
+  if(!isDown)return;
+  var rect=svgEl.getBoundingClientRect();
+  var dx=(e.clientX-startX)/rect.width*1000;
+  var dy=(e.clientY-startY)/rect.height*600;
+  panX=startPanX+dx;panY=startPanY+dy;
+  applyTransform();
+});
+window.addEventListener("mouseup",function(){isDown=false;svgEl.style.cursor="";});
+
+// === Pin click ===
 panel.addEventListener("click",function(e){
   var pin=e.target.closest(".v723-pin");
   if(pin){
     var wasActive=pin.classList.contains("v723-active");
-    panel.querySelectorAll(".v723-pin").forEach(function(p){p.classList.remove("v723-active")});
+    panel.querySelectorAll(".v723-pin").forEach(function(p){
+      p.classList.remove("v723-active");
+      var path=p.querySelector("path");
+      if(path)path.setAttribute("fill","#dc2626");
+    });
     if(!wasActive){
       pin.classList.add("v723-active");
-      pin.querySelector("circle").setAttribute("fill","#16a34a");
+      var path=pin.querySelector("path");
+      if(path)path.setAttribute("fill","#16a34a");
     }
-    panel.querySelectorAll(".v723-pin").forEach(function(p){
-      if(!p.classList.contains("v723-active"))p.querySelector("circle").setAttribute("fill","#dc2626");
-    });
     render();return;
   }
   if(e.target.classList.contains("v723-clear")){
     panel.querySelectorAll('input[type=checkbox]').forEach(function(i){i.checked=false});
     var ratAll=panel.querySelector('input[name=rat][value="0"]');
     if(ratAll)ratAll.checked=true;
-    panel.querySelectorAll(".v723-pin").forEach(function(p){p.classList.remove("v723-active");p.querySelector("circle").setAttribute("fill","#dc2626")});
+    panel.querySelectorAll(".v723-pin").forEach(function(p){
+      p.classList.remove("v723-active");
+      var path=p.querySelector("path");
+      if(path)path.setAttribute("fill","#dc2626");
+    });
     panel.querySelector("#v723-q").value="";
     render();
   }
 });
+
 render();
+applyTransform();
 window.__v723panel=panel;
 }
 go();
