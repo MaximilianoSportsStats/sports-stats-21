@@ -16577,7 +16577,7 @@ window.__v39loaded=true;window.__v391loaded=true;window.__v40loaded=true;window.
 (function(){
   if(window.__v86loaded)return;window.__v86loaded=true;
   function showV86Page(key,label,emoji){
-    if((key==='articulos'||key==='podcast') && typeof window.__showV724Content==='function'){
+    if((key==='articulos'||key==='podcast'||key==='blogs'||key==='seguidos'||key==='noticias') && typeof window.__showV724Content==='function'){
       window.__showV724Content(key);
       return;
     }
@@ -16764,7 +16764,7 @@ window.__v39loaded=true;window.__v391loaded=true;window.__v40loaded=true;window.
     var li=e.target&&e.target.closest?e.target.closest('[data-v86-sub]'):null;
     if(!li) return;
     var k=li.getAttribute('data-v86-sub');
-    if(k==='podcast'||k==='articulos'){
+    if(k==='podcast'||k==='articulos'||k==='blogs'||k==='seguidos'||k==='noticias'){
       e.preventDefault();
       e.stopImmediatePropagation();
       if(typeof window.__showV724Content==='function') window.__showV724Content(k);
@@ -22327,6 +22327,9 @@ function gotoPanel(keepId){
 window.__showV724Content=function(key){
   if(key==="articulos")gotoPanel("panel-v724-articulos");
   else if(key==="podcast")gotoPanel("panel-v724-podcast");
+  else if(key==="blogs")gotoPanel("panel-v708-blogs");
+  else if(key==="seguidos")gotoPanel("panel-v711-seguidos");
+  else if(key==="noticias")gotoPanel("panel-v703-noticias");
 };
 // Capture-phase intercept (NO isTrusted check this time)
 document.addEventListener("click",function(e){
