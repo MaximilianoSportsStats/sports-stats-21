@@ -23183,13 +23183,60 @@ function buildCalendar(panelId, title, subtitle, pool, kind){
   var now=new Date();
   var state=p.__vCalState||{y:now.getFullYear(), m:now.getMonth()};
   p.__vCalState=state;
+  function dayOfYearOf(d){var s=new Date(d.getFullYear(),0,0);return Math.floor((d-s)/86400000)}
+  function openModal(item, doy, label){
+    var existingM=document.getElementById("v-modal");
+    if(existingM)existingM.remove();
+    var modal=document.createElement("div");
+    modal.id="v-modal";
+    modal.className="v-modal-overlay";
+    var inner='<div class="v-modal-card">';
+    inner+='<button class="v-modal-close" type="button">✕</button>';
+    inner+='<div class="v-modal-badge">'+label+'</div>';
+    inner+='<h2 class="v-modal-q">'+item.q+'</h2>';
+    if(kind==="reto"){
+      // Show options with correct highlighted
+      inner+='<div class="v-modal-opts">';
+      item.opts.forEach(function(o){
+        var pct=Math.round(15+Math.random()*30);
+        var isCor=(o===item.correct);
+        inner+='<div class="v-modal-opt'+(isCor?' v-modal-correct':'')+'">';
+        inner+='<div class="v-modal-opt-head"><span class="v-modal-opt-name">'+o+(isCor?' ✓':'')+'</span><span class="v-modal-opt-pct">'+pct+'%</span></div>';
+        inner+='<div class="v-modal-opt-bar"><div style="width:'+pct+'%"></div></div>';
+        inner+='</div>';
+      });
+      inner+='</div>';
+      inner+='<div class="v-modal-foot"><span class="v-modal-correct-badge">✓ Respuesta correcta: <strong>'+item.correct+'</strong></span></div>';
+    } else {
+      // Encuesta with bars
+      inner+='<div class="v-modal-opts">';
+      var totalVotos=item.opts.reduce(function(s,o){return s+(o.v||0)},0)*100;
+      item.opts.forEach(function(o){
+        inner+='<div class="v-modal-opt">';
+        inner+='<div class="v-modal-opt-head"><span class="v-modal-opt-name">'+o.n+'</span><span class="v-modal-opt-pct">'+o.v+'%</span></div>';
+        inner+='<div class="v-modal-opt-bar"><div style="width:'+o.v+'%"></div></div>';
+        inner+='</div>';
+      });
+      inner+='</div>';
+      inner+='<div class="v-modal-foot"><span class="v-modal-votes">👥 '+totalVotos.toLocaleString()+' votos totales</span></div>';
+    }
+    inner+='</div>';
+    modal.innerHTML=inner;
+    document.body.appendChild(modal);
+    modal.addEventListener("click",function(e){
+      if(e.target===modal || e.target.classList.contains("v-modal-close")){
+        modal.remove();
+      }
+    });
+  }
   function render(){
     var y=state.y, m=state.m;
     var monthName=["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"][m];
     var firstDay=new Date(y,m,1);
     var lastDay=new Date(y,m+1,0).getDate();
-    var startDow=firstDay.getDay(); // 0=Sun
-    var todayY=now.getFullYear(), todayM=now.getMonth(), todayD=now.getDate();
+    var startDow=firstDay.getDay();
+    var nowD=new Date();
+    var todayTs=new Date(nowD.getFullYear(),nowD.getMonth(),nowD.getDate()).getTime();
     var html='<div class="v-hero"><h1>'+title+'</h1><p>'+subtitle+'</p></div>';
     html+='<div class="v-cal-wrap">';
     html+='<div class="v-cal-head">';
@@ -23200,22 +23247,26 @@ function buildCalendar(panelId, title, subtitle, pool, kind){
     html+='</div>';
     html+='<div class="v-cal-grid">';
     ["DOM","LUN","MAR","MIE","JUE","VIE","SAB"].forEach(function(d){html+='<div class="v-cal-dow">'+d+'</div>'});
-    // Empty cells before day 1
     for(var i=0;i<startDow;i++)html+='<div class="v-cal-empty"></div>';
-    // Days
+    var items=[];
     for(var d=1;d<=lastDay;d++){
       var date=new Date(y,m,d);
-      var doy=dayOfYear(date);
+      var dateTs=date.getTime();
+      var doy=dayOfYearOf(date);
       var item=pool[(doy-1+pool.length*1000)%pool.length];
-      var isToday=(y===todayY && m===todayM && d===todayD);
+      var isToday=(dateTs===todayTs);
+      var isPast=(dateTs<=todayTs);
       var label=kind==="reto"?("Reto "+doy):("Encuesta "+doy);
       var snippet=item.q.replace(/^[^\w]+/,"").trim();
-      // Truncate
-      if(snippet.length>40)snippet=snippet.slice(0,38)+"…";
-      html+='<div class="v-cal-day'+(isToday?' v-cal-today-cell':'')+'">';
-      html+='<div class="v-cal-num">'+d+'</div>';
-      html+='<div class="v-cal-evt"><strong>'+label+'</strong> '+snippet+'</div>';
-      html+='</div>';
+      if(snippet.length>50)snippet=snippet.slice(0,48)+"…";
+      var dayHtml='<div class="v-cal-day'+(isToday?' v-cal-today-cell':'')+(isPast?' v-cal-clickable':' v-cal-future')+'" data-doy="'+doy+'" data-day="'+d+'">';
+      dayHtml+='<div class="v-cal-num">'+d+'</div>';
+      if(isPast){
+        dayHtml+='<div class="v-cal-evt"><strong>'+label+'</strong> '+snippet+'</div>';
+      }
+      dayHtml+='</div>';
+      html+=dayHtml;
+      if(isPast)items.push({doy:doy, item:item, label:label});
     }
     html+='</div></div>';
     p.innerHTML=html;
@@ -23224,8 +23275,16 @@ function buildCalendar(panelId, title, subtitle, pool, kind){
         var n=b.dataset.nav;
         if(n==="prev"){state.m--;if(state.m<0){state.m=11;state.y--;}}
         else if(n==="next"){state.m++;if(state.m>11){state.m=0;state.y++;}}
-        else if(n==="today"){state.y=now.getFullYear();state.m=now.getMonth();}
+        else if(n==="today"){state.y=nowD.getFullYear();state.m=nowD.getMonth();}
         render();
+      });
+    });
+    p.querySelectorAll(".v-cal-clickable").forEach(function(cell){
+      cell.addEventListener("click",function(){
+        var doy=parseInt(cell.dataset.doy);
+        var item=pool[(doy-1+pool.length*1000)%pool.length];
+        var label=kind==="reto"?("Reto "+doy):("Encuesta "+doy);
+        openModal(item, doy, label);
       });
     });
   }
@@ -23239,9 +23298,7 @@ function buildRetosPanel(){
 function buildEncsPanel(){
   var pool=window.__ENCS_POOL_REF||[];
   buildCalendar("panel-v-encuestas","📊 ENCUESTAS DIARIAS","Vota cada dia y mira que opina la comunidad",pool,"enc");
-}
-
-setInterval(function(){
+}setInterval(function(){
   buildRetosPanel();
   buildEncsPanel();
 }, 1000);
@@ -23440,6 +23497,39 @@ window.alert=function(msg){
   #panel-v-retos .v-cal-day,#panel-v-encuestas .v-cal-day{min-height:60px;padding:4px}
   #panel-v-retos .v-cal-evt,#panel-v-encuestas .v-cal-evt{font-size:9px;-webkit-line-clamp:1}
 }
+</style>
+
+<style>
+#panel-v-retos .v-cal-day,#panel-v-encuestas .v-cal-day{background:#fff;padding:10px;min-height:130px !important;display:flex;flex-direction:column;cursor:pointer;transition:background .15s}
+#panel-v-retos .v-cal-empty,#panel-v-encuestas .v-cal-empty{min-height:130px !important}
+#panel-v-retos .v-cal-future,#panel-v-encuestas .v-cal-future{cursor:default;background:#fafafa;color:#9ca3af}
+#panel-v-retos .v-cal-future:hover,#panel-v-encuestas .v-cal-future:hover{background:#fafafa}
+#panel-v-retos .v-cal-future .v-cal-num,#panel-v-encuestas .v-cal-future .v-cal-num{color:#9ca3af}
+#panel-v-retos .v-cal-clickable,#panel-v-encuestas .v-cal-clickable{cursor:pointer}
+#panel-v-retos .v-cal-evt,#panel-v-encuestas .v-cal-evt{font-size:12px;line-height:1.35;color:#1f2937;background:#fef2f2;padding:6px 8px;border-radius:6px;border-left:3px solid var(--primary);overflow:hidden;display:-webkit-box;-webkit-line-clamp:3 !important;-webkit-box-orient:vertical;max-height:80px}
+#panel-v-encuestas .v-cal-evt{background:#dbeafe;border-left-color:#3b82f6}
+.v-modal-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;z-index:99999;animation:vFadeIn .15s ease}
+@keyframes vFadeIn{from{opacity:0}to{opacity:1}}
+.v-modal-card{background:#fff;border-radius:16px;padding:36px 32px;max-width:560px;width:90%;max-height:85vh;overflow-y:auto;position:relative;box-shadow:0 20px 60px rgba(0,0,0,.3);animation:vSlideUp .2s ease}
+@keyframes vSlideUp{from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1}}
+.v-modal-close{position:absolute;top:14px;right:14px;background:#f3f4f6;border:none;width:32px;height:32px;border-radius:8px;cursor:pointer;font-size:14px;color:#374151;font-weight:700;display:flex;align-items:center;justify-content:center}
+.v-modal-close:hover{background:#e5e7eb}
+.v-modal-badge{display:inline-block;background:var(--primary);color:#fff;padding:4px 12px;border-radius:999px;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.6px;margin-bottom:14px}
+#v-modal .v-modal-q{font-size:22px;margin:0 0 24px;color:#111;font-weight:800;line-height:1.3}
+.v-modal-opts{display:flex;flex-direction:column;gap:12px;margin-bottom:20px}
+.v-modal-opt{padding:12px 14px;border:1px solid #e5e7eb;border-radius:10px;background:#fff}
+.v-modal-opt.v-modal-correct{border-color:#16a34a;background:#dcfce7}
+.v-modal-opt-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.v-modal-opt-name{font-weight:700;color:#111;font-size:15px}
+.v-modal-opt.v-modal-correct .v-modal-opt-name{color:#166534}
+.v-modal-opt-pct{font-weight:800;color:#dc2626;font-size:15px}
+.v-modal-opt.v-modal-correct .v-modal-opt-pct{color:#16a34a}
+.v-modal-opt-bar{height:8px;background:#f3f4f6;border-radius:999px;overflow:hidden}
+.v-modal-opt-bar div{height:100%;background:linear-gradient(90deg,#dc2626,#ef4444);border-radius:999px}
+.v-modal-opt.v-modal-correct .v-modal-opt-bar div{background:linear-gradient(90deg,#16a34a,#22c55e)}
+.v-modal-foot{padding-top:16px;border-top:1px solid #f3f4f6;text-align:center}
+.v-modal-correct-badge{color:#166534;font-weight:700;font-size:14px}
+.v-modal-votes{color:var(--muted);font-size:14px;font-weight:600}
 </style>
 </body>
 </html>
