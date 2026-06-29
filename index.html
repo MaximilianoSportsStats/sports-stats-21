@@ -23879,6 +23879,50 @@ setInterval(wireMercado, 800);
 wireMercado();
 })();
 </script>
+
+<style>
+.v-mercado-btn{background:var(--primary);color:#fff !important;border:none;padding:8px 18px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:700;margin-left:12px;display:inline-block;vertical-align:middle;text-decoration:none;transition:background .15s}
+.v-mercado-btn:hover{background:#991b1b}
+</style>
+<script>
+(function(){
+if(window.__vMercadoNuclear)return;window.__vMercadoNuclear=true;
+window.__goToMercadoPage=function(){
+  document.querySelectorAll("[id^='panel-']").forEach(function(p){
+    p.style.setProperty("display","none","important");
+  });
+  var mp=document.getElementById("v326-panel-mercado");
+  if(mp)mp.style.setProperty("display","block","important");
+  window.scrollTo({top:0,behavior:"instant"});
+};
+function wireBtn(){
+  var inicio=document.getElementById("panel-inicio");
+  if(!inicio)return;
+  // Find h2 MERCADO
+  var h2=Array.from(inicio.querySelectorAll("h2,h3")).filter(function(h){return /MERCADO/i.test(h.textContent)&&h.textContent.trim().length<20})[0];
+  if(!h2)return;
+  // Inline onclick on H2 itself - cannot be overridden
+  if(!h2.dataset.vNukeWired){
+    h2.dataset.vNukeWired="1";
+    h2.setAttribute("onclick","window.__goToMercadoPage()");
+    h2.style.cursor="pointer";
+  }
+  // Also add a visible "Ver más →" button after the h2
+  if(!h2.dataset.vBtnAdded){
+    h2.dataset.vBtnAdded="1";
+    var btn=document.createElement("a");
+    btn.className="v-mercado-btn";
+    btn.textContent="Ver mercado completo →";
+    btn.setAttribute("href","#mercado");
+    btn.setAttribute("onclick","event.preventDefault();window.__goToMercadoPage();return false;");
+    // Insert after H2
+    h2.insertAdjacentElement("afterend",btn);
+  }
+}
+setInterval(wireBtn, 800);
+wireBtn();
+})();
+</script>
 </body>
 </html>
 
