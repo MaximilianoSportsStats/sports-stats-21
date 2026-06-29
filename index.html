@@ -21725,7 +21725,8 @@ var SECTION_IDS=[
   "panel-v724-podcast",
   "panel-v724-curiosos",
   "panel-v-retos",
-  "panel-v-encuestas"
+  "panel-v-encuestas",
+  "v326-panel-mercado"
 ];
 function syncAll(){
   var visibleSection=null;
@@ -23777,6 +23778,69 @@ function styleCards(){
 }
 setInterval(styleCards,1500);
 styleCards();
+})();
+</script>
+
+<script>
+(function(){
+if(window.__vMercadoNav)return;window.__vMercadoNav=true;
+function goToMercado(){
+  document.querySelectorAll("[id^='panel-'],#v326-panel-mercado").forEach(function(p){
+    if(p.id!=="v326-panel-mercado")p.style.setProperty("display","none","important");
+  });
+  var mp=document.getElementById("v326-panel-mercado");
+  if(mp)mp.style.setProperty("display","block","important");
+  var inicio=document.getElementById("panel-inicio");
+  if(inicio)inicio.style.setProperty("display","none","important");
+  window.scrollTo({top:0,behavior:"instant"});
+  document.documentElement.scrollTop=0;document.body.scrollTop=0;
+  var drawer=document.querySelector(".v36-side");
+  if(drawer)drawer.classList.remove("v36-open","v34-open","open");
+}
+window.__goMercado=goToMercado;
+document.addEventListener("click",function(e){
+  if(!e.isTrusted)return;
+  var el=e.target.closest("h1,h2,h3,a,button,[id*='mercado'],[class*='mercado-head']");
+  if(!el)return;
+  var txt=(el.textContent||"").trim();
+  // Match MERCADO title
+  if(/^[\W_]*MERCADO[\W_]*$/u.test(txt) && txt.length<30){
+    // Don't intercept if already on mercado page
+    var alreadyMercado=document.getElementById("v326-panel-mercado");
+    if(alreadyMercado && alreadyMercado.contains(el) && alreadyMercado.style.display!=="none"){
+      // Scroll to top of mercado page
+      e.preventDefault();e.stopImmediatePropagation();
+      window.scrollTo({top:0,behavior:"smooth"});
+      return;
+    }
+    e.preventDefault();e.stopImmediatePropagation();
+    goToMercado();
+    return;
+  }
+  // Match "Mercado" in drawer
+  if(/^[\W_]*Mercado$/u.test(txt) && txt.length<20 && el.tagName==="LI"){
+    e.preventDefault();e.stopImmediatePropagation();
+    goToMercado();
+    return;
+  }
+},true);
+
+// Make MERCADO title cursor pointer
+function styleMercadoTitles(){
+  var inicio=document.getElementById("panel-inicio");
+  if(!inicio)return;
+  inicio.querySelectorAll("h1,h2,h3").forEach(function(h){
+    if(h.dataset.vMercadoStyled)return;
+    var t=(h.textContent||"").trim();
+    if(/MERCADO/i.test(t) && t.length<20){
+      h.dataset.vMercadoStyled="1";
+      h.style.cursor="pointer";
+      h.style.transition="color .15s";
+    }
+  });
+}
+setInterval(styleMercadoTitles,1500);
+styleMercadoTitles();
 })();
 </script>
 </body>
