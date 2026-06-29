@@ -23181,9 +23181,15 @@ function buildCalendar(panelId, title, subtitle, pool, kind){
   p.dataset.vCalRendered="1";
   if(!existing){p.style.display="none";main.appendChild(p);}
   var now=new Date();
-  var state=p.__vCalState||{y:now.getFullYear(), m:now.getMonth()};
+  var state=p.__vCalState||{y:now.getFullYear(), m:now.getMonth(), sport:'Todos'};
   p.__vCalState=state;
   function dayOfYearOf(d){var s=new Date(d.getFullYear(),0,0);return Math.floor((d-s)/86400000)}
+  function extractSport(q){
+    var firstChar=(q||"").trim().slice(0,4);
+    var map={"⚽":"Futbol","🏀":"Basketball","🎾":"Tenis","🏎":"F1","🥊":"Boxeo","🏈":"NFL","🏊":"Olympics","🏓":"Padel","🏃":"Atletismo","⛳":"Golf","🥋":"UFC","🏉":"Rugby","🏒":"Hockey","🥇":"Olympics","🏅":"Olympics","🏆":"Futbol","🇦":"Futbol"};
+    for(var k in map){if(firstChar.indexOf(k)===0||firstChar.indexOf(k)>-1)return map[k];}
+    return "Otro";
+  }
   function openModal(item, doy, label){
     var existingM=document.getElementById("v-modal");
     if(existingM)existingM.remove();
@@ -23254,22 +23260,37 @@ function buildCalendar(panelId, title, subtitle, pool, kind){
       var dateTs=date.getTime();
       var doy=dayOfYearOf(date);
       var item=pool[(doy-1+pool.length*1000)%pool.length];
+      var itemSport=extractSport(item.q);
+      var matchesFilter=(state.sport==="Todos"||itemSport===state.sport);
       var isToday=(dateTs===todayTs);
       var isPast=(dateTs<=todayTs);
       var label=kind==="reto"?("Reto "+doy):("Encuesta "+doy);
       var snippet=item.q.replace(/^[^\w]+/,"").trim();
       if(snippet.length>50)snippet=snippet.slice(0,48)+"…";
-      var dayHtml='<div class="v-cal-day'+(isToday?' v-cal-today-cell':'')+(isPast?' v-cal-clickable':' v-cal-future')+'" data-doy="'+doy+'" data-day="'+d+'">';
+      var dayHtml='<div class="v-cal-day'+(isToday?' v-cal-today-cell':'')+(isPast&&matchesFilter?' v-cal-clickable':' v-cal-future')+'" data-doy="'+doy+'" data-day="'+d+'">';
       dayHtml+='<div class="v-cal-num">'+d+'</div>';
-      if(isPast){
+      if(isPast && matchesFilter){
         dayHtml+='<div class="v-cal-evt"><strong>'+label+'</strong> '+snippet+'</div>';
       }
       dayHtml+='</div>';
       html+=dayHtml;
       if(isPast)items.push({doy:doy, item:item, label:label});
     }
+    html+='</div>';
+    // Filter section
+    var sportsInPool={};
+    pool.forEach(function(it){sportsInPool[extractSport(it.q)]=true;});
+    var sportsList=["Todos"].concat(Object.keys(sportsInPool).sort());
+    html+='<div class="v-cal-filters"><div class="v-cal-filters-title">\u{1F3AF} Filtrar por deporte</div><div class="v-cal-filters-row">';
+    sportsList.forEach(function(s){
+      html+='<button class="v-cal-fbtn'+(state.sport===s?' v-cal-fbtn-active':'')+'" data-sport="'+s+'">'+s+'</button>';
+    });
     html+='</div></div>';
+    html+='</div>';
     p.innerHTML=html;
+    p.querySelectorAll(".v-cal-fbtn").forEach(function(b){
+      b.addEventListener("click",function(){state.sport=b.dataset.sport;render();});
+    });
     p.querySelectorAll(".v-cal-nav, .v-cal-today").forEach(function(b){
       b.addEventListener("click",function(){
         var n=b.dataset.nav;
@@ -23530,6 +23551,17 @@ window.alert=function(msg){
 .v-modal-foot{padding-top:16px;border-top:1px solid #f3f4f6;text-align:center}
 .v-modal-correct-badge{color:#166534;font-weight:700;font-size:14px}
 .v-modal-votes{color:var(--muted);font-size:14px;font-weight:600}
+</style>
+
+<style>
+#panel-v-retos .v-cal-filters,#panel-v-encuestas .v-cal-filters{margin-top:24px;padding:18px 20px;background:#fff;border:1px solid #e5e7eb;border-radius:12px}
+#panel-v-retos .v-cal-filters-title,#panel-v-encuestas .v-cal-filters-title{font-size:13px;font-weight:700;color:#111;margin-bottom:12px;text-transform:uppercase;letter-spacing:.4px}
+#panel-v-retos .v-cal-filters-row,#panel-v-encuestas .v-cal-filters-row{display:flex;flex-wrap:wrap;gap:8px}
+#panel-v-retos .v-cal-fbtn,#panel-v-encuestas .v-cal-fbtn{background:#fff;border:2px solid #e5e7eb;color:#374151;padding:7px 16px;border-radius:999px;font-size:13px;font-weight:600;cursor:pointer;transition:all .15s}
+#panel-v-retos .v-cal-fbtn:hover,#panel-v-encuestas .v-cal-fbtn:hover{border-color:var(--primary);color:var(--primary)}
+#panel-v-retos .v-cal-fbtn-active,#panel-v-encuestas .v-cal-fbtn-active{background:var(--primary);border-color:var(--primary);color:#fff}
+#panel-v-encuestas .v-cal-fbtn-active{background:#3b82f6;border-color:#3b82f6}
+#panel-v-encuestas .v-cal-fbtn:hover{border-color:#3b82f6;color:#3b82f6}
 </style>
 </body>
 </html>
