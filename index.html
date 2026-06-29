@@ -22898,6 +22898,151 @@ setTimeout(updateEnc,500);
 setInterval(updateEnc,2000);
 })();
 </script>
+
+<script>
+(function(){
+if(window.__vWire)return;window.__vWire=true;
+
+// Width fix for Dato del Dia
+function fixWidth(){
+  var enc=document.getElementById("v705-encuesta");
+  var dato=document.getElementById("v-dato-dia");
+  if(!enc || !dato)return;
+  var r=enc.getBoundingClientRect();
+  dato.style.setProperty("max-width", r.width+"px", "important");
+  dato.style.setProperty("width", r.width+"px", "important");
+  dato.style.setProperty("margin-left", "auto", "important");
+  dato.style.setProperty("margin-right", "auto", "important");
+  dato.style.setProperty("box-sizing","border-box","important");
+}
+setInterval(fixWidth,400);
+
+// Wiring map: button/card text -> action
+var ACTIONS={
+  // Buttons
+  "Explorar deportes":"deportes",
+  "Ver en vivo":"envivo",
+  "Crear mi perfil":"perfil",
+  "Conectar":"seguidos",
+  "Modo Reclutador":"reclutar",
+  "Comparar":"comparar",
+  "Ver Información":"noticias",
+  "Ver Informacion":"noticias",
+  "Buscar centros":"curiosos_no_que_centros",
+  // Card titles (sometimes clickable too)
+  "Estadísticas Deportes":"deportes",
+  "Sigue los partidos en Vivo":"envivo",
+  "Crea tu perfil":"perfil",
+  "Conecta con Deportistas":"seguidos",
+  "Recluta y Descubre Talento":"reclutar",
+  "Compara Stats":"comparar",
+  "Entérate de la Información Deportiva":"noticias",
+  "Encuentra tu centro deportivo más cercano":"centros",
+  // Inicio section titles
+  "📰 NOTICIAS":"noticias",
+  "NOTICIAS":"noticias",
+  "📝 BLOGS":"blogs",
+  "BLOGS":"blogs",
+  "🎯 RETO DIARIO":"scroll-reto",
+  "📊 ENCUESTA DIARIA":"scroll-encuesta",
+  "RETO DIARIO":"scroll-reto",
+  "ENCUESTA DIARIA":"scroll-encuesta",
+  "💡 DATO DEL DIA":"scroll-dato"
+};
+ACTIONS["Buscar centros"]="centros";
+
+function doAction(key){
+  // Use existing routing
+  if(key==="deportes"){
+    var btn=Array.from(document.querySelectorAll("button,li,a")).filter(function(el){var t=(el.textContent||"").trim();return /^Deportes$/.test(t)||/Estadísticas Deportes/.test(t)})[0];
+    if(btn){btn.click();return}
+    // fallback: show soccer
+    var s=document.getElementById("panel-soccer");
+    if(s){document.querySelectorAll("[id^='panel-']").forEach(function(p){if(p.id!=="panel-soccer")p.style.setProperty("display","none","important")});s.style.setProperty("display","block","important")}
+    return;
+  }
+  if(key==="envivo"){
+    var p=document.getElementById("v56-page-envivo")||document.getElementById("panel-envivo");
+    if(p){document.querySelectorAll("[id^='panel-']").forEach(function(x){x.style.setProperty("display","none","important")});p.style.setProperty("display","block","important")}
+    return;
+  }
+  if(key==="perfil"){
+    alert("Mi Perfil - proximamente!");
+    return;
+  }
+  if(key==="comparar"){
+    var p=document.getElementById("v38-page-comparar");
+    if(p){
+      document.querySelectorAll("[id^='panel-']").forEach(function(x){if(x.id!=="panel-inicio")x.style.setProperty("display","none","important")});
+      p.style.setProperty("display","block","important");
+      p.scrollIntoView({behavior:"instant",block:"start"});
+    }
+    return;
+  }
+  if(key==="centros"){
+    document.querySelectorAll("[id^='panel-']").forEach(function(p){if(p.id!=="panel-v723-centros")p.style.setProperty("display","none","important")});
+    var c=document.getElementById("panel-v723-centros");
+    if(c)c.style.setProperty("display","block","important");
+    window.scrollTo({top:0,behavior:"instant"});
+    return;
+  }
+  // Standard v724 content
+  if(["noticias","blogs","articulos","podcast","seguidos","reclutar","curiosos"].indexOf(key)>=0 && typeof window.__showV724Content==='function'){
+    window.__showV724Content(key);
+    return;
+  }
+  // Scroll to widget on inicio
+  if(key==="scroll-reto"){var r=document.getElementById("v99-retos");if(r)r.scrollIntoView({behavior:"smooth",block:"start"});return}
+  if(key==="scroll-encuesta"){var e=document.getElementById("v705-encuesta");if(e)e.scrollIntoView({behavior:"smooth",block:"start"});return}
+  if(key==="scroll-dato"){var d=document.getElementById("v-dato-dia");if(d)d.scrollIntoView({behavior:"smooth",block:"start"});return}
+}
+
+document.addEventListener("click",function(e){
+  if(!e.isTrusted)return;
+  var el=e.target.closest("button,h1,h2,h3,a,[role='button']");
+  if(!el)return;
+  // Check if inside inicio (don't break navigation in other panels)
+  var inicio=document.getElementById("panel-inicio");
+  if(!inicio || !inicio.contains(el))return;
+  var txt=(el.textContent||"").trim().replace(/\s*→\s*$/,"").trim();
+  if(!txt)return;
+  // Try direct match first
+  var key=ACTIONS[txt];
+  if(!key){
+    // Try matching by partial (titles often have emoji prefix)
+    Object.keys(ACTIONS).forEach(function(k){
+      if(key)return;
+      if(txt===k)key=ACTIONS[k];
+      else if(txt.replace(/^[\W_]+/,"").trim()===k.replace(/^[\W_]+/,"").trim())key=ACTIONS[k];
+    });
+  }
+  if(!key)return;
+  e.preventDefault();
+  e.stopImmediatePropagation();
+  doAction(key);
+},true);
+
+// Add hover/cursor pointer to titles to indicate clickability
+function styleTitles(){
+  var inicio=document.getElementById("panel-inicio");
+  if(!inicio)return;
+  var headers=inicio.querySelectorAll("h1,h2,h3");
+  headers.forEach(function(h){
+    if(h.dataset.vWired)return;
+    var t=(h.textContent||"").trim().replace(/^[\W_]+/,"").trim();
+    if(ACTIONS[t] || ACTIONS["📰 "+t] || ACTIONS["📝 "+t] || ACTIONS["🎯 "+t] || ACTIONS["📊 "+t] || ACTIONS["💡 "+t]){
+      h.dataset.vWired="1";
+      h.style.cursor="pointer";
+      h.style.transition="color .15s";
+      h.addEventListener("mouseenter",function(){h.style.color="var(--primary)"});
+      h.addEventListener("mouseleave",function(){h.style.color=""});
+    }
+  });
+}
+setInterval(styleTitles, 1500);
+styleTitles();
+})();
+</script>
 </body>
 </html>
 
