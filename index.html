@@ -23415,6 +23415,32 @@ window.alert=function(msg){
 };
 })();
 </script>
+
+<style>
+#panel-v-retos .v-cal-wrap,#panel-v-encuestas .v-cal-wrap{max-width:1200px;margin:24px auto 60px;padding:0 24px}
+#panel-v-retos .v-cal-head,#panel-v-encuestas .v-cal-head{display:flex;align-items:center;gap:14px;margin-bottom:18px;padding:0 4px}
+#panel-v-retos .v-cal-head h2,#panel-v-encuestas .v-cal-head h2{font-size:22px;margin:0;color:#111;font-weight:800;letter-spacing:.3px;flex:1;text-align:center}
+#panel-v-retos .v-cal-nav,#panel-v-encuestas .v-cal-nav{width:36px;height:36px;border:1px solid #e5e7eb;background:#fff;border-radius:8px;cursor:pointer;font-size:20px;font-weight:700;color:#374151;display:flex;align-items:center;justify-content:center;transition:all .15s}
+#panel-v-retos .v-cal-nav:hover,#panel-v-encuestas .v-cal-nav:hover{background:var(--primary);color:#fff;border-color:var(--primary)}
+#panel-v-retos .v-cal-today,#panel-v-encuestas .v-cal-today{padding:8px 18px;border:1px solid #d1d5db;background:#fff;border-radius:8px;cursor:pointer;font-size:13px;font-weight:600;color:#374151;transition:all .15s}
+#panel-v-retos .v-cal-today:hover,#panel-v-encuestas .v-cal-today:hover{background:#f3f4f6}
+#panel-v-retos .v-cal-grid,#panel-v-encuestas .v-cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:1px;background:#e5e7eb;border:1px solid #e5e7eb;border-radius:12px;overflow:hidden}
+#panel-v-retos .v-cal-dow,#panel-v-encuestas .v-cal-dow{background:#f9fafb;padding:10px 8px;text-align:center;font-size:11px;font-weight:700;color:#6b7280;text-transform:uppercase;letter-spacing:.5px}
+#panel-v-retos .v-cal-day,#panel-v-encuestas .v-cal-day{background:#fff;padding:8px;min-height:90px;display:flex;flex-direction:column;cursor:pointer;transition:background .15s}
+#panel-v-retos .v-cal-day:hover,#panel-v-encuestas .v-cal-day:hover{background:#fef2f2}
+#panel-v-retos .v-cal-empty,#panel-v-encuestas .v-cal-empty{background:#fafafa;min-height:90px}
+#panel-v-retos .v-cal-num,#panel-v-encuestas .v-cal-num{font-size:13px;font-weight:700;color:#374151;margin-bottom:4px}
+#panel-v-retos .v-cal-today-cell,#panel-v-encuestas .v-cal-today-cell{background:#fef3c7}
+#panel-v-retos .v-cal-today-cell .v-cal-num,#panel-v-encuestas .v-cal-today-cell .v-cal-num{background:var(--primary);color:#fff;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800}
+#panel-v-retos .v-cal-evt,#panel-v-encuestas .v-cal-evt{font-size:11px;line-height:1.3;color:#374151;background:#fef2f2;padding:4px 6px;border-radius:4px;border-left:3px solid var(--primary);overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+#panel-v-encuestas .v-cal-evt{background:#dbeafe;border-left-color:#3b82f6}
+#panel-v-retos .v-cal-evt strong,#panel-v-encuestas .v-cal-evt strong{display:block;color:var(--primary);font-size:10px;text-transform:uppercase;letter-spacing:.4px;margin-bottom:2px}
+#panel-v-encuestas .v-cal-evt strong{color:#1d4ed8}
+@media(max-width:760px){
+  #panel-v-retos .v-cal-day,#panel-v-encuestas .v-cal-day{min-height:60px;padding:4px}
+  #panel-v-retos .v-cal-evt,#panel-v-encuestas .v-cal-evt{font-size:9px;-webkit-line-clamp:1}
+}
+</style>
 </body>
 </html>
 
