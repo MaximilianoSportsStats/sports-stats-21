@@ -22929,6 +22929,17 @@ var ACTIONS={
   "Ver Información":"noticias",
   "Ver Informacion":"noticias",
   "Buscar centros":"curiosos_no_que_centros",
+  // Hero buttons
+  "Empezar a explorar":"deportes",
+  "Crear cuenta":"crear-cuenta",
+  "Más Sobre SS 21":"masss21",
+  "Mas Sobre SS 21":"masss21",
+  "Iniciar Sesión":"login",
+  "Iniciar Sesion":"login",
+  // Section titles inicio
+  "🤵 MERCADO":"mercado",
+  "MERCADO":"mercado",
+  "🤵MERCADO":"mercado",
   // Card titles (sometimes clickable too)
   "Estadísticas Deportes":"deportes",
   "Sigue los partidos en Vivo":"envivo",
@@ -22995,6 +23006,23 @@ function doAction(key){
   if(key==="scroll-reto"){var r=document.getElementById("v99-retos");if(r)r.scrollIntoView({behavior:"smooth",block:"start"});return}
   if(key==="scroll-encuesta"){var e=document.getElementById("v705-encuesta");if(e)e.scrollIntoView({behavior:"smooth",block:"start"});return}
   if(key==="scroll-dato"){var d=document.getElementById("v-dato-dia");if(d)d.scrollIntoView({behavior:"smooth",block:"start"});return}
+  if(key==="crear-cuenta"){alert("Crear cuenta - proximamente disponible! Por ahora explora la app sin login.");return}
+  if(key==="login"){alert("Iniciar Sesión - proximamente disponible! Por ahora explora la app sin login.");return}
+  if(key==="masss21"){
+    // Find Mas Sobre SS21 element and click it
+    var li=Array.from(document.querySelectorAll("li,button,a")).filter(function(el){var t=(el.textContent||"").trim();return /Más Sobre SS 21|Mas Sobre SS 21/.test(t)&&t.length<25})[0];
+    if(li)li.click();
+    return;
+  }
+  if(key==="mercado"){
+    // Find Mercado page if exists or scroll to mercado section
+    var p=document.getElementById("panel-mercado");
+    if(p){document.querySelectorAll("[id^=\'panel-\']").forEach(function(x){if(x.id!=="panel-mercado")x.style.setProperty("display","none","important")});p.style.setProperty("display","block","important");window.scrollTo({top:0,behavior:"instant"});return;}
+    // Fallback: scroll to v164-mercado on inicio
+    var sec=document.getElementById("v164-mercado-wrap")||document.getElementById("v164-mercado");
+    if(sec)sec.scrollIntoView({behavior:"smooth",block:"start"});
+    return;
+  }
 }
 
 document.addEventListener("click",function(e){
