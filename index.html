@@ -22565,7 +22565,7 @@ document.addEventListener("click",function(e){
 (function(){
 if(window.__vCleanup)return;window.__vCleanup=true;
 // Desired order in Contenido y Comunidad submenu
-var DESIRED=["Seguidos","Noticias","Blogs","Artículos","Podcast","Reclutar","Centros Deportivos","Datos Curiosos"];
+var DESIRED=["Seguidos","Noticias","Blogs","Artículos","Podcast","Reclutar","Centros Deportivos","Retos","Encuestas","Datos Curiosos"];
 function normalize(s){
   return (s||"").replace(/^[^\w]+/u,"").trim();
 }
@@ -22825,6 +22825,9 @@ var todayDato=DATOS_POOL[di%DATOS_POOL.length];
 window.__TODAY_RETO=todayReto;
 window.__TODAY_ENCUESTA=todayEnc;
 window.__TODAY_DATO=todayDato;
+window.__RETOS_POOL_REF=RETOS_POOL;
+window.__ENCS_POOL_REF=ENCUESTAS_POOL;
+window.__DATOS_POOL_REF=DATOS_POOL;
 
 // === Inject Dato del Dia widget below Encuesta ===
 function buildDato(){
@@ -23069,6 +23072,239 @@ function styleTitles(){
 }
 setInterval(styleTitles, 1500);
 styleTitles();
+})();
+</script>
+
+<style>
+#panel-v-retos,#panel-v-encuestas{padding:0 0 80px;background:#fafafa;min-height:100vh}
+#panel-v-retos .v-hero,#panel-v-encuestas .v-hero{text-align:center;padding:48px 20px 32px;background:linear-gradient(180deg,#fef2f2,transparent)}
+#panel-v-retos .v-hero h1,#panel-v-encuestas .v-hero h1{color:var(--primary);font-size:42px;margin:0 0 10px;font-weight:800;letter-spacing:.5px}
+#panel-v-retos .v-hero p,#panel-v-encuestas .v-hero p{color:var(--muted);margin:0;font-size:16px}
+#panel-v-retos .v-wrap,#panel-v-encuestas .v-wrap{max-width:1000px;margin:0 auto;padding:0 24px}
+#panel-v-retos .v-list,#panel-v-encuestas .v-list{display:grid;gap:18px}
+#panel-v-retos .v-item,#panel-v-encuestas .v-item{background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:24px;transition:all .2s}
+#panel-v-retos .v-item:hover,#panel-v-encuestas .v-item:hover{box-shadow:0 6px 18px rgba(0,0,0,.06);border-color:var(--primary)}
+#panel-v-retos .v-item h3,#panel-v-encuestas .v-item h3{margin:0 0 10px;color:#111;font-size:18px;font-weight:700}
+#panel-v-retos .v-opts,#panel-v-encuestas .v-opts{display:flex;flex-wrap:wrap;gap:8px}
+#panel-v-retos .v-opt{padding:6px 14px;border:1px solid #e5e7eb;border-radius:999px;font-size:13px;color:#374151;background:#f9fafb}
+#panel-v-retos .v-opt.v-correct{background:#dcfce7;border-color:#16a34a;color:#166534;font-weight:700}
+#panel-v-encuestas .v-bar{display:flex;align-items:center;gap:10px;padding:8px 0;font-size:13px}
+#panel-v-encuestas .v-bar-lbl{min-width:140px;font-weight:600;color:#111}
+#panel-v-encuestas .v-bar-fill{flex:1;background:#f3f4f6;border-radius:999px;height:18px;overflow:hidden;position:relative}
+#panel-v-encuestas .v-bar-fill div{height:100%;background:linear-gradient(90deg,#dc2626,#ef4444);border-radius:999px}
+#panel-v-encuestas .v-bar-pct{min-width:42px;text-align:right;font-weight:700;color:var(--primary)}
+.v-day-badge{display:inline-block;background:#fef2f2;color:var(--primary);padding:3px 10px;border-radius:999px;font-size:11px;font-weight:700;margin-bottom:10px;text-transform:uppercase;letter-spacing:.4px}
+</style>
+<script>
+(function(){
+if(window.__vFixAll)return;window.__vFixAll=true;
+
+function getPools(){
+  return {
+    retos:window.__RETOS_POOL_REF||[],
+    encs:window.__ENCS_POOL_REF||[],
+    datos:window.__DATOS_POOL_REF||[]
+  };
+}
+
+// === Fix 1: Reto correct answer follows today's rotation ===
+function fixRetoCorrect(){
+  var t=window.__TODAY_RETO;
+  if(!t)return;
+  // Override global RETO_CORRECT used by v705 paint
+  window.RETO_CORRECT=t.correct;
+  // Also try to update inline scripts variable - use defineProperty trick if needed
+  try{
+    Object.keys(window).forEach(function(k){
+      if(k==="RETO_CORRECT" && window[k]!==t.correct)window[k]=t.correct;
+    });
+  }catch(e){}
+}
+setInterval(fixRetoCorrect, 1000);
+fixRetoCorrect();
+
+// === Fix 2: Continuously update Reto question + buttons ===
+function rotateReto(){
+  var t=window.__TODAY_RETO;
+  var reto=document.getElementById("v99-retos");
+  if(!t || !reto)return;
+  // Update question (h2 or h3 with the ⚽ emoji)
+  var h=Array.from(reto.querySelectorAll("h1,h2,h3,div")).filter(function(el){
+    var tx=(el.textContent||"").trim();
+    return tx.length>20 && tx.length<200 && /\?$/.test(tx) && !el.children.length;
+  })[0];
+  if(h && h.textContent.trim()!==t.q){
+    h.textContent=t.q;
+  }
+  // Update buttons
+  var btns=Array.from(reto.querySelectorAll("button")).filter(function(b){
+    var bt=(b.textContent||"").trim();
+    return bt.length>0 && bt.length<25 && !bt.includes("→");
+  });
+  if(btns.length>=t.opts.length){
+    for(var i=0;i<t.opts.length;i++){
+      if(btns[i].textContent.trim()!==t.opts[i]){
+        btns[i].textContent=t.opts[i];
+      }
+    }
+  }
+}
+setInterval(rotateReto, 500);
+
+// === Fix 3: Continuously update Encuesta ===
+function rotateEnc(){
+  var t=window.__TODAY_ENCUESTA;
+  var enc=document.getElementById("v705-encuesta");
+  if(!t || !enc)return;
+  // Question
+  var h=Array.from(enc.querySelectorAll("h1,h2,h3,div")).filter(function(el){
+    var tx=(el.textContent||"").trim();
+    return tx.length>20 && tx.length<200 && /\?$/.test(tx) && !el.children.length;
+  })[0];
+  if(h && h.textContent.trim()!==t.q){
+    h.textContent=t.q;
+  }
+}
+setInterval(rotateEnc, 500);
+
+// === Fix 4: Build Retos panel + Encuestas panel ===
+function buildRetosPanel(){
+  if(document.getElementById("panel-v-retos"))return;
+  var retosPool=window.__RETOS_POOL_REF||(function(){
+    // Try to find pool from script
+    return [];
+  })();
+  if(!retosPool.length){return;}
+  var main=document.querySelector("main")||document.body;
+  var p=document.createElement("section");
+  p.id="panel-v-retos";
+  p.style.display="none";
+  var html='<div class="v-hero"><h1>🎯 RETOS DIARIOS</h1><p>Pon a prueba tu conocimiento deportivo todos los dias</p></div>';
+  html+='<div class="v-wrap"><div class="v-list">';
+  retosPool.forEach(function(r,i){
+    html+='<div class="v-item">';
+    html+='<span class="v-day-badge">Reto #'+(i+1)+'</span>';
+    html+='<h3>'+r.q+'</h3>';
+    html+='<div class="v-opts">';
+    r.opts.forEach(function(o){
+      var cls=o===r.correct?'v-opt v-correct':'v-opt';
+      html+='<span class="'+cls+'">'+o+(o===r.correct?' ✓':'')+'</span>';
+    });
+    html+='</div></div>';
+  });
+  html+='</div></div>';
+  p.innerHTML=html;
+  main.appendChild(p);
+}
+function buildEncsPanel(){
+  if(document.getElementById("panel-v-encuestas"))return;
+  var encsPool=window.__ENCS_POOL_REF||[];
+  if(!encsPool.length){return;}
+  var main=document.querySelector("main")||document.body;
+  var p=document.createElement("section");
+  p.id="panel-v-encuestas";
+  p.style.display="none";
+  var html='<div class="v-hero"><h1>📊 ENCUESTAS DIARIAS</h1><p>Vota cada dia y mira que opina la comunidad</p></div>';
+  html+='<div class="v-wrap"><div class="v-list">';
+  encsPool.forEach(function(r,i){
+    html+='<div class="v-item">';
+    html+='<span class="v-day-badge">Encuesta #'+(i+1)+'</span>';
+    html+='<h3>'+r.q+'</h3>';
+    r.opts.forEach(function(o){
+      html+='<div class="v-bar"><span class="v-bar-lbl">'+o.n+'</span><div class="v-bar-fill"><div style="width:'+o.v+'%"></div></div><span class="v-bar-pct">'+o.v+'%</span></div>';
+    });
+    html+='</div>';
+  });
+  html+='</div></div>';
+  p.innerHTML=html;
+  main.appendChild(p);
+}
+
+setInterval(function(){
+  buildRetosPanel();
+  buildEncsPanel();
+}, 1000);
+
+// === Fix 5: Wire __showV724Content to handle retos and encuestas ===
+var origShow=window.__showV724Content;
+window.__showV724Content=function(key){
+  if(key==="retos"){
+    document.querySelectorAll("[id^='panel-']").forEach(function(p){if(p.id!=="panel-v-retos")p.style.setProperty("display","none","important")});
+    document.querySelectorAll("[id^='v86-page-']").forEach(function(p){p.style.setProperty("display","none","important")});
+    var t=document.getElementById("panel-v-retos");
+    if(t)t.style.setProperty("display","block","important");
+    var inicio=document.getElementById("panel-inicio");
+    if(inicio)inicio.style.setProperty("display","none","important");
+    window.scrollTo({top:0,behavior:"instant"});
+    return;
+  }
+  if(key==="encuestas"){
+    document.querySelectorAll("[id^='panel-']").forEach(function(p){if(p.id!=="panel-v-encuestas")p.style.setProperty("display","none","important")});
+    document.querySelectorAll("[id^='v86-page-']").forEach(function(p){p.style.setProperty("display","none","important")});
+    var t=document.getElementById("panel-v-encuestas");
+    if(t)t.style.setProperty("display","block","important");
+    var inicio=document.getElementById("panel-inicio");
+    if(inicio)inicio.style.setProperty("display","none","important");
+    window.scrollTo({top:0,behavior:"instant"});
+    return;
+  }
+  if(typeof origShow==='function')origShow(key);
+};
+
+// === Fix 6: Add Retos and Encuestas LIs to drawer BEFORE Datos Curiosos ===
+function addDrawerItems(){
+  if(document.querySelector('li[data-v-retos]') && document.querySelector('li[data-v-encs]'))return;
+  var allUls=document.querySelectorAll("ul.v56-sub-list");
+  var targetUl=null;
+  for(var i=0;i<allUls.length;i++){
+    var ul=allUls[i];
+    var items=ul.querySelectorAll("li");
+    if(items.length<3)continue;
+    var hasArt=Array.from(items).some(function(li){return /Art[íi]culos/.test(li.textContent)});
+    if(hasArt){targetUl=ul;break;}
+  }
+  if(!targetUl)return;
+  // Find Datos Curiosos position
+  var datosLi=Array.from(targetUl.querySelectorAll("li")).filter(function(li){return /Datos Curiosos/.test(li.textContent)})[0];
+  if(!document.querySelector('li[data-v-retos]')){
+    var li1=document.createElement("li");
+    li1.className="v56-sub-item";
+    li1.setAttribute("data-v-retos","1");
+    li1.innerHTML='<span class="v56-emo">🎯</span><span class="v56-lbl">Retos</span>';
+    li1.addEventListener("click",function(e){e.preventDefault();e.stopImmediatePropagation();window.__showV724Content("retos")});
+    if(datosLi)targetUl.insertBefore(li1, datosLi);else targetUl.appendChild(li1);
+  }
+  if(!document.querySelector('li[data-v-encs]')){
+    var li2=document.createElement("li");
+    li2.className="v56-sub-item";
+    li2.setAttribute("data-v-encs","1");
+    li2.innerHTML='<span class="v56-emo">📊</span><span class="v56-lbl">Encuestas</span>';
+    li2.addEventListener("click",function(e){e.preventDefault();e.stopImmediatePropagation();window.__showV724Content("encuestas")});
+    if(datosLi)targetUl.insertBefore(li2, datosLi);else targetUl.appendChild(li2);
+  }
+}
+setInterval(addDrawerItems, 500);
+addDrawerItems();
+
+// === Fix 7: Capture-phase click for any "Retos" / "Encuestas" text ===
+document.addEventListener("click",function(e){
+  if(!e.isTrusted)return;
+  var li=e.target.closest("li,button,a");
+  if(!li)return;
+  var txt=(li.textContent||"").trim();
+  if(txt.length>30)return;
+  if(/^🎯?s*Retos$/u.test(txt)){
+    e.preventDefault();e.stopImmediatePropagation();
+    window.__showV724Content("retos");return;
+  }
+  if(/^📊?s*Encuestas$/u.test(txt)){
+    e.preventDefault();e.stopImmediatePropagation();
+    window.__showV724Content("encuestas");return;
+  }
+},true);
+
+// === Fix 8: Mercado - if click goes nowhere, scroll to Mercado section on inicio ===
+// (Already done in vWire, but also: if user clicks while on inicio, scroll smooth)
 })();
 </script>
 </body>
