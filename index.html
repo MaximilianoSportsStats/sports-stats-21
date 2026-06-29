@@ -23170,56 +23170,75 @@ function rotateEnc(){
 setInterval(rotateEnc, 500);
 
 // === Fix 4: Build Retos panel + Encuestas panel ===
-function buildRetosPanel(){
-  if(document.getElementById("panel-v-retos"))return;
-  var retosPool=window.__RETOS_POOL_REF||(function(){
-    // Try to find pool from script
-    return [];
-  })();
-  if(!retosPool.length){return;}
+function dayOfYear(d){var s=new Date(d.getFullYear(),0,0);return Math.floor((d-s)/86400000)}
+function buildCalendar(panelId, title, subtitle, pool, kind){
+  if(!pool.length)return false;
+  var existing=document.getElementById(panelId);
+  if(existing && existing.dataset.vCalRendered==="1")return true;
   var main=document.querySelector("main")||document.body;
-  var p=document.createElement("section");
-  p.id="panel-v-retos";
-  p.style.display="none";
-  var html='<div class="v-hero"><h1>🎯 RETOS DIARIOS</h1><p>Pon a prueba tu conocimiento deportivo todos los dias</p></div>';
-  html+='<div class="v-wrap"><div class="v-list">';
-  retosPool.forEach(function(r,i){
-    html+='<div class="v-item">';
-    html+='<span class="v-day-badge">Reto #'+(i+1)+'</span>';
-    html+='<h3>'+r.q+'</h3>';
-    html+='<div class="v-opts">';
-    r.opts.forEach(function(o){
-      var cls=o===r.correct?'v-opt v-correct':'v-opt';
-      html+='<span class="'+cls+'">'+o+(o===r.correct?' ✓':'')+'</span>';
-    });
+  var p=existing||document.createElement("section");
+  p.id=panelId;
+  p.dataset.vCalRendered="1";
+  if(!existing){p.style.display="none";main.appendChild(p);}
+  var now=new Date();
+  var state=p.__vCalState||{y:now.getFullYear(), m:now.getMonth()};
+  p.__vCalState=state;
+  function render(){
+    var y=state.y, m=state.m;
+    var monthName=["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"][m];
+    var firstDay=new Date(y,m,1);
+    var lastDay=new Date(y,m+1,0).getDate();
+    var startDow=firstDay.getDay(); // 0=Sun
+    var todayY=now.getFullYear(), todayM=now.getMonth(), todayD=now.getDate();
+    var html='<div class="v-hero"><h1>'+title+'</h1><p>'+subtitle+'</p></div>';
+    html+='<div class="v-cal-wrap">';
+    html+='<div class="v-cal-head">';
+    html+='<button class="v-cal-nav" data-nav="prev">‹</button>';
+    html+='<h2>'+monthName+' '+y+'</h2>';
+    html+='<button class="v-cal-nav" data-nav="next">›</button>';
+    html+='<button class="v-cal-today" data-nav="today">Hoy</button>';
+    html+='</div>';
+    html+='<div class="v-cal-grid">';
+    ["DOM","LUN","MAR","MIE","JUE","VIE","SAB"].forEach(function(d){html+='<div class="v-cal-dow">'+d+'</div>'});
+    // Empty cells before day 1
+    for(var i=0;i<startDow;i++)html+='<div class="v-cal-empty"></div>';
+    // Days
+    for(var d=1;d<=lastDay;d++){
+      var date=new Date(y,m,d);
+      var doy=dayOfYear(date);
+      var item=pool[(doy-1+pool.length*1000)%pool.length];
+      var isToday=(y===todayY && m===todayM && d===todayD);
+      var label=kind==="reto"?("Reto "+doy):("Encuesta "+doy);
+      var snippet=item.q.replace(/^[^\w]+/,"").trim();
+      // Truncate
+      if(snippet.length>40)snippet=snippet.slice(0,38)+"…";
+      html+='<div class="v-cal-day'+(isToday?' v-cal-today-cell':'')+'">';
+      html+='<div class="v-cal-num">'+d+'</div>';
+      html+='<div class="v-cal-evt"><strong>'+label+'</strong> '+snippet+'</div>';
+      html+='</div>';
+    }
     html+='</div></div>';
-  });
-  html+='</div></div>';
-  p.innerHTML=html;
-  main.appendChild(p);
+    p.innerHTML=html;
+    p.querySelectorAll(".v-cal-nav, .v-cal-today").forEach(function(b){
+      b.addEventListener("click",function(){
+        var n=b.dataset.nav;
+        if(n==="prev"){state.m--;if(state.m<0){state.m=11;state.y--;}}
+        else if(n==="next"){state.m++;if(state.m>11){state.m=0;state.y++;}}
+        else if(n==="today"){state.y=now.getFullYear();state.m=now.getMonth();}
+        render();
+      });
+    });
+  }
+  render();
+  return true;
+}
+function buildRetosPanel(){
+  var pool=window.__RETOS_POOL_REF||[];
+  buildCalendar("panel-v-retos","🎯 RETOS DIARIOS","Pon a prueba tu conocimiento deportivo todos los dias",pool,"reto");
 }
 function buildEncsPanel(){
-  if(document.getElementById("panel-v-encuestas"))return;
-  var encsPool=window.__ENCS_POOL_REF||[];
-  if(!encsPool.length){return;}
-  var main=document.querySelector("main")||document.body;
-  var p=document.createElement("section");
-  p.id="panel-v-encuestas";
-  p.style.display="none";
-  var html='<div class="v-hero"><h1>📊 ENCUESTAS DIARIAS</h1><p>Vota cada dia y mira que opina la comunidad</p></div>';
-  html+='<div class="v-wrap"><div class="v-list">';
-  encsPool.forEach(function(r,i){
-    html+='<div class="v-item">';
-    html+='<span class="v-day-badge">Encuesta #'+(i+1)+'</span>';
-    html+='<h3>'+r.q+'</h3>';
-    r.opts.forEach(function(o){
-      html+='<div class="v-bar"><span class="v-bar-lbl">'+o.n+'</span><div class="v-bar-fill"><div style="width:'+o.v+'%"></div></div><span class="v-bar-pct">'+o.v+'%</span></div>';
-    });
-    html+='</div>';
-  });
-  html+='</div></div>';
-  p.innerHTML=html;
-  main.appendChild(p);
+  var pool=window.__ENCS_POOL_REF||[];
+  buildCalendar("panel-v-encuestas","📊 ENCUESTAS DIARIAS","Vota cada dia y mira que opina la comunidad",pool,"enc");
 }
 
 setInterval(function(){
