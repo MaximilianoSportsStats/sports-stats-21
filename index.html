@@ -22754,6 +22754,150 @@ document.addEventListener("click",function(e){
 // v725 SECTION_IDS isn't directly accessible - the watchdog will keep panel-inicio hidden when curiosos visible via MutationObserver if attached
 })();
 </script>
+
+<style>
+#v-dato-dia{max-width:1200px;margin:24px auto 0;padding:24px 28px;background:linear-gradient(135deg,#fff7ed 0%,#fffbeb 100%);border:1px solid #fde68a;border-radius:16px;box-shadow:0 1px 3px rgba(0,0,0,.04);position:relative;overflow:hidden}
+#v-dato-dia::before{content:"";position:absolute;top:-20px;right:-20px;width:120px;height:120px;background:radial-gradient(circle,#fef3c7,transparent);border-radius:50%;opacity:.6}
+#v-dato-dia .v-dato-label{display:inline-flex;align-items:center;gap:6px;background:#f59e0b;color:#fff;padding:4px 12px;border-radius:999px;font-size:11px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;margin-bottom:12px;position:relative}
+#v-dato-dia .v-dato-head{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;position:relative}
+#v-dato-dia .v-dato-main{flex:1;min-width:0}
+#v-dato-dia h3{font-size:22px;margin:0 0 8px;color:#111;font-weight:800;line-height:1.25;position:relative}
+#v-dato-dia .v-dato-desc{color:#374151;font-size:15px;line-height:1.55;margin:0;position:relative}
+#v-dato-dia .v-dato-num{font-size:48px;font-weight:900;color:#dc2626;line-height:1;text-align:center;min-width:120px;position:relative}
+#v-dato-dia .v-dato-num small{display:block;font-size:11px;color:#92400e;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-top:6px}
+#v-dato-dia .v-dato-foot{margin-top:14px;display:flex;gap:10px;align-items:center;font-size:12px;color:#92400e;font-weight:600;position:relative}
+#v-dato-dia .v-dato-cat{background:#fde68a;color:#92400e;padding:3px 10px;border-radius:999px;font-size:11px;font-weight:700;text-transform:uppercase}
+@media(max-width:640px){#v-dato-dia .v-dato-head{flex-direction:column}#v-dato-dia .v-dato-num{text-align:left;min-width:0}}
+</style>
+<script>
+(function(){
+if(window.__vDailyRot)return;window.__vDailyRot=true;
+// === ROTATING POOLS ===
+var RETOS_POOL=[
+{q:"⚽ ¿Quien es el maximo goleador historico del Mundial?",opts:["Messi","Klose","Ronaldo","Muller"],correct:"Klose"},
+{q:"🏀 ¿Quien tiene mas anillos NBA?",opts:["Jordan","Russell","LeBron","Kareem"],correct:"Russell"},
+{q:"🏎️ ¿Cuantos titulos mundiales tiene Hamilton?",opts:["5","6","7","8"],correct:"7"},
+{q:"🎾 ¿Quien tiene mas Grand Slams masculinos?",opts:["Federer","Nadal","Djokovic","Sampras"],correct:"Djokovic"},
+{q:"⚽ ¿Quien gano el Mundial 2018?",opts:["Croacia","Argentina","Francia","Belgica"],correct:"Francia"},
+{q:"🏀 ¿Quien tiene mas puntos NBA?",opts:["Jordan","Kareem","LeBron","Kobe"],correct:"LeBron"},
+{q:"🏈 ¿Cuantos Super Bowls gano Tom Brady?",opts:["5","6","7","8"],correct:"7"},
+{q:"⚽ ¿Cuantos goles tiene Messi en su carrera?",opts:["750","850","900","1000"],correct:"850"},
+{q:"🏊 ¿Cuantos oros olimpicos tiene Phelps?",opts:["19","21","23","25"],correct:"23"},
+{q:"⚽ ¿En que ano se jugo el primer Mundial?",opts:["1928","1930","1934","1938"],correct:"1930"}
+];
+var ENCUESTAS_POOL=[
+{q:"⚽ ¿Quien consideras que es el GOAT del Futbol?",opts:[{n:"Messi",v:43},{n:"Cristiano Ronaldo",v:31},{n:"Maradona",v:15},{n:"Pele",v:11}]},
+{q:"🏀 ¿Quien es el mejor jugador de la historia de la NBA?",opts:[{n:"Michael Jordan",v:52},{n:"LeBron James",v:28},{n:"Kareem",v:12},{n:"Magic Johnson",v:8}]},
+{q:"🎾 ¿Quien es el GOAT del Tenis masculino?",opts:[{n:"Djokovic",v:38},{n:"Nadal",v:32},{n:"Federer",v:27},{n:"Sampras",v:3}]},
+{q:"🏎️ ¿Quien es el mejor piloto de F1 de la historia?",opts:[{n:"Schumacher",v:42},{n:"Hamilton",v:33},{n:"Senna",v:18},{n:"Verstappen",v:7}]},
+{q:"🥊 ¿Quien es el GOAT del Boxeo?",opts:[{n:"Muhammad Ali",v:48},{n:"Mayweather",v:24},{n:"Tyson",v:18},{n:"Sugar Ray Robinson",v:10}]},
+{q:"⚽ ¿Que liga es la mejor del mundo?",opts:[{n:"Premier League",v:41},{n:"La Liga",v:29},{n:"Champions",v:22},{n:"Serie A",v:8}]},
+{q:"🏈 ¿Quien es el mejor QB activo de la NFL?",opts:[{n:"Patrick Mahomes",v:45},{n:"Josh Allen",v:22},{n:"Joe Burrow",v:18},{n:"Jalen Hurts",v:15}]},
+{q:"⚽ ¿Quien gana el proximo Balon de Oro?",opts:[{n:"Vinicius",v:32},{n:"Mbappe",v:28},{n:"Haaland",v:24},{n:"Yamal",v:16}]},
+{q:"🏊 ¿Mejor deporte para tu salud?",opts:[{n:"Natacion",v:36},{n:"Running",v:28},{n:"Ciclismo",v:22},{n:"Yoga",v:14}]},
+{q:"🏓 ¿El deporte que mas crece?",opts:[{n:"Padel",v:48},{n:"Pickleball",v:25},{n:"E-Sports",v:18},{n:"Crossfit",v:9}]}
+];
+var DATOS_POOL=[
+{e:"⚽",cat:"Futbol",t:"El gol mas rapido en Mundial",d:"Hakan Sukur le metio gol a Corea del Sur a los 11 segundos en el Mundial 2002. Es el gol mas rapido en la historia.",num:"11s",y:"2002"},
+{e:"🏀",cat:"Basketball",t:"100 puntos en un partido",d:"Wilt Chamberlain marco 100 puntos en un solo juego en 1962. Nadie se ha acercado a este record imposible.",num:"100",y:"1962"},
+{e:"🎾",cat:"Tenis",t:"El partido mas largo de la historia",d:"Isner vs Mahut en Wimbledon 2010. 11 horas y 5 minutos en 3 dias. Quinto set 70-68.",num:"11h",y:"2010"},
+{e:"🏊",cat:"Olympics",t:"23 medallas de oro olimpicas",d:"Michael Phelps tiene mas medallas de oro que muchos paises completos. Record practicamente inalcanzable.",num:"23",y:"2004-16"},
+{e:"⚽",cat:"Futbol",t:"1281 goles en su carrera",d:"Pele anoto 1281 goles entre oficiales y amistosos. Mas de un gol por partido en toda su carrera.",num:"1281",y:"1956-77"},
+{e:"🏎️",cat:"F1",t:"Mas victorias en Formula 1",d:"Lewis Hamilton tiene 103 victorias en F1, superando a Schumacher. Logro inalcanzable en la era moderna.",num:"103",y:"2007-24"},
+{e:"🏀",cat:"NBA",t:"81 puntos en un partido moderno",d:"Kobe Bryant marco 81 puntos contra Toronto en 2006. El segundo mejor de la historia despues de Chamberlain.",num:"81",y:"2006"},
+{e:"🏈",cat:"NFL",t:"7 Super Bowls",d:"Tom Brady gano 7 Super Bowls, mas que cualquier franquicia. Jugo hasta los 45 anos a nivel elite.",num:"7",y:"2002-21"},
+{e:"🏃",cat:"Atletismo",t:"Maraton bajo 2 horas",d:"Eliud Kipchoge corrio una maraton en 1h 59m 40s en Viena 2019. Hito historico aunque no oficial.",num:"1:59",y:"2019"},
+{e:"🏒",cat:"Hockey",t:"894 goles en NHL",d:"Wayne Gretzky es el goleador historico de la NHL. The Great One esta a 100+ goles del segundo lugar.",num:"894",y:"1979-99"},
+{e:"🥊",cat:"Boxeo",t:"50 victorias sin derrotas",d:"Floyd Mayweather se retiro con record perfecto 50-0. Jamas perdio una pelea profesional en 21 anos.",num:"50-0",y:"1996-17"},
+{e:"⚽",cat:"Futbol",t:"Mas asistencias en Mundiales",d:"Pele tiene el record con 10 asistencias en Mundiales. Maradona y Messi tambien en el top historico.",num:"10",y:"1958-70"},
+{e:"🥇",cat:"Olympics",t:"Bolt: 8 oros sin perder",d:"Usain Bolt gano 8 oros olimpicos sin perder una sola final entre 2008 y 2016. Dominio absoluto.",num:"8",y:"2008-16"},
+{e:"🎾",cat:"Tenis",t:"24 Grand Slams",d:"Djokovic tiene 24 titulos de Grand Slam masculinos. Margaret Court tiene 24 en femenino.",num:"24",y:"2003-24"}
+];
+
+// Day-of-year based rotation
+function dayIdx(){var d=new Date();var s=new Date(d.getFullYear(),0,0);var diff=d-s;return Math.floor(diff/86400000);}
+var TODAY_KEY=new Date().toISOString().slice(0,10);
+var di=dayIdx();
+var todayReto=RETOS_POOL[di%RETOS_POOL.length];
+var todayEnc=ENCUESTAS_POOL[di%ENCUESTAS_POOL.length];
+var todayDato=DATOS_POOL[di%DATOS_POOL.length];
+
+window.__TODAY_RETO=todayReto;
+window.__TODAY_ENCUESTA=todayEnc;
+window.__TODAY_DATO=todayDato;
+
+// === Inject Dato del Dia widget below Encuesta ===
+function buildDato(){
+  if(document.getElementById("v-dato-dia"))return;
+  var enc=document.getElementById("v705-encuesta");
+  if(!enc){setTimeout(buildDato,300);return;}
+  var w=document.createElement("section");
+  w.id="v-dato-dia";
+  w.innerHTML='<div class="v-dato-label">💡 Dato del Dia</div>'+
+    '<div class="v-dato-head">'+
+      '<div class="v-dato-main">'+
+        '<h3>'+todayDato.e+' '+todayDato.t+'</h3>'+
+        '<p class="v-dato-desc">'+todayDato.d+'</p>'+
+        '<div class="v-dato-foot"><span class="v-dato-cat">'+todayDato.cat+'</span><span>📅 '+todayDato.y+'</span></div>'+
+      '</div>'+
+      '<div class="v-dato-num">'+todayDato.num+'<small>RECORD</small></div>'+
+    '</div>';
+  enc.parentNode.insertBefore(w, enc.nextSibling);
+}
+buildDato();
+setInterval(buildDato,1500);
+
+// === Update RETO question with today's value ===
+function updateReto(){
+  var reto=document.getElementById("v99-retos");
+  if(!reto)return;
+  var h=reto.querySelector("h2, h3, .v99-q, [class*='quest']");
+  if(h && !h.dataset.vRotated){
+    h.dataset.vRotated="1";
+    h.textContent=todayReto.q;
+  }
+  // Update buttons text
+  var btns=reto.querySelectorAll("button");
+  if(btns.length>=4 && !btns[0].dataset.vRotated){
+    todayReto.opts.forEach(function(opt,i){
+      if(btns[i]){
+        btns[i].textContent=opt;
+        btns[i].dataset.vRotated="1";
+      }
+    });
+  }
+}
+setTimeout(updateReto,500);
+setInterval(updateReto,2000);
+
+// === Update ENCUESTA question with today's value ===
+function updateEnc(){
+  var enc=document.getElementById("v705-encuesta");
+  if(!enc)return;
+  var h=enc.querySelector("h2, h3, [class*='quest']");
+  if(h && !h.dataset.vRotated){
+    h.dataset.vRotated="1";
+    h.textContent=todayEnc.q;
+  }
+  // Try to update labels and percentages on bars
+  var rows=enc.querySelectorAll("[class*='bar'], [class*='option'], [class*='row']");
+  if(rows.length>=4){
+    todayEnc.opts.forEach(function(opt,i){
+      if(rows[i] && !rows[i].dataset.vRotated){
+        rows[i].dataset.vRotated="1";
+        // Look for label span and percent span
+        var lbl=rows[i].querySelector("[class*='name'], [class*='label'], [class*='lbl']");
+        var pct=rows[i].querySelector("[class*='pct'], [class*='percent'], [class*='val']");
+        if(lbl)lbl.textContent=opt.n;
+        if(pct)pct.textContent=opt.v+"%";
+      }
+    });
+  }
+}
+setTimeout(updateEnc,500);
+setInterval(updateEnc,2000);
+})();
+</script>
 </body>
 </html>
 
