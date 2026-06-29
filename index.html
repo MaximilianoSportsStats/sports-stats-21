@@ -23843,6 +23843,42 @@ setInterval(styleMercadoTitles,1500);
 styleMercadoTitles();
 })();
 </script>
+
+<script>
+(function(){
+if(window.__vMercadoDirect)return;window.__vMercadoDirect=true;
+function goToMercado(){
+  document.querySelectorAll("[id^='panel-'],#v326-panel-mercado").forEach(function(p){
+    if(p.id!=="v326-panel-mercado")p.style.setProperty("display","none","important");
+  });
+  var mp=document.getElementById("v326-panel-mercado");
+  if(mp)mp.style.setProperty("display","block","important");
+  var inicio=document.getElementById("panel-inicio");
+  if(inicio)inicio.style.setProperty("display","none","important");
+  window.scrollTo({top:0,behavior:"instant"});
+  document.documentElement.scrollTop=0;document.body.scrollTop=0;
+}
+function wireMercado(){
+  var inicio=document.getElementById("panel-inicio");
+  if(!inicio)return;
+  inicio.querySelectorAll("h1,h2,h3").forEach(function(h){
+    var t=(h.textContent||"").trim();
+    if(/MERCADO/i.test(t) && t.length<25 && !h.dataset.vDirectClick){
+      h.dataset.vDirectClick="1";
+      h.style.cursor="pointer";
+      // Use addEventListener with capture=true on the H2 directly
+      h.addEventListener("click",function(e){
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        goToMercado();
+      },true);
+    }
+  });
+}
+setInterval(wireMercado, 800);
+wireMercado();
+})();
+</script>
 </body>
 </html>
 
