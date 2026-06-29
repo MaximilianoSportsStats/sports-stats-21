@@ -23907,20 +23907,21 @@ function wireBtn(){
     h2.setAttribute("onclick","window.__goToMercadoPage()");
     h2.style.cursor="pointer";
   }
-  // Also add a visible "Ver más →" button after the h2
-  if(!h2.dataset.vBtnAdded){
-    h2.dataset.vBtnAdded="1";
-    var btn=document.createElement("a");
-    btn.className="v-mercado-btn";
-    btn.textContent="Ver mercado completo →";
-    btn.setAttribute("href","#mercado");
-    btn.setAttribute("onclick","event.preventDefault();window.__goToMercadoPage();return false;");
-    // Insert after H2
-    h2.insertAdjacentElement("afterend",btn);
-  }
+  
 }
 setInterval(wireBtn, 800);
 wireBtn();
+})();
+</script>
+
+<script>
+(function(){
+if(window.__vRemoveMercBtn)return;window.__vRemoveMercBtn=true;
+function removeMercBtn(){
+  document.querySelectorAll(".v-mercado-btn").forEach(function(b){b.remove()});
+}
+setInterval(removeMercBtn, 300);
+removeMercBtn();
 })();
 </script>
 </body>
