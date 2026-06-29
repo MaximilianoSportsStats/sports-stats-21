@@ -23307,6 +23307,93 @@ document.addEventListener("click",function(e){
 // (Already done in vWire, but also: if user clicks while on inicio, scroll smooth)
 })();
 </script>
+
+<script>
+(function(){
+if(window.__vAlertOverride)return;window.__vAlertOverride=true;
+// Map button label -> action when alert is suppressed
+var ALERT_MAP={
+  "Explorar deportes":"deportes",
+  "Ver en vivo":"envivo",
+  "Crear mi perfil":"perfil",
+  "Conectar":"seguidos",
+  "Modo Reclutador":"reclutar",
+  "Comparar":"comparar",
+  "Ver Información":"noticias",
+  "Ver Informacion":"noticias",
+  "Buscar centros":"centros",
+  "Empezar a explorar":"deportes",
+  "Más Sobre SS 21":"masss21",
+  "Mas Sobre SS 21":"masss21"
+};
+function doRoute(key){
+  if(["noticias","blogs","articulos","podcast","seguidos","reclutar","curiosos","retos","encuestas"].indexOf(key)>=0 && typeof window.__showV724Content==='function'){
+    window.__showV724Content(key);return;
+  }
+  if(key==="centros"){
+    document.querySelectorAll("[id^='panel-']").forEach(function(p){if(p.id!=="panel-v723-centros")p.style.setProperty("display","none","important")});
+    var c=document.getElementById("panel-v723-centros");
+    if(c)c.style.setProperty("display","block","important");
+    window.scrollTo({top:0,behavior:"instant"});return;
+  }
+  if(key==="deportes"){
+    // Click drawer Deportes
+    var li=Array.from(document.querySelectorAll("li,button")).filter(function(el){var t=(el.textContent||"").trim();return /^[🏆🏅]?s*(Estad[íi]sticas Deportes|Deportes)/u.test(t)&&t.length<30})[0];
+    if(li)li.click();
+    return;
+  }
+  if(key==="envivo"){
+    var li=Array.from(document.querySelectorAll("li,button")).filter(function(el){var t=(el.textContent||"").trim();return /^[^\w]*En Vivo$/u.test(t)&&t.length<20})[0];
+    if(li)li.click();
+    return;
+  }
+  if(key==="masss21"){
+    var li=Array.from(document.querySelectorAll("li,button")).filter(function(el){var t=(el.textContent||"").trim();return /M[áa]s Sobre SS 21/.test(t)&&t.length<25})[0];
+    if(li)li.click();
+    return;
+  }
+}
+
+// Track last click to know what was clicked when alert fires
+var lastClicked=null;
+document.addEventListener("click",function(e){
+  if(!e.isTrusted)return;
+  var el=e.target.closest("button,h1,h2,h3,a");
+  if(!el)return;
+  lastClicked=(el.textContent||"").trim().replace(/\s*→\s*$/,"").trim();
+},true);
+
+// Override window.alert
+var origAlert=window.alert;
+window.alert=function(msg){
+  if(typeof msg!=="string"){return origAlert.call(window,msg);}
+  // If alert is "Próximamente: X" and X is a known label, route instead
+  var m=msg.match(/^Pr[óo]ximamente:?\s+(.+)$/);
+  if(m){
+    var key=m[1].trim();
+    // Clean key: remove arrows, emojis, etc
+    key=key.replace(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27FF}]/gu,"").trim();
+    if(ALERT_MAP[key]){
+      doRoute(ALERT_MAP[key]);
+      return;
+    }
+    // Also check common patterns
+    if(/^Conectar/.test(key)){doRoute("seguidos");return;}
+    if(/^Explorar deportes/.test(key)){doRoute("deportes");return;}
+    if(/^Ver en vivo/.test(key)){doRoute("envivo");return;}
+    if(/^Crear mi perfil/.test(key)){doRoute("perfil");return;}
+    if(/^Modo Reclutador/.test(key)){doRoute("reclutar");return;}
+    if(/^Comparar/.test(key)){doRoute("comparar");return;}
+    if(/^Ver Informaci[óo]n/.test(key)){doRoute("noticias");return;}
+    if(/^Buscar centros/.test(key)){doRoute("centros");return;}
+    // Unknown: suppress alert silently
+    console.log("[vAlertOverride] Suppressed alert:",msg);
+    return;
+  }
+  return origAlert.call(window,msg);
+};
+})();
+</script>
 </body>
 </html>
 
