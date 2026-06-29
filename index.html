@@ -85,7 +85,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Inter','Segoe UI
 }
 
 /* ─── SPORT NAV ─── */
-.sport-nav { display: flex; gap: .25rem; flex-wrap: wrap; }
+.sport-nav { display: flex; gap: .25rem; flex-wrap: nowrap; }
 .sport-btn {
   display: flex; align-items: center; gap: .35rem;
   padding: .45rem .8rem; border: 1.5px solid transparent;
@@ -15032,7 +15032,7 @@ window.__v39loaded=true;window.__v391loaded=true;window.__v40loaded=true;window.
   style.id = 'v41-style';
   style.textContent = ''+
     'body.v32-view-deportes .sport-nav-bar{display:block !important;}'+
-    'body.v32-view-deportes nav.sport-nav,body.v32-view-deportes .sport-nav{display:flex !important;flex-wrap:wrap;background:#fafafa;border-bottom:1px solid #e2e8f0;padding:14px 12px 10px;}'+
+    'body.v32-view-deportes nav.sport-nav,body.v32-view-deportes .sport-nav{display:flex !important;flex-wrap:nowrap;background:#fafafa;border-bottom:1px solid #e2e8f0;padding:14px 12px 10px;}'+
     'body:not(.v32-view-deportes) .sport-nav-bar{display:none !important;}'+
     '.v41-sub{display:none;padding-left:20px;background:#fafafa;list-style:none;margin:0;}'+
     '.v41-sub.open{display:block;}'+
@@ -15208,7 +15208,7 @@ window.__v39loaded=true;window.__v391loaded=true;window.__v40loaded=true;window.
   style.id = 'v45-style';
   style.textContent = ''+
     '.sport-nav-bar{display:block !important;}'+
-    'nav.sport-nav,.sport-nav{display:flex !important;flex-wrap:wrap;background:#fafafa;border-bottom:1px solid #e2e8f0;padding:14px 12px 10px;}'+
+    'nav.sport-nav,.sport-nav{display:flex !important;flex-wrap:nowrap;background:#fafafa;border-bottom:1px solid #e2e8f0;padding:14px 12px 10px;}'+
     'body.v26-mode .sport-nav{display:flex !important;}';
   document.head.appendChild(style);
   function ensureShown(){
@@ -15227,7 +15227,7 @@ window.__v39loaded=true;window.__v391loaded=true;window.__v40loaded=true;window.
   style.id = 'v46-style';
   style.textContent = ''+
     'html body .sport-nav-bar, html body.v26-mode .sport-nav-bar, html body.v29-show-bar .sport-nav-bar{display:block !important;}'+
-    'html body nav.sport-nav, html body .sport-nav-bar nav.sport-nav, html body.v26-mode nav.sport-nav, html body.v29-show-bar nav.sport-nav{display:flex !important;flex-wrap:wrap !important;background:#fafafa !important;border-bottom:1px solid #e2e8f0 !important;padding:14px 12px 10px !important;}';
+    'html body nav.sport-nav, html body .sport-nav-bar nav.sport-nav, html body.v26-mode nav.sport-nav, html body.v29-show-bar nav.sport-nav{display:flex !important;flex-wrap:nowrap !important;background:#fafafa !important;border-bottom:1px solid #e2e8f0 !important;padding:14px 12px 10px !important;}';
   document.head.appendChild(style);
   function ensureShown(){
     var b = document.body;
@@ -15347,7 +15347,7 @@ window.__v39loaded=true;window.__v391loaded=true;window.__v40loaded=true;window.
     '.v52-caret.open{transform:rotate(180deg);}'+
     'html body .sport-nav-bar{display:none !important;}'+
     'html body.v32-view-deportes .sport-nav-bar{display:block !important;}'+
-    'html body.v32-view-deportes nav.sport-nav,html body.v32-view-deportes .sport-nav{display:flex !important;flex-wrap:wrap !important;background:#fafafa !important;border-bottom:1px solid #e2e8f0 !important;padding:14px 12px 10px !important;}';
+    'html body.v32-view-deportes nav.sport-nav,html body.v32-view-deportes .sport-nav{display:flex !important;flex-wrap:nowrap !important;background:#fafafa !important;border-bottom:1px solid #e2e8f0 !important;padding:14px 12px 10px !important;}';
   document.head.appendChild(style);
   /* placeholder pages */
   function ensurePages(){var panel=document.getElementById('panel-inicio');if(!panel)return;var pages=[{id:'v51-page-favoritos',emoji:'⭐',title:'Favoritos',desc:'Tus deportes, equipos y deportistas favoritos en un solo lugar.',cards:['Tus equipos','Tus deportistas','Tus ligas','Tus noticias guardadas','Tus comparaciones','Tus alertas']},{id:'v51-page-envivo',emoji:'🔴',title:'En Vivo',desc:'Partidos y eventos deportivos transmitiendose ahora mismo.',cards:['Futbol en vivo','Tenis en vivo','Basketball en vivo','Beisbol en vivo','Carreras en vivo','Otros deportes']}];pages.forEach(function(p){if(document.getElementById(p.id))return;var sec=document.createElement('section');sec.id=p.id;sec.style.cssText='display:none;padding:24px;';var html='<div style="max-width:1200px;margin:0 auto;"><div style="padding:24px;border:1px solid #e2e8f0;border-radius:12px;background:linear-gradient(135deg,#fff,#fdf2f2);margin-bottom:20px;"><h2 style="color:#c8102e;margin:0 0 8px 0;">'+p.emoji+' '+p.title+'</h2><p style="color:#555;margin:0;">'+p.desc+'</p></div><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px;">';p.cards.forEach(function(c){html+='<div style="padding:20px;border:1px solid #e2e8f0;border-radius:12px;background:#fff;"><h3 style="margin:0 0 8px 0;color:#222;">'+c+'</h3><p style="color:#888;margin:0;font-size:14px;">Proximamente.</p></div>';});html+='</div></div>';sec.innerHTML=html;panel.appendChild(sec);});}
@@ -15394,7 +15394,7 @@ window.__v39loaded=true;window.__v391loaded=true;window.__v40loaded=true;window.
   style.textContent=''+
     'html body .sport-nav-bar{display:none !important;}'+
     'html body.v32-view-deportes .sport-nav-bar{display:block !important;}'+
-    'html body.v32-view-deportes nav.sport-nav,html body.v32-view-deportes .sport-nav{display:flex !important;flex-wrap:wrap !important;background:#fafafa !important;border-bottom:1px solid #e2e8f0 !important;padding:14px 12px 10px !important;}';
+    'html body.v32-view-deportes nav.sport-nav,html body.v32-view-deportes .sport-nav{display:flex !important;flex-wrap:nowrap !important;background:#fafafa !important;border-bottom:1px solid #e2e8f0 !important;padding:14px 12px 10px !important;}';
   document.head.appendChild(style);
   /* Create Favoritos and En Vivo placeholder pages */
   function ensurePages(){
@@ -15490,7 +15490,7 @@ window.__v39loaded=true;window.__v391loaded=true;window.__v40loaded=true;window.
     /* Hide bar except in deportes view */
     'html body .sport-nav-bar{display:none !important;}'+
     'html body.v32-view-deportes .sport-nav-bar{display:block !important;}'+
-    'html body.v32-view-deportes nav.sport-nav,html body.v32-view-deportes .sport-nav{display:flex !important;flex-wrap:wrap !important;background:#fafafa !important;border-bottom:1px solid #e2e8f0 !important;padding:14px 12px 10px !important;}';
+    'html body.v32-view-deportes nav.sport-nav,html body.v32-view-deportes .sport-nav{display:flex !important;flex-wrap:nowrap !important;background:#fafafa !important;border-bottom:1px solid #e2e8f0 !important;padding:14px 12px 10px !important;}';
   document.head.appendChild(style);
   /* Create placeholder pages */
   function ensurePages(){
@@ -15588,7 +15588,7 @@ window.__v39loaded=true;window.__v391loaded=true;window.__v40loaded=true;window.
     /* Bar only in deportes */
     'html body .sport-nav-bar{display:none !important;}'+
     'html body.v32-view-deportes .sport-nav-bar{display:block !important;}'+
-    'html body.v32-view-deportes nav.sport-nav,html body.v32-view-deportes .sport-nav{display:flex !important;flex-wrap:wrap !important;background:#fafafa !important;border-bottom:1px solid #e2e8f0 !important;padding:14px 12px 10px !important;}';
+    'html body.v32-view-deportes nav.sport-nav,html body.v32-view-deportes .sport-nav{display:flex !important;flex-wrap:nowrap !important;background:#fafafa !important;border-bottom:1px solid #e2e8f0 !important;padding:14px 12px 10px !important;}';
   document.head.appendChild(st);
   function ensurePages(){
     var panel=document.getElementById('panel-inicio');if(!panel)return;
