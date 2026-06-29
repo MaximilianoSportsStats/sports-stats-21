@@ -23563,6 +23563,145 @@ window.alert=function(msg){
 #panel-v-encuestas .v-cal-fbtn-active{background:#3b82f6;border-color:#3b82f6}
 #panel-v-encuestas .v-cal-fbtn:hover{border-color:#3b82f6;color:#3b82f6}
 </style>
+
+<style>
+/* Force sport-nav to single line with horizontal scroll */
+.sport-nav-bar .sport-nav,#v326-panel-mercado .sport-nav,.v326-mercado .sport-nav{
+  flex-wrap:nowrap !important;
+  overflow-x:auto !important;
+  overflow-y:hidden;
+  scrollbar-width:thin;
+  padding-bottom:6px;
+}
+.sport-nav-bar .sport-nav::-webkit-scrollbar{height:6px}
+.sport-nav-bar .sport-nav::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:999px}
+.sport-nav-bar .sport-nav .sport-btn{flex-shrink:0 !important}
+/* Footer link cursor */
+footer.v12-footer li,footer.v12-footer a{cursor:pointer !important;transition:color .15s}
+footer.v12-footer li:hover,footer.v12-footer a:hover{color:var(--primary) !important}
+</style>
+<script>
+(function(){
+if(window.__vMercadoFix)return;window.__vMercadoFix=true;
+
+// Map footer text to action  
+var FOOTER_MAP={
+  "Historia":"historia",
+  "Sobre Nosotros":"sobre",
+  "Trabaja con Nosotros":"trabaja",
+  "Prensa":"prensa",
+  "Deportes":"deportes",
+  "Eventos Globales":"eventos",
+  "Ligas Locales":"ligas",
+  "Mi Perfil":"perfil",
+  "Contacto":"contacto",
+  "Centro de Ayuda":"ayuda",
+  "Sugerencias":"sugerencias",
+  "Estado del Servicio":"estado",
+  "Política de Privacidad":"privacidad",
+  "Politica de Privacidad":"privacidad",
+  "Términos y Condiciones":"terminos",
+  "Terminos y Condiciones":"terminos",
+  "Política de Cookies":"cookies",
+  "Politica de Cookies":"cookies",
+  "Derechos de Imagen":"imagen"
+};
+var FOOTER_TITLE={
+  historia:"📜 Historia de Sports Stats 21",
+  sobre:"ℹ️ Sobre Nosotros",
+  trabaja:"💼 Trabaja con Nosotros",
+  prensa:"📰 Prensa",
+  eventos:"🌍 Eventos Globales",
+  ligas:"🏆 Ligas Locales",
+  perfil:"👤 Mi Perfil",
+  contacto:"📞 Contacto",
+  ayuda:"❓ Centro de Ayuda",
+  sugerencias:"💬 Sugerencias",
+  estado:"🟢 Estado del Servicio",
+  privacidad:"🔒 Politica de Privacidad",
+  terminos:"📜 Terminos y Condiciones",
+  cookies:"🍪 Politica de Cookies",
+  imagen:"📸 Derechos de Imagen"
+};
+var FOOTER_BODY={
+  historia:"Sports Stats 21 nacio en 2026 con la mision de unir todos los datos deportivos del mundo en una sola plataforma. Desde futbol hasta atletismo, queremos que cada fanatico encuentre lo que busca.",
+  sobre:"Somos un equipo apasionado por el deporte, los datos y la tecnologia. Construimos la red social deportiva mas completa de Latinoamerica.",
+  trabaja:"Estamos contratando! Buscamos desarrolladores, diseñadores, periodistas deportivos y community managers. Contactanos a careers@sportsstats21.com",
+  prensa:"Para consultas de medios y prensa contactanos en press@sportsstats21.com. Tenemos kit de prensa y assets disponibles para periodistas.",
+  eventos:"Calendario completo de eventos globales: Mundial, JJOO, Champions League, Super Bowl, World Series, Six Nations y mas. Proximamente seccion dedicada.",
+  ligas:"Cobertura de ligas profesionales, universitarias, escolares y amateur de cada pais. Filtra por region y nivel.",
+  perfil:"Crea tu perfil deportivo, sube tus stats, conectate con clubes y reclutadores. Disponible al iniciar sesion.",
+  contacto:"Email: hola@sportsstats21.com\nInstagram: @sportsstats21\nTwitter: @SportsStats21\nLinkedIn: Sports Stats 21",
+  ayuda:"Centro de ayuda con guias, tutoriales, FAQs y soporte por chat. Estamos disponibles 24/7 para ayudarte.",
+  sugerencias:"Tu opinion nos importa! Envianos tus ideas a feedback@sportsstats21.com o usa el chat flotante.",
+  estado:"Todos los sistemas operacionales ✅\n\nUltimo incidente: ninguno\nUptime ultimo mes: 99.98%",
+  privacidad:"Tomamos tu privacidad muy en serio. Solo recolectamos los datos necesarios para que la app funcione. Nunca vendemos tu informacion personal a terceros.",
+  terminos:"Al usar Sports Stats 21 aceptas nuestros Terminos y Condiciones. Lee la version completa en sportsstats21.com/terminos",
+  cookies:"Usamos cookies tecnicas para que la app funcione correctamente y cookies opcionales de analisis. Puedes manejar tus preferencias en cualquier momento.",
+  imagen:"Todas las imagenes y assets son propiedad de Sports Stats 21 o usados bajo licencia. Para consultas de derechos de imagen escribi a legal@sportsstats21.com"
+};
+
+function showInfoModal(title, body){
+  var existing=document.getElementById("v-info-modal");
+  if(existing)existing.remove();
+  var modal=document.createElement("div");
+  modal.id="v-info-modal";
+  modal.className="v-modal-overlay";
+  modal.innerHTML='<div class="v-modal-card"><button class="v-modal-close" type="button">✕</button><h2 class="v-modal-q">'+title+'</h2><p style="font-size:15px;line-height:1.7;color:#374151;white-space:pre-line;margin:0">'+body+'</p></div>';
+  document.body.appendChild(modal);
+  modal.addEventListener("click",function(e){
+    if(e.target===modal || e.target.classList.contains("v-modal-close"))modal.remove();
+  });
+}
+
+// Wire footer links + MERCADO title
+document.addEventListener("click",function(e){
+  if(!e.isTrusted)return;
+  var el=e.target.closest("li,a,button,h1,h2,h3");
+  if(!el)return;
+  var txt=(el.textContent||"").trim();
+  if(txt.length>50 || !txt)return;
+  
+  // Inside footer
+  var inFooter=!!el.closest("footer");
+  if(inFooter){
+    var key=FOOTER_MAP[txt];
+    if(key){
+      e.preventDefault();e.stopImmediatePropagation();
+      if(key==="deportes"){
+        // Route to deportes via showV724Content or fallback
+        if(typeof window.__showV724Content==='function'){
+          // No "deportes" key but try
+        }
+        // Click drawer Deportes
+        var liD=Array.from(document.querySelectorAll("li,button")).filter(function(l){var t=(l.textContent||"").trim();return /^[\u{1F3C6}]?\s*Deportes/u.test(t)&&t.length<20})[0];
+        if(liD)liD.click();
+        else showInfoModal("🏆 Deportes","Proximamente: catalogo completo de deportes profesionales, universitarios, amateur y escolares.");
+        return;
+      }
+      if(key==="perfil"){
+        showInfoModal(FOOTER_TITLE.perfil, FOOTER_BODY.perfil);
+        return;
+      }
+      showInfoModal(FOOTER_TITLE[key]||txt, FOOTER_BODY[key]||"Proximamente: contenido completo de esta seccion.");
+      return;
+    }
+  }
+  
+  // MERCADO title click in mercado page
+  if(/^[\W_]*MERCADO[\W_]*$/u.test(txt) && el.tagName.match(/^H[123]$/)){
+    var mp=document.getElementById("v326-panel-mercado");
+    if(mp && mp.contains(el)){
+      // Scroll to top of mercado
+      e.preventDefault();e.stopImmediatePropagation();
+      mp.scrollIntoView({behavior:"smooth",block:"start"});
+      window.scrollTo({top:0,behavior:"smooth"});
+      return;
+    }
+  }
+},true);
+})();
+</script>
 </body>
 </html>
 
