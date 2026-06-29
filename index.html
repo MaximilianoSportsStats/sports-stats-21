@@ -23702,6 +23702,24 @@ document.addEventListener("click",function(e){
 },true);
 })();
 </script>
+
+<script>
+(function(){
+if(window.__vStrayBlogs)return;window.__vStrayBlogs=true;
+function removeStray(){
+  var ul=document.getElementById("v56-ul");
+  if(!ul)return;
+  // Find direct children LIs that are Blogs (with v100Sub blogs)
+  Array.from(ul.children).forEach(function(c){
+    if(c.tagName==="LI" && c.dataset && c.dataset.v100Sub==="blogs"){
+      c.remove();
+    }
+  });
+}
+setInterval(removeStray, 500);
+removeStray();
+})();
+</script>
 </body>
 </html>
 
