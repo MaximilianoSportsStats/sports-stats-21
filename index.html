@@ -23720,6 +23720,65 @@ setInterval(removeStray, 500);
 removeStray();
 })();
 </script>
+
+<script>
+(function(){
+if(window.__vCardClick)return;window.__vCardClick=true;
+
+function showCardModal(title, desc, category, time){
+  var existing=document.getElementById("v-card-modal");
+  if(existing)existing.remove();
+  var modal=document.createElement("div");
+  modal.id="v-card-modal";
+  modal.className="v-modal-overlay";
+  var html='<div class="v-modal-card">';
+  html+='<button class="v-modal-close" type="button">✕</button>';
+  if(category)html+='<div class="v-modal-badge">'+category+'</div>';
+  html+='<h2 class="v-modal-q">'+title+'</h2>';
+  if(desc)html+='<p style="font-size:15px;line-height:1.7;color:#374151;margin:0 0 20px">'+desc+'</p>';
+  html+='<p style="font-size:14px;line-height:1.6;color:#6b7280;margin:0 0 20px;font-style:italic">El articulo completo proximamente disponible. Mientras tanto explora otras secciones de Sports Stats 21.</p>';
+  if(time)html+='<div style="font-size:13px;color:var(--muted);font-weight:600;padding-top:14px;border-top:1px solid #f3f4f6">🕑 '+time+'</div>';
+  html+='</div>';
+  modal.innerHTML=html;
+  document.body.appendChild(modal);
+  modal.addEventListener("click",function(e){
+    if(e.target===modal || e.target.classList.contains("v-modal-close"))modal.remove();
+  });
+}
+
+document.addEventListener("click",function(e){
+  if(!e.isTrusted)return;
+  // Look for article cards in the inicio carousels
+  var card=e.target.closest("article.v100-news-big, article.v100-news-mini, article.v164-mercado-card, article.v100-blogs-card, .v326-mercado-card, [class*='news-big'], [class*='news-mini'], [class*='blogs-card'], [class*='mercado-card']");
+  if(!card)return;
+  // Only intercept if in inicio panel
+  var inicio=document.getElementById("panel-inicio");
+  if(!inicio || !inicio.contains(card))return;
+  // Extract data
+  var title=(card.querySelector("h2,h3,h4")||{textContent:""}).textContent.trim();
+  var allP=card.querySelectorAll("p");
+  var desc="";
+  for(var i=0;i<allP.length;i++){var t=allP[i].textContent.trim();if(t.length>20){desc=t;break;}}
+  var cat=(card.querySelector("[class*='tag'],[class*='badge'],[class*='cat']")||{textContent:""}).textContent.trim();
+  var time=(card.querySelector("[class*='time'],[class*='hace'],[class*='date']")||{textContent:""}).textContent.trim();
+  if(!title)return;
+  e.preventDefault();
+  e.stopImmediatePropagation();
+  showCardModal(title, desc, cat, time);
+},true);
+
+// Cursor pointer for cards
+function styleCards(){
+  document.querySelectorAll("article.v100-news-big, article.v100-news-mini, article.v164-mercado-card, article.v100-blogs-card, .v326-mercado-card, [class*='news-big'], [class*='news-mini'], [class*='blogs-card']").forEach(function(c){
+    if(c.dataset.vCardStyled)return;
+    c.dataset.vCardStyled="1";
+    c.style.cursor="pointer";
+  });
+}
+setInterval(styleCards,1500);
+styleCards();
+})();
+</script>
 </body>
 </html>
 
