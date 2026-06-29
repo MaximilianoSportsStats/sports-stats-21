@@ -21722,7 +21722,8 @@ var SECTION_IDS=[
   "panel-v712-reclutar",
   "panel-v723-centros",
   "panel-v724-articulos",
-  "panel-v724-podcast"
+  "panel-v724-podcast",
+  "panel-v724-curiosos"
 ];
 function syncAll(){
   var visibleSection=null;
@@ -22564,7 +22565,7 @@ document.addEventListener("click",function(e){
 (function(){
 if(window.__vCleanup)return;window.__vCleanup=true;
 // Desired order in Contenido y Comunidad submenu
-var DESIRED=["Seguidos","Noticias","Blogs","Artículos","Podcast","Reclutar","Centros Deportivos"];
+var DESIRED=["Seguidos","Noticias","Blogs","Artículos","Podcast","Reclutar","Centros Deportivos","Datos Curiosos"];
 function normalize(s){
   return (s||"").replace(/^[^\w]+/u,"").trim();
 }
@@ -22595,6 +22596,162 @@ function reorder(){
 }
 reorder();
 setInterval(reorder, 500);
+})();
+</script>
+
+<style>
+#panel-v724-curiosos{padding:0 0 80px;background:linear-gradient(180deg,#fef3c7 0%,#fafafa 200px,#fafafa);min-height:100vh}
+#panel-v724-curiosos .v724c-hero{text-align:center;padding:48px 20px 32px}
+#panel-v724-curiosos .v724c-hero h1{color:#92400e;font-size:42px;margin:0 0 10px;font-weight:800;letter-spacing:.5px}
+#panel-v724-curiosos .v724c-hero p{color:#78350f;margin:0;font-size:17px;max-width:700px;margin-left:auto;margin-right:auto;opacity:.8}
+#panel-v724-curiosos .v724c-wrap{max-width:1200px;margin:0 auto;padding:0 24px}
+#panel-v724-curiosos .v724c-filters{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:28px;justify-content:center}
+#panel-v724-curiosos .v724c-filter{background:#fff;border:2px solid #fde68a;color:#92400e;padding:8px 18px;border-radius:999px;font-size:14px;font-weight:600;cursor:pointer;transition:all .15s}
+#panel-v724-curiosos .v724c-filter:hover{border-color:#f59e0b}
+#panel-v724-curiosos .v724c-filter.v724c-active{background:#f59e0b;border-color:#f59e0b;color:#fff}
+#panel-v724-curiosos .v724c-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:20px}
+#panel-v724-curiosos .v724c-card{background:#fff;border:1px solid #fde68a;border-radius:16px;padding:24px;transition:all .2s;position:relative;overflow:hidden}
+#panel-v724-curiosos .v724c-card:hover{transform:translateY(-4px);box-shadow:0 12px 24px rgba(245,158,11,.15);border-color:#f59e0b}
+#panel-v724-curiosos .v724c-emoji{font-size:48px;margin-bottom:14px;display:block}
+#panel-v724-curiosos .v724c-cat{display:inline-block;background:#fde68a;color:#92400e;padding:3px 10px;border-radius:999px;font-size:11px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;margin-bottom:12px}
+#panel-v724-curiosos .v724c-card h3{font-size:18px;margin:0 0 10px;color:#111;font-weight:700;line-height:1.3}
+#panel-v724-curiosos .v724c-card p{color:#374151;font-size:14px;line-height:1.6;margin:0}
+#panel-v724-curiosos .v724c-stat{margin-top:14px;display:flex;justify-content:space-between;align-items:center;padding-top:12px;border-top:1px solid #f3f4f6;font-size:13px}
+#panel-v724-curiosos .v724c-year{color:var(--muted);font-weight:600}
+#panel-v724-curiosos .v724c-num{color:#dc2626;font-weight:800;font-size:18px}
+</style>
+<script>
+(function(){
+if(window.__vCurio)return;window.__vCurio=true;
+var CURIOSOS=[
+{cat:"Futbol",e:"⚽",t:"El gol mas rapido en Mundial",d:"Hakan Sukur le metio gol a Corea del Sur a los 11 segundos en el Mundial 2002. Es el gol mas rapido en la historia de los Mundiales.",y:"2002",n:"11 seg"},
+{cat:"Basketball",e:"🏀",t:"100 puntos en un partido",d:"Wilt Chamberlain marco 100 puntos en un solo juego en 1962 jugando para los Philadelphia Warriors contra los New York Knicks. Nadie se ha acercado.",y:"1962",n:"100 pts"},
+{cat:"Tenis",e:"🎾",t:"El partido mas largo de la historia",d:"Isner vs Mahut en Wimbledon 2010. 11 horas y 5 minutos repartidos en 3 dias. El quinto set termino 70-68 a favor de Isner.",y:"2010",n:"11h 5m"},
+{cat:"Olympics",e:"🏊",t:"23 medallas de oro olimpicas",d:"Michael Phelps tiene 23 medallas de oro olimpicas, mas que muchos paises completos. Su record es practicamente inalcanzable.",y:"2004-2016",n:"23 oros"},
+{cat:"Futbol",e:"⚽",t:"1281 goles en su carrera",d:"Pele anoto 1281 goles en partidos oficiales y amistosos a lo largo de su carrera. Un promedio de mas de un gol por partido.",y:"1956-1977",n:"1281"},
+{cat:"F1",e:"🏎️",t:"7 campeonatos mundiales",d:"Lewis Hamilton y Michael Schumacher comparten el record de 7 campeonatos mundiales de Formula 1. Hamilton ademas tiene mas victorias.",y:"2008-2020",n:"7 titulos"},
+{cat:"NBA",e:"🏀",t:"30007 puntos NBA en su carrera",d:"Kareem Abdul-Jabbar dominaba el record hasta que LeBron James lo superó en 2023. Mas de 30 años en la cima del basket profesional.",y:"2023",n:"38000+"},
+{cat:"Futbol",e:"🏆",t:"Mas goles en un Mundial",d:"Just Fontaine de Francia anoto 13 goles en el Mundial de Suecia 1958. Increiblemente, jamas jugo otro Mundial.",y:"1958",n:"13 goles"},
+{cat:"Atletismo",e:"🏃",t:"Maraton bajo 2 horas",d:"Eliud Kipchoge corrio una maraton en 1h 59m 40s en Viena 2019. No fue oficial por condiciones especiales pero rompio la barrera.",y:"2019",n:"1:59:40"},
+{cat:"Boxeo",e:"🥊",t:"49 victorias sin derrotas",d:"Floyd Mayweather se retiro con record perfecto de 50-0. Jamas perdio una pelea profesional en 21 años de carrera.",y:"1996-2017",n:"50-0"},
+{cat:"Tenis",e:"🎾",t:"24 Grand Slams",d:"Novak Djokovic tiene 24 titulos de Grand Slam, el record absoluto en tenis masculino. Margaret Court tiene 24 en femenino.",y:"2003-2024",n:"24 GS"},
+{cat:"Hockey",e:"🏒",t:"894 goles en NHL",d:"Wayne Gretzky tiene 894 goles en temporada regular. El segundo lugar esta a 100+ goles. Era 'The Great One' por algo.",y:"1979-1999",n:"894"},
+{cat:"NFL",e:"🏈",t:"7 Super Bowls como jugador",d:"Tom Brady gano 7 Super Bowls, mas que cualquier franquicia de la NFL. Jugo hasta los 45 años manteniendo nivel elite.",y:"2002-2021",n:"7 SB"},
+{cat:"Futbol",e:"🇦🇷",t:"Mas asistencias Mundial",d:"Pele tiene el record de mas asistencias en Mundiales con 10. Messi y Maradona estan en el top tambien con cifras altas.",y:"1958-1970",n:"10 ast"},
+{cat:"Olympics",e:"🥇",t:"Bolt sin perder finales olimpicas",d:"Usain Bolt gano 8 oros olimpicos sin perder una sola final en 100m, 200m y 4x100m de 2008 a 2016.",y:"2008-2016",n:"8 oros"}
+];
+window.__CURIOSOS=CURIOSOS;
+function buildPanel(){
+  if(document.getElementById("panel-v724-curiosos"))return;
+  var main=document.querySelector("main")||document.body;
+  var p=document.createElement("section");
+  p.id="panel-v724-curiosos";
+  p.style.display="none";
+  var cats=["Todos"];
+  CURIOSOS.forEach(function(c){if(cats.indexOf(c.cat)<0)cats.push(c.cat)});
+  var html='<div class="v724c-hero"><h1>💡 DATOS CURIOSOS</h1><p>Records imposibles, momentos historicos y datos increibles del deporte mundial</p></div>';
+  html+='<div class="v724c-wrap">';
+  html+='<div class="v724c-filters" data-area="cur">';
+  cats.forEach(function(c,i){html+='<button class="v724c-filter'+(i===0?' v724c-active':'')+'" data-cat="'+c+'">'+c+'</button>'});
+  html+='</div>';
+  html+='<div class="v724c-grid" id="v724c-grid">';
+  CURIOSOS.forEach(function(c){
+    html+='<div class="v724c-card" data-cat="'+c.cat+'">';
+    html+='<span class="v724c-emoji">'+c.e+'</span>';
+    html+='<span class="v724c-cat">'+c.cat+'</span>';
+    html+='<h3>'+c.t+'</h3>';
+    html+='<p>'+c.d+'</p>';
+    html+='<div class="v724c-stat"><span class="v724c-year">📅 '+c.y+'</span><span class="v724c-num">'+c.n+'</span></div>';
+    html+='</div>';
+  });
+  html+='</div></div>';
+  p.innerHTML=html;
+  main.appendChild(p);
+  p.querySelector('[data-area="cur"]').addEventListener("click",function(e){
+    var b=e.target.closest(".v724c-filter");if(!b)return;
+    p.querySelectorAll('[data-area="cur"] .v724c-filter').forEach(function(x){x.classList.remove("v724c-active")});
+    b.classList.add("v724c-active");
+    var cat=b.dataset.cat;
+    p.querySelectorAll("#v724c-grid .v724c-card").forEach(function(c){
+      c.style.display=(cat==="Todos"||c.dataset.cat===cat)?"":"none";
+    });
+  });
+}
+buildPanel();
+
+// Add drawer LI "Datos Curiosos" if not exists
+function addDrawerItem(){
+  var existing=document.querySelector('li[data-v-curio]');
+  if(existing)return;
+  var allUls=document.querySelectorAll("ul.v56-sub-list");
+  var targetUl=null;
+  for(var i=0;i<allUls.length;i++){
+    var ul=allUls[i];
+    var items=ul.querySelectorAll("li");
+    if(items.length<3)continue;
+    var hasArt=Array.from(items).some(function(li){return /Art[íi]culos/.test(li.textContent)});
+    if(hasArt){targetUl=ul;break;}
+  }
+  if(!targetUl)return;
+  var li=document.createElement("li");
+  li.className="v56-sub-item";
+  li.setAttribute("data-v-curio","1");
+  li.innerHTML='<span class="v56-emo">💡</span><span class="v56-lbl">Datos Curiosos</span>';
+  // Match style of siblings
+  var first=targetUl.querySelector("li");
+  if(first){
+    var fcs=getComputedStyle(first);
+    li.style.cssText=first.style.cssText;
+  }
+  targetUl.appendChild(li);
+  // Click handler on the LI
+  li.addEventListener("click",function(e){
+    e.preventDefault();
+    e.stopImmediatePropagation();
+    if(typeof window.__showV724Content==='function')window.__showV724Content("curiosos");
+  });
+}
+setInterval(addDrawerItem,500);
+addDrawerItem();
+
+// Extend __showV724Content to handle curiosos
+var origShow=window.__showV724Content;
+window.__showV724Content=function(key){
+  if(key==="curiosos"){
+    // Reuse gotoPanel logic by direct hide/show
+    document.querySelectorAll("[id^='panel-']").forEach(function(p){
+      if(p.id!=="panel-v724-curiosos")p.style.setProperty("display","none","important");
+    });
+    document.querySelectorAll("[id^='v86-page-']").forEach(function(p){p.style.setProperty("display","none","important")});
+    var cur=document.getElementById("panel-v724-curiosos");
+    if(cur)cur.style.setProperty("display","block","important");
+    var inicio=document.getElementById("panel-inicio");
+    if(inicio)inicio.style.setProperty("display","none","important");
+    window.scrollTo({top:0,behavior:"instant"});
+    document.documentElement.scrollTop=0;document.body.scrollTop=0;
+    var drawer=document.querySelector(".v36-side");
+    if(drawer){drawer.classList.remove("v36-open","v34-open","open")}
+    return;
+  }
+  if(typeof origShow==='function')origShow(key);
+};
+
+// Capture-phase click for any "Datos Curiosos" text
+document.addEventListener("click",function(e){
+  if(!e.isTrusted)return;
+  var li=e.target.closest("li,button,a");
+  if(!li)return;
+  var txt=(li.textContent||"").trim();
+  if(txt.length>30 && txt.length<60 && /Datos Curiosos/i.test(txt))return; // probably parent header
+  if(/^💡?s*Datos Curiosos$/u.test(txt) || /^Datos Curiosos$/.test(txt)){
+    e.preventDefault();
+    e.stopImmediatePropagation();
+    window.__showV724Content("curiosos");
+  }
+},true);
+
+// Add panel-v724-curiosos to v725 SECTION_IDS via setInterval check (master watchdog)
+// v725 SECTION_IDS isn't directly accessible - the watchdog will keep panel-inicio hidden when curiosos visible via MutationObserver if attached
 })();
 </script>
 </body>
