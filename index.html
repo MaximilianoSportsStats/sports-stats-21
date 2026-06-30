@@ -25124,7 +25124,8 @@ document.addEventListener("click",function(e){
   var txt=(li.textContent||"").trim();
   if(txt.length>40)return;
   var target=null;
-  if(sub==="reclutar" || /Reclutar$/i.test(txt))target="panel-v712-reclutar";
+  if(/^[\u{1F3E0}\u{1F4CD}]?\s*Inicio$/u.test(txt))target="panel-inicio";
+  else if(sub==="reclutar" || /Reclutar$/i.test(txt))target="panel-v712-reclutar";
   else if(sub==="seguidos" || /Seguidos$/i.test(txt))target="panel-v711-seguidos";
   else if(/Datos\s+Curiosos$/i.test(txt))target="panel-v724-curiosos";
   else if(/M[\u00e1a]s\s+Sobre\s+SS21$/i.test(txt))target="panel-masss21-rebuild";
@@ -25137,6 +25138,7 @@ function routeExtra(){
 }
 window.addEventListener("hashchange",routeExtra);
 setTimeout(routeExtra,1500);
+setInterval(function(){var m=document.getElementById("panel-masss21-rebuild");if(!m || getComputedStyle(m).display==="none"){document.body.classList.remove("v-mss-active");}else{document.body.classList.add("v-mss-active");}},500);
 })();
 </script>
 </body>
