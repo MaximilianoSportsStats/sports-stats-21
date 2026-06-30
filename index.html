@@ -24564,6 +24564,193 @@ tryWatch();
 [class*='encuesta-countdown'],
 [class*='-countdown']{display:none !important}
 </style>
+
+<style>
+#panel-masss21-rebuild{padding:0 0 80px;background:#fafafa;min-height:100vh}
+#panel-masss21-rebuild .v-mss-hero{text-align:center;padding:48px 20px 32px;background:linear-gradient(180deg,#fef2f2,transparent)}
+#panel-masss21-rebuild .v-mss-hero h1{color:var(--primary);font-size:42px;margin:0 0 10px;font-weight:800;letter-spacing:.5px}
+#panel-masss21-rebuild .v-mss-hero p{color:var(--muted);margin:0;font-size:17px;max-width:700px;margin-left:auto;margin-right:auto}
+#panel-masss21-rebuild .v-mss-layout{max-width:1300px;margin:24px auto 0;padding:0 24px;display:flex;gap:32px}
+#panel-masss21-rebuild .v-mss-sidebar{width:260px;flex-shrink:0;background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:14px;height:fit-content;position:sticky;top:80px;max-height:calc(100vh - 100px);overflow-y:auto}
+#panel-masss21-rebuild .v-mss-sidebar h4{font-size:11px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.6px;margin:14px 12px 8px;padding-bottom:8px;border-bottom:1px solid #f3f4f6}
+#panel-masss21-rebuild .v-mss-sidebar h4:first-child{margin-top:0}
+#panel-masss21-rebuild .v-mss-sidebar a{display:flex;align-items:center;gap:10px;padding:10px 12px;color:#374151;font-size:14px;font-weight:600;text-decoration:none;border-radius:8px;cursor:pointer;transition:all .15s}
+#panel-masss21-rebuild .v-mss-sidebar a:hover{background:#fef2f2;color:var(--primary)}
+#panel-masss21-rebuild .v-mss-sidebar a.v-active{background:var(--primary);color:#fff}
+#panel-masss21-rebuild .v-mss-sidebar a .v-mss-icon{font-size:18px;display:inline-block;width:22px;text-align:center}
+#panel-masss21-rebuild .v-mss-main{flex:1;min-width:0}
+#panel-masss21-rebuild .v-mss-sect{background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:32px 36px;margin-bottom:20px;scroll-margin-top:90px}
+#panel-masss21-rebuild .v-mss-sect h2{font-size:28px;margin:0 0 16px;color:#111;font-weight:800;display:flex;align-items:center;gap:10px}
+#panel-masss21-rebuild .v-mss-sect h3{font-size:18px;margin:18px 0 8px;color:#111;font-weight:700}
+#panel-masss21-rebuild .v-mss-sect p{color:#374151;font-size:15px;line-height:1.7;margin:0 0 12px;white-space:pre-line}
+#panel-masss21-rebuild .v-mss-sect a{color:var(--primary);text-decoration:underline}
+#panel-masss21-rebuild .v-mss-sect ul{margin:8px 0 14px;padding-left:24px;color:#374151;font-size:15px;line-height:1.7}
+@media(max-width:900px){
+  #panel-masss21-rebuild .v-mss-layout{flex-direction:column}
+  #panel-masss21-rebuild .v-mss-sidebar{width:auto;position:static}
+}
+</style>
+<script>
+(function(){
+if(window.__vMassObSS21)return;window.__vMassObSS21=true;
+
+var SECTIONS=[
+  {grp:"Sports Stats 21"},
+  {id:"historia",ic:"📜",t:"Historia",h:"Historia de Sports Stats 21",body:"Sports Stats 21 nacio en 2026 con la mision de unir todos los datos deportivos del mundo en una sola plataforma. Desde futbol hasta atletismo, queremos que cada fanatico encuentre lo que busca.\n\nLa idea surgio cuando un grupo de fans del deporte se dio cuenta que no existia una sola plataforma que centralizara stats historicas, noticias diarias, mercado, comunidad y resultados en vivo. Las opciones existentes eran o muy caras, o muy fragmentadas, o tenian paywalls que dejaban afuera al fan promedio.\n\nDesde el primer dia decidimos hacer algo distinto: una red social del deporte gratuita, completa y para todo el mundo. Data desde 1888, mas de 50 deportes cubiertos, integraciones con clubes, ligas locales, scouts y federaciones. Sin paywalls, sin spam, sin sesgo.\n\nHoy seguimos creciendo gracias a vos y a una comunidad cada vez mas grande de fans, deportistas y profesionales del deporte."},
+  {id:"sobre",ic:"ℹ️",t:"Sobre Nosotros",h:"Sobre Nosotros",body:"Somos un equipo apasionado por el deporte, los datos y la tecnologia.\n\nNuestro equipo combina periodistas deportivos, ingenieros de software, data scientists, disenadores y deportistas activos. Creemos que el deporte une al mundo, y que la informacion deportiva debe ser accesible, precisa y entretenida para todos.\n\nTrabajamos con clubes profesionales, ligas locales, scouts, federaciones y miles de fans para garantizar que la data sea verificada, actualizada y representativa de la realidad deportiva."},
+  {id:"trabaja",ic:"💼",t:"Trabaja con Nosotros",h:"Trabaja con Nosotros",body:"Estamos contratando.\n\nBuscamos:\n- Desarrolladores frontend (React, JavaScript)\n- Desarrolladores backend (Node, Python, Go)\n- Data engineers (SQL, dbt, Airflow)\n- Disenadores UX/UI\n- Periodistas deportivos\n- Community managers\n- Scouts y analistas deportivos\n\nTrabajamos 100% remoto desde cualquier lugar del mundo. Cultura horizontal, equipo internacional, beneficios competitivos.\n\nEnviar CV y portfolio a careers@sportsstats21.com con el rol en el asunto."},
+  {id:"prensa",ic:"📰",t:"Prensa",h:"Prensa y Medios",body:"Para consultas de medios y prensa, contactanos en press@sportsstats21.com\n\nDisponemos de:\n- Kit de prensa con logos, fotos del equipo y assets visuales\n- Lineamientos de marca\n- Datos de uso y crecimiento\n- Entrevistas con el equipo fundador\n- Backstage de productos en desarrollo\n\nRespondemos consultas dentro de las 24 horas habiles."},
+  {grp:"Producto"},
+  {id:"deportes",ic:"🏆",t:"Deportes",h:"Deportes cubiertos",body:"Sports Stats 21 cubre mas de 50 deportes profesionales, universitarios, escolares y amateurs.\n\nDeportes profesionales: Futbol, Basketball, Tenis, F1, NFL, Beisbol, Hockey, Golf, Boxeo, MMA, Rugby, Cricket, Volleyball, Atletismo, Natacion, Padel, Ciclismo, Halterofilia, Esgrima, Hipica, Tiro, Equitacion, Surf, Skate, Climbing, Triatlon, y mas.\n\nCada deporte tiene su propia seccion con ligas, equipos, jugadores, calendarios, resultados, records historicos y rankings actualizados."},
+  {id:"eventos",ic:"🌍",t:"Eventos Globales",h:"Eventos Globales",body:"Calendario completo de eventos globales:\n- Mundial de Futbol (FIFA)\n- Copa America y Eurocopa\n- Champions League / Libertadores\n- Juegos Olimpicos\n- Super Bowl, World Series, Stanley Cup\n- Grand Slams de Tenis\n- F1 Grandes Premios\n- Mundial de Rugby\n- Six Nations\n- Tour de France, Giro de Italia, Vuelta a Espana\n- Maratones top 10 del mundo\n\nProximamente: sistema de notificaciones para no perderte ningun evento."},
+  {id:"ligas",ic:"🏟️",t:"Ligas Locales",h:"Ligas Locales",body:"Cobertura de ligas profesionales, universitarias, escolares y amateurs de cada pais:\n\nAmerica: MLS, Liga Mexicana, Liga Profesional Argentina, Brasileirao, Primera Division de Chile, Primera Division de Peru, Liga MX universitaria, NCAA, y mas.\n\nEuropa: Premier League, La Liga, Bundesliga, Serie A, Ligue 1, Eredivisie, Primeira Liga, ligas escandinavas, ligas universitarias UK/EU.\n\nAsia: J League, K League, Liga China, ligas universitarias japonesas.\n\nAfrica y Oceania: ligas de cada region.\n\nFiltra por region, deporte y nivel."},
+  {id:"perfil",ic:"👤",t:"Mi Perfil",h:"Mi Perfil",body:"Crea tu perfil deportivo en Sports Stats 21:\n- CV deportivo completo\n- Stats personales\n- Logros y trofeos\n- Equipos y clubes\n- Fotos y videos\n- Conexion con reclutadores\n- Conexion con otros deportistas\n\nAmateur, semi-pro o profesional, tu perfil esta visible para clubes, ligas y scouts de todo el mundo.\n\nDisponible al crear cuenta (proximamente)."},
+  {grp:"Soporte"},
+  {id:"contacto",ic:"📞",t:"Contacto",h:"Contacto",body:"Como contactarnos:\n\nEmail general: hola@sportsstats21.com\nSoporte tecnico: soporte@sportsstats21.com\nPrensa: press@sportsstats21.com\nCareers: careers@sportsstats21.com\nFeedback: feedback@sportsstats21.com\n\nRedes sociales:\nInstagram: @sportsstats21\nTwitter/X: @SportsStats21\nLinkedIn: Sports Stats 21\nYouTube: Sports Stats 21\n\nRespondemos dentro de las 24 horas habiles."},
+  {id:"ayuda",ic:"❓",t:"Centro de Ayuda",h:"Centro de Ayuda",body:"Centro de ayuda con guias, tutoriales, FAQs y soporte por chat.\n\nTopicos cubiertos:\n- Como crear tu cuenta\n- Como armar tu perfil deportivo\n- Como seguir equipos, jugadores y ligas\n- Como filtrar resultados y stats\n- Como contactar a otros deportistas\n- Como conectar con clubes y scouts\n- Solucion de problemas tecnicos\n- Configuracion de notificaciones\n- Privacidad y seguridad\n\nChat en vivo: disponible 24/7."},
+  {id:"sugerencias",ic:"💬",t:"Sugerencias",h:"Sugerencias y Feedback",body:"Tu opinion nos importa.\n\nEnvianos:\n- Ideas de nuevas funcionalidades\n- Reporte de bugs\n- Sugerencias de mejora UX\n- Deportes o ligas que queres ver cubiertas\n- Cualquier otra cosa que se te ocurra\n\nEmail: feedback@sportsstats21.com\nO usa el chat flotante en la esquina inferior derecha.\n\nLeemos todos los mensajes."},
+  {id:"estado",ic:"🟢",t:"Estado del Servicio",h:"Estado del Servicio",body:"Todos los sistemas operacionales ✅\n\nUltimo incidente: ninguno en los ultimos 90 dias\nUptime ultimo mes: 99.98%\nUptime ultimo ano: 99.94%\nTiempo de respuesta promedio: 124ms\n\nMonitorizamos en tiempo real:\n- Frontend (www, app)\n- API publica\n- Base de datos\n- CDN\n- Sistema de autenticacion\n- Procesamiento de datos en vivo\n\nStatus page: status.sportsstats21.com"},
+  {grp:"Legal"},
+  {id:"privacidad",ic:"🔒",t:"Politica de Privacidad",h:"Politica de Privacidad",body:"Tomamos tu privacidad muy en serio.\n\nDatos que recolectamos:\n- Email y nombre al crear cuenta\n- Perfil deportivo que vos elegis publicar\n- Equipos y jugadores que sigues\n- Tu historial de visitas en la app (para mejorar UX)\n- Datos tecnicos (IP, navegador, dispositivo)\n\nQue NO hacemos:\n- Nunca vendemos tu informacion a terceros\n- Nunca compartimos tu email sin tu permiso\n- Nunca trackeamos fuera de nuestra plataforma\n- Nunca usamos cookies de publicidad sin tu consentimiento\n\nPodes eliminar tu cuenta y todos tus datos en cualquier momento desde Configuracion."},
+  {id:"terminos",ic:"📜",t:"Terminos y Condiciones",h:"Terminos y Condiciones",body:"Al usar Sports Stats 21 aceptas nuestros Terminos y Condiciones completos disponibles en sportsstats21.com/terminos\n\nResumen:\n- Edad minima 14 anos (consentimiento parental hasta 18)\n- No publicar contenido ofensivo o ilegal\n- Respeto a otros usuarios\n- No spam ni publicidad no autorizada\n- No bots ni scraping masivo\n- Sports Stats 21 puede modificar el servicio en cualquier momento\n- Notificamos cambios importantes con anticipacion\n\nLeer Terminos completos: sportsstats21.com/terminos"},
+  {id:"cookies",ic:"🍪",t:"Politica de Cookies",h:"Politica de Cookies",body:"Usamos cookies para que la app funcione correctamente.\n\nCookies tecnicas (siempre activas):\n- Sesion de usuario\n- Preferencias de idioma\n- Carrito de favoritos\n\nCookies opcionales (con tu consentimiento):\n- Analytics (medir uso de la app)\n- Personalizacion de contenido\n- A/B testing\n\nCookies que NO usamos:\n- Publicidad de terceros\n- Tracking entre sitios\n- Fingerprinting\n\nPodes manejar tus preferencias en Configuracion > Privacidad."},
+  {id:"imagen",ic:"📸",t:"Derechos de Imagen",h:"Derechos de Imagen",body:"Todas las imagenes y assets visuales utilizados en Sports Stats 21 son:\n- Propiedad de Sports Stats 21\n- Licenciados a Sports Stats 21\n- Usados bajo Creative Commons con atribucion\n- O propiedad de cada usuario que las sube\n\nSi creeis que una imagen viola tus derechos de autor, contactanos en legal@sportsstats21.com con:\n- Identificacion de la imagen en cuestion\n- Prueba de derecho de autor\n- Tu informacion de contacto\n\nRespondemos en menos de 48hs habiles."}
+];
+
+function buildPage(){
+  if(document.getElementById("panel-masss21-rebuild"))return;
+  var main=document.querySelector("main")||document.body;
+  var panel=document.createElement("section");
+  panel.id="panel-masss21-rebuild";
+  panel.style.display="none";
+  var html='<div class="v-mss-hero"><h1>🌟 Mas Sobre Sports Stats 21</h1><p>Todo lo que necesitas saber sobre la red social de los deportes</p></div>';
+  html+='<div class="v-mss-layout">';
+  html+='<aside class="v-mss-sidebar">';
+  var currentGroup=null;
+  SECTIONS.forEach(function(s){
+    if(s.grp){html+='<h4>'+s.grp+'</h4>';return;}
+    html+='<a data-target="v-mss-'+s.id+'" data-id="'+s.id+'"><span class="v-mss-icon">'+s.ic+'</span>'+s.t+'</a>';
+  });
+  html+='</aside>';
+  html+='<div class="v-mss-main">';
+  SECTIONS.forEach(function(s){
+    if(s.grp)return;
+    html+='<section id="v-mss-'+s.id+'" class="v-mss-sect" data-id="'+s.id+'">';
+    html+='<h2>'+s.ic+' '+s.h+'</h2>';
+    html+='<p>'+s.body+'</p>';
+    html+='</section>';
+  });
+  html+='</div></div>';
+  panel.innerHTML=html;
+  main.appendChild(panel);
+  // Sidebar click handler scrolls to section
+  panel.querySelectorAll(".v-mss-sidebar a").forEach(function(a){
+    a.addEventListener("click",function(e){
+      e.preventDefault();
+      var target=document.getElementById(a.dataset.target);
+      if(target){
+        target.scrollIntoView({behavior:"smooth",block:"start"});
+        panel.querySelectorAll(".v-mss-sidebar a").forEach(function(x){x.classList.remove("v-active")});
+        a.classList.add("v-active");
+      }
+    });
+  });
+  // Scroll spy
+  var observer=new IntersectionObserver(function(entries){
+    entries.forEach(function(en){
+      if(en.isIntersecting){
+        var id=en.target.dataset.id;
+        panel.querySelectorAll(".v-mss-sidebar a").forEach(function(x){
+          if(x.dataset.id===id)x.classList.add("v-active");
+          else x.classList.remove("v-active");
+        });
+      }
+    });
+  },{rootMargin:"-100px 0px -50% 0px"});
+  panel.querySelectorAll(".v-mss-sect").forEach(function(s){observer.observe(s)});
+}
+buildPage();
+
+// Make __showMassObreSS21 navigate to this panel + optionally scroll to section
+window.__showMassObreSS21=function(sectionId){
+  buildPage();
+  document.querySelectorAll("[id^='panel-'], [id^='v326-panel'], [id^='v56-page-'], [id^='v38-page-'], [id^='v87-page-']").forEach(function(p){
+    if(p.id!=="panel-masss21-rebuild")p.style.setProperty("display","none","important");
+  });
+  var inicio=document.getElementById("panel-inicio");
+  if(inicio)inicio.style.setProperty("display","none","important");
+  var panel=document.getElementById("panel-masss21-rebuild");
+  if(panel)panel.style.setProperty("display","block","important");
+  window.scrollTo({top:0,behavior:"instant"});
+  if(sectionId){
+    setTimeout(function(){
+      var target=document.getElementById("v-mss-"+sectionId);
+      if(target)target.scrollIntoView({behavior:"smooth",block:"start"});
+      panel.querySelectorAll(".v-mss-sidebar a").forEach(function(a){
+        if(a.dataset.id===sectionId)a.classList.add("v-active");
+        else a.classList.remove("v-active");
+      });
+    },200);
+  }
+};
+
+// Map footer texts to section IDs
+var FOOTER_TO_SECT={
+  "Historia":"historia",
+  "Sobre Nosotros":"sobre",
+  "Trabaja con Nosotros":"trabaja",
+  "Prensa":"prensa",
+  "Deportes":"deportes",
+  "Eventos Globales":"eventos",
+  "Ligas Locales":"ligas",
+  "Mi Perfil":"perfil",
+  "Contacto":"contacto",
+  "Centro de Ayuda":"ayuda",
+  "Sugerencias":"sugerencias",
+  "Estado del Servicio":"estado",
+  "Politica de Privacidad":"privacidad",
+  "Política de Privacidad":"privacidad",
+  "Terminos y Condiciones":"terminos",
+  "Términos y Condiciones":"terminos",
+  "Politica de Cookies":"cookies",
+  "Política de Cookies":"cookies",
+  "Derechos de Imagen":"imagen"
+};
+
+// Intercept footer link clicks - high priority capture
+document.addEventListener("click",function(e){
+  if(!e.isTrusted)return;
+  var el=e.target.closest("li,a,button");
+  if(!el)return;
+  if(!el.closest("footer"))return;
+  var txt=(el.textContent||"").trim();
+  if(txt.length>40)return;
+  var sect=FOOTER_TO_SECT[txt];
+  if(!sect)return;
+  e.preventDefault();
+  e.stopImmediatePropagation();
+  window.__showMassObreSS21(sect);
+},true);
+
+// Also intercept drawer Mas Sobre SS21 click → navigate to first section
+document.addEventListener("click",function(e){
+  if(!e.isTrusted)return;
+  var el=e.target.closest("li,button,a");
+  if(!el)return;
+  var txt=(el.textContent||"").trim();
+  if(txt.length>30)return;
+  if(/M[áa]s Sobre SS 21|Mas Sobre SS21/i.test(txt)){
+    e.preventDefault();
+    e.stopImmediatePropagation();
+    window.__showMassObreSS21();
+  }
+},true);
+
+// Override the showInfoModal that was the old alert-style for these specific keys to use the new page
+var origShowInfoModal=window.showInfoModal;
+// Suppress info modals for footer items - my listener should preempt them, but safety
+})();
+</script>
 </body>
 </html>
 
