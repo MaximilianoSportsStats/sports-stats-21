@@ -21726,7 +21726,8 @@ var SECTION_IDS=[
   "panel-v724-curiosos",
   "panel-v-retos",
   "panel-v-encuestas",
-  "v326-panel-mercado"
+  "v326-panel-mercado",
+  "panel-masss21-rebuild"
 ];
 function syncAll(){
   var visibleSection=null;
@@ -24749,6 +24750,30 @@ document.addEventListener("click",function(e){
 // Override the showInfoModal that was the old alert-style for these specific keys to use the new page
 var origShowInfoModal=window.showInfoModal;
 // Suppress info modals for footer items - my listener should preempt them, but safety
+})();
+</script>
+
+<style>
+#v36-side{display:flex;flex-direction:column}
+#v36-side .v344-items{order:-1 !important}
+#v36-side #v56-ul{order:1 !important}
+#v36-side .v36-foot{order:99 !important}
+</style>
+<script>
+(function(){
+if(window.__vDrawerOrder)return;window.__vDrawerOrder=true;
+function reorder(){
+  var drawer=document.getElementById("v36-side");
+  if(!drawer)return;
+  var header=drawer.querySelector(".v344-items");
+  var ul=drawer.querySelector("#v56-ul");
+  if(header && ul && header.compareDocumentPosition(ul)===Node.DOCUMENT_POSITION_PRECEDING){
+    // ul is before header - move header to be first
+    drawer.insertBefore(header, drawer.firstChild);
+  }
+}
+setInterval(reorder, 500);
+reorder();
 })();
 </script>
 </body>
