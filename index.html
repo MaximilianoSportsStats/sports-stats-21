@@ -24873,6 +24873,85 @@ upgrade();
 #panel-masss21-rebuild .v-mss-sidebar a.v-active:hover{background:#991b1b !important;color:#fff !important}
 #panel-masss21-rebuild .v-mss-sidebar h4{color:var(--primary) !important;font-weight:800 !important;text-transform:uppercase !important;letter-spacing:.5px !important;font-size:11px !important;border-bottom-color:#fee2e2 !important}
 </style>
+
+<style>
+/* Override main overflow when masss21 is showing */
+body.v-mss-active main.main{overflow:visible !important}
+/* Improve sidebar - make it position:sticky better */
+#panel-masss21-rebuild .v-mss-sidebar{position:sticky !important;top:70px !important;align-self:flex-start !important;z-index:10}
+</style>
+<script>
+(function(){
+if(window.__vMassActive)return;window.__vMassActive=true;
+// Watch panel-masss21-rebuild visibility and toggle body class
+function check(){
+  var p=document.getElementById("panel-masss21-rebuild");
+  if(!p)return;
+  var visible=getComputedStyle(p).display!=="none";
+  document.body.classList.toggle("v-mss-active", visible);
+}
+setInterval(check, 400);
+check();
+
+// Functional sidebar click + scroll spy that works  
+function wireSidebar(){
+  var panel=document.getElementById("panel-masss21-rebuild");
+  if(!panel)return;
+  // Sidebar links
+  panel.querySelectorAll(".v-mss-sidebar a").forEach(function(a){
+    if(a.dataset.vSidebarWired)return;
+    a.dataset.vSidebarWired="1";
+    a.addEventListener("click",function(e){
+      e.preventDefault();
+      var target=document.getElementById(a.dataset.target);
+      if(!target)return;
+      var rect=target.getBoundingClientRect();
+      var top=rect.top+window.scrollY-70;
+      window.scrollTo({top:top, behavior:"smooth"});
+      panel.querySelectorAll(".v-mss-sidebar a").forEach(function(x){x.classList.remove("v-active")});
+      a.classList.add("v-active");
+    });
+  });
+  
+  // Scroll spy
+  if(!panel.dataset.vScrollSpyAttached){
+    panel.dataset.vScrollSpyAttached="1";
+    function updateActive(){
+      if(getComputedStyle(panel).display==="none")return;
+      var sections=panel.querySelectorAll(".v-mss-sect");
+      var scrollPos=window.scrollY+100;
+      var activeId=null;
+      sections.forEach(function(s){
+        var top=s.getBoundingClientRect().top+window.scrollY;
+        if(top<=scrollPos)activeId=s.dataset.id;
+      });
+      if(activeId){
+        panel.querySelectorAll(".v-mss-sidebar a").forEach(function(a){
+          if(a.dataset.id===activeId){
+            a.classList.add("v-active");
+            // Scroll sidebar to keep active visible
+            var sidebar=panel.querySelector(".v-mss-sidebar");
+            var aRect=a.getBoundingClientRect();
+            var sRect=sidebar.getBoundingClientRect();
+            if(aRect.top<sRect.top+30){
+              sidebar.scrollTop+=(aRect.top-sRect.top-30);
+            } else if(aRect.bottom>sRect.bottom-30){
+              sidebar.scrollTop+=(aRect.bottom-sRect.bottom+30);
+            }
+          } else {
+            a.classList.remove("v-active");
+          }
+        });
+      }
+    }
+    window.addEventListener("scroll", updateActive, {passive:true});
+    updateActive();
+  }
+}
+setInterval(wireSidebar, 800);
+wireSidebar();
+})();
+</script>
 </body>
 </html>
 
