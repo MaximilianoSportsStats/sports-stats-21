@@ -24242,6 +24242,139 @@ setInterval(renderRich, 1000);
 renderRich();
 })();
 </script>
+
+<style>
+.v-rebuild-reto,.v-rebuild-enc{padding:24px 32px}
+.v-rebuild-reto .v-rb-label{display:flex;align-items:center;gap:6px;color:var(--primary);font-size:12px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;margin-bottom:8px}
+.v-rebuild-reto h3,.v-rebuild-enc h3{font-size:22px;margin:0 0 18px;color:#111;font-weight:800;line-height:1.3}
+.v-rebuild-reto .v-rb-opts{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:14px}
+.v-rebuild-reto .v-rb-opt{background:#fff;border:1px solid #e5e7eb;color:#111;padding:10px 22px;border-radius:8px;font-size:15px;font-weight:700;cursor:pointer;transition:all .15s}
+.v-rebuild-reto .v-rb-opt:hover{border-color:var(--primary)}
+.v-rebuild-reto .v-rb-opt.v-correct{background:#dcfce7;border-color:#16a34a;color:#166534}
+.v-rebuild-reto .v-rb-opt.v-wrong{background:#fef2f2;border-color:#dc2626;color:#dc2626}
+.v-rebuild-reto .v-rb-msg{padding:10px 14px;border-radius:8px;font-weight:700;font-size:14px;margin-top:8px;display:none}
+.v-rebuild-reto .v-rb-msg.v-success{display:block;background:#dcfce7;color:#166534}
+.v-rebuild-reto .v-rb-msg.v-failed{display:block;background:#fef2f2;color:#dc2626}
+.v-rebuild-reto .v-rb-meta,.v-rebuild-enc .v-rb-meta{margin-top:14px;display:flex;justify-content:space-between;color:var(--muted);font-size:12px;font-weight:600}
+.v-rebuild-enc .v-rb-label{display:flex;align-items:center;gap:6px;color:var(--primary);font-size:12px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;margin-bottom:8px}
+.v-rebuild-enc .v-rb-bars{display:flex;flex-direction:column;gap:8px}
+.v-rebuild-enc .v-rb-bar{display:flex;align-items:center;gap:10px;padding:8px 14px;border-radius:8px;cursor:pointer;border:1px solid #e5e7eb;background:#fff;transition:all .15s;font-size:14px;font-weight:600;color:#111}
+.v-rebuild-enc .v-rb-bar:hover{border-color:var(--primary)}
+.v-rebuild-enc .v-rb-bar.v-voted{background:#fef2f2;border-color:var(--primary)}
+.v-rebuild-enc .v-rb-bar-name{min-width:160px;flex-shrink:0}
+.v-rebuild-enc .v-rb-bar-fill{flex:1;background:#f3f4f6;border-radius:999px;height:10px;overflow:hidden}
+.v-rebuild-enc .v-rb-bar-fill > div{height:100%;background:linear-gradient(90deg,#dc2626,#ef4444);border-radius:999px;transition:width .4s}
+.v-rebuild-enc .v-rb-bar-pct{min-width:42px;text-align:right;font-weight:800;color:var(--primary)}
+.v-rebuild-enc .v-rb-info{margin-bottom:10px;color:#1565c0;font-weight:600;font-size:14px;padding:8px 12px;background:#dbeafe;border-radius:8px;display:none}
+.v-rebuild-enc.v-voted-state .v-rb-info{display:block}
+.v-rebuild-enc .v-rb-votes{position:absolute;top:24px;right:32px;text-align:right}
+.v-rebuild-enc .v-rb-votes .v-rb-num{color:var(--primary);font-weight:800;font-size:24px;line-height:1}
+.v-rebuild-enc .v-rb-votes .v-rb-vlbl{color:var(--muted);font-size:11px;font-weight:600;letter-spacing:.4px}
+</style>
+<script>
+(function(){
+if(window.__vRebuildWidgets)return;window.__vRebuildWidgets=true;
+
+var TODAY=new Date().toISOString().slice(0,10);
+function dayOfYear(){var d=new Date();var s=new Date(d.getFullYear(),0,0);return Math.floor((d-s)/86400000);}
+
+function buildReto(){
+  var reto=document.getElementById("v99-retos");
+  if(!reto)return;
+  var pool=window.__RETOS_POOL_REF||[];
+  if(!pool.length){setTimeout(buildReto,400);return;}
+  if(reto.dataset.vRebuilt===TODAY)return;
+  reto.dataset.vRebuilt=TODAY;
+  
+  var t=pool[(dayOfYear()-1+pool.length*1000)%pool.length];
+  var voteKey="v-rebuild-reto-"+TODAY;
+  var existingVote=localStorage.getItem(voteKey);
+  
+  reto.className=reto.className+" v-rebuild-reto";
+  var optsHtml=t.opts.map(function(o){
+    var cls="v-rb-opt";
+    if(existingVote){
+      if(o===t.correct)cls+=" v-correct";
+      else if(o===existingVote)cls+=" v-wrong";
+    }
+    return '<button class="'+cls+'" data-opt="'+o+'">'+o+'</button>';
+  }).join("");
+  
+  var msgClass="";
+  var msgText="";
+  if(existingVote){
+    if(existingVote===t.correct){msgClass="v-success";msgText="✓ Correcto! Vuelve mañana por el próximo reto.";}
+    else{msgClass="v-failed";msgText="✗ No es esa. La correcta es: "+t.correct;}
+  }
+  
+  reto.innerHTML='<div class="v-rb-label">🎯 RETO DIARIO</div>'+
+    '<h3>'+t.q+'</h3>'+
+    '<div class="v-rb-opts">'+optsHtml+'</div>'+
+    '<div class="v-rb-msg '+msgClass+'">'+msgText+'</div>'+
+    '<div class="v-rb-meta"><span>📌 Próximamente: más retos, ranking semanal y desafíos por deporte.</span></div>';
+  
+  // Click handlers
+  reto.querySelectorAll(".v-rb-opt").forEach(function(b){
+    b.addEventListener("click",function(){
+      if(localStorage.getItem(voteKey))return;
+      var choice=b.dataset.opt;
+      localStorage.setItem(voteKey, choice);
+      buildReto.call(this, true);
+      reto.dataset.vRebuilt="";
+      buildReto();
+    });
+  });
+}
+
+function buildEnc(){
+  var enc=document.getElementById("v705-encuesta");
+  if(!enc)return;
+  var pool=window.__ENCS_POOL_REF||[];
+  if(!pool.length){setTimeout(buildEnc,400);return;}
+  if(enc.dataset.vRebuilt===TODAY)return;
+  enc.dataset.vRebuilt=TODAY;
+  
+  var t=pool[(dayOfYear()-1+pool.length*1000)%pool.length];
+  var voteKey="v-rebuild-enc-"+TODAY;
+  var existingVote=localStorage.getItem(voteKey);
+  var totalVotes=t.opts.reduce(function(s,o){return s+(o.v||0)},0)*30+847; // synthetic
+  
+  enc.className=enc.className+" v-rebuild-enc";
+  if(existingVote)enc.classList.add("v-voted-state");
+  enc.style.position="relative";
+  
+  var barsHtml=t.opts.map(function(o){
+    var cls="v-rb-bar"+(existingVote===o.n?" v-voted":"");
+    return '<div class="'+cls+'" data-opt="'+o.n+'">'+
+      '<span class="v-rb-bar-name">'+o.n+'</span>'+
+      '<div class="v-rb-bar-fill"><div style="width:'+o.v+'%"></div></div>'+
+      '<span class="v-rb-bar-pct">'+o.v+'%</span>'+
+    '</div>';
+  }).join("");
+  
+  enc.innerHTML='<div class="v-rb-votes"><div class="v-rb-num">'+totalVotes.toLocaleString()+'</div><div class="v-rb-vlbl">VOTOS</div></div>'+
+    '<div class="v-rb-label">📊 ENCUESTA DIARIA</div>'+
+    '<h3>'+t.q+'</h3>'+
+    '<div class="v-rb-info">✓ Ya votaste hoy. Resultados en vivo.</div>'+
+    '<div class="v-rb-bars">'+barsHtml+'</div>'+
+    '<div class="v-rb-meta"><span>📌 Próximamente: encuestas por deporte y resultados semanales históricos.</span></div>';
+  
+  enc.querySelectorAll(".v-rb-bar").forEach(function(b){
+    b.addEventListener("click",function(){
+      if(localStorage.getItem(voteKey))return;
+      localStorage.setItem(voteKey, b.dataset.opt);
+      enc.dataset.vRebuilt="";
+      buildEnc();
+    });
+  });
+}
+
+// Build initially and re-check periodically (in case widgets get re-rendered)
+function tick(){buildReto();buildEnc();}
+setTimeout(tick, 1000);
+setInterval(tick, 2000);
+})();
+</script>
 </body>
 </html>
 
