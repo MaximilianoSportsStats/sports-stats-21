@@ -24222,6 +24222,8 @@ function renderRich(){
   var content=panel.querySelector(".v326-content");
   if(!content)return;
   if(document.getElementById("v326-mercado-rich"))return;
+  // Remove old/default cards (any non-rich children)
+  Array.from(content.children).forEach(function(c){if(c.id!=="v326-mercado-rich")c.remove();});
   var grid=document.createElement("div");
   grid.id="v326-mercado-rich";
   CARDS.forEach(function(c){
