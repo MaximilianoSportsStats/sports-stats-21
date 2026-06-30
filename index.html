@@ -15302,7 +15302,7 @@ window.__v39loaded=true;window.__v391loaded=true;window.__v40loaded=true;window.
     var bar=document.querySelector('.sport-nav-bar');
     var nav=document.querySelector('.sport-nav-bar .sport-nav, .sport-nav-bar nav');
     if(bar){bar.style.setProperty('display','block','important');}
-    if(nav){nav.style.setProperty('display','flex','important');nav.style.setProperty('flex-wrap','wrap','important');}
+    if(nav){nav.style.setProperty('display','flex','important');nav.style.setProperty('flex-wrap','nowrap','important');}
   }
   fix();
   /* run on body class change (smart - no feedback loop because we only modify nav, not body) */
@@ -15732,7 +15732,7 @@ window.__v39loaded=true;window.__v391loaded=true;window.__v40loaded=true;window.
     var nav=document.querySelector('.sport-nav-bar nav.sport-nav, .sport-nav-bar .sport-nav');
     var d=inDeportes();
     if(bar){if(d){bar.style.setProperty('display','block','important');}else{bar.style.setProperty('display','none','important');}}
-    if(nav){if(d){nav.style.setProperty('display','flex','important');nav.style.setProperty('flex-wrap','wrap','important');}else{nav.style.setProperty('display','none','important');}}
+    if(nav){if(d){nav.style.setProperty('display','flex','important');nav.style.setProperty('flex-wrap','nowrap','important');}else{nav.style.setProperty('display','none','important');}}
   }
   applyBar();
   var mo=new MutationObserver(function(){applyBar();});
