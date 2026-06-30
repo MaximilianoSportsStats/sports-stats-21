@@ -24841,6 +24841,38 @@ setInterval(upgrade,800);
 upgrade();
 })();
 </script>
+
+<style>
+/* Override Wikipedia serif font - use site default */
+#panel-masss21-rebuild .v-mss-hero h1,
+#panel-masss21-rebuild .v-mss-sect h2,
+#panel-masss21-rebuild .v-mss-sect h3{
+  font-family:Inter, "Segoe UI", sans-serif !important;
+  font-weight:700 !important;
+}
+#panel-masss21-rebuild .v-mss-hero h1{font-size:36px !important;color:var(--primary) !important;letter-spacing:.3px}
+#panel-masss21-rebuild .v-mss-sect h2{font-size:22px !important;color:#111 !important;border-bottom:2px solid #fee2e2 !important;padding-bottom:8px !important}
+#panel-masss21-rebuild .v-mss-sect h3{font-size:17px !important;color:#111 !important;border-bottom:1px solid #f3f4f6 !important;padding-bottom:6px !important}
+#panel-masss21-rebuild .v-mss-main{font-family:Inter, "Segoe UI", sans-serif !important;font-size:15px !important;color:#374151 !important}
+#panel-masss21-rebuild .v-mss-sect p{color:#374151 !important;font-size:15px !important;text-align:left !important}
+#panel-masss21-rebuild .v-mss-sect a{color:var(--primary) !important;text-decoration:underline !important;text-decoration-color:rgba(220,38,38,.3) !important;text-underline-offset:2px}
+#panel-masss21-rebuild .v-mss-sect a:hover{text-decoration-color:var(--primary) !important}
+
+/* Improve sticky sidebar - stronger anchoring */
+#panel-masss21-rebuild .v-mss-layout{align-items:flex-start;min-height:calc(100vh - 100px)}
+#panel-masss21-rebuild .v-mss-sidebar{
+  position:sticky !important;
+  top:70px !important;
+  max-height:calc(100vh - 90px) !important;
+  overflow-y:auto !important;
+  align-self:flex-start;
+}
+#panel-masss21-rebuild .v-mss-sidebar a{color:#374151 !important;font-weight:500 !important;text-decoration:none !important}
+#panel-masss21-rebuild .v-mss-sidebar a:hover{color:var(--primary) !important;background:#fef2f2 !important;text-decoration:none !important}
+#panel-masss21-rebuild .v-mss-sidebar a.v-active{background:var(--primary) !important;color:#fff !important;border-left:0 !important;font-weight:600 !important;border-radius:6px}
+#panel-masss21-rebuild .v-mss-sidebar a.v-active:hover{background:#991b1b !important;color:#fff !important}
+#panel-masss21-rebuild .v-mss-sidebar h4{color:var(--primary) !important;font-weight:800 !important;text-transform:uppercase !important;letter-spacing:.5px !important;font-size:11px !important;border-bottom-color:#fee2e2 !important}
+</style>
 </body>
 </html>
 
