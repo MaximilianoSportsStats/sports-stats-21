@@ -24454,7 +24454,7 @@ function buildRetoHard(){
     else{msgClass="v-failed";msgText="\u{2717} No es esa. La correcta es: "+t.correct;}
   }
   
-  reto.innerHTML='<div class="v-rb-header"><div class="v-rb-label">\u{1F3AF} RETO DIARIO</div><div class="v-rb-timer-wrap">\u{23F0} Pr\u{00F3}ximo reto en <span class="v-rb-timer">'+getTimeUntilMidnight()+'</span></div></div>'+
+  reto.innerHTML='<div class="v-rb-header"><div class="v-rb-label">\u{1F3AF} RETO DIARIO</div></div>'+
     '<h3>'+t.q+'</h3>'+
     '<div class="v-rb-opts">'+optsHtml+'</div>'+
     '<div class="v-rb-msg '+msgClass+'">'+msgText+'</div>'+
@@ -24514,7 +24514,7 @@ function buildEncHard(){
   enc.innerHTML='<div class="v-rb-header"><div class="v-rb-label">\u{1F4CA} ENCUESTA DIARIA</div><div class="v-rb-votes-inline"><span class="v-rb-num">'+totalVotes.toLocaleString()+'</span><span class="v-rb-vlbl">VOTOS</span></div></div>'+
     '<h3>'+t.q+'</h3>'+
     contentHtml+
-    '<div class="v-rb-footer-row"><span class="v-rb-meta-txt">\u{1F4CC} Pr\u{00F3}ximamente: encuestas por deporte y resultados semanales hist\u{00F3}ricos.</span><span class="v-rb-timer-wrap">\u{23F0} Pr\u{00F3}xima encuesta en <span class="v-rb-timer">'+getTimeUntilMidnight()+'</span></span></div>';
+    '<div class="v-rb-footer-row"><span class="v-rb-meta-txt">\u{1F4CC} Pr\u{00F3}ximamente: encuestas por deporte y resultados semanales hist\u{00F3}ricos.</span></div>';
   
   enc.querySelectorAll(".v-rb-vote-opt, .v-rb-bar").forEach(function(b){
     b.addEventListener("click",function(){
@@ -24555,6 +24555,14 @@ tryWatch();
 #v705-encuesta.v-rebuild-enc .v-rb-votes-inline .v-rb-vlbl{font-size:11px;color:var(--muted);font-weight:600;letter-spacing:.4px}
 #v705-encuesta.v-rebuild-enc .v-rb-footer-row{margin-top:14px;display:flex;justify-content:space-between;color:var(--muted);font-size:12px;font-weight:600;flex-wrap:wrap;gap:10px}
 #v99-retos.v-rebuild-reto .v-rb-meta{justify-content:space-between}
+</style>
+
+<style>
+.v100-retos-countdown,
+.v705-encuesta-countdown,
+[class*='retos-countdown'],
+[class*='encuesta-countdown'],
+[class*='-countdown']{display:none !important}
 </style>
 </body>
 </html>
