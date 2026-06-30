@@ -24952,6 +24952,53 @@ setInterval(wireSidebar, 800);
 wireSidebar();
 })();
 </script>
+
+<script>
+(function(){
+if(window.__vMassButtonFix)return;window.__vMassButtonFix=true;
+// Capture-phase intercept: ANY click on element with text "Más Sobre SS 21" goes to new page
+document.addEventListener("click",function(e){
+  if(!e.isTrusted)return;
+  var el=e.target.closest("button,a,li,div,span");
+  if(!el)return;
+  var txt=(el.textContent||"").trim();
+  if(txt.length>30)return;
+  // Match "Más Sobre SS 21" with optional arrow
+  if(/^[\W_]*M[áa]s Sobre SS\s?21\s*(?:→|>|\u{2192})?\s*$/u.test(txt) || txt==="Más Sobre SS 21 →" || txt==="Más Sobre SS 21"){
+    // Don't trigger if inside drawer (drawer already handled)
+    e.preventDefault();
+    e.stopImmediatePropagation();
+    if(typeof window.__showMassObreSS21==='function'){
+      window.__showMassObreSS21();
+    }
+  }
+},true);
+
+// Also kill the old v87-page-masss21 panel: hide it whenever it tries to show
+function killOldPanel(){
+  var old=document.getElementById("v87-page-masss21");
+  if(old && getComputedStyle(old).display!=="none"){
+    var newPanel=document.getElementById("panel-masss21-rebuild");
+    if(newPanel && getComputedStyle(newPanel).display==="none"){
+      // If old is showing but new isn't, transition to new
+      if(typeof window.__showMassObreSS21==='function'){
+        window.__showMassObreSS21();
+      } else {
+        old.style.setProperty("display","none","important");
+      }
+    } else if(newPanel && getComputedStyle(newPanel).display!=="none"){
+      // Both visible - hide old
+      old.style.setProperty("display","none","important");
+    } else {
+      // No new panel - just hide old
+      old.style.setProperty("display","none","important");
+    }
+  }
+}
+setInterval(killOldPanel, 300);
+killOldPanel();
+})();
+</script>
 </body>
 </html>
 
