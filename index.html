@@ -22411,7 +22411,7 @@ function hideAllExcept(keepId){
   if(keep)keep.style.setProperty("display","block","important");
 }
 function showInicio(){
-  document.querySelectorAll("[id^='panel-']").forEach(function(p){
+  document.querySelectorAll("[id^='panel-'],#v326-panel-mercado,#panel-v-retos,#panel-v-encuestas,#panel-v724-curiosos").forEach(function(p){
     if(p.id!=="panel-inicio")p.style.setProperty("display","none","important");
   });
   var inicio=document.getElementById("panel-inicio");
@@ -22473,7 +22473,7 @@ function hideAllExcept(keepId){
   if(keep)keep.style.setProperty("display","block","important");
 }
 function showInicio(){
-  document.querySelectorAll("[id^='panel-']").forEach(function(p){
+  document.querySelectorAll("[id^='panel-'],#v326-panel-mercado,#panel-v-retos,#panel-v-encuestas,#panel-v724-curiosos").forEach(function(p){
     if(p.id!=="panel-inicio")p.style.setProperty("display","none","important");
   });
   document.querySelectorAll("[id^='v86-page-']").forEach(function(p){
