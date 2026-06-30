@@ -24909,7 +24909,7 @@ function wireSidebar(){
       if(!target)return;
       var rect=target.getBoundingClientRect();
       var top=rect.top+window.scrollY-70;
-      window.scrollTo({top:top, behavior:"smooth"});
+      try{ window.scrollTo({top:top, behavior:"smooth"}); }catch(_){} window.scrollTo(0, top);
       panel.querySelectorAll(".v-mss-sidebar a").forEach(function(x){x.classList.remove("v-active")});
       a.classList.add("v-active");
     });
