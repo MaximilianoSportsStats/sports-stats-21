@@ -24286,7 +24286,7 @@ function buildReto(){
   if(reto.dataset.vRebuilt===TODAY)return;
   reto.dataset.vRebuilt=TODAY;
   
-  var t=pool[(dayOfYear()-1+pool.length*1000)%pool.length];
+  var t=pool[dayOfYear()%pool.length];
   var voteKey="v-rebuild-reto-"+TODAY;
   var existingVote=localStorage.getItem(voteKey);
   
@@ -24331,7 +24331,7 @@ function buildEnc(force){
   if(!enc)return;
   var pool=window.__ENCS_POOL_REF||[];
   if(!pool.length){setTimeout(buildEnc,400);return;}
-  var t=pool[(dayOfYear()-1+pool.length*1000)%pool.length];
+  var t=pool[dayOfYear()%pool.length];
   var sig=TODAY+"|"+t.q;
   if(enc.dataset.vRebuilt===sig && !force)return;
   enc.dataset.vRebuilt=sig;
