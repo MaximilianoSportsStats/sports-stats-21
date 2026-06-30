@@ -23898,18 +23898,31 @@ window.__goToMercadoPage=function(){
 function wireBtn(){
   var inicio=document.getElementById("panel-inicio");
   if(!inicio)return;
-  // Find h2 MERCADO
-  var h2=Array.from(inicio.querySelectorAll("h2,h3")).filter(function(h){return /MERCADO/i.test(h.textContent)&&h.textContent.trim().length<20})[0];
+  // Find ALL mercado-related elements that should be clickable
+  var sec=document.getElementById("v164-mercado");
+  if(!sec)return;
+  var h2=Array.from(sec.querySelectorAll("h2,h3")).filter(function(h){return /MERCADO/i.test(h.textContent)})[0];
   if(!h2)return;
-  // Inline onclick on H2 itself - cannot be overridden
+  // Inline onclick on H2
   if(!h2.dataset.vNukeWired){
     h2.dataset.vNukeWired="1";
     h2.setAttribute("onclick","window.__goToMercadoPage()");
     h2.style.cursor="pointer";
   }
-  
+  // Also subtitle (next sibling of h2)
+  var subtitle=h2.nextElementSibling;
+  if(subtitle && subtitle.tagName==="DIV" && !subtitle.dataset.vNukeWired && (subtitle.textContent||"").trim().length<80){
+    subtitle.dataset.vNukeWired="1";
+    subtitle.setAttribute("onclick","window.__goToMercadoPage()");
+    subtitle.style.cursor="pointer";
+  }
+  // Also wire mousedown on H2 (fires earlier than click, harder to intercept)
+  if(!h2.dataset.vMDownWired){
+    h2.dataset.vMDownWired="1";
+    h2.setAttribute("onmousedown","window.__goToMercadoPage();return false;");
+  }
 }
-setInterval(wireBtn, 800);
+setInterval(wireBtn, 800);;
 wireBtn();
 })();
 </script>
