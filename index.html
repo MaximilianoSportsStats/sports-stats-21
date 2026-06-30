@@ -24082,6 +24082,75 @@ setTimeout(function(){
 setInterval(updateHash, 600);
 })();
 </script>
+
+<script>
+(function(){
+if(window.__vCleanHome)return;window.__vCleanHome=true;
+
+window.__goHome=function(){
+  // 1. Hide ALL section panels with !important
+  var sectionPanelsToHide=["panel-v703-noticias","panel-v708-blogs","panel-v709-podcast","panel-v710-articulos","panel-v711-seguidos","panel-v712-reclutar","panel-v723-centros","panel-v724-articulos","panel-v724-podcast","panel-v724-curiosos","panel-v-retos","panel-v-encuestas","v326-panel-mercado","v56-page-favoritos","v56-page-envivo","v38-page-universitarias","v38-page-escolares","v38-page-amateur","v38-page-comparar","v87-page-masss21","panel-soccer","panel-tennis","panel-nba","panel-f1","panel-nfl","panel-baseball","panel-hockey","panel-golf","panel-ufc","panel-rugby","panel-padel","panel-acuaticos","panel-athletics","panel-volley","panel-cricket","panel-eventos","panel-mlb","panel-nhl","panel-olympics","panel-cycling","panel-chess","panel-liga-local","panel-mas-deportes","panel-otros","v700-shell"];
+  sectionPanelsToHide.forEach(function(id){var el=document.getElementById(id);if(el)el.style.setProperty("display","none","important");});
+  // 2. Also hide any v86-page-*
+  document.querySelectorAll("[id^='v86-page-']").forEach(function(p){p.style.setProperty("display","none","important");});
+  // 3. Restore panel-inicio
+  var inicio=document.getElementById("panel-inicio");
+  if(inicio)inicio.style.removeProperty("display");
+  // 4. Reset internal state
+  if(typeof window.__v715_target!=="undefined")window.__v715_target=null;
+  document.body.classList.remove("v703-noticias","v708-blogs","v709-podcast","v700-active","v32-view-deportes","v32-view-mercado","v32-view-noticias");
+  if(!document.body.classList.contains("v32-view-inicio"))document.body.classList.add("v32-view-inicio");
+  // 5. Close any modals
+  ["v-modal","v-info-modal","v-card-modal"].forEach(function(id){var m=document.getElementById(id);if(m)m.remove();});
+  // 6. Close drawer
+  var drawer=document.querySelector(".v36-side");
+  if(drawer)drawer.classList.remove("v36-open","v34-open","open");
+  // 7. Scroll to top
+  window.scrollTo({top:0,behavior:"instant"});
+  document.documentElement.scrollTop=0;
+  document.body.scrollTop=0;
+  // 8. Update URL hash
+  if(location.hash && location.hash!=="#inicio"){
+    if(window.__skipNextHashChange!==undefined)window.__skipNextHashChange=true;
+    history.replaceState(null,"","#inicio");
+  }
+};
+
+// Capture-phase intercept for "Inicio" clicks anywhere
+document.addEventListener("click",function(e){
+  if(!e.isTrusted)return;
+  var el=e.target.closest("li,button,a,h1,h2,h3");
+  if(!el)return;
+  var txt=(el.textContent||"").trim();
+  if(txt.length>20)return;
+  if(/^🏠?s*Inicio$/u.test(txt) || txt==="Inicio"){
+    e.preventDefault();
+    e.stopImmediatePropagation();
+    window.__goHome();
+  }
+},true);
+
+// Logo click also goes home
+function wireLogo(){
+  var logos=Array.from(document.querySelectorAll("img,a,div,header *")).filter(function(el){
+    var alt=el.getAttribute&&el.getAttribute("alt");
+    var src=el.getAttribute&&el.getAttribute("src");
+    return (alt && /Sports Stats 21/i.test(alt))||(src && /logo/i.test(src));
+  });
+  logos.forEach(function(l){
+    if(l.dataset.vHomeWired)return;
+    l.dataset.vHomeWired="1";
+    l.style.cursor="pointer";
+    l.addEventListener("click",function(e){
+      e.preventDefault();e.stopImmediatePropagation();
+      window.__goHome();
+    },true);
+  });
+}
+setInterval(wireLogo, 1500);
+wireLogo();
+})();
+</script>
 </body>
 </html>
 
