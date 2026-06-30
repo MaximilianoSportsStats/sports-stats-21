@@ -24160,6 +24160,86 @@ wireLogo();
 #v326-panel-mercado .v326-tabs{max-width:1200px;margin:0 auto 24px;padding:0 24px;justify-content:center}
 #v326-panel-mercado .v326-content{max-width:1200px;margin:0 auto;padding:0 24px}
 </style>
+
+<style>
+#v326-panel-mercado .v326-content{display:block !important}
+#v326-mercado-rich{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:18px;padding:0 24px;max-width:1200px;margin:0 auto}
+#v326-mercado-rich .v-mcard{background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:18px;transition:all .2s;cursor:pointer}
+#v326-mercado-rich .v-mcard:hover{transform:translateY(-3px);box-shadow:0 12px 28px rgba(0,0,0,.08);border-color:var(--primary)}
+#v326-mercado-rich .v-mcard-emoji{font-size:32px;margin-bottom:10px;display:block}
+#v326-mercado-rich .v-mcard-cat{display:inline-block;background:#fef2f2;color:var(--primary);padding:3px 10px;border-radius:999px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;margin-bottom:10px}
+#v326-mercado-rich .v-mcard h3{font-size:16px;margin:0 0 8px;color:#111;font-weight:700;line-height:1.3}
+#v326-mercado-rich .v-mcard p{color:#6b7280;font-size:13px;line-height:1.5;margin:0 0 12px}
+#v326-mercado-rich .v-mcard-meta{display:flex;justify-content:space-between;padding-top:10px;border-top:1px solid #f3f4f6;font-size:12px}
+#v326-mercado-rich .v-mcard-value{color:var(--primary);font-weight:800}
+#v326-mercado-rich .v-mcard-date{color:var(--muted);font-weight:600}
+</style>
+<script>
+(function(){
+if(window.__vMercadoRich)return;window.__vMercadoRich=true;
+
+// === 1. Drawer Mercado click interceptor ===
+document.addEventListener("click",function(e){
+  if(!e.isTrusted)return;
+  var li=e.target.closest("[data-v322-mercado], li, button, a");
+  if(!li)return;
+  var hasV322=li.getAttribute && li.getAttribute("data-v322-mercado");
+  var txt=(li.textContent||"").trim();
+  if(hasV322 || /^🤵?s*Mercado$/u.test(txt) && txt.length<15){
+    e.preventDefault();
+    e.stopImmediatePropagation();
+    if(typeof window.__goToMercadoPage==='function')window.__goToMercadoPage();
+  }
+},true);
+
+// === 2. Add many more cards to Mercado page ===
+var CARDS=[
+{e:"⚽",cat:"Top fichaje",t:"Mbappé al Real Madrid",d:"Fichaje del año. Contrato por 5 años con bono de firma récord histórico.",v:"€180M",d2:"15 jul 2026"},
+{e:"⚽",cat:"Renovación",t:"Lamine Yamal renueva con Barcelona",d:"Mejora salarial hasta 2030. Cláusula de rescisión sube a 1.000 millones.",v:"€60M/año",d2:"12 jul 2026"},
+{e:"⚽",cat:"Top fichaje",t:"Endrick llega a Madrid",d:"La joya brasileña se suma al plantel blanco. Promesa del fútbol mundial.",v:"€60M",d2:"10 jul 2026"},
+{e:"⚽",cat:"Top fichaje",t:"Vitór Roque al Barça",d:"Nuevo delantero brasileño confirmado. Contrato por 5 temporadas.",v:"€40M",d2:"05 jul 2026"},
+{e:"⚽",cat:"Rumor",t:"Mbappé al PSG (renovación)",d:"Negociaciones avanzadas para extender contrato. Aumento salarial del 30%.",v:"€100M/año",d2:"02 jul 2026"},
+{e:"⚽",cat:"Top fichaje",t:"Vinicius Jr al Manchester City",d:"Posible bombazo para el verano. Pep Guardiola lo quiere como pieza clave.",v:"€200M",d2:"30 jun 2026"},
+{e:"⚽",cat:"Renovación",t:"Bellingham extiende con Real Madrid",d:"Contrato hasta 2032. Sueldo equiparado a estrellas top del club.",v:"€25M/año",d2:"28 jun 2026"},
+{e:"⚽",cat:"Top fichaje",t:"Haaland al Barcelona",d:"Operación histórica en curso. El noruego cambiaría Inglaterra por España.",v:"€220M",d2:"25 jun 2026"},
+{e:"🤝",cat:"Préstamo",t:"João Félix a Chelsea",d:"Préstamo con opción de compra obligatoria. Buscando minutos y forma.",v:"€20M opción",d2:"20 jun 2026"},
+{e:"🤝",cat:"Préstamo",t:"Joao Cancelo al Bayern",d:"Cesión con opción. El portugués busca recuperar protagonismo.",v:"€18M opción",d2:"18 jun 2026"},
+{e:"🆓",cat:"Agente libre",t:"Modric firma con Inter Miami",d:"Vinculación de 2 años con MLS. Última gran aventura del croata.",v:"Libre",d2:"15 jun 2026"},
+{e:"🆓",cat:"Agente libre",t:"Marcelo regresa a Brasil",d:"El veterano lateral firma con Fluminense por 2 temporadas.",v:"Libre",d2:"12 jun 2026"},
+{e:"📝",cat:"Contrato",t:"Cláusula millonaria de Yamal",d:"€1.000 millones de cláusula. Acuerdo histórico del Barcelona.",v:"€1B cláusula",d2:"10 jun 2026"},
+{e:"📝",cat:"Contrato",t:"Mbappé bonus por Champions",d:"€20M extra si Real Madrid gana la Champions 2026/27.",v:"€20M bonus",d2:"08 jun 2026"},
+{e:"🔥",cat:"Rumor",t:"Salah deja Liverpool",d:"Arabia Saudita ofrece contrato récord. Liverpool busca reemplazo.",v:"€300M ofrecido",d2:"05 jun 2026"},
+{e:"🔥",cat:"Rumor",t:"De Bruyne a Inter Miami",d:"Possible llegada en enero 2027. Charlas iniciales con MLS.",v:"DAZN exclusivo",d2:"02 jun 2026"},
+{e:"💰",cat:"Valores",t:"Top 5 jugadores mas caros",d:"Yamal lidera con €180M valor de mercado. Bellingham y Haaland completan top 3.",v:"€180M",d2:"01 jun 2026"},
+{e:"💰",cat:"Valores",t:"Clubes con mayor inversion",d:"Real Madrid lidera con €450M en fichajes esta ventana. PSG segundo con €380M.",v:"€450M total",d2:"30 may 2026"},
+{e:"📚",cat:"Historial",t:"Top traspasos de la decada",d:"Neymar al PSG sigue siendo el record. Mbappé al Real Madrid segundo lugar.",v:"€222M Neymar",d2:"25 may 2026"},
+{e:"📚",cat:"Historial",t:"Renovaciones legendarias",d:"Messi y Ronaldo con los contratos mas largos en sus respectivos clubes.",v:"22 años Messi",d2:"20 may 2026"}
+];
+
+function renderRich(){
+  var panel=document.getElementById("v326-panel-mercado");
+  if(!panel)return;
+  var content=panel.querySelector(".v326-content");
+  if(!content)return;
+  if(document.getElementById("v326-mercado-rich"))return;
+  var grid=document.createElement("div");
+  grid.id="v326-mercado-rich";
+  CARDS.forEach(function(c){
+    var card=document.createElement("div");
+    card.className="v-mcard";
+    card.innerHTML='<span class="v-mcard-emoji">'+c.e+'</span>'+
+      '<span class="v-mcard-cat">'+c.cat+'</span>'+
+      '<h3>'+c.t+'</h3>'+
+      '<p>'+c.d+'</p>'+
+      '<div class="v-mcard-meta"><span class="v-mcard-value">'+c.v+'</span><span class="v-mcard-date">'+c.d2+'</span></div>';
+    grid.appendChild(card);
+  });
+  content.appendChild(grid);
+}
+setInterval(renderRich, 1000);
+renderRich();
+})();
+</script>
 </body>
 </html>
 
