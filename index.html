@@ -23937,6 +23937,151 @@ setInterval(removeMercBtn, 300);
 removeMercBtn();
 })();
 </script>
+
+<script>
+(function(){
+if(window.__vHashRouter)return;window.__vHashRouter=true;
+
+// Mapping: URL hash -> panel ID + (optional) action function
+var HASH_TO_PANEL={
+  "inicio":"panel-inicio",
+  "noticias":"panel-v703-noticias",
+  "blogs":"panel-v708-blogs",
+  "podcast":"panel-v724-podcast",
+  "articulos":"panel-v724-articulos",
+  "seguidos":"panel-v711-seguidos",
+  "reclutar":"panel-v712-reclutar",
+  "centros":"panel-v723-centros",
+  "centros_deportivos":"panel-v723-centros",
+  "curiosos":"panel-v724-curiosos",
+  "datos_curiosos":"panel-v724-curiosos",
+  "retos":"panel-v-retos",
+  "encuestas":"panel-v-encuestas",
+  "mercado":"v326-panel-mercado",
+  "favoritos":"v56-page-favoritos",
+  "envivo":"v56-page-envivo",
+  "en_vivo":"v56-page-envivo",
+  "deportes_profesionales":"panel-soccer",
+  "deportes_universitarios":"v38-page-universitarias",
+  "deportes_escolares":"v38-page-escolares",
+  "deportes_amateur":"v38-page-amateur",
+  "comparar":"v38-page-comparar",
+  "futbol":"panel-soccer",
+  "tenis":"panel-tennis",
+  "basketball":"panel-nba",
+  "f1":"panel-f1",
+  "nfl":"panel-nfl",
+  "beisbol":"panel-baseball",
+  "hockey":"panel-hockey",
+  "golf":"panel-golf",
+  "combate":"panel-ufc",
+  "rugby":"panel-rugby",
+  "padel":"panel-padel",
+  "natacion":"panel-acuaticos",
+  "atletismo":"panel-athletics",
+  "voleyball":"panel-volley",
+  "cricket":"panel-cricket",
+  "mas_sobre_ss21":"v87-page-masss21",
+  "MasSobreSS21":"v87-page-masss21"
+};
+
+// Reverse: panel ID -> hash
+var PANEL_TO_HASH={};
+Object.keys(HASH_TO_PANEL).forEach(function(h){
+  var pid=HASH_TO_PANEL[h];
+  if(!PANEL_TO_HASH[pid])PANEL_TO_HASH[pid]=h;
+});
+
+function normHash(h){
+  return (h||"").replace(/^#/,"").toLowerCase().trim();
+}
+
+// Show panel by hash (when user navigates by URL)
+function routeFromHash(){
+  var hash=normHash(location.hash);
+  if(!hash)hash="inicio";
+  var panelId=HASH_TO_PANEL[hash];
+  if(!panelId){
+    // Try variations
+    var lh=hash.toLowerCase();
+    for(var k in HASH_TO_PANEL){
+      if(k.toLowerCase()===lh){panelId=HASH_TO_PANEL[k];break;}
+    }
+  }
+  if(!panelId)return;
+  // Find currently visible panel
+  var current=document.querySelector("[id^='panel-']:not([style*='display: none'])");
+  if(current && current.id===panelId)return; // already showing
+  
+  // Programmatically navigate
+  if(panelId==="panel-inicio"){
+    document.querySelectorAll("[id^='panel-'],[id='v326-panel-mercado']").forEach(function(p){
+      if(p.id!=="panel-inicio")p.style.setProperty("display","none","important");
+    });
+    var inicio=document.getElementById("panel-inicio");
+    if(inicio)inicio.style.removeProperty("display");
+    return;
+  }
+  // Use existing __showV724Content for known keys
+  var v724Keys={"panel-v703-noticias":"noticias","panel-v708-blogs":"blogs","panel-v724-podcast":"podcast","panel-v724-articulos":"articulos","panel-v711-seguidos":"seguidos","panel-v712-reclutar":"reclutar","panel-v724-curiosos":"curiosos","panel-v-retos":"retos","panel-v-encuestas":"encuestas"};
+  if(v724Keys[panelId] && typeof window.__showV724Content==='function'){
+    window.__showV724Content(v724Keys[panelId]);
+    return;
+  }
+  if(panelId==="v326-panel-mercado" && typeof window.__goToMercadoPage==='function'){
+    window.__goToMercadoPage();
+    return;
+  }
+  // Fallback: hide everything else, show this
+  document.querySelectorAll("[id^='panel-'], [id='v326-panel-mercado']").forEach(function(p){
+    if(p.id!==panelId)p.style.setProperty("display","none","important");
+  });
+  var target=document.getElementById(panelId);
+  if(target)target.style.setProperty("display","block","important");
+  var inicio=document.getElementById("panel-inicio");
+  if(inicio && panelId!=="panel-inicio")inicio.style.setProperty("display","none","important");
+}
+
+// Update URL hash when panel becomes visible (MutationObserver-based)
+function updateHash(){
+  var visible=null;
+  // Check all known panels
+  Object.keys(PANEL_TO_HASH).forEach(function(pid){
+    var el=document.getElementById(pid);
+    if(!el)return;
+    if(getComputedStyle(el).display!=="none"){
+      // Don't double-set for panel-inicio if other section is also visible
+      if(pid==="panel-inicio" && visible)return;
+      if(!visible || pid!=="panel-inicio")visible=pid;
+    }
+  });
+  if(!visible)return;
+  var hash=PANEL_TO_HASH[visible];
+  if(!hash)return;
+  if(normHash(location.hash)===hash)return;
+  // Update without triggering hashchange routing back
+  window.__skipNextHashChange=true;
+  history.replaceState(null,"","#"+hash);
+}
+
+// Listen to URL hash change (back/forward, paste link)
+window.addEventListener("hashchange",function(e){
+  if(window.__skipNextHashChange){window.__skipNextHashChange=false;return;}
+  routeFromHash();
+});
+
+// On page load, route to current hash
+setTimeout(function(){
+  if(location.hash && normHash(location.hash)!=="inicio"){
+    routeFromHash();
+  }
+  updateHash();
+},500);
+
+// Periodic check to update hash if panel changed
+setInterval(updateHash, 600);
+})();
+</script>
 </body>
 </html>
 
