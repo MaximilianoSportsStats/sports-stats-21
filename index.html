@@ -25132,7 +25132,7 @@ document.addEventListener("click",function(e){
 },true);
 function routeExtra(){
   var h=(location.hash||"").replace(/^#/,"").toLowerCase().trim();
-  var map={"reclutar":"panel-v712-reclutar","seguidos":"panel-v711-seguidos","datos":"panel-v724-curiosos","curiosos":"panel-v724-curiosos","datos_curiosos":"panel-v724-curiosos","masss21":"panel-masss21-rebuild","mas_sobre_ss21":"panel-masss21-rebuild"};
+  var map={"inicio":"panel-inicio","reclutar":"panel-v712-reclutar","seguidos":"panel-v711-seguidos","datos":"panel-v724-curiosos","curiosos":"panel-v724-curiosos","datos_curiosos":"panel-v724-curiosos","masss21":"panel-masss21-rebuild","mas_sobre_ss21":"panel-masss21-rebuild"};
   if(map[h])goSection(map[h]);
 }
 window.addEventListener("hashchange",routeExtra);
