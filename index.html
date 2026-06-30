@@ -24398,6 +24398,164 @@ setInterval(tick, 2000);
 #v99-retos.v-rebuild-reto h3,#v705-encuesta.v-rebuild-enc h3{font-size:22px;margin:8px 0 18px;color:#111;font-weight:800;line-height:1.3}
 #v99-retos.v-rebuild-reto .v-rb-label,#v705-encuesta.v-rebuild-enc .v-rb-label{color:var(--primary);font-size:13px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;margin-bottom:4px;display:flex;align-items:center;gap:6px}
 </style>
+
+<script>
+(function(){
+if(window.__vRebuildHard)return;window.__vRebuildHard=true;
+
+var TODAY=new Date().toISOString().slice(0,10);
+function dayOfYear(){var d=new Date();var s=new Date(d.getFullYear(),0,0);return Math.floor((d-s)/86400000);}
+
+function getTimeUntilMidnight(){
+  var n=new Date();
+  var m=new Date(n.getFullYear(),n.getMonth(),n.getDate()+1);
+  var diff=m-n;
+  var h=Math.floor(diff/3600000);
+  var mm=Math.floor((diff%3600000)/60000);
+  var s=Math.floor((diff%60000)/1000);
+  return (h<10?"0"+h:h)+":"+(mm<10?"0"+mm:mm)+":"+(s<10?"0"+s:s);
+}
+
+function buildRetoHard(){
+  var reto=document.getElementById("v99-retos");
+  if(!reto)return;
+  var pool=window.__RETOS_POOL_REF||[];
+  if(!pool.length)return;
+  var t=pool[dayOfYear()%pool.length];
+  var voteKey="v-rebuild-reto-"+TODAY;
+  var existingVote=localStorage.getItem(voteKey);
+  
+  // Check if content is correct - first bar/button should be t.opts[0]
+  var firstBtn=reto.querySelector(".v-rb-opt");
+  var expectedFirstText=t.opts[0];
+  if(firstBtn && firstBtn.textContent.trim()===expectedFirstText && reto.dataset.vTimer){
+    // Just update timer
+    var timerEl=reto.querySelector(".v-rb-timer");
+    if(timerEl)timerEl.textContent=getTimeUntilMidnight();
+    return;
+  }
+  
+  // Full rebuild
+  reto.className=reto.className.replace(/\bv-rebuild-reto\b/g,"").trim()+" v-rebuild-reto";
+  reto.dataset.vTimer="1";
+  
+  var optsHtml=t.opts.map(function(o){
+    var cls="v-rb-opt";
+    if(existingVote){
+      if(o===t.correct)cls+=" v-correct";
+      else if(o===existingVote)cls+=" v-wrong";
+    }
+    return '<button class="'+cls+'" data-opt="'+o+'">'+o+'</button>';
+  }).join("");
+  
+  var msgClass="",msgText="";
+  if(existingVote){
+    if(existingVote===t.correct){msgClass="v-success";msgText="\u{2713} Correcto! Vuelve mañana por el próximo reto.";}
+    else{msgClass="v-failed";msgText="\u{2717} No es esa. La correcta es: "+t.correct;}
+  }
+  
+  reto.innerHTML='<div class="v-rb-header"><div class="v-rb-label">\u{1F3AF} RETO DIARIO</div><div class="v-rb-timer-wrap">\u{23F0} Pr\u{00F3}ximo reto en <span class="v-rb-timer">'+getTimeUntilMidnight()+'</span></div></div>'+
+    '<h3>'+t.q+'</h3>'+
+    '<div class="v-rb-opts">'+optsHtml+'</div>'+
+    '<div class="v-rb-msg '+msgClass+'">'+msgText+'</div>'+
+    '<div class="v-rb-meta"><span>\u{1F4CC} Próximamente: más retos, ranking semanal y desafíos por deporte.</span></div>';
+  
+  reto.querySelectorAll(".v-rb-opt").forEach(function(b){
+    b.addEventListener("click",function(){
+      if(localStorage.getItem(voteKey))return;
+      localStorage.setItem(voteKey, b.dataset.opt);
+      buildRetoHard();
+    });
+  });
+}
+
+function buildEncHard(){
+  var enc=document.getElementById("v705-encuesta");
+  if(!enc)return;
+  var pool=window.__ENCS_POOL_REF||[];
+  if(!pool.length)return;
+  var t=pool[dayOfYear()%pool.length];
+  var voteKey="v-rebuild-enc-"+TODAY;
+  var existingVote=localStorage.getItem(voteKey);
+  var totalVotes=t.opts.reduce(function(s,o){return s+(o.v||0)},0)*30+847;
+  
+  // Check if content matches - first option/bar should be t.opts[0].n
+  var first=enc.querySelector(".v-rb-bar-name, .v-rb-vote-opt");
+  var expectedFirstName=t.opts[0].n;
+  if(first && first.textContent.trim()===expectedFirstName){
+    // Just refresh timer
+    var timerEl=enc.querySelector(".v-rb-timer");
+    if(timerEl)timerEl.textContent=getTimeUntilMidnight();
+    return;
+  }
+  
+  // Full rebuild
+  enc.className=enc.className.replace(/\bv-rebuild-enc\b/g,"").replace(/\bv-voted-state\b/g,"").trim()+" v-rebuild-enc";
+  if(existingVote)enc.classList.add("v-voted-state");
+  
+  var contentHtml;
+  if(existingVote){
+    var barsHtml=t.opts.map(function(o){
+      var cls="v-rb-bar v-rb-voted-bar"+(existingVote===o.n?" v-voted":"");
+      return '<div class="'+cls+'" data-opt="'+o.n+'">'+
+        '<span class="v-rb-bar-name">'+o.n+'</span>'+
+        '<div class="v-rb-bar-fill"><div style="width:'+o.v+'%"></div></div>'+
+        '<span class="v-rb-bar-pct">'+o.v+'%</span>'+
+      '</div>';
+    }).join("");
+    contentHtml='<div class="v-rb-info">\u{2713} Ya votaste hoy. Resultados en vivo.</div><div class="v-rb-bars">'+barsHtml+'</div>';
+  } else {
+    var optsHtml=t.opts.map(function(o){
+      return '<button class="v-rb-vote-opt" data-opt="'+o.n+'">'+o.n+'</button>';
+    }).join("");
+    contentHtml='<div class="v-rb-info v-rb-info-vote">Vota tu opci\u{00F3}n - los resultados aparecen al instante</div><div class="v-rb-opts-vote">'+optsHtml+'</div>';
+  }
+  
+  enc.innerHTML='<div class="v-rb-header"><div class="v-rb-label">\u{1F4CA} ENCUESTA DIARIA</div><div class="v-rb-votes-inline"><span class="v-rb-num">'+totalVotes.toLocaleString()+'</span><span class="v-rb-vlbl">VOTOS</span></div></div>'+
+    '<h3>'+t.q+'</h3>'+
+    contentHtml+
+    '<div class="v-rb-footer-row"><span class="v-rb-meta-txt">\u{1F4CC} Pr\u{00F3}ximamente: encuestas por deporte y resultados semanales hist\u{00F3}ricos.</span><span class="v-rb-timer-wrap">\u{23F0} Pr\u{00F3}xima encuesta en <span class="v-rb-timer">'+getTimeUntilMidnight()+'</span></span></div>';
+  
+  enc.querySelectorAll(".v-rb-vote-opt, .v-rb-bar").forEach(function(b){
+    b.addEventListener("click",function(){
+      if(localStorage.getItem(voteKey))return;
+      localStorage.setItem(voteKey, b.dataset.opt);
+      buildEncHard();
+    });
+  });
+}
+
+// Run aggressively to overwrite any legacy modifications
+setInterval(function(){buildRetoHard();buildEncHard();}, 400);
+setTimeout(function(){buildRetoHard();buildEncHard();}, 800);
+
+// Also use MutationObserver to detect changes and rebuild immediately
+function watchEl(id, builder){
+  var el=document.getElementById(id);
+  if(!el || el.dataset.vWatched)return;
+  el.dataset.vWatched="1";
+  new MutationObserver(function(){
+    setTimeout(builder, 50);
+  }).observe(el,{characterData:true, childList:true, subtree:true});
+}
+function tryWatch(){
+  watchEl("v99-retos", buildRetoHard);
+  watchEl("v705-encuesta", buildEncHard);
+}
+setInterval(tryWatch, 1000);
+tryWatch();
+})();
+</script>
+<style>
+#v99-retos.v-rebuild-reto .v-rb-header,#v705-encuesta.v-rebuild-enc .v-rb-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;gap:14px;flex-wrap:wrap}
+#v99-retos.v-rebuild-reto .v-rb-timer-wrap,#v705-encuesta.v-rebuild-enc .v-rb-timer-wrap{font-size:13px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.4px}
+#v99-retos.v-rebuild-reto .v-rb-timer,#v705-encuesta.v-rebuild-enc .v-rb-timer{color:var(--primary);font-weight:800;font-family:monospace;font-size:14px}
+#v705-encuesta.v-rebuild-enc .v-rb-votes-inline{display:flex;align-items:baseline;gap:6px}
+#v705-encuesta.v-rebuild-enc .v-rb-votes-inline .v-rb-num{font-size:24px;font-weight:800;color:var(--primary);line-height:1}
+#v705-encuesta.v-rebuild-enc .v-rb-votes-inline .v-rb-vlbl{font-size:11px;color:var(--muted);font-weight:600;letter-spacing:.4px}
+#v705-encuesta.v-rebuild-enc .v-rb-footer-row{margin-top:14px;display:flex;justify-content:space-between;color:var(--muted);font-size:12px;font-weight:600;flex-wrap:wrap;gap:10px}
+#v99-retos.v-rebuild-reto .v-rb-meta{justify-content:space-between}
+</style>
 </body>
 </html>
 
