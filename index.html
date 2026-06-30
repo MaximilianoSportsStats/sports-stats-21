@@ -24326,55 +24326,71 @@ function buildReto(){
   });
 }
 
-function buildEnc(){
+function buildEnc(force){
   var enc=document.getElementById("v705-encuesta");
   if(!enc)return;
   var pool=window.__ENCS_POOL_REF||[];
   if(!pool.length){setTimeout(buildEnc,400);return;}
-  if(enc.dataset.vRebuilt===TODAY)return;
-  enc.dataset.vRebuilt=TODAY;
-  
   var t=pool[(dayOfYear()-1+pool.length*1000)%pool.length];
+  var sig=TODAY+"|"+t.q;
+  if(enc.dataset.vRebuilt===sig && !force)return;
+  enc.dataset.vRebuilt=sig;
+  
   var voteKey="v-rebuild-enc-"+TODAY;
   var existingVote=localStorage.getItem(voteKey);
-  var totalVotes=t.opts.reduce(function(s,o){return s+(o.v||0)},0)*30+847; // synthetic
+  var totalVotes=t.opts.reduce(function(s,o){return s+(o.v||0)},0)*30+847;
   
-  enc.className=enc.className+" v-rebuild-enc";
+  enc.className=enc.className.replace(/\bv-rebuild-enc\b/g,"").replace(/\bv-voted-state\b/g,"").trim()+" v-rebuild-enc";
   if(existingVote)enc.classList.add("v-voted-state");
   enc.style.position="relative";
   
-  var barsHtml=t.opts.map(function(o){
-    var cls="v-rb-bar"+(existingVote===o.n?" v-voted":"");
-    return '<div class="'+cls+'" data-opt="'+o.n+'">'+
-      '<span class="v-rb-bar-name">'+o.n+'</span>'+
-      '<div class="v-rb-bar-fill"><div style="width:'+o.v+'%"></div></div>'+
-      '<span class="v-rb-bar-pct">'+o.v+'%</span>'+
-    '</div>';
-  }).join("");
+  var contentHtml;
+  if(existingVote){
+    var barsHtml=t.opts.map(function(o){
+      var cls="v-rb-bar v-rb-voted-bar"+(existingVote===o.n?" v-voted":"");
+      return '<div class="'+cls+'" data-opt="'+o.n+'">'+
+        '<span class="v-rb-bar-name">'+o.n+'</span>'+
+        '<div class="v-rb-bar-fill"><div style="width:'+o.v+'%"></div></div>'+
+        '<span class="v-rb-bar-pct">'+o.v+'%</span>'+
+      '</div>';
+    }).join("");
+    contentHtml='<div class="v-rb-info">\u{2713} Ya votaste hoy. Resultados en vivo.</div>'+
+      '<div class="v-rb-bars">'+barsHtml+'</div>';
+  } else {
+    var optsHtml=t.opts.map(function(o){
+      return '<button class="v-rb-vote-opt" data-opt="'+o.n+'">'+o.n+'</button>';
+    }).join("");
+    contentHtml='<div class="v-rb-info v-rb-info-vote">Vota tu opcion - los resultados aparecen al instante</div>'+
+      '<div class="v-rb-opts-vote">'+optsHtml+'</div>';
+  }
   
   enc.innerHTML='<div class="v-rb-votes"><div class="v-rb-num">'+totalVotes.toLocaleString()+'</div><div class="v-rb-vlbl">VOTOS</div></div>'+
-    '<div class="v-rb-label">📊 ENCUESTA DIARIA</div>'+
+    '<div class="v-rb-label">\u{1F4CA} ENCUESTA DIARIA</div>'+
     '<h3>'+t.q+'</h3>'+
-    '<div class="v-rb-info">✓ Ya votaste hoy. Resultados en vivo.</div>'+
-    '<div class="v-rb-bars">'+barsHtml+'</div>'+
-    '<div class="v-rb-meta"><span>📌 Próximamente: encuestas por deporte y resultados semanales históricos.</span></div>';
+    contentHtml+
+    '<div class="v-rb-meta"><span>\u{1F4CC} Próximamente: encuestas por deporte y resultados semanales históricos.</span></div>';
   
-  enc.querySelectorAll(".v-rb-bar").forEach(function(b){
+  enc.querySelectorAll(".v-rb-vote-opt, .v-rb-bar").forEach(function(b){
     b.addEventListener("click",function(){
       if(localStorage.getItem(voteKey))return;
       localStorage.setItem(voteKey, b.dataset.opt);
-      enc.dataset.vRebuilt="";
-      buildEnc();
+      buildEnc(true);
     });
   });
 }
 
-// Build initially and re-check periodically (in case widgets get re-rendered)
 function tick(){buildReto();buildEnc();}
 setTimeout(tick, 1000);
 setInterval(tick, 2000);
 })();
 </script>
+
+<style>
+#v705-encuesta .v-rb-opts-vote{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:8px}
+#v705-encuesta .v-rb-vote-opt{background:#fff;border:1px solid #e5e7eb;color:#111;padding:12px 18px;border-radius:8px;font-size:15px;font-weight:700;cursor:pointer;transition:all .15s;text-align:left}
+#v705-encuesta .v-rb-vote-opt:hover{border-color:var(--primary);background:#fef2f2}
+#v705-encuesta .v-rb-info-vote{display:block !important;background:#dbeafe;color:#1e40af}
+</style>
 </body>
 </html>
 
