@@ -25644,6 +25644,38 @@ setInterval(reorganize, 700);
 setTimeout(reorganize, 300);
 })();
 </script>
+<script>
+(function(){if(window.__vHashSync)return;window.__vHashSync=true;
+window.addEventListener("click", function(e){
+  var li=e.target && e.target.closest ? e.target.closest("li, a") : null;
+  if(!li)return;
+  var txt=(li.textContent||"").trim();
+  if(txt.length>30)return;
+  var newHash=null, cleanEnvivo=false, cleanMass=false;
+  if(/^\u{1F3E0}?\s*Inicio$/u.test(txt)){newHash="inicio";cleanEnvivo=true;cleanMass=true;}
+  else if(/^\u{1F534}?\s*En\s*Vivo$/u.test(txt)){newHash="envivo";cleanMass=true;}
+  else if(/^\u{1F4CD}?\s*Centros\s+Deportivos$/u.test(txt)){newHash="centros";cleanEnvivo=true;cleanMass=true;}
+  else if(/Mercado$/i.test(txt) && txt.length<15){newHash="mercado";cleanEnvivo=true;cleanMass=true;}
+  else if(/M[\u00e1a]s\s+Sobre\s+SS/i.test(txt)){newHash="masss21";cleanEnvivo=true;}
+  else if(/Noticias$/i.test(txt) && txt.length<15){newHash="noticias";cleanEnvivo=true;cleanMass=true;}
+  else if(/Blogs$/i.test(txt) && txt.length<10){newHash="blogs";cleanEnvivo=true;cleanMass=true;}
+  else if(/Art[\u00edi]culos$/i.test(txt) && txt.length<15){newHash="articulos";cleanEnvivo=true;cleanMass=true;}
+  else if(/Podcast$/i.test(txt) && txt.length<12){newHash="podcast";cleanEnvivo=true;cleanMass=true;}
+  else if(/Seguidos$/i.test(txt) && txt.length<12){newHash="seguidos";cleanEnvivo=true;cleanMass=true;}
+  else if(/Reclutar$/i.test(txt)){newHash="reclutar";cleanEnvivo=true;cleanMass=true;}
+  else if(/Datos\s+Curiosos$/i.test(txt)){newHash="datos";cleanEnvivo=true;cleanMass=true;}
+  else if(/Retos$/i.test(txt) && txt.length<10){newHash="retos";cleanEnvivo=true;cleanMass=true;}
+  else if(/Encuestas$/i.test(txt) && txt.length<12){newHash="encuestas";cleanEnvivo=true;cleanMass=true;}
+  if(newHash){
+    try{history.replaceState(null,"","#"+newHash);}catch(_){}
+    if(cleanEnvivo)document.body.classList.remove("v-envivo-active");
+    if(cleanMass)document.body.classList.remove("v-mss-active");
+    if(newHash==="envivo")document.body.classList.add("v-envivo-active");
+    if(newHash==="masss21")document.body.classList.add("v-mss-active");
+  }
+}, true);
+})();
+</script>
 </body>
 </html>
 
