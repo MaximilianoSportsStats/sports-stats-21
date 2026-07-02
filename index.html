@@ -25233,6 +25233,9 @@ html body.v-envivo-active[class] #panel-v-envivo-rebuild{display:block !importan
 </section>
 <script>
 (function(){if(window.__vEnvivo)return;window.__vEnvivo=true;
+/* Move panel into main.main so it renders correctly */
+function relocate(){var p=document.getElementById("panel-v-envivo-rebuild");var m=document.querySelector("main.main");if(p && m && p.parentElement!==m){m.appendChild(p);}}
+setTimeout(relocate,500);setInterval(relocate,2000);
 /* Mock data - real leagues and teams */
 var LEAGUES={
   premier:{name:"Premier League",icon:"XIS",country:"Inglaterra"},
