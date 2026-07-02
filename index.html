@@ -25623,6 +25623,21 @@ function reorganize(){
   }
   /* Remove top-level En Vivo */
   if(envivoTop)envivoTop.remove();
+  /* Fix v344-items empty gap */
+  var v344=document.querySelector(".v344-items");
+  if(v344 && getComputedStyle(v344).flex!=="0 0 auto")v344.style.setProperty("flex","0 0 auto","important");
+  /* Rename "Estadisticas Deportes" to just "Deportes" */
+  var deportesLi=Array.from(ul.querySelectorAll("li.v56-item")).filter(function(li){return /Estad[íi]sticas\s+Deportes/i.test((li.textContent||""))})[0];
+  if(deportesLi){
+    Array.from(deportesLi.childNodes).forEach(function(n){
+      if(n.nodeType===3 && /Estad[íi]sticas\s+Deportes/i.test(n.nodeValue||""))n.nodeValue=n.nodeValue.replace(/Estad[íi]sticas\s+Deportes/,"Deportes");
+      else if(n.nodeType===1){
+        var spans=n.querySelectorAll?Array.from(n.querySelectorAll("*")):[];
+        spans.forEach(function(s){if(/^Estad[íi]sticas\s+Deportes$/i.test((s.textContent||"").trim()))s.textContent="Deportes";});
+        if(/^Estad[íi]sticas\s+Deportes$/i.test((n.textContent||"").trim()))n.textContent="Deportes";
+      }
+    });
+  }
 }
 setInterval(reorganize, 700);
 setTimeout(reorganize, 300);
