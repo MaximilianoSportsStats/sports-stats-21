@@ -25599,6 +25599,34 @@ document.addEventListener("click",function(e){
 
 })();
 </script>
+<script>
+(function(){if(window.__vDrawerReorg)return;window.__vDrawerReorg=true;
+function reorganize(){
+  var ul=document.getElementById("v56-ul");
+  if(!ul)return;
+  var items=Array.from(ul.querySelectorAll("li"));
+  var envivoTop=items.filter(function(li){return li.className==="v56-item" && /^\u{1F534}?\s*En\s*Vivo$/u.test((li.textContent||"").trim())})[0];
+  var subLists=ul.querySelectorAll("ul.v56-sub-list");
+  var deportesSubList=subLists[0]; /* first sub-list = Deportes */
+  if(!deportesSubList)return;
+  var profesionales=Array.from(deportesSubList.querySelectorAll("li")).filter(function(li){return /Profesionales/.test((li.textContent||"").trim())})[0];
+  if(!profesionales)return;
+  /* Check if En Vivo already in sub-list */
+  var envivoSub=Array.from(deportesSubList.querySelectorAll("li")).filter(function(li){return /En\s*Vivo/i.test((li.textContent||"").trim())})[0];
+  if(!envivoSub){
+    /* Create En Vivo sub item */
+    var newLi=document.createElement("li");
+    newLi.className="v56-sub-item";
+    newLi.innerHTML='<span style="font-size:18px;margin-right:8px;display:inline-block;width:24px;text-align:center;">\u{1F534}</span><span>En Vivo</span>';
+    deportesSubList.insertBefore(newLi, profesionales);
+  }
+  /* Remove top-level En Vivo */
+  if(envivoTop)envivoTop.remove();
+}
+setInterval(reorganize, 700);
+setTimeout(reorganize, 300);
+})();
+</script>
 </body>
 </html>
 
