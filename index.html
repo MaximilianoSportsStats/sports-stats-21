@@ -25142,6 +25142,8 @@ setInterval(function(){var m=document.getElementById("panel-masss21-rebuild");if
 })();
 </script>
 <style>
+html body.v-envivo-active[class] #panel-inicio.tab-panel.active,html body.v-envivo-active[class] #v56-page-envivo{display:none !important;}
+html body.v-envivo-active[class] #panel-v-envivo-rebuild{display:block !important;}
 #panel-v-envivo-rebuild{max-width:1400px;margin:0 auto;padding:24px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:var(--fg,#111);}
 .v-envivo-layout{display:grid;grid-template-columns:280px 1fr;gap:32px;align-items:start;}
 .v-envivo-sidebar{position:sticky;top:16px;display:flex;flex-direction:column;gap:24px;}
@@ -25507,10 +25509,12 @@ function ensureRendered(){
   }
 }
 setInterval(ensureRendered,600);
+setInterval(function(){var p=document.getElementById("panel-v-envivo-rebuild");if(!p)return;if(getComputedStyle(p).display==="none")document.body.classList.remove("v-envivo-active");else document.body.classList.add("v-envivo-active");},500);
 setTimeout(ensureRendered,1200);
 
 /* Route #envivo/#en_vivo to this new panel */
 window.__showEnvivo=function(){
+  document.body.classList.add("v-envivo-active");
   if(window.__goSection)window.__goSection("panel-v-envivo-rebuild");
   ensureRendered();
   /* Aggressive: hide inicio and legacy envivo for 2s */
