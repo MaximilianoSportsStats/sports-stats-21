@@ -25513,6 +25513,17 @@ setTimeout(ensureRendered,1200);
 window.__showEnvivo=function(){
   if(window.__goSection)window.__goSection("panel-v-envivo-rebuild");
   ensureRendered();
+  /* Aggressive: hide inicio and legacy envivo for 2s */
+  var t0=Date.now();
+  var iv=setInterval(function(){
+    var ini=document.getElementById("panel-inicio");
+    var leg=document.getElementById("v56-page-envivo");
+    var newP=document.getElementById("panel-v-envivo-rebuild");
+    if(ini)ini.style.setProperty("display","none","important");
+    if(leg)leg.style.setProperty("display","none","important");
+    if(newP)newP.style.setProperty("display","block","important");
+    if(Date.now()-t0>2500)clearInterval(iv);
+  },100);
 };
 
 /* Hash aliases */
