@@ -25554,7 +25554,7 @@ function ensureRendered(){
   }
 }
 setInterval(ensureRendered,600);
-setInterval(function(){var p=document.getElementById("panel-v-envivo-rebuild");if(!p)return;if(getComputedStyle(p).display==="none")document.body.classList.remove("v-envivo-active");else document.body.classList.add("v-envivo-active");},500);
+setInterval(function(){var p=document.getElementById("panel-v-envivo-rebuild");if(!p)return;var h=(location.hash||"").replace(/^#/,"").toLowerCase();var isEnv=(h==="envivo"||h==="en_vivo"||h==="live");if(!isEnv){document.body.classList.remove("v-envivo-active");if(getComputedStyle(p).display!=="none")p.style.setProperty("display","none","important");return;}if(getComputedStyle(p).display==="none")document.body.classList.remove("v-envivo-active");else document.body.classList.add("v-envivo-active");},500);
 setTimeout(ensureRendered,1200);
 
 /* Route #envivo/#en_vivo to this new panel */
@@ -25562,9 +25562,11 @@ window.__showEnvivo=function(){
   document.body.classList.add("v-envivo-active");
   if(window.__goSection)window.__goSection("panel-v-envivo-rebuild");
   ensureRendered();
-  /* Aggressive: hide inicio and legacy envivo for 2s */
+  /* Aggressive: hide inicio and legacy envivo for 2s while hash stays envivo */
   var t0=Date.now();
   var iv=setInterval(function(){
+    var h=(location.hash||"").replace(/^#/,"").toLowerCase();
+    if(h!=="envivo"&&h!=="en_vivo"&&h!=="live"){clearInterval(iv);return;}
     var ini=document.getElementById("panel-inicio");
     var leg=document.getElementById("v56-page-envivo");
     var newP=document.getElementById("panel-v-envivo-rebuild");
