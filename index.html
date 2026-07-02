@@ -25145,6 +25145,12 @@ setInterval(function(){var m=document.getElementById("panel-masss21-rebuild");if
 html body.v-envivo-active[class] #panel-inicio.tab-panel.active,html body.v-envivo-active[class] #v56-page-envivo{display:none !important;}
 html body.v-envivo-active[class] #panel-v-envivo-rebuild{display:block !important;}
 #panel-v-envivo-rebuild{max-width:1400px;margin:0 auto;padding:24px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:var(--fg,#111);}
+.v-envivo-sportbar{display:flex;gap:6px;overflow-x:auto;padding:12px 8px;margin-bottom:20px;background:#fff;border:1px solid #e5e7eb;border-radius:12px;scrollbar-width:none;}
+.v-envivo-sportbar::-webkit-scrollbar{display:none;}
+.v-envivo-sportbtn{display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px 14px;border-radius:10px;background:transparent;border:none;cursor:pointer;font-family:inherit;font-size:11px;font-weight:600;color:#374151;transition:all .15s;white-space:nowrap;min-width:60px;}
+.v-envivo-sportbtn:hover{background:#f3f4f6;}
+.v-envivo-sportbtn.v-active{background:#c8102e;color:#fff;}
+.v-envivo-sportbtn .v-sportbtn-icon{font-size:22px;}
 .v-envivo-layout{display:grid;grid-template-columns:280px 1fr;gap:32px;align-items:start;}
 .v-envivo-sidebar{position:sticky;top:16px;display:flex;flex-direction:column;gap:24px;}
 .v-envivo-card{background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:18px;box-shadow:0 1px 2px rgba(0,0,0,0.03);}
@@ -25203,6 +25209,7 @@ html body.v-envivo-active[class] #panel-v-envivo-rebuild{display:block !importan
 }
 </style>
 <section id="panel-v-envivo-rebuild" style="display:none">
+  <div id="v-envivo-sportbar" class="v-envivo-sportbar"></div>
   <div class="v-envivo-layout">
     <aside class="v-envivo-sidebar">
       <div class="v-envivo-card">
@@ -25366,7 +25373,8 @@ function toggleFav(k){var f=getFavs();var i=f.indexOf(k);if(i>=0)f.splice(i,1);e
 var state={
   selectedDay:isoDay(new Date()),
   selectedSport:"all",
-  filter:"all"
+  filter:"all",
+  sportBar:"futbol"
 };
 
 function renderWeek(){
@@ -25482,7 +25490,39 @@ function renderHeader(){
   subEl.textContent=d.getDate()+" de "+["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"][d.getMonth()]+", "+d.getFullYear();
 }
 
+function renderSportBar(){
+  var sports=[
+    {k:"all",n:"Todos",i:"⭐"},
+    {k:"futbol",n:"Fútbol",i:"⚽"},
+    {k:"tenis",n:"Tenis",i:"🎾"},
+    {k:"carreras",n:"Carreras",i:"🏎"},
+    {k:"basketball",n:"Basketball",i:"🏀"},
+    {k:"combate",n:"Combate",i:"🥊"},
+    {k:"baseball",n:"Baseball",i:"⚾"},
+    {k:"hockey",n:"Hockey",i:"🏒"},
+    {k:"nfl",n:"Fútbol Americano",i:"🏈"},
+    {k:"rugby",n:"Rugby",i:"🏉"},
+    {k:"golf",n:"Golf",i:"⛳"},
+    {k:"atletismo",n:"Atletismo",i:"🏃"},
+    {k:"natacion",n:"Natación",i:"🏊"},
+    {k:"ciclismo",n:"Ciclismo",i:"🚴"},
+    {k:"volley",n:"Volleyball",i:"🏐"},
+    {k:"padel",n:"Pádel",i:"🏓"},
+    {k:"cricket",n:"Cricket",i:"🏏"},
+    {k:"otros",n:"Otros",i:"🏅"},
+    {k:"eventos",n:"Eventos",i:"🌍"}
+  ];
+  var activeSport=state.sportBar||"futbol";
+  var html=sports.map(function(s){
+    var isActive=activeSport===s.k;
+    return '<button class="v-envivo-sportbtn'+(isActive?" v-active":"")+'" data-sportbar="'+s.k+'"><span class="v-sportbtn-icon">'+s.i+'</span><span>'+s.n+'</span></button>';
+  }).join("");
+  var el=document.getElementById("v-envivo-sportbar");
+  if(el)el.innerHTML=html;
+}
+
 function renderAll(){
+  renderSportBar();
   renderWeek();
   renderSports();
   renderHeader();
@@ -25501,6 +25541,8 @@ document.addEventListener("click",function(e){
   if(day){state.selectedDay=day.getAttribute("data-day");renderAll();return;}
   if(sport){state.selectedSport=sport.getAttribute("data-sport");renderAll();return;}
   if(filter){state.filter=filter.getAttribute("data-filter");document.querySelectorAll(".v-envivo-pill").forEach(function(p){p.classList.remove("v-active")});filter.classList.add("v-active");renderMatches();return;}
+  var sportBar=e.target.closest("[data-sportbar]");
+  if(sportBar){state.sportBar=sportBar.getAttribute("data-sportbar");renderSportBar();/* For now just visual, later filter */renderMatches();return;}
 });
 
 /* Panel activation - render on show */
