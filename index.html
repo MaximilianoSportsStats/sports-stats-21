@@ -25676,6 +25676,21 @@ window.addEventListener("click", function(e){
 }, true);
 })();
 </script>
+<script>
+(function(){if(window.__vBounceGuard)return;
+window.__vBounceGuard=setInterval(function(){
+  var h=(location.hash||"").replace(/^#/,"").toLowerCase();
+  var envivo=document.getElementById("panel-v-envivo-rebuild");
+  var inicio=document.getElementById("panel-inicio");
+  if(!envivo||!inicio)return;
+  if(h==="envivo"||h==="en_vivo"||h==="live"){
+    if(!document.body.classList.contains("v-envivo-active"))document.body.classList.add("v-envivo-active");
+    if(getComputedStyle(envivo).display==="none")envivo.style.setProperty("display","block","important");
+    if(getComputedStyle(inicio).display!=="none")inicio.style.setProperty("display","none","important");
+  }
+},400);
+})();
+</script>
 </body>
 </html>
 
