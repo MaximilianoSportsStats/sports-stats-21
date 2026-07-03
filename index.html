@@ -25726,17 +25726,31 @@ function wire(){
   if(!container)return;
   var cards=container.querySelectorAll(".inicio-panel");
   if(cards.length<8)return;
-  var targets={"Explorar deportes":"noticias","Ver en vivo":"envivo","Crear mi perfil":"seguidos","Conectar":"seguidos","Modo Reclutador":"reclutar","Comparar":"seguidos","Ver Información":"noticias","Buscar centros":"centros"};
+  var targets={
+    "Explorar deportes":{action:"toast",msg:"Próximamente: Página de Deportes con NBA, NFL, MLB, F1, Champions y todas las ligas."},
+    "Ver en vivo":{action:"nav",target:"envivo"},
+    "Crear mi perfil":{action:"toast",msg:"Próximamente: Crea tu perfil deportivo con tu CV, estadísticas históricas y videos."},
+    "Conectar":{action:"nav",target:"seguidos"},
+    "Modo Reclutador":{action:"nav",target:"reclutar"},
+    "Comparar":{action:"toast",msg:"Próximamente: Compara dos deportistas, equipos o ligas del mismo deporte lado a lado."},
+    "Ver Información":{action:"nav",target:"noticias"},
+    "Buscar centros":{action:"nav",target:"centros"}
+  };
   Array.from(cards).forEach(function(card){
     var btn=card.querySelector(".v99-cta");
     if(!btn||btn.__vWired)return;
     var txt=(btn.textContent||"").trim().replace(/[\u2192\u2794\u27a1\ufe0f>\s]+$/,"").trim();
-    var target=targets[txt];
-    if(!target)return;
+    var cfg=targets[txt];
+    if(!cfg)return;
     btn.__vWired=true;
     btn.addEventListener("click", function(e){
       e.preventDefault();
       e.stopImmediatePropagation();
+      if(cfg.action==="toast"){
+        showToast(cfg.msg);
+        return;
+      }
+      var target=cfg.target;
       try{history.replaceState(null,"","#"+target);}catch(_){}
       var panelMap={"envivo":"panel-v-envivo-rebuild","noticias":"panel-v703-noticias","centros":"panel-v723-centros","reclutar":"panel-v712-reclutar","seguidos":"panel-v711-seguidos"};
       var panelId=panelMap[target];
@@ -25744,7 +25758,27 @@ function wire(){
       else if(window.__goSection&&panelId)window.__goSection(panelId);
     }, true);
   });
+  /* Toast helper */
+  if(!window.__vToastCss){
+    window.__vToastCss=true;
+    var st=document.createElement("style");
+    st.textContent=".v-toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(100px);background:#111;color:#fff;padding:14px 20px;border-radius:12px;font-size:14px;font-weight:500;font-family:-apple-system,sans-serif;box-shadow:0 8px 24px rgba(0,0,0,0.25);max-width:420px;z-index:99999;opacity:0;transition:all .35s ease;line-height:1.4;}.v-toast.v-show{transform:translateX(-50%) translateY(0);opacity:1;}.v-toast::before{content:\"🔜\";margin-right:10px;}";
+    document.head.appendChild(st);
+  }
+  function showToast(msg){
+    var existing=document.querySelector(".v-toast");
+    if(existing)existing.remove();
+    var t=document.createElement("div");
+    t.className="v-toast";
+    t.textContent=msg;
+    document.body.appendChild(t);
+    requestAnimationFrame(function(){t.classList.add("v-show");});
+    setTimeout(function(){t.classList.remove("v-show");setTimeout(function(){t.remove();},400);},3500);
+  }
 }
+/* Reset wired flags to allow re-wiring with new logic */
+function resetWires(){var container=document.querySelector(".inicio-panels");if(!container)return;Array.from(container.querySelectorAll(".v99-cta")).forEach(function(b){b.__vWired=false;});}
+resetWires();
 setInterval(wire, 700);
 setTimeout(wire, 300);
 })();
