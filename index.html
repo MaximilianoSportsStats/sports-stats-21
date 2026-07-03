@@ -26263,6 +26263,316 @@ setInterval(replaceIfNeeded, 700);
 setTimeout(replaceIfNeeded, 300);
 })();
 </script>
+<style>
+#panel-v-deportes-shell,#panel-v-comparar{max-width:1400px;margin:0 auto;padding:16px 20px;font-family:-apple-system,sans-serif;color:#111;display:none;}
+.v-dp-sportnav{display:flex;gap:6px;overflow-x:auto;padding:14px 10px;margin-bottom:20px;background:#fff;border:1px solid #e5e7eb;border-radius:14px;scrollbar-width:none;}
+.v-dp-sportnav::-webkit-scrollbar{display:none;}
+.v-dp-sportbtn{display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px 14px;border-radius:12px;background:transparent;border:none;cursor:pointer;font-family:inherit;font-size:11px;font-weight:600;color:#374151;white-space:nowrap;min-width:64px;line-height:1.15;}
+.v-dp-sportbtn:hover{background:#f3f4f6;}
+.v-dp-sportbtn.v-active{background:#c8102e;color:#fff;}
+.v-dp-sportbtn .v-sportbtn-icon{font-size:24px;}
+.v-dp-layout{display:grid;grid-template-columns:220px 1fr;gap:24px;align-items:start;}
+.v-dp-sidebar{position:sticky;top:16px;background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:10px 4px;}
+.v-dp-sec-title{padding:12px 18px 8px;font-size:11px;font-weight:700;color:#c8102e;text-transform:uppercase;letter-spacing:0.6px;border-bottom:1px solid #f3f4f6;margin-bottom:6px;}
+.v-dp-side-item{display:block;width:100%;padding:9px 18px;background:transparent;border:none;text-align:left;font-family:inherit;font-size:14px;color:#374151;cursor:pointer;border-radius:8px;font-weight:500;}
+.v-dp-side-item:hover{background:#f9fafb;}
+.v-dp-side-item.v-active{background:#c8102e;color:#fff;}
+.v-dp-main{background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:24px;min-height:600px;}
+.v-dp-head{display:flex;align-items:center;justify-content:space-between;padding-bottom:16px;border-bottom:1px solid #f3f4f6;margin-bottom:16px;}
+.v-dp-title{display:flex;align-items:center;gap:14px;font-size:26px;font-weight:800;color:#111;}
+.v-dp-title-icon{width:52px;height:52px;border-radius:50%;background:#f3f4f6;display:flex;align-items:center;justify-content:center;font-size:26px;}
+.v-dp-toggle{display:flex;gap:10px;font-size:11px;color:#9ca3af;font-weight:600;letter-spacing:0.5px;}
+.v-dp-toggle span{cursor:pointer;padding:6px 10px;border-radius:6px;}
+.v-dp-toggle .v-active{color:#111;background:#f9fafb;}
+.v-dp-tabs{display:flex;gap:24px;border-bottom:1px solid #e5e7eb;margin-bottom:24px;overflow-x:auto;}
+.v-dp-tab{background:none;border:none;padding:12px 4px;font-family:inherit;font-size:14px;font-weight:600;color:#6b7280;cursor:pointer;position:relative;white-space:nowrap;}
+.v-dp-tab.v-active{color:#c8102e;}
+.v-dp-tab.v-active::after{content:"";position:absolute;bottom:-1px;left:0;right:0;height:2px;background:#c8102e;}
+.v-dp-stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:28px;}
+.v-dp-stat-card{background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:20px 18px;}
+.v-dp-stat-val{font-size:32px;font-weight:800;color:#c8102e;line-height:1;letter-spacing:-1px;}
+.v-dp-stat-label{margin-top:8px;font-size:13px;color:#111;font-weight:600;}
+.v-dp-stat-sub{margin-top:2px;font-size:12px;color:#9ca3af;}
+.v-dp-section-title{display:flex;align-items:center;gap:8px;font-size:16px;font-weight:700;color:#111;margin:18px 0 14px;}
+.v-dp-ligas-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}
+.v-dp-liga-card{background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:16px;cursor:pointer;transition:all .15s;}
+.v-dp-liga-card:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,0.06);border-color:#c8102e;}
+.v-dp-liga-name{font-size:15px;font-weight:700;color:#111;margin-bottom:4px;}
+.v-dp-liga-meta{font-size:12px;color:#6b7280;}
+@media (max-width:900px){
+  .v-dp-layout{grid-template-columns:1fr;}
+  .v-dp-sidebar{position:static;}
+  .v-dp-stats-grid,.v-dp-ligas-grid{grid-template-columns:repeat(2,1fr);}
+}
+/* Comparar */
+.v-cmp-hero{background:linear-gradient(135deg,#c8102e 0%,#8b0d20 100%);color:#fff;padding:30px 24px;border-radius:16px;margin-bottom:24px;text-align:center;}
+.v-cmp-hero h1{margin:0 0 8px;font-size:28px;font-weight:800;}
+.v-cmp-hero p{margin:0;font-size:15px;opacity:0.9;}
+.v-cmp-categories{display:flex;gap:8px;justify-content:center;margin-bottom:24px;}
+.v-cmp-cat{padding:10px 22px;border-radius:24px;background:#f3f4f6;border:none;font-family:inherit;font-size:14px;font-weight:600;color:#374151;cursor:pointer;}
+.v-cmp-cat.v-active{background:#c8102e;color:#fff;}
+.v-cmp-slots{display:grid;grid-template-columns:1fr auto 1fr;gap:20px;align-items:stretch;margin-bottom:30px;}
+.v-cmp-slot{background:#fff;border:2px dashed #d1d5db;border-radius:14px;padding:40px 20px;text-align:center;min-height:220px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;cursor:pointer;transition:all .15s;}
+.v-cmp-slot:hover{border-color:#c8102e;background:#fef2f2;}
+.v-cmp-slot .v-slot-icon{font-size:44px;color:#9ca3af;}
+.v-cmp-slot .v-slot-txt{font-size:15px;font-weight:600;color:#6b7280;}
+.v-cmp-vs{font-size:22px;font-weight:800;color:#c8102e;align-self:center;padding:0 10px;}
+.v-cmp-info{background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:24px;text-align:center;color:#6b7280;font-size:14px;}
+.v-cmp-info h3{margin:0 0 10px;font-size:16px;color:#111;font-weight:700;}
+@media (max-width:700px){
+  .v-cmp-slots{grid-template-columns:1fr;}
+  .v-cmp-vs{padding:8px 0;}
+}
+</style><section id="panel-v-deportes-shell">
+  <div class="v-dp-sportnav" id="v-dp-sportnav"></div>
+  <div class="v-dp-layout">
+    <aside class="v-dp-sidebar" id="v-dp-sidebar"></aside>
+    <main class="v-dp-main">
+      <div class="v-dp-head">
+        <div class="v-dp-title"><div class="v-dp-title-icon" id="v-dp-title-icon">⚽</div><span id="v-dp-title-name">Fútbol</span></div>
+        <div class="v-dp-toggle"><span class="v-active">EQUIPO</span><span>OLÍMPICO</span></div>
+      </div>
+      <div class="v-dp-tabs" id="v-dp-tabs"></div>
+      <div id="v-dp-content"></div>
+    </main>
+  </div>
+</section>
+<section id="panel-v-comparar">
+  <div class="v-cmp-hero"><h1>⚖️ Compara Stats</h1><p>Selecciona dos deportistas, equipos o ligas del mismo deporte y compará sus números lado a lado</p></div>
+  <div class="v-cmp-categories" id="v-cmp-cats">
+    <button class="v-cmp-cat v-active" data-cat="jugadores">👤 Jugadores</button>
+    <button class="v-cmp-cat" data-cat="equipos">👥 Equipos</button>
+    <button class="v-cmp-cat" data-cat="ligas">🏆 Ligas</button>
+  </div>
+  <div class="v-cmp-slots">
+    <div class="v-cmp-slot"><div class="v-slot-icon">➕</div><div class="v-slot-txt">Elegí primer <span id="v-cmp-slot-label-a">jugador</span></div></div>
+    <div class="v-cmp-vs">VS</div>
+    <div class="v-cmp-slot"><div class="v-slot-icon">➕</div><div class="v-slot-txt">Elegí segundo <span id="v-cmp-slot-label-b">jugador</span></div></div>
+  </div>
+  <div class="v-cmp-info"><h3>Ejemplos de comparaciones que vas a poder hacer</h3><p>Messi vs Cristiano · Real Madrid vs Bayern · Premier League vs La Liga · Djokovic vs Nadal · LeBron vs Jordan · Verstappen vs Hamilton</p></div>
+</section><script>
+(function(){if(window.__vDeportesShell)return;window.__vDeportesShell=true;
+
+/* Move panels into main.main */
+function relocate(){
+  var m=document.querySelector("main.main");
+  if(!m)return;
+  ["panel-v-deportes-shell","panel-v-comparar"].forEach(function(id){
+    var p=document.getElementById(id);
+    if(p && p.parentElement!==m)m.appendChild(p);
+  });
+}
+setInterval(relocate, 2000);
+setTimeout(relocate, 500);
+
+var SPORTS=[
+  {k:"futbol",n:"Fútbol",i:"⚽"},
+  {k:"tenis",n:"Tenis",i:"🎾"},
+  {k:"carreras",n:"Carreras",i:"🏎"},
+  {k:"basketball",n:"Basketball",i:"🏀"},
+  {k:"combate",n:"Combate",i:"🥊"},
+  {k:"baseball",n:"Baseball",i:"⚾"},
+  {k:"hockey",n:"Hockey",i:"🏒"},
+  {k:"nfl",n:"Fútbol Americano",i:"🏈"},
+  {k:"rugby",n:"Rugby",i:"🏉"},
+  {k:"golf",n:"Golf",i:"⛳"},
+  {k:"atletismo",n:"Atletismo",i:"🏃"},
+  {k:"natacion",n:"Natación",i:"🏊"},
+  {k:"ciclismo",n:"Ciclismo",i:"🚴"},
+  {k:"volley",n:"Volleyball",i:"🏐"},
+  {k:"padel",n:"Pádel",i:"🏓"},
+  {k:"cricket",n:"Cricket",i:"🏏"},
+  {k:"otros",n:"Otros Deportes",i:"🏅"},
+  {k:"eventos",n:"Eventos Globales",i:"🌍"}
+];
+
+var TABS=["Resumen","Ligas y Eventos","Records","Rankings","Calendario","Historia","Variantes"];
+
+var SIDEBAR={
+  "COMPETICIONES":["Mundial FIFA","Champions League","Libertadores","Eurocopa","Copa América"],
+  "TOP LIGAS":["Premier League","La Liga","Bundesliga","Serie A","Ligue 1"],
+  "MÁS":["Selecciones","Leyendas","Mercado","Records"]
+};
+
+var STATS_HERO=[
+  {v:"4 mil M",l:"Seguidores",s:"deporte más popular"},
+  {v:"211",l:"Federaciones",s:"miembros FIFA"},
+  {v:"32→48",l:"Selecciones",s:"Qatar 22 / EE.UU.-CAN-MEX 26"},
+  {v:"5",l:"Confederaciones",s:"UEFA/CONMEBOL/AFC/CAF/CONCACAF/OFC"}
+];
+
+var TOP_LIGAS=[
+  {n:"Premier League",m:"Inglaterra · 20 clubes"},
+  {n:"La Liga",m:"España · 20 clubes"},
+  {n:"Bundesliga",m:"Alemania · 18 clubes"},
+  {n:"Serie A",m:"Italia · 20 clubes"},
+  {n:"Ligue 1",m:"Francia · 18 clubes"},
+  {n:"Brasileirão",m:"Brasil · 20 clubes"},
+  {n:"Liga Argentina",m:"Argentina · 28 clubes"},
+  {n:"MLS",m:"USA · 30 clubes"}
+];
+
+var state={sport:"futbol",tab:"Resumen",cmpCat:"jugadores"};
+
+function renderSportNav(){
+  var el=document.getElementById("v-dp-sportnav");
+  if(!el)return;
+  el.innerHTML=SPORTS.map(function(s){
+    var isActive=state.sport===s.k;
+    return '<button class="v-dp-sportbtn'+(isActive?" v-active":"")+'" data-dp-sport="'+s.k+'"><span class="v-sportbtn-icon">'+s.i+'</span><span>'+s.n+'</span></button>';
+  }).join("");
+}
+
+function renderSidebar(){
+  var el=document.getElementById("v-dp-sidebar");
+  if(!el)return;
+  var html="";
+  Object.keys(SIDEBAR).forEach(function(section){
+    html+='<div class="v-dp-sec-title">'+section+'</div>';
+    SIDEBAR[section].forEach(function(item){
+      html+='<button class="v-dp-side-item">'+item+'</button>';
+    });
+  });
+  el.innerHTML=html;
+}
+
+function renderTabs(){
+  var el=document.getElementById("v-dp-tabs");
+  if(!el)return;
+  el.innerHTML=TABS.map(function(t){
+    return '<button class="v-dp-tab'+(state.tab===t?" v-active":"")+'" data-dp-tab="'+t+'">'+t+'</button>';
+  }).join("");
+}
+
+function renderContent(){
+  var el=document.getElementById("v-dp-content");
+  if(!el)return;
+  if(state.tab==="Resumen"){
+    el.innerHTML=
+      '<div class="v-dp-stats-grid">'+
+        STATS_HERO.map(function(s){
+          return '<div class="v-dp-stat-card"><div class="v-dp-stat-val">'+s.v+'</div><div class="v-dp-stat-label">'+s.l+'</div><div class="v-dp-stat-sub">'+s.s+'</div></div>';
+        }).join("")+
+      '</div>'+
+      '<div class="v-dp-section-title"><span>🏆</span><span>Top Ligas</span></div>'+
+      '<div class="v-dp-ligas-grid">'+
+        TOP_LIGAS.map(function(l){
+          return '<div class="v-dp-liga-card"><div class="v-dp-liga-name">'+l.n+'</div><div class="v-dp-liga-meta">'+l.m+'</div></div>';
+        }).join("")+
+      '</div>';
+  }else{
+    el.innerHTML='<div style="text-align:center;padding:60px 20px;color:#9ca3af"><div style="font-size:48px;margin-bottom:12px">🚧</div><div style="font-size:16px;font-weight:600;color:#374151;margin-bottom:6px">'+state.tab+' de '+SPORTS.filter(function(s){return s.k===state.sport})[0].n+'</div><div style="font-size:14px">Próximamente en las siguientes iteraciones</div></div>';
+  }
+}
+
+function renderAll(){renderSportNav();renderSidebar();renderTabs();renderContent();
+  var s=SPORTS.filter(function(x){return x.k===state.sport})[0];
+  if(s){document.getElementById("v-dp-title-icon").textContent=s.i;document.getElementById("v-dp-title-name").textContent=s.n;}
+}
+
+window.__showDeportes=function(){
+  document.body.classList.add("v-dp-active");
+  var p=document.getElementById("panel-v-deportes-shell");
+  if(!p)return;
+  var others=["panel-inicio","panel-v-envivo-rebuild","panel-masss21-rebuild","v326-panel-mercado","panel-v703-noticias","panel-v708-blogs","panel-v724-articulos","panel-v724-podcast","panel-v711-seguidos","panel-v712-reclutar","panel-v723-centros","panel-v724-curiosos","panel-v-retos","panel-v-encuestas","v56-page-envivo","panel-v-comparar"];
+  others.forEach(function(id){var e=document.getElementById(id);if(e)e.style.setProperty("display","none","important");});
+  p.style.setProperty("display","block","important");
+  try{history.replaceState(null,"","#deportes");}catch(_){}
+  document.body.classList.remove("v-envivo-active","v-mss-active");
+  renderAll();
+  window.scrollTo(0,0);
+};
+
+window.__showComparar=function(){
+  var p=document.getElementById("panel-v-comparar");
+  if(!p)return;
+  var others=["panel-inicio","panel-v-envivo-rebuild","panel-masss21-rebuild","v326-panel-mercado","panel-v703-noticias","panel-v708-blogs","panel-v724-articulos","panel-v724-podcast","panel-v711-seguidos","panel-v712-reclutar","panel-v723-centros","panel-v724-curiosos","panel-v-retos","panel-v-encuestas","v56-page-envivo","panel-v-deportes-shell"];
+  others.forEach(function(id){var e=document.getElementById(id);if(e)e.style.setProperty("display","none","important");});
+  p.style.setProperty("display","block","important");
+  try{history.replaceState(null,"","#comparar");}catch(_){}
+  document.body.classList.remove("v-envivo-active","v-mss-active");
+  window.scrollTo(0,0);
+};
+
+/* Click handlers */
+document.addEventListener("click", function(e){
+  var sportBtn=e.target.closest?e.target.closest("[data-dp-sport]"):null;
+  if(sportBtn){state.sport=sportBtn.getAttribute("data-dp-sport");renderAll();return;}
+  var tabBtn=e.target.closest?e.target.closest("[data-dp-tab]"):null;
+  if(tabBtn){state.tab=tabBtn.getAttribute("data-dp-tab");renderTabs();renderContent();return;}
+  var cmpCat=e.target.closest?e.target.closest("[data-cat]"):null;
+  if(cmpCat){
+    state.cmpCat=cmpCat.getAttribute("data-cat");
+    document.querySelectorAll(".v-cmp-cat").forEach(function(c){c.classList.remove("v-active");});
+    cmpCat.classList.add("v-active");
+    var label=state.cmpCat==="jugadores"?"jugador":(state.cmpCat==="equipos"?"equipo":"liga");
+    var a=document.getElementById("v-cmp-slot-label-a");
+    var b=document.getElementById("v-cmp-slot-label-b");
+    if(a)a.textContent=label;if(b)b.textContent=label;
+    return;
+  }
+}, true);
+
+/* Wire drawer "Profesionales" → Deportes shell */
+window.addEventListener("click", function(e){
+  var li=e.target && e.target.closest?e.target.closest("li, a"):null;
+  if(!li)return;
+  var txt=(li.textContent||"").trim();
+  if(txt.length>25)return;
+  if(/^[\u{1F3C6}]?\s*Profesionales$/u.test(txt)){
+    e.preventDefault();e.stopImmediatePropagation();
+    window.__showDeportes();
+  }
+}, true);
+
+/* Hash router */
+window.addEventListener("hashchange", function(){
+  var h=(location.hash||"").replace(/^#/,"").toLowerCase();
+  if(h==="deportes"||h==="futbol"||h==="profesionales")window.__showDeportes();
+  else if(h==="comparar")window.__showComparar();
+});
+setTimeout(function(){
+  var h=(location.hash||"").replace(/^#/,"").toLowerCase();
+  if(h==="deportes"||h==="futbol"||h==="profesionales")window.__showDeportes();
+  else if(h==="comparar")window.__showComparar();
+}, 1500);
+
+})();
+</script>
+<script>
+/* Update Comparar widget button to go to real Comparar panel */
+(function(){if(window.__vComparBtnFix)return;window.__vComparBtnFix=true;
+setInterval(function(){
+  var container=document.querySelector(".inicio-panels");
+  if(!container)return;
+  var cards=container.querySelectorAll(".inicio-panel");
+  cards.forEach(function(card){
+    var btn=card.querySelector(".v99-cta");
+    if(!btn)return;
+    var txt=(btn.textContent||"").trim().replace(/[\u2192\u2794\u27a1\ufe0f>\s]+$/,"").trim();
+    if(txt==="Comparar" && !btn.__vComparWired){
+      btn.__vComparWired=true;
+      /* Replace toast handler with real navigation */
+      btn.addEventListener("click", function(e){
+        e.preventDefault();e.stopImmediatePropagation();
+        var oldToast=document.querySelector(".v-toast");
+        if(oldToast)oldToast.remove();
+        if(window.__showComparar)window.__showComparar();
+      }, true);
+    }
+    if(txt==="Explorar deportes" && !btn.__vDeportesWired){
+      btn.__vDeportesWired=true;
+      btn.addEventListener("click", function(e){
+        e.preventDefault();e.stopImmediatePropagation();
+        var oldToast=document.querySelector(".v-toast");
+        if(oldToast)oldToast.remove();
+        if(window.__showDeportes)window.__showDeportes();
+      }, true);
+    }
+  });
+},700);
+})();
+</script>
 </body>
 </html>
 
