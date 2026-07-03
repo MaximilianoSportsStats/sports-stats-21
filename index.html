@@ -25829,8 +25829,10 @@ var currentLang="es";
 function applyLang(){
   var lang=getCurrentLang();
   if(lang===currentLang)return;
+  /* Revert to Spanish first so DOM has source strings to match against */
+  revertAll(document.body);
   currentLang=lang;
-  walkAndTranslate(document.body, lang);
+  if(lang!=="es")walkAndTranslate(document.body, lang);
 }
 
 /* Listen for lang picker clicks */
