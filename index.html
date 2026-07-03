@@ -26211,7 +26211,59 @@ window.addEventListener("popstate", function(){
 });
 
 })();
-</script></body>
+</script><script>
+(function(){if(window.__vCentrosSports)return;window.__vCentrosSports=true;
+/* Canonical sport list matching En Vivo sport-nav */
+var CANONICAL_SPORTS=[
+  "Fútbol","Tenis","Carreras","Basketball","Combate","Baseball","Hockey",
+  "Fútbol Americano","Rugby","Golf","Atletismo","Natación","Ciclismo",
+  "Volleyball","Pádel","Cricket","Otros Deportes","Eventos Globales"
+];
+
+function findSportsContainer(){
+  /* Find v723-fs-b that has Bicicleta or Clavado (the sports list, not others) */
+  var containers=document.querySelectorAll(".v723-fs-b");
+  for(var i=0;i<containers.length;i++){
+    var c=containers[i];
+    var t=(c.textContent||"");
+    if(/Bicicleta|Clavado|Yoga|Spinning|Waterpolo|F[uú]tbol|Basketball|Atletismo/.test(t)){
+      /* Additional check: has Yoga/Spinning/Bicicleta (old-only) OR only new stuff */
+      return c;
+    }
+  }
+  return null;
+}
+
+function alreadyCanonical(container){
+  var labels=Array.from(container.querySelectorAll("label"));
+  if(labels.length!==CANONICAL_SPORTS.length)return false;
+  for(var i=0;i<labels.length;i++){
+    if((labels[i].textContent||"").trim().indexOf(CANONICAL_SPORTS[i])<0)return false;
+  }
+  return true;
+}
+
+function replaceIfNeeded(){
+  var container=findSportsContainer();
+  if(!container)return;
+  if(alreadyCanonical(container))return;
+  /* Save which sports were checked (by value) */
+  var checked={};
+  Array.from(container.querySelectorAll("input[type=checkbox]:checked")).forEach(function(inp){
+    checked[inp.value]=true;
+  });
+  /* Rebuild with canonical list */
+  var html=CANONICAL_SPORTS.map(function(s){
+    return '<label><input type="checkbox" data-f="d" value="'+s+'"' + (checked[s]?' checked':'') + '> '+s+'</label>';
+  }).join("");
+  container.innerHTML=html;
+}
+
+setInterval(replaceIfNeeded, 700);
+setTimeout(replaceIfNeeded, 300);
+})();
+</script>
+</body>
 </html>
 
 window.selectLLPriv=function(el){document.querySelectorAll('.ll-priv-opt').forEach(function(o){o.classList.remove('ll-priv-active');o.style.border='2px solid var(--border)';o.style.background='transparent';});el.classList.add('ll-priv-active');el.style.border='2px solid var(--primary)';el.style.background='rgba(200,16,46,.06)';var inp=el.querySelector('input');if(inp)inp.checked=true;};
