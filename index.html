@@ -26927,6 +26927,31 @@ setInterval(function(){
 
 })();
 </script>
+<script>
+(function(){if(window.__vHashPersister)return;window.__vHashPersister=true;
+/* Ensures URL hash matches actually visible panel */
+setInterval(function(){
+  var hash=(location.hash||"").replace(/^#/,"").toLowerCase();
+  var mp=document.getElementById("panel-masss21-rebuild");
+  var envivo=document.getElementById("panel-v-envivo-rebuild");
+  var dp=document.getElementById("panel-v-deportes-shell");
+  var cmp=document.getElementById("panel-v-comparar");
+  /* Detect visible panel */
+  var isMass=mp && getComputedStyle(mp).display!=="none";
+  var isEnvivo=envivo && getComputedStyle(envivo).display!=="none";
+  var isDp=dp && getComputedStyle(dp).display!=="none";
+  var isCmp=cmp && getComputedStyle(cmp).display!=="none";
+  var wanted=null;
+  if(isMass)wanted="masss21";
+  else if(isEnvivo)wanted="envivo";
+  else if(isDp)wanted="deportes";
+  else if(isCmp)wanted="comparar";
+  if(wanted && hash!==wanted){
+    try{history.replaceState(null,"","#"+wanted);}catch(_){}
+  }
+},600);
+})();
+</script>
 </body>
 </html>
 
