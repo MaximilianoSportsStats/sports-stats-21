@@ -25846,16 +25846,21 @@ function revertAll(root){
   }
 }
 
-/* Detect current language from picker */
+/* Detect current language: prefer html[lang], fallback to picker text */
 function getCurrentLang(){
+  /* Primary: html lang attribute (set by picker on change) */
+  var htmlLang=(document.documentElement.getAttribute("lang")||"").toLowerCase().substring(0,2);
+  if(htmlLang==="en"||htmlLang==="pt"||htmlLang==="fr"||htmlLang==="it"||htmlLang==="de"||htmlLang==="es")return htmlLang;
+  /* Fallback: check picker button text including native names */
   var btn=document.querySelector(".v398-picker-btn");
   if(!btn)return "es";
   var txt=(btn.textContent||"").trim();
   if(/Ingl[eé]s|English/i.test(txt))return "en";
-  if(/Portugu[eé]s/i.test(txt))return "pt";
-  if(/Franc[eé]s|French/i.test(txt))return "fr";
+  if(/Portugu[eé]s|Portuguese/i.test(txt))return "pt";
+  if(/Franc[eé]s|French|Fran[çc]ais/i.test(txt))return "fr";
   if(/Italiano|Italian/i.test(txt))return "it";
-  if(/Alem[aá]n|German/i.test(txt))return "de";
+  if(/Alem[aá]n|German|Deutsch/i.test(txt))return "de";
+  if(/Espa[nñ]ol|Spanish/i.test(txt))return "es";
   return "es";
 }
 
