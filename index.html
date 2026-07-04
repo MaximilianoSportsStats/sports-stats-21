@@ -26988,6 +26988,13 @@ function restoreInicio(){
     if(e && getComputedStyle(e).display!=="none")otherPanelsVisible=true;
   });
   if(otherPanelsVisible)return;
+  /* Check if any Inicio sub-page (Favoritos, etc) is currently visible - if so, do not restore */
+  var subPageActive=false;
+  ["v56-page-favoritos","v56-page-envivo","v38-page-escolares","v38-page-universitarias","v38-page-amateur","v38-page-comparar","v38-page-mapa","v87-page-favoritos"].forEach(function(id){
+    var e=document.getElementById(id);
+    if(e && getComputedStyle(e).display!=="none" && e.offsetHeight>50)subPageActive=true;
+  });
+  if(subPageActive)return;
   /* Show inicio primary sections */
   INICIO_SECTIONS.forEach(function(id){
     var e=document.getElementById(id);
@@ -27023,12 +27030,7 @@ window.addEventListener("click", function(e){
   }
 }, true);
 
-/* Periodic safety net */
-setInterval(function(){
-  var h=(location.hash||"").replace(/^#/,"").toLowerCase();
-  if(h!=="inicio"&&h!=="")return;
-  restoreInicio();
-}, 1500);
+/* NO periodic restore - only on explicit Inicio click, to avoid corrupting Favoritos and other sub-pages */
 
 setTimeout(restoreInicio, 1000);
 })();
