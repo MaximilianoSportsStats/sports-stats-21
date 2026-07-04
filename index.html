@@ -27035,6 +27035,316 @@ window.addEventListener("click", function(e){
 setTimeout(restoreInicio, 1000);
 })();
 </script>
+<style>
+#panel-v-favoritos-new{max-width:1400px;margin:0 auto;padding:16px 20px 40px;font-family:-apple-system,sans-serif;color:#111;display:none;}
+.v-fav-empty{background:#fff;border:2px dashed #e5e7eb;border-radius:16px;padding:60px 30px;text-align:center;margin-top:20px;}
+.v-fav-empty h2{margin:0 0 8px;font-size:22px;font-weight:800;color:#111;}
+.v-fav-empty p{margin:0 0 24px;font-size:15px;color:#6b7280;max-width:520px;margin-left:auto;margin-right:auto;line-height:1.5;}
+.v-fav-empty-icon{font-size:52px;margin-bottom:16px;}
+.v-fav-empty-cta{padding:12px 24px;background:#c8102e;color:#fff;border:none;border-radius:10px;font-family:inherit;font-size:14px;font-weight:600;cursor:pointer;}
+.v-fav-empty-cta:hover{background:#a80e26;}
+/* Hero */
+.v-fav-hero{background:linear-gradient(135deg,#c8102e 0%,#8b0d20 100%);color:#fff;padding:32px 28px;border-radius:20px;margin-bottom:24px;display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;}
+.v-fav-hero-left{display:flex;align-items:center;gap:20px;flex:1;min-width:280px;}
+.v-fav-hero-logo{width:80px;height:80px;border-radius:16px;background:rgba(255,255,255,0.15);display:flex;align-items:center;justify-content:center;font-size:36px;font-weight:800;flex-shrink:0;}
+.v-fav-hero-txt h2{margin:0 0 4px;font-size:24px;font-weight:800;}
+.v-fav-hero-txt .v-fav-hero-sub{font-size:14px;opacity:0.85;margin-bottom:10px;}
+.v-fav-hero-next{background:rgba(255,255,255,0.12);padding:10px 14px;border-radius:12px;text-align:right;min-width:200px;}
+.v-fav-hero-next-label{font-size:11px;opacity:0.8;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:3px;}
+.v-fav-hero-next-match{font-size:15px;font-weight:600;margin-bottom:2px;}
+.v-fav-hero-next-time{font-size:13px;opacity:0.9;}
+/* Section blocks */
+.v-fav-block{background:#fff;border:1px solid #e5e7eb;border-radius:16px;padding:20px 22px;margin-bottom:16px;}
+.v-fav-block-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}
+.v-fav-block-head h3{margin:0;font-size:17px;font-weight:800;color:#111;display:flex;align-items:center;gap:8px;}
+.v-fav-block-head .v-fav-count{background:#f3f4f6;color:#6b7280;padding:3px 10px;border-radius:12px;font-size:11px;font-weight:700;}
+.v-fav-block-head .v-fav-add-btn{background:none;border:1px solid #e5e7eb;padding:6px 12px;border-radius:8px;font-family:inherit;font-size:12px;font-weight:600;color:#374151;cursor:pointer;}
+.v-fav-block-head .v-fav-add-btn:hover{background:#f9fafb;border-color:#c8102e;color:#c8102e;}
+/* Chips - equipos */
+.v-fav-chips{display:flex;gap:10px;overflow-x:auto;padding-bottom:6px;scrollbar-width:none;}
+.v-fav-chips::-webkit-scrollbar{display:none;}
+.v-fav-chip{flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:6px;padding:14px 18px;border-radius:14px;background:#f9fafb;cursor:pointer;transition:all .15s;min-width:110px;position:relative;}
+.v-fav-chip:hover{background:#fef2f2;transform:translateY(-2px);}
+.v-fav-chip-badge{width:52px;height:52px;border-radius:50%;background:#fff;border:2px solid #e5e7eb;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:800;color:#111;}
+.v-fav-chip-name{font-size:12px;font-weight:600;color:#111;text-align:center;line-height:1.2;}
+.v-fav-chip-remove{position:absolute;top:6px;right:6px;width:20px;height:20px;background:#c8102e;color:#fff;border:none;border-radius:50%;font-size:11px;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;opacity:0;transition:opacity .15s;}
+.v-fav-chip:hover .v-fav-chip-remove{opacity:1;}
+/* Match cards */
+.v-fav-matches{display:flex;gap:12px;overflow-x:auto;padding-bottom:6px;scrollbar-width:none;}
+.v-fav-matches::-webkit-scrollbar{display:none;}
+.v-fav-match{flex-shrink:0;width:280px;background:#f9fafb;border:1px solid #e5e7eb;border-radius:12px;padding:14px;cursor:pointer;transition:all .15s;}
+.v-fav-match:hover{border-color:#c8102e;transform:translateY(-1px);box-shadow:0 4px 12px rgba(0,0,0,0.05);}
+.v-fav-match-comp{font-size:10px;font-weight:700;color:#6b7280;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;display:flex;align-items:center;gap:6px;}
+.v-fav-match-teams{display:grid;grid-template-columns:1fr auto 1fr;gap:8px;align-items:center;margin-bottom:10px;}
+.v-fav-match-team{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:#111;}
+.v-fav-match-team.right{justify-content:flex-end;}
+.v-fav-match-badge{width:26px;height:26px;border-radius:50%;background:#e5e7eb;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#374151;}
+.v-fav-match-vs{font-size:11px;font-weight:800;color:#6b7280;}
+.v-fav-match-time{background:#fff;padding:6px 10px;border-radius:8px;font-size:12px;font-weight:600;color:#c8102e;text-align:center;border:1px solid #e5e7eb;}
+.v-fav-match-live{color:#10b981;}
+/* Results list */
+.v-fav-result{display:grid;grid-template-columns:1fr auto auto auto 1fr auto;gap:10px;align-items:center;padding:12px 0;border-bottom:1px solid #f3f4f6;font-size:13px;}
+.v-fav-result:last-child{border-bottom:none;}
+.v-fav-result-team{color:#111;font-weight:500;}
+.v-fav-result-team.right{text-align:right;}
+.v-fav-result-team.fav{font-weight:700;color:#c8102e;}
+.v-fav-result-score{width:26px;height:26px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;background:#f3f4f6;color:#111;}
+.v-fav-result-score.win{background:#dcfce7;color:#166534;}
+.v-fav-result-score.lose{background:#fee2e2;color:#991b1b;}
+.v-fav-result-meta{font-size:11px;color:#9ca3af;}
+/* Standings */
+.v-fav-standings-table{width:100%;font-size:13px;}
+.v-fav-standings-table th{padding:8px 6px;text-align:center;font-size:10px;color:#6b7280;font-weight:700;text-transform:uppercase;letter-spacing:0.3px;border-bottom:1px solid #f3f4f6;}
+.v-fav-standings-table td{padding:8px 6px;text-align:center;border-bottom:1px solid #f9fafb;}
+.v-fav-standings-table td.left{text-align:left;font-weight:600;color:#111;}
+.v-fav-standings-table tr.highlight td{background:#fef2f2;}
+.v-fav-standings-table tr.highlight td.left{color:#c8102e;}
+.v-fav-standings-table .pos{width:24px;color:#9ca3af;font-weight:700;}
+/* News */
+.v-fav-news-item{display:flex;gap:14px;padding:12px 0;border-bottom:1px solid #f3f4f6;cursor:pointer;transition:background .1s;}
+.v-fav-news-item:last-child{border-bottom:none;}
+.v-fav-news-item:hover{background:#fafbfc;margin:0 -12px;padding:12px;border-radius:8px;}
+.v-fav-news-thumb{width:80px;height:56px;border-radius:8px;background:linear-gradient(135deg,#c8102e,#8b0d20);display:flex;align-items:center;justify-content:center;font-size:24px;color:#fff;flex-shrink:0;}
+.v-fav-news-body{flex:1;min-width:0;}
+.v-fav-news-badge{font-size:10px;font-weight:700;color:#c8102e;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px;}
+.v-fav-news-title{font-size:14px;font-weight:600;color:#111;line-height:1.3;margin-bottom:4px;}
+.v-fav-news-meta{font-size:11px;color:#9ca3af;}
+/* Star button for adding to favs (global) */
+.v-star-btn{background:none;border:none;cursor:pointer;font-size:16px;color:#d1d5db;padding:4px;transition:all .15s;line-height:1;}
+.v-star-btn.v-active{color:#f59e0b;}
+.v-star-btn:hover{transform:scale(1.15);}
+@media (max-width:700px){
+  .v-fav-hero{flex-direction:column;text-align:center;align-items:stretch;}
+  .v-fav-hero-left{justify-content:center;flex-direction:column;}
+  .v-fav-hero-next{text-align:center;}
+  .v-fav-block{padding:16px;}
+}
+</style><section id="panel-v-favoritos-new"></section><script>
+(function(){if(window.__vFavPanel)return;window.__vFavPanel=true;
+
+/* Move panel to main.main */
+function relocate(){
+  var m=document.querySelector("main.main");
+  var p=document.getElementById("panel-v-favoritos-new");
+  if(m && p && p.parentElement!==m)m.appendChild(p);
+}
+setInterval(relocate, 2000);
+setTimeout(relocate, 500);
+
+/* localStorage helpers */
+function getFavs(){try{return JSON.parse(localStorage.getItem("v-favs")||'{"teams":[],"players":[],"leagues":[]}');}catch(_){return {teams:[],players:[],leagues:[]};}}
+function setFavs(f){try{localStorage.setItem("v-favs",JSON.stringify(f));}catch(_){}}
+function toggleFav(cat,name){var f=getFavs();var arr=f[cat]||[];var i=arr.indexOf(name);if(i>=0)arr.splice(i,1);else arr.push(name);f[cat]=arr;setFavs(f);return arr.indexOf(name)>=0;}
+function isFav(cat,name){return (getFavs()[cat]||[]).indexOf(name)>=0;}
+window.__toggleFav=toggleFav;
+window.__isFav=isFav;
+window.__getFavs=getFavs;
+
+/* Mock data for defaults if user has no favs */
+var TEAM_BADGES={"Real Madrid":"RM","Barcelona":"BAR","Bayern Munich":"BAY","PSG":"PSG","Manchester City":"MCI","Manchester United":"MUN","Liverpool":"LIV","Arsenal":"ARS","Chelsea":"CHE","Juventus":"JUV","Inter Milan":"INT","AC Milan":"MIL","Napoli":"NAP","Atlético Madrid":"ATM","Boca Juniors":"BOC","River Plate":"RIV","Flamengo":"FLA","Colo-Colo":"CC","Universidad de Chile":"UCH","Lakers":"LAL","Celtics":"BOS","Warriors":"GSW","Chiefs":"KC","Eagles":"PHI","Yankees":"NYY","Dodgers":"LAD"};
+
+var UPCOMING_MATCHES=[
+  {home:"Real Madrid",away:"Barcelona",time:"Sáb 21:00",comp:"La Liga · El Clásico",badgeH:"RM",badgeA:"BAR"},
+  {home:"Bayern",away:"Dortmund",time:"Dom 15:30",comp:"Bundesliga · Der Klassiker",badgeH:"BAY",badgeA:"BVB"},
+  {home:"PSG",away:"Marseille",time:"Dom 21:00",comp:"Ligue 1 · Le Classique",badgeH:"PSG",badgeA:"OM"},
+  {home:"Man City",away:"Liverpool",time:"Lun 17:30",comp:"Premier League",badgeH:"MCI",badgeA:"LIV"},
+  {home:"Boca",away:"River",time:"Mar 20:00",comp:"Superclásico",badgeH:"BOC",badgeA:"RIV"},
+  {home:"Lakers",away:"Celtics",time:"Mié 03:30",comp:"NBA",badgeH:"LAL",badgeA:"BOS"},
+  {home:"Inter",away:"Milan",time:"Sáb 20:45",comp:"Derby della Madonnina",badgeH:"INT",badgeA:"MIL"}
+];
+
+var RECENT_RESULTS=[
+  {home:"Real Madrid",away:"Villarreal",hs:3,as:1,comp:"La Liga · hace 2 días",fav:"Real Madrid"},
+  {home:"Chelsea",away:"Man City",hs:1,as:2,comp:"Premier League · hace 3 días",fav:"Man City"},
+  {home:"Bayern",away:"Leverkusen",hs:2,as:2,comp:"Bundesliga · hace 4 días",fav:"Bayern"},
+  {home:"Boca",away:"Lanús",hs:2,as:0,comp:"Liga Argentina · hace 5 días",fav:"Boca"},
+  {home:"PSG",away:"Nice",hs:4,as:0,comp:"Ligue 1 · hace 6 días",fav:"PSG"}
+];
+
+var STANDINGS_LALIGA=[
+  {p:1,team:"Real Madrid",pj:15,g:12,e:2,pd:1,pts:38,hl:true},
+  {p:2,team:"Barcelona",pj:15,g:11,e:1,pd:3,pts:34},
+  {p:3,team:"Atlético Madrid",pj:15,g:10,e:2,pd:3,pts:32},
+  {p:4,team:"Athletic Club",pj:15,g:8,e:3,pd:4,pts:27},
+  {p:5,team:"Villarreal",pj:15,g:7,e:4,pd:4,pts:25}
+];
+
+var NEWS_ITEMS=[
+  {badge:"Real Madrid",title:"Bellingham vuelve para el Clásico tras superar molestia muscular",time:"hace 2h",icon:"⚽"},
+  {badge:"Premier League",title:"Man City ficha a joven promesa argentina por 50M€",time:"hace 5h",icon:"🎯"},
+  {badge:"NBA",title:"Lakers logran su séptima victoria consecutiva contra Warriors",time:"hace 8h",icon:"🏀"},
+  {badge:"Boca Juniors",title:"Nuevo DT confirmado para la próxima temporada",time:"hace 12h",icon:"🇦🇷"},
+  {badge:"Champions",title:"Sorteo de octavos: emparejamientos y análisis",time:"ayer",icon:"🏆"}
+];
+
+function render(){
+  var el=document.getElementById("panel-v-favoritos-new");
+  if(!el)return;
+  var favs=getFavs();
+  var teams=favs.teams;
+  if(!teams.length){
+    /* Default suggested teams */
+    teams=["Real Madrid","Bayern Munich","Boca Juniors","Lakers"];
+  }
+  var featuredTeam=teams[0]||"Tu equipo";
+  var featuredBadge=TEAM_BADGES[featuredTeam]||featuredTeam.substring(0,3).toUpperCase();
+  var nextMatch=UPCOMING_MATCHES.filter(function(m){return m.home===featuredTeam||m.away===featuredTeam})[0]||UPCOMING_MATCHES[0];
+
+  var html=""+
+    /* Hero */
+    '<div class="v-fav-hero">'+
+      '<div class="v-fav-hero-left">'+
+        '<div class="v-fav-hero-logo">'+featuredBadge+'</div>'+
+        '<div class="v-fav-hero-txt"><h2>'+featuredTeam+'</h2><div class="v-fav-hero-sub">Tu equipo destacado</div></div>'+
+      '</div>'+
+      '<div class="v-fav-hero-next">'+
+        '<div class="v-fav-hero-next-label">Próximo partido</div>'+
+        '<div class="v-fav-hero-next-match">vs '+(nextMatch.home===featuredTeam?nextMatch.away:nextMatch.home)+'</div>'+
+        '<div class="v-fav-hero-next-time">'+nextMatch.time+' · '+nextMatch.comp+'</div>'+
+      '</div>'+
+    '</div>'+
+    /* Mis Equipos chips */
+    '<div class="v-fav-block">'+
+      '<div class="v-fav-block-head">'+
+        '<h3>⭐ Mis Equipos <span class="v-fav-count">'+teams.length+'</span></h3>'+
+        '<button class="v-fav-add-btn" onclick="window.__addFavPrompt()">+ Agregar</button>'+
+      '</div>'+
+      '<div class="v-fav-chips">'+
+        teams.map(function(t){
+          var b=TEAM_BADGES[t]||t.substring(0,3).toUpperCase();
+          return '<div class="v-fav-chip" data-team="'+t+'"><div class="v-fav-chip-badge">'+b+'</div><div class="v-fav-chip-name">'+t+'</div><button class="v-fav-chip-remove" data-remove="'+t+'" title="Quitar">×</button></div>';
+        }).join("")+
+      '</div>'+
+    '</div>'+
+    /* Próximos partidos */
+    '<div class="v-fav-block">'+
+      '<div class="v-fav-block-head">'+
+        '<h3>📅 Próximos partidos</h3>'+
+        '<span class="v-fav-count">'+UPCOMING_MATCHES.length+'</span>'+
+      '</div>'+
+      '<div class="v-fav-matches">'+
+        UPCOMING_MATCHES.map(function(m){
+          return '<div class="v-fav-match" data-match="'+m.home+'-'+m.away+'">'+
+            '<div class="v-fav-match-comp">🏆 '+m.comp+'</div>'+
+            '<div class="v-fav-match-teams">'+
+              '<div class="v-fav-match-team"><span class="v-fav-match-badge">'+m.badgeH+'</span><span>'+m.home+'</span></div>'+
+              '<div class="v-fav-match-vs">VS</div>'+
+              '<div class="v-fav-match-team right"><span>'+m.away+'</span><span class="v-fav-match-badge">'+m.badgeA+'</span></div>'+
+            '</div>'+
+            '<div class="v-fav-match-time">🕐 '+m.time+'</div>'+
+          '</div>';
+        }).join("")+
+      '</div>'+
+    '</div>'+
+    /* Últimos resultados */
+    '<div class="v-fav-block">'+
+      '<div class="v-fav-block-head"><h3>📊 Últimos resultados</h3></div>'+
+      '<div>'+
+        RECENT_RESULTS.map(function(r){
+          var homeWin=r.hs>r.as, awayWin=r.as>r.hs;
+          var favIsHome=r.fav===r.home;
+          var favWon=(favIsHome && homeWin)||(!favIsHome && awayWin);
+          var favDraw=r.hs===r.as;
+          return '<div class="v-fav-result">'+
+            '<div class="v-fav-result-team'+(favIsHome?" fav":"")+'">'+r.home+'</div>'+
+            '<div class="v-fav-result-score '+(homeWin?"win":awayWin?"lose":"")+'">'+r.hs+'</div>'+
+            '<div style="color:#9ca3af">-</div>'+
+            '<div class="v-fav-result-score '+(awayWin?"win":homeWin?"lose":"")+'">'+r.as+'</div>'+
+            '<div class="v-fav-result-team right'+(favIsHome?"":" fav")+'">'+r.away+'</div>'+
+            '<div class="v-fav-result-meta">'+r.comp+'</div>'+
+          '</div>';
+        }).join("")+
+      '</div>'+
+    '</div>'+
+    /* Standings mini */
+    '<div class="v-fav-block">'+
+      '<div class="v-fav-block-head"><h3>🏆 La Liga · Tabla</h3><span class="v-fav-count">Top 5</span></div>'+
+      '<table class="v-fav-standings-table">'+
+        '<thead><tr><th class="pos">#</th><th class="left" style="text-align:left">Equipo</th><th>PJ</th><th>G</th><th>E</th><th>P</th><th>PTS</th></tr></thead>'+
+        '<tbody>'+
+          STANDINGS_LALIGA.map(function(t){
+            return '<tr'+(t.hl?' class="highlight"':'')+'><td class="pos">'+t.p+'</td><td class="left" style="text-align:left">'+t.team+'</td><td>'+t.pj+'</td><td>'+t.g+'</td><td>'+t.e+'</td><td>'+t.pd+'</td><td><strong>'+t.pts+'</strong></td></tr>';
+          }).join("")+
+        '</tbody>'+
+      '</table>'+
+    '</div>'+
+    /* Noticias filtradas */
+    '<div class="v-fav-block">'+
+      '<div class="v-fav-block-head"><h3>📰 Noticias de tus favoritos</h3></div>'+
+      '<div>'+
+        NEWS_ITEMS.map(function(n){
+          return '<div class="v-fav-news-item">'+
+            '<div class="v-fav-news-thumb">'+n.icon+'</div>'+
+            '<div class="v-fav-news-body">'+
+              '<div class="v-fav-news-badge">'+n.badge+'</div>'+
+              '<div class="v-fav-news-title">'+n.title+'</div>'+
+              '<div class="v-fav-news-meta">'+n.time+'</div>'+
+            '</div>'+
+          '</div>';
+        }).join("")+
+      '</div>'+
+    '</div>';
+  el.innerHTML=html;
+}
+
+/* Public: showFavoritos */
+window.__showFavoritos=function(){
+  var p=document.getElementById("panel-v-favoritos-new");
+  if(!p)return;
+  render();
+  var others=["panel-inicio","panel-v-envivo-rebuild","panel-masss21-rebuild","v326-panel-mercado","panel-v703-noticias","panel-v708-blogs","panel-v724-articulos","panel-v724-podcast","panel-v711-seguidos","panel-v712-reclutar","panel-v723-centros","panel-v724-curiosos","panel-v-retos","panel-v-encuestas","v56-page-envivo","panel-v-deportes-shell","panel-v-comparar"];
+  others.forEach(function(id){var e=document.getElementById(id);if(e)e.style.setProperty("display","none","important");});
+  p.style.setProperty("display","block","important");
+  try{history.replaceState(null,"","#favoritos");}catch(_){}
+  document.body.classList.remove("v-envivo-active","v-mss-active");
+  window.scrollTo(0,0);
+};
+
+window.__addFavPrompt=function(){
+  var name=prompt("Agregá un equipo, jugador o liga a favoritos:");
+  if(!name)return;
+  toggleFav("teams",name.trim());
+  render();
+};
+
+/* Wire drawer Favoritos click to override old behavior */
+window.addEventListener("click", function(e){
+  var li=e.target && e.target.closest?e.target.closest("li, a, button"):null;
+  if(!li)return;
+  var txt=(li.textContent||"").trim();
+  if(txt.length>20)return;
+  if(/^[\u{2B50}]?\s*(Favoritos|Favorites|Favoriten|Favoris|Preferiti)$/u.test(txt)){
+    e.preventDefault();e.stopImmediatePropagation();
+    window.__showFavoritos();
+  }
+}, true);
+
+/* Chip clicks - remove */
+document.addEventListener("click", function(e){
+  var panel=document.getElementById("panel-v-favoritos-new");
+  if(!panel || getComputedStyle(panel).display==="none")return;
+  var removeBtn=e.target && e.target.closest?e.target.closest("[data-remove]"):null;
+  if(removeBtn){
+    e.preventDefault();e.stopImmediatePropagation();
+    var name=removeBtn.getAttribute("data-remove");
+    toggleFav("teams",name);
+    render();
+    return;
+  }
+});
+
+/* Hash router */
+window.addEventListener("hashchange", function(){
+  var h=(location.hash||"").replace(/^#/,"").toLowerCase();
+  if(h==="favoritos"||h==="favorites")window.__showFavoritos();
+});
+setTimeout(function(){
+  var h=(location.hash||"").replace(/^#/,"").toLowerCase();
+  if(h==="favoritos"||h==="favorites")window.__showFavoritos();
+},1500);
+
+})();
+</script>
 </body>
 </html>
 
