@@ -26573,6 +26573,355 @@ setInterval(function(){
 },700);
 })();
 </script>
+<!-- Leaflet CDN -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+<style>
+/* Search dropdown */
+.v-search-wrap{position:relative;}
+.v-search-drop{position:absolute;top:calc(100% + 6px);left:0;right:0;background:#fff;border:1px solid #e5e7eb;border-radius:12px;box-shadow:0 12px 32px rgba(0,0,0,0.12);max-height:420px;overflow-y:auto;z-index:9999;display:none;}
+.v-search-drop.v-open{display:block;}
+.v-search-section{padding:8px 0;border-bottom:1px solid #f3f4f6;}
+.v-search-section:last-child{border-bottom:none;}
+.v-search-section-title{padding:6px 16px;font-size:11px;font-weight:700;color:#c8102e;text-transform:uppercase;letter-spacing:0.5px;}
+.v-search-item{display:flex;align-items:center;gap:12px;padding:10px 16px;cursor:pointer;font-size:14px;color:#111;transition:background .1s;}
+.v-search-item:hover,.v-search-item.v-hl{background:#fef2f2;}
+.v-search-item-icon{width:32px;height:32px;border-radius:8px;background:#f3f4f6;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
+.v-search-item-name{flex:1;font-weight:500;}
+.v-search-item-type{font-size:11px;font-weight:600;color:#9ca3af;text-transform:uppercase;letter-spacing:0.4px;}
+.v-search-empty{padding:30px 20px;text-align:center;color:#9ca3af;font-size:14px;}
+/* Leaflet map */
+#v-leaflet-map{width:100%;height:100%;min-height:500px;border-radius:12px;overflow:hidden;}
+.v-map-popup{font-family:-apple-system,sans-serif;min-width:200px;}
+.v-map-popup h4{margin:0 0 4px;font-size:14px;font-weight:700;color:#111;}
+.v-map-popup .v-popup-city{font-size:12px;color:#6b7280;margin-bottom:8px;}
+.v-map-popup .v-popup-sports{font-size:11px;color:#374151;background:#f9fafb;padding:6px 8px;border-radius:6px;}
+</style>
+<script>
+(function(){if(window.__vSearchInit)return;window.__vSearchInit=true;
+
+/* Full search index */
+var INDEX=[
+  /* Sections */
+  {type:"section",icon:"🏠",name:"Inicio",dest:{hash:"inicio"}},
+  {type:"section",icon:"🔴",name:"En Vivo",dest:{hash:"envivo"}},
+  {type:"section",icon:"📰",name:"Noticias",dest:{hash:"noticias"}},
+  {type:"section",icon:"📝",name:"Blogs",dest:{hash:"blogs"}},
+  {type:"section",icon:"🎙",name:"Podcast",dest:{hash:"podcast"}},
+  {type:"section",icon:"📝",name:"Artículos",dest:{hash:"articulos"}},
+  {type:"section",icon:"👥",name:"Seguidos",dest:{hash:"seguidos"}},
+  {type:"section",icon:"🎯",name:"Reclutar",dest:{hash:"reclutar"}},
+  {type:"section",icon:"📍",name:"Centros Deportivos",dest:{hash:"centros"}},
+  {type:"section",icon:"🎯",name:"Retos",dest:{hash:"retos"}},
+  {type:"section",icon:"📊",name:"Encuestas",dest:{hash:"encuestas"}},
+  {type:"section",icon:"💡",name:"Datos Curiosos",dest:{hash:"datos"}},
+  {type:"section",icon:"💰",name:"Mercado",dest:{hash:"mercado"}},
+  {type:"section",icon:"⚖️",name:"Comparar",dest:{fn:"__showComparar"}},
+  {type:"section",icon:"🌟",name:"Más Sobre SS21",dest:{hash:"masss21"}},
+  /* Sports */
+  {type:"sport",icon:"⚽",name:"Fútbol",dest:{fn:"__showDeportes",sport:"futbol"}},
+  {type:"sport",icon:"🎾",name:"Tenis",dest:{fn:"__showDeportes",sport:"tenis"}},
+  {type:"sport",icon:"🏎",name:"Carreras",dest:{fn:"__showDeportes",sport:"carreras"}},
+  {type:"sport",icon:"🏀",name:"Basketball",dest:{fn:"__showDeportes",sport:"basketball"}},
+  {type:"sport",icon:"🥊",name:"Boxeo / Combate",dest:{fn:"__showDeportes",sport:"combate"}},
+  {type:"sport",icon:"⚾",name:"Baseball",dest:{fn:"__showDeportes",sport:"baseball"}},
+  {type:"sport",icon:"🏒",name:"Hockey",dest:{fn:"__showDeportes",sport:"hockey"}},
+  {type:"sport",icon:"🏈",name:"Fútbol Americano / NFL",dest:{fn:"__showDeportes",sport:"nfl"}},
+  {type:"sport",icon:"🏉",name:"Rugby",dest:{fn:"__showDeportes",sport:"rugby"}},
+  {type:"sport",icon:"⛳",name:"Golf",dest:{fn:"__showDeportes",sport:"golf"}},
+  {type:"sport",icon:"🏃",name:"Atletismo",dest:{fn:"__showDeportes",sport:"atletismo"}},
+  {type:"sport",icon:"🏊",name:"Natación",dest:{fn:"__showDeportes",sport:"natacion"}},
+  {type:"sport",icon:"🚴",name:"Ciclismo",dest:{fn:"__showDeportes",sport:"ciclismo"}},
+  {type:"sport",icon:"🏐",name:"Volleyball",dest:{fn:"__showDeportes",sport:"volley"}},
+  {type:"sport",icon:"🏓",name:"Pádel",dest:{fn:"__showDeportes",sport:"padel"}},
+  {type:"sport",icon:"🏏",name:"Cricket",dest:{fn:"__showDeportes",sport:"cricket"}},
+  /* Leagues */
+  {type:"liga",icon:"🏆",name:"Premier League",dest:{hash:"deportes"}},
+  {type:"liga",icon:"🏆",name:"La Liga",dest:{hash:"deportes"}},
+  {type:"liga",icon:"🏆",name:"Bundesliga",dest:{hash:"deportes"}},
+  {type:"liga",icon:"🏆",name:"Serie A",dest:{hash:"deportes"}},
+  {type:"liga",icon:"🏆",name:"Ligue 1",dest:{hash:"deportes"}},
+  {type:"liga",icon:"🏆",name:"Champions League",dest:{hash:"deportes"}},
+  {type:"liga",icon:"🏆",name:"Libertadores",dest:{hash:"deportes"}},
+  {type:"liga",icon:"🏆",name:"Mundial FIFA",dest:{hash:"deportes"}},
+  {type:"liga",icon:"🏆",name:"Copa América",dest:{hash:"deportes"}},
+  {type:"liga",icon:"🏆",name:"Eurocopa",dest:{hash:"deportes"}},
+  {type:"liga",icon:"🏆",name:"MLS",dest:{hash:"deportes"}},
+  {type:"liga",icon:"🏆",name:"Brasileirão",dest:{hash:"deportes"}},
+  {type:"liga",icon:"🏆",name:"Liga Argentina",dest:{hash:"deportes"}},
+  {type:"liga",icon:"🏀",name:"NBA",dest:{fn:"__showDeportes",sport:"basketball"}},
+  {type:"liga",icon:"🏈",name:"NFL",dest:{fn:"__showDeportes",sport:"nfl"}},
+  {type:"liga",icon:"⚾",name:"MLB",dest:{fn:"__showDeportes",sport:"baseball"}},
+  {type:"liga",icon:"🏒",name:"NHL",dest:{fn:"__showDeportes",sport:"hockey"}},
+  {type:"liga",icon:"🏎",name:"Fórmula 1",dest:{fn:"__showDeportes",sport:"carreras"}},
+  {type:"liga",icon:"🥊",name:"UFC",dest:{fn:"__showDeportes",sport:"combate"}},
+  {type:"liga",icon:"🎾",name:"ATP Tour",dest:{fn:"__showDeportes",sport:"tenis"}},
+  {type:"liga",icon:"🎾",name:"WTA Tour",dest:{fn:"__showDeportes",sport:"tenis"}},
+  /* Teams (major) */
+  {type:"equipo",icon:"⚽",name:"Real Madrid",dest:{fn:"__showDeportes",sport:"futbol"}},
+  {type:"equipo",icon:"⚽",name:"Barcelona",dest:{fn:"__showDeportes",sport:"futbol"}},
+  {type:"equipo",icon:"⚽",name:"Bayern Munich",dest:{fn:"__showDeportes",sport:"futbol"}},
+  {type:"equipo",icon:"⚽",name:"Manchester City",dest:{fn:"__showDeportes",sport:"futbol"}},
+  {type:"equipo",icon:"⚽",name:"Manchester United",dest:{fn:"__showDeportes",sport:"futbol"}},
+  {type:"equipo",icon:"⚽",name:"Liverpool",dest:{fn:"__showDeportes",sport:"futbol"}},
+  {type:"equipo",icon:"⚽",name:"Arsenal",dest:{fn:"__showDeportes",sport:"futbol"}},
+  {type:"equipo",icon:"⚽",name:"Chelsea",dest:{fn:"__showDeportes",sport:"futbol"}},
+  {type:"equipo",icon:"⚽",name:"PSG",dest:{fn:"__showDeportes",sport:"futbol"}},
+  {type:"equipo",icon:"⚽",name:"Juventus",dest:{fn:"__showDeportes",sport:"futbol"}},
+  {type:"equipo",icon:"⚽",name:"Inter Milán",dest:{fn:"__showDeportes",sport:"futbol"}},
+  {type:"equipo",icon:"⚽",name:"AC Milan",dest:{fn:"__showDeportes",sport:"futbol"}},
+  {type:"equipo",icon:"⚽",name:"Boca Juniors",dest:{fn:"__showDeportes",sport:"futbol"}},
+  {type:"equipo",icon:"⚽",name:"River Plate",dest:{fn:"__showDeportes",sport:"futbol"}},
+  {type:"equipo",icon:"⚽",name:"Flamengo",dest:{fn:"__showDeportes",sport:"futbol"}},
+  {type:"equipo",icon:"⚽",name:"Colo-Colo",dest:{fn:"__showDeportes",sport:"futbol"}},
+  {type:"equipo",icon:"⚽",name:"Universidad de Chile",dest:{fn:"__showDeportes",sport:"futbol"}},
+  {type:"equipo",icon:"🏀",name:"Los Angeles Lakers",dest:{fn:"__showDeportes",sport:"basketball"}},
+  {type:"equipo",icon:"🏀",name:"Boston Celtics",dest:{fn:"__showDeportes",sport:"basketball"}},
+  {type:"equipo",icon:"🏀",name:"Golden State Warriors",dest:{fn:"__showDeportes",sport:"basketball"}},
+  {type:"equipo",icon:"🏈",name:"Kansas City Chiefs",dest:{fn:"__showDeportes",sport:"nfl"}},
+  {type:"equipo",icon:"🏈",name:"Philadelphia Eagles",dest:{fn:"__showDeportes",sport:"nfl"}},
+  {type:"equipo",icon:"⚾",name:"New York Yankees",dest:{fn:"__showDeportes",sport:"baseball"}},
+  {type:"equipo",icon:"⚾",name:"Los Angeles Dodgers",dest:{fn:"__showDeportes",sport:"baseball"}},
+  /* Players (major) */
+  {type:"jugador",icon:"⚽",name:"Lionel Messi",dest:{fn:"__showDeportes",sport:"futbol"}},
+  {type:"jugador",icon:"⚽",name:"Cristiano Ronaldo",dest:{fn:"__showDeportes",sport:"futbol"}},
+  {type:"jugador",icon:"⚽",name:"Kylian Mbappé",dest:{fn:"__showDeportes",sport:"futbol"}},
+  {type:"jugador",icon:"⚽",name:"Erling Haaland",dest:{fn:"__showDeportes",sport:"futbol"}},
+  {type:"jugador",icon:"⚽",name:"Neymar Jr",dest:{fn:"__showDeportes",sport:"futbol"}},
+  {type:"jugador",icon:"⚽",name:"Vinicius Jr",dest:{fn:"__showDeportes",sport:"futbol"}},
+  {type:"jugador",icon:"⚽",name:"Bellingham",dest:{fn:"__showDeportes",sport:"futbol"}},
+  {type:"jugador",icon:"🏀",name:"LeBron James",dest:{fn:"__showDeportes",sport:"basketball"}},
+  {type:"jugador",icon:"🏀",name:"Stephen Curry",dest:{fn:"__showDeportes",sport:"basketball"}},
+  {type:"jugador",icon:"🏀",name:"Nikola Jokić",dest:{fn:"__showDeportes",sport:"basketball"}},
+  {type:"jugador",icon:"🏀",name:"Luka Doncic",dest:{fn:"__showDeportes",sport:"basketball"}},
+  {type:"jugador",icon:"🎾",name:"Novak Djokovic",dest:{fn:"__showDeportes",sport:"tenis"}},
+  {type:"jugador",icon:"🎾",name:"Carlos Alcaraz",dest:{fn:"__showDeportes",sport:"tenis"}},
+  {type:"jugador",icon:"🎾",name:"Jannik Sinner",dest:{fn:"__showDeportes",sport:"tenis"}},
+  {type:"jugador",icon:"🎾",name:"Iga Świątek",dest:{fn:"__showDeportes",sport:"tenis"}},
+  {type:"jugador",icon:"🏎",name:"Max Verstappen",dest:{fn:"__showDeportes",sport:"carreras"}},
+  {type:"jugador",icon:"🏎",name:"Lewis Hamilton",dest:{fn:"__showDeportes",sport:"carreras"}},
+  {type:"jugador",icon:"🏎",name:"Lando Norris",dest:{fn:"__showDeportes",sport:"carreras"}},
+  {type:"jugador",icon:"🏈",name:"Patrick Mahomes",dest:{fn:"__showDeportes",sport:"nfl"}},
+  {type:"jugador",icon:"🥊",name:"Canelo Álvarez",dest:{fn:"__showDeportes",sport:"combate"}}
+];
+
+/* Normalize for search: strip accents, lowercase */
+function norm(s){return (s||"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");}
+INDEX.forEach(function(i){i._norm=norm(i.name);});
+
+function buildDropdown(input){
+  var wrap=input.parentElement;
+  if(!wrap.querySelector(".v-search-drop")){
+    wrap.classList.add("v-search-wrap");
+    var d=document.createElement("div");
+    d.className="v-search-drop";
+    wrap.appendChild(d);
+  }
+  return wrap.querySelector(".v-search-drop");
+}
+
+function search(q){
+  q=norm(q);
+  if(!q||q.length<1)return [];
+  return INDEX.filter(function(i){return i._norm.indexOf(q)>=0}).slice(0,15);
+}
+
+function renderResults(drop, results, q){
+  if(!results.length){
+    drop.innerHTML='<div class="v-search-empty">No hay resultados para "'+q+'"</div>';
+    return;
+  }
+  var groups={jugador:[],equipo:[],liga:[],sport:[],section:[]};
+  results.forEach(function(r){if(groups[r.type])groups[r.type].push(r);});
+  var order=[{k:"section",t:"Secciones"},{k:"sport",t:"Deportes"},{k:"liga",t:"Ligas y Competiciones"},{k:"equipo",t:"Equipos"},{k:"jugador",t:"Jugadores"}];
+  var html="";
+  order.forEach(function(g){
+    if(!groups[g.k].length)return;
+    html+='<div class="v-search-section"><div class="v-search-section-title">'+g.t+'</div>';
+    groups[g.k].forEach(function(item, idx){
+      html+='<div class="v-search-item" data-search-idx="'+INDEX.indexOf(item)+'"><div class="v-search-item-icon">'+item.icon+'</div><div class="v-search-item-name">'+item.name+'</div><div class="v-search-item-type">'+g.t.slice(0,-1)+'</div></div>';
+    });
+    html+='</div>';
+  });
+  drop.innerHTML=html;
+}
+
+function navigate(item){
+  var d=item.dest;
+  if(d.fn && window[d.fn]){
+    window[d.fn]();
+    if(d.sport && window.__setDeportesSport){window.__setDeportesSport(d.sport);}
+    return;
+  }
+  if(d.hash){
+    try{history.replaceState(null,"","#"+d.hash);}catch(_){}
+    /* Manually trigger navigation */
+    var map={inicio:"panel-inicio",envivo:"panel-v-envivo-rebuild",noticias:"panel-v703-noticias",blogs:"panel-v708-blogs",podcast:"panel-v724-podcast",articulos:"panel-v724-articulos",seguidos:"panel-v711-seguidos",reclutar:"panel-v712-reclutar",centros:"panel-v723-centros",retos:"panel-v-retos",encuestas:"panel-v-encuestas",datos:"panel-v724-curiosos",mercado:"v326-panel-mercado",masss21:"panel-masss21-rebuild",deportes:"panel-v-deportes-shell"};
+    var pid=map[d.hash];
+    if(d.hash==="envivo" && window.__showEnvivo){window.__showEnvivo();return;}
+    if(d.hash==="deportes" && window.__showDeportes){window.__showDeportes();return;}
+    if(pid && window.__goSection){window.__goSection(pid);}
+  }
+}
+
+function wire(){
+  var input=document.getElementById("v398-search-input");
+  if(!input || input.__vWired)return;
+  input.__vWired=true;
+  var drop=buildDropdown(input);
+  input.addEventListener("input", function(){
+    var q=input.value.trim();
+    if(!q){drop.classList.remove("v-open");return;}
+    var results=search(q);
+    renderResults(drop, results, q);
+    drop.classList.add("v-open");
+  });
+  input.addEventListener("focus", function(){
+    if(input.value.trim())drop.classList.add("v-open");
+  });
+  input.addEventListener("blur", function(){
+    setTimeout(function(){drop.classList.remove("v-open");},200);
+  });
+  drop.addEventListener("mousedown", function(e){
+    var it=e.target.closest("[data-search-idx]");
+    if(!it)return;
+    e.preventDefault();
+    var idx=parseInt(it.getAttribute("data-search-idx"),10);
+    var item=INDEX[idx];
+    if(!item)return;
+    navigate(item);
+    input.value="";
+    drop.classList.remove("v-open");
+  });
+}
+setInterval(wire, 800);
+setTimeout(wire, 400);
+
+/* Helper for setting Deportes sport via search */
+window.__setDeportesSport=function(sport){
+  setTimeout(function(){
+    var btn=document.querySelector('[data-dp-sport="'+sport+'"]');
+    if(btn)btn.click();
+  },300);
+};
+
+})();
+
+/* Leaflet Map for Centros */
+(function(){if(window.__vLeafletCentros)return;window.__vLeafletCentros=true;
+
+var CITIES={
+  "Santiago":[-33.4489,-70.6693],
+  "Providencia":[-33.4269,-70.6187],
+  "Las Condes":[-33.4172,-70.5476],
+  "Vitacura":[-33.3946,-70.5867],
+  "Nunoa":[-33.4569,-70.6006],
+  "Nuñoa":[-33.4569,-70.6006],
+  "Valparaiso":[-33.0472,-71.6127],
+  "Vina del Mar":[-33.0246,-71.5518],
+  "Viña del Mar":[-33.0246,-71.5518],
+  "Concepcion":[-36.827,-73.0498],
+  "Concepción":[-36.827,-73.0498],
+  "Buenos Aires":[-34.6037,-58.3816],
+  "CDMX":[19.4326,-99.1332],
+  "Ciudad de Mexico":[19.4326,-99.1332],
+  "Guadalajara":[20.6597,-103.3496],
+  "Monterrey":[25.6866,-100.3161],
+  "Bogota":[4.7110,-74.0721],
+  "Lima":[-12.0464,-77.0428],
+  "Sao Paulo":[-23.5505,-46.6333],
+  "Rio de Janeiro":[-22.9068,-43.1729],
+  "Madrid":[40.4168,-3.7038],
+  "Barcelona":[41.3851,2.1734],
+  "Miami":[25.7617,-80.1918],
+  "New York":[40.7128,-74.0060],
+  "Los Angeles":[34.0522,-118.2437]
+};
+
+function coordsForCity(c){
+  if(CITIES[c])return CITIES[c];
+  /* Fuzzy match */
+  var normC=(c||"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");
+  for(var k in CITIES){
+    var normK=k.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");
+    if(normK===normC || normK.indexOf(normC)>=0 || normC.indexOf(normK)>=0)return CITIES[k];
+  }
+  return null;
+}
+
+var map=null;
+var markers=[];
+
+function initMap(){
+  var container=document.querySelector(".v723-map");
+  if(!container || container.__vLeaflet)return;
+  if(typeof L==="undefined")return; /* Leaflet not loaded yet */
+  container.__vLeaflet=true;
+  /* Replace old content with map div */
+  container.innerHTML='<div id="v-leaflet-map"></div>';
+  var mapEl=container.querySelector("#v-leaflet-map");
+  mapEl.style.height="600px";
+  map=L.map(mapEl).setView([-15,-60], 3);
+  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    maxZoom: 19,
+    attribution: '© OpenStreetMap contributors'
+  }).addTo(map);
+  loadCentros();
+}
+
+function loadCentros(){
+  if(!map)return;
+  /* Extract centros from DOM (already rendered) - look for popup/tooltip data */
+  /* Sample static data since we can't reliably parse the source */
+  var sample=[
+    {n:"Estadio Nacional",c:"Santiago",pais:"CL",d:["Fútbol","Atletismo"]},
+    {n:"Estadio Monumental",c:"Santiago",pais:"CL",d:["Fútbol"]},
+    {n:"Parque Bicentenario",c:"Santiago",pais:"CL",d:["Running","Atletismo","Ciclismo"]},
+    {n:"Cancha Municipal Las Condes",c:"Las Condes",pais:"CL",d:["Fútbol","Tenis"]},
+    {n:"Club Providencia",c:"Providencia",pais:"CL",d:["Tenis","Natación","Pádel"]},
+    {n:"Sausalito",c:"Viña del Mar",pais:"CL",d:["Fútbol"]},
+    {n:"Estadio Monumental Boca",c:"Buenos Aires",pais:"AR",d:["Fútbol"]},
+    {n:"Estadio Monumental River",c:"Buenos Aires",pais:"AR",d:["Fútbol"]},
+    {n:"Bosque de Chapultepec",c:"CDMX",pais:"MX",d:["Running","Ciclismo","Atletismo"]},
+    {n:"Estadio Azteca",c:"CDMX",pais:"MX",d:["Fútbol"]},
+    {n:"Maracana",c:"Rio de Janeiro",pais:"BR",d:["Fútbol"]},
+    {n:"Estadio Morumbi",c:"Sao Paulo",pais:"BR",d:["Fútbol"]},
+    {n:"Santiago Bernabéu",c:"Madrid",pais:"ES",d:["Fútbol"]},
+    {n:"Camp Nou",c:"Barcelona",pais:"ES",d:["Fútbol"]},
+    {n:"Hard Rock Stadium",c:"Miami",pais:"US",d:["Fútbol Americano","Fútbol"]},
+    {n:"Madison Square Garden",c:"New York",pais:"US",d:["Basketball","Hockey"]},
+    {n:"Estadio Nacional Lima",c:"Lima",pais:"PE",d:["Fútbol","Atletismo"]},
+    {n:"Estadio El Campin",c:"Bogota",pais:"CO",d:["Fútbol"]},
+    {n:"Cancha Central Concepción",c:"Concepción",pais:"CL",d:["Fútbol"]}
+  ];
+  /* Clear old markers */
+  markers.forEach(function(m){map.removeLayer(m);});
+  markers=[];
+  sample.forEach(function(c){
+    var coords=coordsForCity(c.c);
+    if(!coords)return;
+    var m=L.marker(coords).addTo(map);
+    m.bindPopup('<div class="v-map-popup"><h4>'+c.n+'</h4><div class="v-popup-city">📍 '+c.c+', '+c.pais+'</div><div class="v-popup-sports">🏅 '+c.d.join(" · ")+'</div></div>');
+    markers.push(m);
+  });
+  /* Fit bounds to visible markers */
+  if(markers.length){
+    var group=L.featureGroup(markers);
+    setTimeout(function(){map.fitBounds(group.getBounds().pad(0.1));}, 200);
+  }
+}
+
+setInterval(function(){
+  var panel=document.getElementById("panel-v723-centros");
+  if(!panel)return;
+  var isVisible=getComputedStyle(panel).display!=="none";
+  if(isVisible)initMap();
+  /* Invalidate size to make Leaflet re-check dimensions when panel becomes visible */
+  if(map && isVisible)setTimeout(function(){map.invalidateSize();},200);
+},1000);
+
+})();
+</script>
 </body>
 </html>
 
