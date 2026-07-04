@@ -25727,12 +25727,12 @@ function wire(){
   var cards=container.querySelectorAll(".inicio-panel");
   if(cards.length<8)return;
   var targets={
-    "Explorar deportes":{action:"toast",msg:"Próximamente: Página de Deportes con NBA, NFL, MLB, F1, Champions y todas las ligas."},
+    "Explorar deportes":{action:"showDeportes"},
     "Ver en vivo":{action:"nav",target:"envivo"},
     "Crear mi perfil":{action:"toast",msg:"Próximamente: Crea tu perfil deportivo con tu CV, estadísticas históricas y videos."},
     "Conectar":{action:"nav",target:"seguidos"},
     "Modo Reclutador":{action:"nav",target:"reclutar"},
-    "Comparar":{action:"toast",msg:"Próximamente: Compara dos deportistas, equipos o ligas del mismo deporte lado a lado."},
+    "Comparar":{action:"showComparar"},
     "Ver Información":{action:"nav",target:"noticias"},
     "Buscar centros":{action:"nav",target:"centros"}
   };
@@ -25748,6 +25748,22 @@ function wire(){
       e.stopImmediatePropagation();
       if(cfg.action==="toast"){
         showToast(cfg.msg);
+        return;
+      }
+      if(cfg.action==="showDeportes"){
+        if(window.__showDeportes)window.__showDeportes();
+        return;
+      }
+      if(cfg.action==="showComparar"){
+        if(window.__showComparar)window.__showComparar();
+        return;
+      }
+      if(cfg.action==="showDeportes"){
+        if(window.__showDeportes)window.__showDeportes();
+        return;
+      }
+      if(cfg.action==="showComparar"){
+        if(window.__showComparar)window.__showComparar();
         return;
       }
       var target=cfg.target;
