@@ -26968,6 +26968,71 @@ setInterval(function(){
 },600);
 })();
 </script>
+<script>
+(function(){if(window.__vInicioRestore)return;window.__vInicioRestore=true;
+/* Sections that belong to Inicio (primary landing content) */
+var INICIO_SECTIONS=["heroCarousel","v25-intro","inicio-panels","inicio-features"];
+/* Sections that are legacy "sub-pages" living inside panel-inicio */
+var INICIO_SUBPAGES=["v56-page-favoritos","v56-page-envivo","v38-page-escolares","v38-page-universitarias","v38-page-amateur","v38-page-comparar","v38-page-mapa","v87-page-favoritos","v29-todos-page","v27-noticias-header","v16-news-section","v32-news-grid-sec","v27-blogs-header","v25-blogs-section","v32-blogs-grid-sec","v71-wrap","v16-novedades-header","v17-updates-widget","v35-nb-page"];
+
+function restoreInicio(){
+  var panel=document.getElementById("panel-inicio");
+  if(!panel)return;
+  var isInicioVisible=getComputedStyle(panel).display!=="none";
+  if(!isInicioVisible)return;
+  var h=(location.hash||"").replace(/^#/,"").toLowerCase();
+  /* Only restore if we're actually on inicio hash (not a sub-panel showing over inicio) */
+  var otherPanelsVisible=false;
+  ["panel-v-envivo-rebuild","panel-masss21-rebuild","panel-v-deportes-shell","panel-v-comparar","v326-panel-mercado","panel-v703-noticias","panel-v708-blogs","panel-v724-articulos","panel-v724-podcast","panel-v711-seguidos","panel-v712-reclutar","panel-v723-centros","panel-v724-curiosos","panel-v-retos","panel-v-encuestas","panel-masss21-rebuild"].forEach(function(id){
+    var e=document.getElementById(id);
+    if(e && getComputedStyle(e).display!=="none")otherPanelsVisible=true;
+  });
+  if(otherPanelsVisible)return;
+  /* Show inicio primary sections */
+  INICIO_SECTIONS.forEach(function(id){
+    var e=document.getElementById(id);
+    if(!e)return;
+    /* Only unhide if it was hidden (avoid touching if user has it visible) */
+    if(getComputedStyle(e).display==="none"){
+      e.style.removeProperty("display");
+      e.style.setProperty("display","block","important");
+    }
+  });
+  /* Hide inicio sub-pages */
+  INICIO_SUBPAGES.forEach(function(id){
+    var e=document.getElementById(id);
+    if(e)e.style.setProperty("display","none","important");
+  });
+}
+
+/* Watch for hashchange and clicks */
+window.addEventListener("hashchange", function(){
+  var h=(location.hash||"").replace(/^#/,"").toLowerCase();
+  if(h==="inicio"||h==="")setTimeout(restoreInicio, 100);
+});
+
+/* Also on click of Inicio in drawer */
+window.addEventListener("click", function(e){
+  var li=e.target && e.target.closest?e.target.closest("li, a"):null;
+  if(!li)return;
+  var txt=(li.textContent||"").trim();
+  if(txt.length>15)return;
+  if(/^[\u{1F3E0}]?\s*(Inicio|Home)$/u.test(txt)){
+    setTimeout(restoreInicio, 300);
+    setTimeout(restoreInicio, 800);
+  }
+}, true);
+
+/* Periodic safety net */
+setInterval(function(){
+  var h=(location.hash||"").replace(/^#/,"").toLowerCase();
+  if(h!=="inicio"&&h!=="")return;
+  restoreInicio();
+}, 1500);
+
+setTimeout(restoreInicio, 1000);
+})();
+</script>
 </body>
 </html>
 
