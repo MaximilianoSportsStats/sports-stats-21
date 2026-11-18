@@ -1,6 +1,46 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+<script>
+/* SS21 REGULADOR de temporizadores.
+   El sitio acumula ~120 setInterval de capas viejas ("vigilantes" que cada
+   150-400 ms vuelven a aplicar su parche): ~170 ejecuciones por segundo con
+   la pagina quieta, lo que la hace lenta y gasta bateria en el celular.
+   - Los intervalos de menos de 2 s pasan a correr cada 2 s...
+   - ...pero corren de inmediato despues de cada accion del usuario (clic,
+     tecla, cambio de idioma, navegacion), asi que reaccionan igual de rapido.
+   - Con la pestana en segundo plano no corren.
+   Los intervalos de 2 s o mas (rotaciones, relojes) no se tocan. */
+(function(){
+  if(window.SS21tick) return;
+  var MIN = 2000;
+  var nativo = window.setInterval, limpiarNativo = window.clearInterval;
+  var rapidos = new Map();
+  window.setInterval = function(fn, ms){
+    if(typeof fn !== "function") return nativo.apply(window, arguments);
+    var extra = Array.prototype.slice.call(arguments, 2);
+    ms = +ms || 0;
+    var correr = function(){ if(document.hidden) return; return fn.apply(window, extra); };
+    var id = nativo.call(window, correr, Math.max(ms, MIN));
+    if(ms < MIN) rapidos.set(id, correr);
+    return id;
+  };
+  window.clearInterval = function(id){ rapidos.delete(id); return limpiarNativo.call(window, id); };
+  var pendiente = null;
+  window.SS21tick = function(){
+    if(pendiente) return;
+    pendiente = setTimeout(function(){
+      pendiente = null;
+      rapidos.forEach(function(correr){ try{ correr(); }catch(_){ } });
+    }, 40);
+  };
+  ["click","keyup","change","hashchange","popstate"].forEach(function(ev){
+    window.addEventListener(ev, function(){ window.SS21tick(); setTimeout(window.SS21tick, 350); }, true);
+  });
+  document.addEventListener("visibilitychange", function(){ if(!document.hidden) window.SS21tick(); });
+})();
+</script>
+<script>/* SS21: guardar la direccion con la que se entro, antes de que alguna capa vieja la cambie */window.__ss21hashInicial=location.hash;</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <link rel="icon" type="image/png" href="data/logo.png">
@@ -17516,94 +17556,8 @@ attachInicio2();
 })();
 </script>
 
-<script>
-/* v302 - forzar Inicio al cargar (matar auto-nav a Futbol) */
-(function(){
-  if(window.__v302)return;window.__v302=true;
-  function forceInicio(){
-    var inicio=document.getElementById("panel-inicio");
-    if(inicio)inicio.classList.add("active");
-    document.querySelectorAll("[id^=panel-]").forEach(function(p){if(p.id!=="panel-inicio")p.classList.remove("active");});
-    document.querySelectorAll(".sport-btn").forEach(function(b){
-      var isAll=(b.textContent||"").includes("Todos")||/goInicio/.test(b.getAttribute("onclick")||"");
-      if(isAll){b.classList.add("active");}else{b.classList.remove("active");}
-    });
-    document.body.classList.add("v32-view-inicio");
-    document.body.classList.remove("v32-view-soccer");
-  }
-  if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",forceInicio);}else{forceInicio();}
-  [100,500,1000,2000,3000,5000].forEach(function(ms){setTimeout(forceInicio,ms);});
-  window.addEventListener("load",forceInicio);
-})();
-</script>
-
-<script>
-/* v303 - Inicio lock hasta que user haga click (mata auto-nav diferido) */
-(function(){
-  if(window.__v303)return;window.__v303=true;
-  var userActed=false;
-  document.addEventListener("click",function(){userActed=true;},true);
-  function forceInicio(){
-    if(userActed)return;
-    var inicio=document.getElementById("panel-inicio");
-    if(inicio)inicio.classList.add("active");
-    document.querySelectorAll("[id^=panel-]").forEach(function(p){if(p.id!=="panel-inicio")p.classList.remove("active");});
-    document.querySelectorAll(".sport-btn").forEach(function(b){
-      var isAll=(b.textContent||"").includes("Todos")||/goInicio/.test(b.getAttribute("onclick")||"");
-      if(isAll){b.classList.add("active");}else{b.classList.remove("active");}
-    });
-    document.body.classList.add("v32-view-inicio");
-    document.body.classList.remove("v32-view-soccer");
-    var sidebar=document.getElementById("sidebar");
-    if(sidebar)sidebar.style.display="none";
-  }
-  var startTime=Date.now();
-  var iv=setInterval(function(){
-    if(userActed||Date.now()-startTime>30000){clearInterval(iv);return;}
-    forceInicio();
-  },250);
-  forceInicio();
-})();
-</script>
-
-<style id="v304-lock-css">
-body:not(.v304-clicked) #panel-inicio{display:block !important;visibility:visible !important;opacity:1 !important;}
-body:not(.v304-clicked) [id^="panel-"]:not(#panel-inicio){display:none !important;}
-body:not(.v304-clicked) #sidebar{display:none !important;}
-</style>
-<script>
-/* v304 - lock visual a Inicio hasta primer click del user (CSS !important = artilleria pesada) */
-(function(){
-  if(window.__v304)return;window.__v304=true;
-  function unlock(){document.body.classList.add("v304-clicked");}
-  document.addEventListener("click",unlock,true);
-  document.addEventListener("touchstart",unlock,true);
-})();
-</script>
-
-<script>
-/* v305 - solo desbloquear con click REAL del user (isTrusted), no programatico */
-(function(){
-  if(window.__v305)return;window.__v305=true;
-  function maybeUnlock(e){
-    if(e && e.isTrusted){
-      document.body.classList.add("v304-clicked");
-      document.removeEventListener("click",maybeUnlock,true);
-      document.removeEventListener("touchstart",maybeUnlock,true);
-      document.removeEventListener("keydown",maybeUnlock,true);
-    }
-  }
-  document.addEventListener("click",maybeUnlock,true);
-  document.addEventListener("touchstart",maybeUnlock,true);
-  document.addEventListener("keydown",maybeUnlock,true);
-  /* Ensure v304-clicked is NOT on body at startup (override v304 script) */
-  document.body.classList.remove("v304-clicked");
-  /* Watch in case something adds it programmatically */
-  setTimeout(function(){document.body.classList.remove("v304-clicked");},100);
-  setTimeout(function(){document.body.classList.remove("v304-clicked");},500);
-  setTimeout(function(){document.body.classList.remove("v304-clicked");},2000);
-})();
-</script>
+<!-- SS21 limpieza: aqui estaban v302-v305 (bloqueo de la portada los primeros 30 s y hasta el primer clic).
+     Peleaban con el router y rompian las direcciones directas (#/tenis); el router SS21NAV ya define la vista inicial. -->
 
 <script>
 /* v306 - interceptar switchSport para bloquear auto-nav antes de primer click real */
@@ -27473,7 +27427,10 @@ window.selectLLPriv=function(el){document.querySelectorAll('.ll-priv-opt').forEa
       el.style.setProperty("display","none","important");
       el.classList.remove("active");
     });
-    target.style.setProperty("display","block","important");
+    /* Los deportes con lista lateral (aside) van en flex: lista al costado y
+       contenido al lado. En block la lista (100vh) empujaba el contenido una
+       pantalla entera hacia abajo y la seccion parecia vacia. */
+    distribuir(target, panelId);
     target.style.setProperty("visibility","visible","important");
     target.style.setProperty("opacity","1","important");
     if(target.classList.contains("tab-panel")) target.classList.add("active");
@@ -27492,6 +27449,13 @@ window.selectLLPriv=function(el){document.querySelectorAll('.ll-priv-opt').forEa
       bcl.add("v32-view-" + vista);
     }
     document.body.classList.add("v304-clicked");
+    /* v700 era otro prototipo de pagina de deporte (#v700-shell); su clase
+       escondia las listas laterales y su shell competia con los paneles. */
+    var quitarV700 = function(){
+      document.body.classList.remove("v700-active");
+      var v700 = document.getElementById("v700-shell"); if(v700) v700.style.setProperty("display","none","important");
+    };
+    quitarV700(); setTimeout(quitarV700, 0); setTimeout(quitarV700, 120);
 
     /* v317/v318 muestran el sidebar de cada deporte (ligas de futbol, etc.)
        segun la clase v317-show-{deporte}, que antes solo se ponia con un
@@ -27501,6 +27465,13 @@ window.selectLLPriv=function(el){document.querySelectorAll('.ll-priv-opt').forEa
       if(c.indexOf("v317-show-") === 0 && c !== "v317-show-" + dep) document.body.classList.remove(c);
     });
     if(SPORT_PANELS[panelId]) document.body.classList.add("v317-show-" + dep);
+    /* Algunos deportes arman su contenido un instante despues: se vuelve a
+       revisar que opciones de la lista llevan a algo y como distribuir. */
+    if(SPORT_PANELS[panelId]){
+      [350, 1000].forEach(function(ms){
+        setTimeout(function(){ if(current === panelId) distribuir(target, panelId); }, ms);
+      });
+    }
 
     /* Algunos paneles de deporte quedaban en blanco: switchSport solo
        llama al render la primera vez y la bandera _init quedaba puesta
@@ -27550,10 +27521,114 @@ window.selectLLPriv=function(el){document.querySelectorAll('.ll-priv-opt').forEa
       document.documentElement.scrollTop = 0;
       document.body.scrollTop = 0;
     }
+    historial(panelId, opts);
     current = panelId;
+    /* los vigilantes viejos (ancho de tarjetas, etc.) se ajustan al cambiar de vista */
+    if(window.SS21tick) window.SS21tick();
   }
 
-  window.SS21NAV = { go: go, ids: IDS, get current(){ return current; } };
+  /* Deporte con lista lateral visible -> grilla (lista | contenido); si no, bloque. */
+  function distribuir(target, panelId){
+    if(SPORT_PANELS[panelId] && window.SS21sidebar){ try{ window.SS21sidebar.marcar(target); }catch(_){ } }
+    var conLista = SPORT_PANELS[panelId] && target.querySelector(":scope > aside:not([style*='display: none'])");
+    target.style.setProperty("display", conLista ? "grid" : "block", "important");
+    if(conLista) target.setAttribute("data-ss21-lista", ""); else target.removeAttribute("data-ss21-lista");
+  }
+
+  /* --- Direcciones e historial -------------------------------------------
+     Antes ~12 capas leian/escribian location.hash y el historial cada una por
+     su cuenta (una incluso cada 600 ms), y se pisaban: "atras" llevaba a
+     cualquier lado. Ahora el router es el unico dueno:
+       - cada vista tiene su direccion (#/futbol, #/noticias, ...)
+       - navegar agrega un paso al historial -> "atras"/"adelante" funcionan
+       - las capas viejas ya no pueden escribir el historial
+     Direcciones viejas (#futbol, #deportes, #masss21...) se siguen aceptando. */
+  var SLUG = {
+    "panel-inicio":"inicio", "panel-soccer":"futbol", "panel-tennis":"tenis",
+    "panel-f1":"carreras", "panel-nba":"basketball", "panel-ufc":"combate",
+    "panel-baseball":"beisbol", "panel-mlb":"beisbol", "panel-hockey":"hockey",
+    "panel-nhl":"hockey", "panel-nfl":"futbol-americano", "panel-rugby":"rugby",
+    "panel-golf":"golf", "panel-athletics":"atletismo", "panel-acuaticos":"natacion",
+    "panel-cycling":"ciclismo", "panel-volley":"voleibol", "panel-padel":"padel",
+    "panel-cricket":"cricket", "panel-otros":"otros-deportes", "panel-eventos":"eventos",
+    "panel-olympics":"eventos", "panel-chess":"ajedrez",
+    "panel-v703-noticias":"noticias", "panel-v708-blogs":"blogs",
+    "panel-v724-podcast":"podcast", "panel-v724-articulos":"articulos",
+    "panel-v711-seguidos":"seguidos", "panel-v712-reclutar":"reclutar",
+    "panel-v723-centros":"centros", "panel-v724-curiosos":"datos-curiosos",
+    "panel-v-retos":"retos", "panel-v-encuestas":"encuestas",
+    "v326-panel-mercado":"mercado", "panel-masss21-rebuild":"mas-sobre-ss21",
+    "panel-v-favoritos-new":"favoritos", "panel-v-comparar":"comparar",
+    "panel-v-envivo-rebuild":"en-vivo"
+  };
+  /* panel de deporte -> clave de switchSport (para abrirlo con su contenido) */
+  var DEPORTE = {
+    "panel-soccer":"soccer", "panel-tennis":"tennis", "panel-f1":"f1", "panel-nba":"nba",
+    "panel-ufc":"ufc", "panel-baseball":"baseball", "panel-mlb":"baseball",
+    "panel-hockey":"hockey", "panel-nhl":"hockey", "panel-nfl":"nfl", "panel-rugby":"rugby",
+    "panel-golf":"golf", "panel-athletics":"athletics", "panel-acuaticos":"acuaticos",
+    "panel-cycling":"cycling", "panel-volley":"volley", "panel-padel":"padel",
+    "panel-cricket":"cricket", "panel-otros":"otros", "panel-eventos":"eventos",
+    "panel-olympics":"eventos"
+  };
+  var ALIAS = {
+    deportes:"panel-soccer", profesionales:"panel-soccer", deportes_profesionales:"panel-soccer",
+    f1:"panel-f1", nfl:"panel-nfl", voleyball:"panel-volley", envivo:"panel-v-envivo-rebuild",
+    en_vivo:"panel-v-envivo-rebuild", curiosos:"panel-v724-curiosos", datos:"panel-v724-curiosos",
+    datos_curiosos:"panel-v724-curiosos", centros_deportivos:"panel-v723-centros",
+    masss21:"panel-masss21-rebuild", mas_sobre_ss21:"panel-masss21-rebuild"
+  };
+  var PORSLUG = {};
+  Object.keys(SLUG).forEach(function(pid){ if(!PORSLUG[SLUG[pid]]) PORSLUG[SLUG[pid]] = pid; });
+  PORSLUG["eventos"] = "panel-eventos";
+  PORSLUG["beisbol"] = "panel-baseball";
+  PORSLUG["hockey"] = "panel-hockey";
+
+  function desdeHash(h){
+    h = decodeURIComponent((h || "").replace(/^#\/?/, "")).trim();
+    if(!h) return "panel-inicio";
+    var k = h.toLowerCase();
+    return PORSLUG[k] || ALIAS[k] || PORSLUG[k.replace(/_/g, "-")] || null;
+  }
+
+  var hOrigPush = history.pushState.bind(history);
+  var hOrigReplace = history.replaceState.bind(history);
+  var escribiendo = false, desdeHistorial = false, cargando = true;
+  history.pushState = function(){ if(escribiendo) return hOrigPush.apply(null, arguments); };
+  history.replaceState = function(){ if(escribiendo) return hOrigReplace.apply(null, arguments); };
+  function escribir(tipo, h){
+    escribiendo = true;
+    try{ (tipo === "push" ? hOrigPush : hOrigReplace)({ss21: h}, "", h); }
+    catch(_){ }
+    finally{ escribiendo = false; }
+  }
+  function historial(panelId, opts){
+    var slug = SLUG[panelId];
+    if(!slug) return;                     /* vistas sin direccion propia: no tocar */
+    var h = "#/" + slug;
+    if(location.hash === h) return;
+    var reemplazar = cargando || desdeHistorial || (opts && opts.reemplazar) || current === null;
+    escribir(reemplazar ? "replace" : "push", h);
+  }
+  function navegarA(pid){
+    if(DEPORTE[pid]) abrirDeporte(DEPORTE[pid]);
+    else go(pid);
+  }
+  function alCambiar(e){
+    var pid = desdeHash(location.hash);
+    if(!pid) return;                      /* direccion desconocida: que la maneje quien la entienda */
+    e.stopImmediatePropagation();         /* las capas viejas ya no reaccionan */
+    if(pid === current || (DEPORTE[pid] && DEPORTE[pid] === DEPORTE[current])){
+      historial(current, {reemplazar:true}); return;
+    }
+    desdeHistorial = true;
+    try{ navegarA(pid); } finally { desdeHistorial = false; }
+  }
+  /* capture en window: corre antes que los listeners viejos (registrados sin capture) */
+  window.addEventListener("popstate", alCambiar, true);
+  window.addEventListener("hashchange", alCambiar, true);
+
+  window.SS21NAV = { go: go, ids: IDS, get current(){ return current; }, slug: function(pid){ return SLUG[pid]; }, desdeHash: desdeHash };
 
   /* --- Envolver las funciones de navegacion ya existentes ---------------
      Se deja correr la funcion original (que renderiza y arma el contenido)
@@ -27713,27 +27788,124 @@ window.selectLLPriv=function(el){document.querySelectorAll('.ll-priv-opt').forEa
 
   /* Estado inicial coherente: una sola vista al cargar. */
   function inicial(){
-    var h = (location.hash || "").replace(/^#/, "").toLowerCase();
-    var porHash = {
-      inicio:"panel-inicio", deportes:"panel-soccer",
-      profesionales:"panel-soccer", envivo:"panel-v-envivo-rebuild",
-      noticias:"panel-v703-noticias", blogs:"panel-v708-blogs",
-      podcast:"panel-v724-podcast", articulos:"panel-v724-articulos",
-      seguidos:"panel-v711-seguidos", reclutar:"panel-v712-reclutar",
-      centros:"panel-v723-centros", curiosos:"panel-v724-curiosos",
-      datos:"panel-v724-curiosos", mercado:"v326-panel-mercado",
-      masss21:"panel-masss21-rebuild", favoritos:"panel-v-favoritos-new",
-      comparar:"panel-v-comparar"
-    };
-    var destino = porHash[h] || "panel-inicio";
-    if(destino === "panel-soccer"){ abrirDeporte("soccer"); return; }
-    go(destino, {scroll:false});
+    var destino = desdeHash(window.__ss21hashInicial || location.hash) || "panel-inicio";
+    cargando = true;
+    try{
+      if(DEPORTE[destino]) abrirDeporte(DEPORTE[destino]);
+      else go(destino, {scroll:false});
+    } finally {
+      /* las repeticiones diferidas de go() (60/400 ms) tampoco deben apilar pasos */
+      setTimeout(function(){ cargando = false; }, 700);
+    }
   }
   if(document.readyState === "loading"){
     document.addEventListener("DOMContentLoaded", function(){ setTimeout(inicial, 600); });
   } else {
     setTimeout(inicial, 600);
   }
+})();
+</script>
+<style id="ss21-sidebar-css">
+/* SS21: deportes con lista lateral -> grilla: lista a la izquierda (columna 1,
+   todas las filas) y cada pieza del contenido apilada en la columna 2. */
+[id^="panel-"][data-ss21-lista]{grid-template-columns:220px minmax(0,1fr) !important;column-gap:24px !important;row-gap:0 !important;align-items:start !important;}
+[id^="panel-"][data-ss21-lista] > aside{grid-column:1 !important;grid-row:1 / span 60 !important;height:auto !important;max-height:calc(100vh - 80px) !important;position:sticky !important;top:70px !important;align-self:start !important;}
+[id^="panel-"][data-ss21-lista] > :not(aside){grid-column:2 !important;min-width:0 !important;}
+@media (max-width:760px){
+  [id^="panel-"][data-ss21-lista]{grid-template-columns:minmax(0,1fr) !important;}
+  [id^="panel-"][data-ss21-lista] > aside{grid-row:auto !important;position:static !important;max-height:42vh !important;}
+  [id^="panel-"][data-ss21-lista] > :not(aside){grid-column:1 !important;}
+}
+/* SS21SIDEBAR: opciones sin contenido detras se ven como "Pronto" */
+.v336-sb li.ss21-pronto,.v335-tenis-sidebar li.ss21-pronto{opacity:.45;cursor:default !important;}
+.v336-sb li.ss21-pronto:hover,.v335-tenis-sidebar li.ss21-pronto:hover{background:transparent !important;color:inherit !important;}
+.v336-sb li.ss21-pronto::after,.v335-tenis-sidebar li.ss21-pronto::after{content:"Pronto";font-size:10px;margin-left:6px;background:#eef0f3;border-radius:8px;padding:1px 6px;color:#667;font-weight:600;}
+.v336-sb li.ss21-sb-activo,.v335-tenis-sidebar li.ss21-sb-activo{background:#f8f0ef;color:#c0392b;font-weight:600;}
+/* El selector M/F de estas listas no hacia nada (no hay contenido femenino separado) */
+.v336-sb .v336-mf,.v335-tenis-sidebar .v335-mf{display:none !important;}
+</style>
+<script id="ss21-sidebar">
+/* SS21SIDEBAR: las listas laterales de cada deporte (Reglas, Historia, ligas...)
+   eran decorativas: nunca se conectaron a nada. Ahora cada opcion abre la
+   pestana real del deporte que le corresponde; si no existe, queda "Pronto". */
+(function(){
+  if(window.SS21sidebar) return;
+  function norm(t){
+    return (t||"").normalize("NFD").replace(/[̀-ͯ]/g,"")
+      .replace(/[^\w\s\/.\-]/g," ").replace(/\s+/g," ").trim().toLowerCase();
+  }
+  /* sinonimos: opcion de la lista -> textos de pestanas reales a buscar */
+  var SIN = {
+    "reglas":["reglas","acerca"], "historia":["historia","acerca"],
+    "records":["records","estadisticas","leyendas"],
+    "calendario":["calendario","temporada","eventos"],
+    "nba finals":["playoffs"], "super bowl":["playoffs"], "euroleague":["internacional"],
+    "ncaa football":["ncaa"], "f1 gp":["f1"], "rally dakar":["rally"],
+    "world cup":["copa del mundo","world cup"], "six nations":["seis naciones"],
+    "rugby champ.":["rugby championship"], "majors":["major championships","major"],
+    "master 1000":["masters 1000"], "ranking atp/wta":["ranking atp"],
+    "top deportistas":["ranking atp"], "torneos":["grand slams"],
+    "world champ.":["mundial","world champ"], "npb japon":["npb"], "kbo corea":["kbo"],
+    "premier padel":["premier padel"], "top 14":["top 14"]
+  };
+  function candidatos(panel){
+    return Array.prototype.slice.call(panel.querySelectorAll("button, h1, h2, h3, h4")).filter(function(e){
+      if(e.closest("aside") || e.closest(".v17-followers-bar") || e.closest(".v82-box")) return false;
+      return e.offsetParent !== null && norm(e.textContent).length > 1;
+    });
+  }
+  function buscar(panel, li){
+    var lbl = norm(li.textContent).replace(/\s*pronto$/,"");
+    var terminos = [lbl].concat(SIN[lbl] || []);
+    var cands = candidatos(panel);
+    for(var i=0;i<terminos.length;i++){
+      var t = terminos[i]; if(t.length < 2) continue;
+      var exactos = cands.filter(function(c){ return norm(c.textContent) === t; });
+      var parciales = cands.filter(function(c){ var n = norm(c.textContent); return n.indexOf(t) === 0 || (t.length >= 4 && n.indexOf(t) >= 0); });
+      var lista = exactos.length ? exactos : parciales;
+      lista.sort(function(a,b){ return (a.tagName === "BUTTON" ? 0 : 1) - (b.tagName === "BUTTON" ? 0 : 1); });
+      if(lista.length) return lista[0];
+    }
+    return null;
+  }
+  function items(panel){
+    return Array.prototype.slice.call(panel.querySelectorAll(".v336-sb li, .v335-tenis-sidebar li")).filter(function(li){
+      return !li.classList.contains("v335-section") && !li.classList.contains("v335-collapse");
+    });
+  }
+  function marcar(panel){
+    if(!panel) return;
+    var vivos = 0, lista = items(panel);
+    lista.forEach(function(li){
+      var ok = !!buscar(panel, li);
+      if(ok) vivos++;
+      li.classList.toggle("ss21-pronto", !ok);
+    });
+    /* Si ninguna opcion lleva a algo, la lista entera seria "Pronto": se
+       esconde y el contenido usa todo el ancho. */
+    if(lista.length){
+      var aside = lista[0].closest("aside");
+      if(aside) aside.style.setProperty("display", vivos ? "" : "none", vivos ? "" : "important");
+    }
+  }
+  document.addEventListener("click", function(e){
+    var li = e.target && e.target.closest && e.target.closest(".v336-sb li, .v335-tenis-sidebar li");
+    if(!li || li.classList.contains("v335-section") || li.classList.contains("v335-collapse")) return;
+    e.preventDefault(); e.stopImmediatePropagation();
+    var panel = li.closest("[id^=panel-]"); if(!panel) return;
+    var destino = buscar(panel, li);
+    if(!destino){ li.classList.add("ss21-pronto"); return; }
+    items(panel).forEach(function(o){ o.classList.remove("ss21-sb-activo"); });
+    li.classList.add("ss21-sb-activo");
+    if(destino.tagName === "BUTTON") destino.click();
+    setTimeout(function(){
+      var r = destino.getBoundingClientRect();
+      var h = document.querySelector(".header");
+      var off = (h ? h.getBoundingClientRect().height : 60) + 12;
+      window.scrollTo({top: window.scrollY + r.top - off, behavior: "smooth"});
+    }, 60);
+  }, true);
+  window.SS21sidebar = { marcar: marcar, buscar: buscar };
 })();
 </script>
 <style id="ss21-mobile-header">

@@ -135,6 +135,14 @@ def revisar_navegacion(browser, movil):
         largo = pg.evaluate(f"() => document.getElementById('{vis[0]}').innerText.trim().length")
         if largo < 100:
             malos.append(f"{k}: {vis[0]} casi vacio ({largo} caracteres)")
+        # El contenido (no la lista lateral) tiene que empezar en la primera
+        # pantalla: si una lista lo empuja hacia abajo, la seccion parece vacia.
+        arriba = pg.evaluate(f"""() => {{ const P = document.getElementById('{vis[0]}');
+          const kids = [...P.children].filter(c => c.tagName !== 'ASIDE' && getComputedStyle(c).display !== 'none' && c.getBoundingClientRect().height > 20);
+          return kids.length ? Math.round(kids[0].getBoundingClientRect().top + scrollY) : -1 }}""")
+        limite = 1000 if movil else 700
+        if arriba > limite:
+            malos.append(f"{k}: el contenido empieza muy abajo (y={arriba}px)")
         if movil:
             ancho = pg.evaluate("document.documentElement.scrollWidth")
             if ancho > 392:
@@ -180,6 +188,54 @@ def revisar_menu_escritorio(browser):
     pg.context.close()
 
 
+def revisar_historial(browser):
+    print("\n[escritorio] direcciones, atras y adelante")
+    pg, _ = nueva_pagina(browser, False)
+    pg.wait_for_timeout(3000)
+    if pg.evaluate("SS21NAV.current") != "panel-inicio":
+        falla(f"la portada no se queda quieta al cargar ({pg.evaluate('SS21NAV.current')})")
+    pasos = []
+    pg.locator(".inicio-btn-primary").first.click(); pg.wait_for_timeout(1500)
+    pasos.append(pg.evaluate("[SS21NAV.current, location.hash]"))
+    for k in ["tennis", "nba"]:
+        btn = [h for h in pg.query_selector_all(".sport-btn")
+               if h.is_visible() and f"'{k}'" in (h.get_attribute("onclick") or "")][0]
+        btn.click(); pg.wait_for_timeout(1500)
+        pasos.append(pg.evaluate("[SS21NAV.current, location.hash]"))
+    esperados = [["panel-soccer", "#/futbol"], ["panel-tennis", "#/tenis"], ["panel-nba", "#/basketball"]]
+    if pasos != esperados:
+        falla(f"direcciones al navegar: {pasos}")
+    else:
+        ok("cada seccion tiene su direccion (#/futbol, #/tenis, #/basketball)")
+    atras = []
+    for _ in range(3):
+        pg.go_back(); pg.wait_for_timeout(1300)
+        atras.append(pg.evaluate("SS21NAV.current"))
+    if atras != ["panel-tennis", "panel-soccer", "panel-inicio"]:
+        falla(f"'atras' lleva a {atras}")
+    else:
+        ok("'atras' recorre los pasos en orden")
+    pg.go_forward(); pg.wait_for_timeout(1300)
+    if pg.evaluate("SS21NAV.current") != "panel-soccer":
+        falla(f"'adelante' lleva a {pg.evaluate('SS21NAV.current')}")
+    else:
+        ok("'adelante' funciona")
+    pg.context.close()
+    malos = []
+    for h, esperado in [("#/tenis", "panel-tennis"), ("#/noticias", "panel-v703-noticias"),
+                        ("#deportes", "panel-soccer"), ("#/carreras", "panel-f1")]:
+        ctx = browser.new_context(viewport={"width": 1440, "height": 900})
+        q = ctx.new_page(); q.goto(URL.rstrip("/") + "/" + h); q.wait_for_timeout(3500)
+        vis = q.evaluate(JS_PANELES_VISIBLES)
+        if vis != [esperado]:
+            malos.append(f"{h} -> {vis}")
+        ctx.close()
+    if malos:
+        falla("enlaces directos: " + ", ".join(malos))
+    else:
+        ok("los enlaces directos abren la seccion correcta")
+
+
 def revisar_celular_todas_las_secciones(browser):
     print("\n[celular] todas las secciones: ancho y contenido cortado")
     pg, _ = nueva_pagina(browser, True)
@@ -199,8 +255,13 @@ def revisar_celular_todas_las_secciones(browser):
         w = pg.evaluate("document.documentElement.scrollWidth")
         if w > 392:
             anchos.append(f"{v} ({w}px)")
-        for c in pg.evaluate(JS_CORTADOS):
-            cortados.setdefault(c, v)
+        primera = set(pg.evaluate(JS_CORTADOS))
+        if primera:
+            # Las tarjetas que rotan con animacion se ven "cortadas" a mitad de
+            # movimiento: solo cuenta si sigue cortado un segundo despues.
+            pg.wait_for_timeout(1200)
+            for c in primera & set(pg.evaluate(JS_CORTADOS)):
+                cortados.setdefault(c, v)
         tablas += [f"{v}: {t}" for t in pg.evaluate("""() => [...document.querySelectorAll('table')]
           .filter(t => t.offsetParent && t.getBoundingClientRect().width > 360)
           .filter(t => { let p = t.parentElement; while (p && p !== document.body) {
@@ -231,6 +292,7 @@ def main():
         browser = p.chromium.launch(**kw)
         revisar_navegacion(browser, movil=False)
         revisar_menu_escritorio(browser)
+        revisar_historial(browser)
         revisar_navegacion(browser, movil=True)
         revisar_celular_todas_las_secciones(browser)
         browser.close()
