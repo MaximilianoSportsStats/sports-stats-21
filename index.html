@@ -27535,6 +27535,7 @@ window.selectLLPriv=function(el){document.querySelectorAll('.ll-priv-opt').forEa
 
   /* Deporte con lista lateral visible -> grilla (lista | contenido); si no, bloque. */
   function distribuir(target, panelId){
+    if(SPORT_PANELS[panelId] && window.SS21std){ try{ window.SS21std.preparar(target); }catch(_){ } }
     if(SPORT_PANELS[panelId] && window.SS21sidebar){ try{ window.SS21sidebar.marcar(target); }catch(_){ } }
     var conLista = SPORT_PANELS[panelId] && target.querySelector(":scope > aside:not([style*='display: none'])");
     target.style.setProperty("display", conLista ? "grid" : "block", "important");
@@ -27815,7 +27816,7 @@ window.selectLLPriv=function(el){document.querySelectorAll('.ll-priv-opt').forEa
 /* SS21: deportes con lista lateral -> grilla: lista a la izquierda (columna 1,
    todas las filas) y cada pieza del contenido apilada en la columna 2. */
 [id^="panel-"][data-ss21-lista]{grid-template-columns:220px minmax(0,1fr) !important;column-gap:24px !important;row-gap:0 !important;align-items:start !important;}
-[id^="panel-"][data-ss21-lista] > aside{grid-column:1 !important;grid-row:1 / span 60 !important;height:auto !important;max-height:calc(100vh - 80px) !important;position:sticky !important;top:70px !important;align-self:start !important;}
+[id^="panel-"][data-ss21-lista] > aside{grid-column:1 !important;grid-row:1 / span 60 !important;height:auto !important;max-height:calc(100vh - 80px) !important;position:relative !important;top:0 !important;align-self:start !important;}
 [id^="panel-"][data-ss21-lista] > :not(aside){grid-column:2 !important;min-width:0 !important;}
 @media (max-width:760px){
   [id^="panel-"][data-ss21-lista]{grid-template-columns:minmax(0,1fr) !important;}
@@ -27967,7 +27968,7 @@ window.selectLLPriv=function(el){document.querySelectorAll('.ll-priv-opt').forEa
 </script>
 <style id="ss21-que-es-css">
 /* "¿Que es el Futbol?" con el mismo formato que las regiones de la lista */
-#sidebar .ss21-qef-head{margin-top:2px;}
+#sidebar .ss21-qef-head{margin-top:8px;}
 #sidebar .ss21-qef-list .sub-btn.ss21-activo{color:#c8102e !important;font-weight:700 !important;background:#fdf2f3 !important;}
 #football-main .ss21-qef-tabs{display:flex;flex-wrap:wrap;gap:.4rem;margin:0 0 1.1rem;border-bottom:2px solid var(--border,#e5e7eb);padding-bottom:.6rem;}
 #football-main .ss21-ley-intro{background:var(--card,#fff);border-radius:12px;padding:1.1rem 1.3rem;margin-bottom:1rem;line-height:1.7;font-size:.95rem;}
@@ -28126,6 +28127,11 @@ window.selectLLPriv=function(el){document.querySelectorAll('.ll-priv-opt').forEa
     envoltura.replaceWith.apply(envoltura, Array.prototype.slice.call(cont.childNodes));
     var cab = document.querySelector("#sidebar .ss21-qef-head");
     if(cab){ cab.setAttribute("data-v22-collapsed", "1"); }
+    /* la etiqueta "Ligas" era texto blanco sobre fondo blanco: invisible, pero
+       dejaba un hueco entre "Que es el futbol" y las regiones */
+    var lista = document.querySelector("#sidebar .ss21-qef-list");
+    var sig = lista && lista.nextElementSibling;
+    if(sig && !sig.classList.contains("continent-header") && /^\s*ligas\s*$/i.test(sig.textContent)) sig.style.display = "none";
   }
   document.addEventListener("click", function(e){
     var b = e.target && e.target.closest && e.target.closest("[data-ss21-qef]");
@@ -28159,6 +28165,213 @@ window.selectLLPriv=function(el){document.querySelectorAll('.ll-priv-opt').forEa
     if(e.target && e.target.closest && e.target.closest(".sgt-btn")) setTimeout(alCambiar, 200);
   }, true);
   window.SS21queEs = mostrar;
+})();
+</script>
+<style id="ss21-estructura-css">
+/* SS21 ESTRUCTURA COMUN: todas las listas laterales de deportes con el mismo
+   formato que Futbol (mismos tamanos, colores y comportamiento). */
+/* la lista de Futbol vive fuera del panel: se baja lo mismo que el relleno del
+   contenido para que todas las listas empiecen a la misma altura */
+@media (min-width:761px){ .layout > aside#sidebar{margin-top:24px !important;} }
+aside.ss21-std{background:#fff !important;padding:16px 10px !important;margin:0 !important;border-right:1px solid #e2e8f0 !important;font-family:inherit;}
+aside.ss21-std .ss21-std-label{font-size:9.92px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:1.2px;padding:8.8px 8px;margin:0 0 6.4px;border-bottom:1px solid #e2e8f0;}
+aside.ss21-std .ss21-std-h{font-size:11.2px;font-weight:800;color:#94a3b8;text-transform:uppercase;letter-spacing:.9px;padding:7.2px 12px;margin:8px 0 2.4px;border-radius:6px;display:flex;align-items:center;gap:6px;cursor:pointer;user-select:none;}
+aside.ss21-std .ss21-std-h:hover{color:#64748b;}
+aside.ss21-std .ss21-std-h .caret{margin-left:auto;font-size:10.4px;transform:rotate(-90deg);transition:transform .15s;}
+aside.ss21-std .ss21-std-g.abierto .ss21-std-h{color:#c8102e;background:#fdf2f2;}
+aside.ss21-std .ss21-std-g.abierto .ss21-std-h .caret{transform:none;}
+aside.ss21-std .ss21-std-l{display:none;padding:0 0 4px;margin:0;}
+aside.ss21-std .ss21-std-g.abierto .ss21-std-l{display:block;}
+aside.ss21-std .ss21-std-i{display:flex;align-items:center;width:100%;text-align:left;font-size:12.32px;font-weight:400;color:#475569;background:transparent;border:0;padding:5.12px 8.8px 5.12px 14px;border-radius:4.8px;cursor:pointer;font-family:inherit;}
+aside.ss21-std .ss21-std-i:hover{background:#f8fafc;color:#c8102e;}
+aside.ss21-std .ss21-std-i.activo{color:#c8102e;font-weight:700;background:#fdf2f3;}
+aside.ss21-std .ss21-std-i.pronto{opacity:.5;cursor:default;}
+aside.ss21-std .ss21-std-i.pronto:hover{background:transparent;color:#475569;}
+aside.ss21-std .ss21-std-i.pronto::after{content:"Pronto";margin-left:auto;font-size:10px;background:#eef0f3;border-radius:8px;padding:1px 6px;color:#667;font-weight:600;}
+/* Pagina "Que es el ..." de cada deporte (misma forma que la de Futbol) */
+.ss21-qe-view{padding:1rem 0;}
+.ss21-qe-view .ss21-qe-hero{background:linear-gradient(135deg,#a01515 0%,#ee2a2a 100%);color:#fff;border-radius:14px;padding:28px;margin-bottom:18px;box-shadow:0 6px 20px rgba(238,42,42,.18);}
+.ss21-qe-view .ss21-qe-hero h1{margin:0 0 6px;font-size:26px;font-weight:800;color:#fff;}
+.ss21-qe-view .ss21-qe-hero .sub{opacity:.93;font-size:15px;}
+.ss21-qe-view .ss21-qe-tabs{display:flex;flex-wrap:wrap;gap:.4rem;margin:0 0 1.1rem;border-bottom:2px solid var(--border,#e5e7eb);padding-bottom:.6rem;}
+.ss21-qe-view .ss21-qe-vacio{background:var(--card,#fff);border:2px dashed #e2e8f0;border-radius:14px;padding:2.2rem 1.5rem;text-align:center;color:#64748b;line-height:1.6;}
+.ss21-qe-view .ss21-qe-vacio b{display:block;font-size:1.1rem;color:#1e293b;margin:.4rem 0;}
+</style>
+<script id="ss21-estructura">
+/* SS21 ESTRUCTURA COMUN de deportes.
+   Antes cada deporte tenia su propia lista lateral (algunas decorativas, otras
+   con secciones distintas). Ahora todas siguen el mismo modelo que Futbol:
+     - Que es el <deporte>?  -> Resumen, Reglas, Historia, Records, Glosario
+     - Competiciones        -> ligas y torneos de ese deporte
+     - Temporada y rankings -> calendario, posiciones/ranking, leyendas
+   Cada opcion abre la pestana real que le corresponde; si todavia no existe,
+   queda como "Pronto". Las opciones de "Que es...?" abren una pagina con la
+   misma forma para todos, lista para llenarse con contenido. */
+(function(){
+  if(window.SS21std) return;
+  var QE = [["resumen","\u{1F4D6} Resumen"],["reglas","\u{1F4CB} Reglas"],["historia","\u{1F4DC} Historia"],["records","\u{1F3C6} Récords"],["glosario","\u{1F4DA} Glosario"]];
+  var NOMBRE_QE = {resumen:"Resumen", reglas:"Reglas", historia:"Historia", records:"Récords", glosario:"Glosario"};
+  function L(texto){ return [texto].concat(Array.prototype.slice.call(arguments, 1)); }
+  var D = {
+    "panel-tennis":   {n:"Tenis", art:"el", e:"\u{1F3BE}",
+      c:[L("\u{1F451} Grand Slams","grand slams"),L("⭐ Masters 1000","masters 1000"),L("\u{1F3AF} ATP 500","atp 500"),L("\u{1F3BE} ATP 250","atp 250"),L("\u{1F3C6} Copa Davis","copa davis"),L("\u{1F94E} Challenger","challenger")],
+      t:[L("\u{1F4C5} Calendario","calendario"),L("\u{1F4C8} Ranking ATP","ranking atp"),L("\u{1F4C8} Ranking WTA","ranking wta"),L("\u{1F451} Leyendas","leyendas")]},
+    "panel-f1":       {n:"Automovilismo", art:"el", e:"\u{1F3CE}️",
+      c:[L("\u{1F3CE}️ Fórmula 1","f1"),L("\u{1F3C1} Fórmula 2","f2"),L("\u{1F3C1} Fórmula 3","f3"),L("⚡ Fórmula E","formula e"),L("\u{1F3C6} Resistencia (WEC)","wec"),L("\u{1F3CD}️ MotoGP","motogp"),L("\u{1F3CD}️ Superbike","superbike"),L("\u{1F697} NASCAR","nascar"),L("\u{1F699} Rally / WRC","rally"),L("\u{1F3C1} IndyCar","indycar")],
+      t:[L("\u{1F4C5} Calendario","calendario"),L("\u{1F4CA} Clasificación","standings"),L("\u{1F451} Leyendas","leyendas")]},
+    "panel-nba":      {n:"Basketball", art:"el", e:"\u{1F3C0}",
+      c:[L("\u{1F3C0} NBA","nba"),L("\u{1F3C0} WNBA","wnba"),L("\u{1F539} G League","g league"),L("\u{1F393} NCAA","ncaa"),L("\u{1F30D} Internacional","internacional")],
+      t:[L("\u{1F5D3}️ Temporada","temporada"),L("\u{1F4CA} Posiciones","standings"),L("\u{1F3C6} Playoffs","playoffs"),L("\u{1F393} Draft","draft"),L("\u{1F4C8} Estadísticas","estadisticas"),L("\u{1F451} Leyendas","leyendas")]},
+    "panel-ufc":      {n:"Deportes de Combate", art:"los", e:"\u{1F94A}",
+      c:[L("\u{1F94A} UFC","ufc"),L("\u{1F94B} Boxeo","boxeo"),L("\u{1F4AA} WWE","wwe"),L("\u{1F94B} Judo","judo"),L("\u{1F9B5} Kickboxing","kickboxing"),L("\u{1F94A} MMA","mma"),L("\u{1F97E} Muay Thai","muay thai"),L("\u{1F94B} BJJ","bjj"),L("\u{1F3AD} Lucha Libre","lucha libre")],
+      t:[L("\u{1F5D3}️ Eventos","eventos"),L("\u{1F3C6} Campeones","campeones"),L("⭐ Pound for Pound","pound for pound"),L("\u{1F451} Leyendas","leyendas")]},
+    "panel-baseball": {n:"Béisbol", art:"el", e:"⚾",
+      c:[L("⚾ MLB","mlb"),L("\u{1F1EF}\u{1F1F5} NPB (Japón)","npb"),L("\u{1F1F0}\u{1F1F7} KBO (Corea)","kbo"),L("\u{1F1E9}\u{1F1F4} LIDOM","lidom"),L("\u{1F1F2}\u{1F1FD} LMB","lmb"),L("\u{1F3C6} World Series","world series")],
+      t:[L("\u{1F4CA} Posiciones","standings"),L("\u{1F4C8} Estadísticas","estadisticas"),L("\u{1F451} Leyendas","leyendas")]},
+    "panel-hockey":   {n:"Hockey", art:"el", e:"\u{1F3D2}",
+      c:[L("\u{1F3D2} NHL","nhl"),L("\u{1F1FA}\u{1F1F8} AHL","ahl"),L("\u{1F1F7}\u{1F1FA} KHL","khl"),L("\u{1F3D1} Hockey césped","cesped"),L("\u{1F3C6} Stanley Cup","stanley cup")],
+      t:[L("\u{1F5D3}️ Temporada","temporada"),L("\u{1F4CA} Posiciones","standings"),L("\u{1F3D2} Goleadores","anotadores"),L("\u{1F451} Leyendas","leyendas")]},
+    "panel-nfl":      {n:"Fútbol Americano", art:"el", e:"\u{1F3C8}",
+      c:[L("\u{1F3C8} NFL","nfl"),L("\u{1F393} NCAA","ncaa"),L("\u{1F341} CFL","cfl"),L("⚡ XFL","xfl")],
+      t:[L("\u{1F5D3}️ Temporada","temporada"),L("\u{1F4CA} Posiciones","standings"),L("\u{1F3C6} Playoffs y Super Bowl","playoffs"),L("\u{1F393} Draft","draft"),L("\u{1F4C8} Estadísticas","estadisticas"),L("\u{1F451} Leyendas","leyendas")]},
+    "panel-rugby":    {n:"Rugby", art:"el", e:"\u{1F3C9}",
+      c:[L("\u{1F3C6} Copa del Mundo","copa del mundo"),L("6️⃣ Seis Naciones","seis naciones"),L("\u{1F30E} Rugby Championship","rugby championship"),L("\u{1F3AF} Super Rugby Pacific","super rugby"),L("\u{1F1EA}\u{1F1FA} URC","urc"),L("\u{1F1EB}\u{1F1F7} Top 14","top 14"),L("\u{1F3F4} Premiership","premiership")],
+      t:[L("\u{1F30D} Ranking mundial","ranking mundial"),L("\u{1F4CB} Competiciones","competiciones"),L("\u{1F451} Leyendas","leyendas")]},
+    "panel-golf":     {n:"Golf", art:"el", e:"⛳",
+      c:[L("\u{1F3C6} Majors","major championships","major"),L("⭐ PGA Tour","pga tour"),L("\u{1F30D} DP World Tour","dp world","european tour"),L("\u{1F6BA} LPGA","lpga")],
+      t:[L("\u{1F5D3}️ Temporada","temporada"),L("\u{1F4C8} Ranking mundial (OWGR)","owgr"),L("\u{1F451} Leyendas","leyendas")]},
+    "panel-athletics":{n:"Atletismo", art:"el", e:"\u{1F3C3}",
+      c:[L("\u{1F3C6} Mundial de Atletismo","mundial atletismo","mundial"),L("\u{1F48E} Diamond League","diamond league"),L("\u{1F947} Juegos Olímpicos","olimpicos","olympics")],
+      t:[L("\u{1F5D3}️ Calendario","calendario"),L("\u{1F4CA} General","general"),L("\u{1F451} Leyendas","leyendas")]},
+    "panel-acuaticos":{n:"Deportes Acuáticos", art:"los", e:"\u{1F3CA}",
+      c:[L("\u{1F3CA} Natación","natacion"),L("\u{1F93F} Clavados","clavados"),L("\u{1F93D} Waterpolo","waterpolo"),L("\u{1F483} Natación artística","sincronizada"),L("\u{1F30A} Aguas abiertas","aguas abiertas"),L("\u{1F3C4} Surf","surf"),L("⛵ Vela","vela"),L("\u{1F6A3} Remo","remo"),L("\u{1F6F6} Canoa / Kayak","canoa")],
+      t:[L("\u{1F5D3}️ Calendario","calendario"),L("⭐ Récords mundiales","records mundiales"),L("\u{1F451} Leyendas","leyendas")]},
+    "panel-cycling":  {n:"Ciclismo", art:"el", e:"\u{1F6B4}",
+      c:[L("\u{1F7E1} Tour de Francia","tour de france","tour de francia"),L("\u{1F1EE}\u{1F1F9} Giro de Italia","giro"),L("\u{1F1EA}\u{1F1F8} Vuelta a España","vuelta"),L("\u{1F30D} Mundial de ruta","mundial","world champ")],
+      t:[L("\u{1F5D3}️ Calendario","calendario"),L("\u{1F4C8} Ranking UCI","ranking"),L("\u{1F451} Leyendas","leyendas")]},
+    "panel-volley":   {n:"Voleibol", art:"el", e:"\u{1F3D0}",
+      c:[L("\u{1F3C6} Mundial","mundial","world champ"),L("⭐ Nations League","nations league"),L("\u{1F3D6}️ Vóley playa","beach","playa")],
+      t:[L("\u{1F5D3}️ Calendario","calendario"),L("\u{1F4C8} Ranking FIVB","ranking"),L("\u{1F451} Leyendas","leyendas")]},
+    "panel-padel":    {n:"Pádel", art:"el", e:"\u{1F3D3}",
+      c:[L("\u{1F3C6} Premier Padel","premier padel"),L("\u{1F3AF} APT Padel Tour","apt padel"),L("\u{1F3E0} Clubes","clubes")],
+      t:[L("\u{1F4CA} General","general"),L("\u{1F4C8} Ranking","ranking"),L("\u{1F451} Leyendas","leyendas")]},
+    "panel-cricket":  {n:"Cricket", art:"el", e:"\u{1F3CF}",
+      c:[L("\u{1F3C6} Copa del Mundo ICC","icc world cup","world cup"),L("⭐ IPL","ipl"),L("\u{1F1EE}\u{1F1F3} T20","t20")],
+      t:[L("\u{1F5D3}️ Calendario","calendario"),L("\u{1F4C8} Ranking ICC","ranking"),L("\u{1F451} Leyendas","leyendas")]}
+  };
+  function norm(t){
+    return (t||"").normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/[^\w\s\/.\-]/g," ").replace(/\s+/g," ").trim().toLowerCase();
+  }
+  function candidatos(panel){
+    return Array.prototype.slice.call(panel.querySelectorAll("button, [role=tab], h2, h3, h4")).filter(function(e){
+      if(e.closest("aside") || e.closest(".ss21-qe-view") || e.closest(".v17-followers-bar") || e.closest(".v82-box")) return false;
+      return norm(e.textContent).length > 1;
+    });
+  }
+  function buscar(panel, terminos){
+    var cands = candidatos(panel);
+    for(var i=0;i<terminos.length;i++){
+      var t = norm(terminos[i]); if(t.length < 2) continue;
+      var ex = cands.filter(function(c){ return norm(c.textContent) === t; });
+      if(ex.length) return preferir(ex);
+      var pa = cands.filter(function(c){ var n = norm(c.textContent); return n.indexOf(t) === 0 || (t.length >= 4 && n.indexOf(t) >= 0); });
+      if(pa.length) return preferir(pa);
+    }
+    return null;
+  }
+  function preferir(l){
+    l.sort(function(a,b){ return (a.tagName === "BUTTON" ? 0 : 1) - (b.tagName === "BUTTON" ? 0 : 1); });
+    return l[0];
+  }
+  function grupo(clave, titulo, items){
+    return '<div class="ss21-std-g" data-g="' + clave + '"><div class="ss21-std-h">' + titulo + '<span class="caret">▾</span></div><div class="ss21-std-l">' + items + '</div></div>';
+  }
+  function armar(panel){
+    var cfg = D[panel.id]; if(!cfg) return;
+    var aside = panel.querySelector(":scope > aside.v336-sb, :scope > aside.v335-tenis-sidebar, :scope > aside.ss21-std");
+    if(!aside || aside.getAttribute("data-ss21-std") === "1") return;
+    aside.setAttribute("data-ss21-std", "1");
+    aside.classList.add("ss21-std");
+    aside.style.removeProperty("display");
+    var qeItems = QE.map(function(q){ return '<button class="ss21-std-i" data-qe="' + q[0] + '">' + q[1] + '</button>'; }).join("");
+    var dest = function(lista){ return lista.map(function(it){ return '<button class="ss21-std-i" data-busca="' + it.slice(1).join("|") + '">' + it[0] + '</button>'; }).join(""); };
+    aside.innerHTML = '<div class="ss21-std-label">' + cfg.n + '</div>'
+      + grupo("qe", "\u{1F4D6} ¿Qué es " + cfg.art + " " + cfg.n + "?", qeItems)
+      + grupo("c", "\u{1F3C6} Competiciones", dest(cfg.c))
+      + grupo("t", "\u{1F4CA} Temporada y rankings", dest(cfg.t));
+  }
+  function marcar(panel){
+    var aside = panel.querySelector(":scope > aside.ss21-std"); if(!aside) return;
+    aside.querySelectorAll("[data-busca]").forEach(function(b){
+      b.classList.toggle("pronto", !buscar(panel, b.getAttribute("data-busca").split("|")));
+    });
+  }
+  function hijos(panel){
+    return Array.prototype.slice.call(panel.children).filter(function(c){ return c.tagName !== "ASIDE" && !c.classList.contains("ss21-qe-view"); });
+  }
+  function cerrarQe(panel){
+    var v = panel.querySelector(":scope > .ss21-qe-view"); if(!v) return;
+    v.remove();
+    hijos(panel).forEach(function(c){ if(c.hasAttribute("data-ss21-oculto")){ c.style.removeProperty("display"); c.removeAttribute("data-ss21-oculto"); } });
+    panel.querySelectorAll(":scope > aside.ss21-std [data-qe].activo").forEach(function(b){ b.classList.remove("activo"); });
+  }
+  function abrirQe(panel, tab){
+    var cfg = D[panel.id]; if(!cfg) return;
+    var v = panel.querySelector(":scope > .ss21-qe-view");
+    if(!v){
+      v = document.createElement("div"); v.className = "ss21-qe-view";
+      var aside = panel.querySelector(":scope > aside");
+      if(aside && aside.nextSibling) panel.insertBefore(v, aside.nextSibling); else panel.appendChild(v);
+      hijos(panel).forEach(function(c){
+        if(getComputedStyle(c).display !== "none"){ c.setAttribute("data-ss21-oculto", "1"); c.style.setProperty("display", "none", "important"); }
+      });
+    }
+    var barra = '<div class="ss21-qe-tabs">' + QE.map(function(q){ return '<button class="inner-tab' + (q[0] === tab ? ' active' : '') + '" data-qe="' + q[0] + '">' + q[1] + '</button>'; }).join("") + '</div>';
+    v.innerHTML = '<div class="ss21-qe-hero"><h1>' + cfg.e + ' ' + cfg.n + '</h1><div class="sub">¿Qué es ' + cfg.art + ' ' + cfg.n.toLowerCase() + '? Reglas, historia, récords y vocabulario.</div></div>'
+      + barra
+      + '<div class="ss21-qe-vacio"><div style="font-size:2rem">\u{1F4DD}</div><b>' + NOMBRE_QE[tab] + ' · ' + cfg.n + '</b>Esta sección está en preparación.<br>Aquí irá ' + ({resumen:"un resumen de qué es " + cfg.art + " " + cfg.n.toLowerCase() + ", sus cifras y dónde se juega", reglas:"una explicación simple de las reglas", historia:"una línea de tiempo con sus momentos clave", records:"los grandes récords y marcas históricas", glosario:"el vocabulario esencial"})[tab] + '.</div>';
+    panel.querySelectorAll(":scope > aside.ss21-std .ss21-std-i").forEach(function(b){ b.classList.toggle("activo", b.getAttribute("data-qe") === tab); });
+  }
+  document.addEventListener("click", function(e){
+    var t = e.target; if(!t || !t.closest) return;
+    var h = t.closest("aside.ss21-std .ss21-std-h");
+    if(h){ e.preventDefault(); e.stopImmediatePropagation(); h.parentElement.classList.toggle("abierto"); return; }
+    var qe = t.closest("[data-qe]");
+    if(qe && (qe.closest("aside.ss21-std") || qe.closest(".ss21-qe-view"))){
+      e.preventDefault(); e.stopImmediatePropagation();
+      var panel = qe.closest("[id^=panel-]");
+      abrirQe(panel, qe.getAttribute("data-qe"));
+      var g = panel.querySelector(':scope > aside.ss21-std .ss21-std-g[data-g="qe"]'); if(g) g.classList.add("abierto");
+      return;
+    }
+    var it = t.closest("aside.ss21-std [data-busca]");
+    if(it){
+      e.preventDefault(); e.stopImmediatePropagation();
+      if(it.classList.contains("pronto")) return;
+      var p = it.closest("[id^=panel-]");
+      cerrarQe(p);
+      var destino = buscar(p, it.getAttribute("data-busca").split("|"));
+      if(!destino){ it.classList.add("pronto"); return; }
+      p.querySelectorAll(":scope > aside.ss21-std .ss21-std-i").forEach(function(b){ b.classList.toggle("activo", b === it); });
+      if(destino.tagName === "BUTTON" || destino.getAttribute("role") === "tab") destino.click();
+      setTimeout(function(){
+        var r = destino.getBoundingClientRect(); var hd = document.querySelector(".header");
+        window.scrollTo({top: window.scrollY + r.top - ((hd ? hd.getBoundingClientRect().height : 60) + 12), behavior:"smooth"});
+      }, 60);
+      return;
+    }
+    /* al cambiar de deporte desde la barra, se vuelve al contenido normal */
+    if(t.closest(".sport-btn")){
+      Object.keys(D).forEach(function(id){ var p2 = document.getElementById(id); if(p2) cerrarQe(p2); });
+    }
+  }, true);
+  function preparar(panel){
+    if(!panel || !D[panel.id]) return;
+    armar(panel); marcar(panel);
+  }
+  function todos(){ Object.keys(D).forEach(function(id){ var p = document.getElementById(id); if(p) armar(p); }); }
+  if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", function(){ setTimeout(todos, 2500); }); else setTimeout(todos, 2500);
+  window.SS21std = { preparar: preparar, cerrarQe: cerrarQe, abrirQe: abrirQe, config: D };
 })();
 </script>
 <style id="ss21-mobile-header">
