@@ -19059,6 +19059,12 @@ html body.v317-show-soccer .v338-soccer-sb{display:block !important;}
 <script>
 (function(){if(window.__v338)return;window.__v338=true;
 function build(){
+  /* SS21: desactivado. Este bloque vaciaba #panel-soccer (ps.innerHTML="")
+     para poner una presentacion de 6 diapositivas, y con eso borraba
+     #football-main: ninguna liga (ni el futbol femenino) se podia abrir,
+     renderLeague fallaba. El diseno original (lista de regiones con M/F +
+     #football-main) vuelve a funcionar. */
+  return;
   var ps=document.getElementById("panel-soccer");if(!ps)return;
   if(ps.querySelector(".v338-soccer-sb"))return;
   ps.innerHTML="";
@@ -27906,6 +27912,47 @@ window.selectLLPriv=function(el){document.querySelectorAll('.ll-priv-opt').forEa
     }, 60);
   }, true);
   window.SS21sidebar = { marcar: marcar, buscar: buscar };
+})();
+</script>
+<style id="ss21-honesto">
+/* SS21: elementos que parecian clicables pero no llevan a ningun lado todavia
+   (no existen las paginas de articulo, audios ni el comparador). Se ven como
+   lo que son, en vez de "botones rotos". */
+#panel-v703-noticias [style*="cursor"],#panel-v708-blogs [style*="cursor"],
+.v-mcard,.v724-podcast-card,#panel-masss21-rebuild .v-mss-sect > h2,
+.inicio-panel{cursor:default !important;}
+.v724-cta,.v724-card-cta{pointer-events:none !important;opacity:.6 !important;}
+.v724-cta::after,.v724-card-cta::after{content:" · Próximamente";font-weight:600;}
+#panel-v-comparar .v-cmp-slot{cursor:default !important;}
+#panel-v-comparar .v-cmp-slot:hover{border-color:#d1d5db !important;background:#fff !important;}
+#panel-v-comparar .v-cmp-slot .v-slot-txt::after{content:"Próximamente";display:block;margin-top:8px;font-size:12px;font-weight:700;color:#c8102e;letter-spacing:.3px;}
+/* Etiquetas de deportes de "Mas sobre SS21": ahora abren su deporte */
+#panel-masss21-rebuild .v-mss-sport-pill.ss21-pill-ok{cursor:pointer !important;}
+#panel-masss21-rebuild .v-mss-sport-pill:not(.ss21-pill-ok){cursor:default !important;}
+</style>
+<script id="ss21-pills">
+(function(){
+  if(window.__ss21pills) return; window.__ss21pills = true;
+  function norm(t){ return (t||"").normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/[^\w\s]/g," ").replace(/\s+/g," ").trim().toLowerCase(); }
+  var MAPA = { "futbol":"soccer", "basketball":"nba", "basquetbol":"nba", "tenis":"tennis", "f1":"f1",
+    "formula 1":"f1", "nfl":"nfl", "mlb":"baseball", "beisbol":"baseball", "baseball":"baseball",
+    "hockey":"hockey", "golf":"golf", "boxeo":"ufc", "mma":"ufc", "ufc":"ufc", "rugby":"rugby",
+    "atletismo":"athletics", "natacion":"acuaticos", "ciclismo":"cycling", "voleibol":"volley",
+    "volleyball":"volley", "voley":"volley", "padel":"padel", "cricket":"cricket" };
+  function clave(el){ return MAPA[norm(el.textContent)] || null; }
+  function marcar(){
+    document.querySelectorAll("#panel-masss21-rebuild .v-mss-sport-pill").forEach(function(p){
+      p.classList.toggle("ss21-pill-ok", !!clave(p));
+    });
+  }
+  document.addEventListener("click", function(e){
+    var p = e.target && e.target.closest && e.target.closest("#panel-masss21-rebuild .v-mss-sport-pill");
+    if(!p) return;
+    var k = clave(p);
+    if(k && window.SS21abrirDeporte){ e.preventDefault(); e.stopImmediatePropagation(); window.SS21abrirDeporte(k); }
+  }, true);
+  setTimeout(marcar, 800); setTimeout(marcar, 3000);
+  window.addEventListener("click", function(){ setTimeout(marcar, 400); }, true);
 })();
 </script>
 <style id="ss21-mobile-header">
