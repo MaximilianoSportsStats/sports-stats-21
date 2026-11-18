@@ -27965,6 +27965,202 @@ window.selectLLPriv=function(el){document.querySelectorAll('.ll-priv-opt').forEa
   }, true);
 })();
 </script>
+<style id="ss21-que-es-css">
+/* "¿Que es el Futbol?" con el mismo formato que las regiones de la lista */
+#sidebar .ss21-qef-head{margin-top:2px;}
+#sidebar .ss21-qef-list .sub-btn.ss21-activo{color:#c8102e !important;font-weight:700 !important;background:#fdf2f3 !important;}
+#football-main .ss21-qef-tabs{display:flex;flex-wrap:wrap;gap:.4rem;margin:0 0 1.1rem;border-bottom:2px solid var(--border,#e5e7eb);padding-bottom:.6rem;}
+#football-main .ss21-ley-intro{background:var(--card,#fff);border-radius:12px;padding:1.1rem 1.3rem;margin-bottom:1rem;line-height:1.7;font-size:.95rem;}
+#football-main .ss21-leyes{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:.8rem;}
+#football-main .ss21-ley{background:var(--card,#fff);border:1px solid var(--border,#e5e7eb);border-radius:12px;padding:1rem 1.1rem;line-height:1.6;font-size:.9rem;}
+#football-main .ss21-ley h4{margin:0 0 .4rem;font-size:.98rem;display:flex;gap:.5rem;align-items:baseline;}
+#football-main .ss21-ley h4 span{display:inline-flex;min-width:1.7rem;height:1.7rem;align-items:center;justify-content:center;border-radius:50%;background:#c8102e;color:#fff;font-size:.78rem;font-weight:800;}
+#football-main .ss21-ley p{margin:0;color:#475569;}
+</style>
+<script id="ss21-que-es">
+/* SS21: "¿Que es el Futbol?" era un boton suelto con otro estilo (rojo, con un
+   signo de pregunta extra adelante). Ahora es un encabezado igual a las regiones
+   que se despliega en Resumen / Reglas / Historia / Records / Glosario; el
+   contenido tiene las mismas pestanas arriba. Reglas = las 17 Reglas de Juego. */
+(function(){
+  if(window.SS21queEs) return;
+  var PESTANAS = [["resumen","\u{1F4D6} Resumen"],["reglas","\u{1F4CB} Reglas"],["historia","\u{1F4DC} Historia"],["records","\u{1F3C6} Récords"],["glosario","\u{1F4DA} Glosario"]];
+  var LEYES = [
+    ["El terreno de juego","Rectángulo de 90 a 120 m de largo por 45 a 90 m de ancho (en partidos internacionales, 100-110 × 64-75 m). El área grande se extiende 16,5 m desde la línea de meta, el punto penal está a 11 m y el círculo central tiene 9,15 m de radio."],
+    ["El balón","Esférico, de 68 a 70 cm de circunferencia y entre 410 y 450 g al comienzo del partido."],
+    ["Los jugadores","Dos equipos de 11, uno de ellos arquero. Si un equipo queda con menos de 7 jugadores, el partido se suspende. En competiciones oficiales se permiten hasta 5 cambios, en un máximo de 3 momentos del juego (más el entretiempo)."],
+    ["El equipamiento","Camiseta, short, medias, canilleras y calzado. El arquero usa colores distintos a los de ambos equipos y a los del árbitro. No se permite nada peligroso, como joyas."],
+    ["El árbitro","Es la máxima autoridad: hace cumplir las reglas, puede dejar seguir el juego si favorece al equipo que recibió la falta (ventaja) y sus decisiones sobre hechos del juego son definitivas."],
+    ["Los otros oficiales","Dos asistentes de línea, cuarto árbitro y, en muchas ligas, el VAR. El VAR solo interviene en errores claros sobre goles, penales, tarjetas rojas directas o confusión de identidad."],
+    ["La duración","Dos tiempos de 45 minutos con un descanso de hasta 15. El árbitro agrega el tiempo perdido por cambios, lesiones, revisiones del VAR o demoras."],
+    ["Inicio y reanudación","Cada tiempo y cada gol se reanudan con el saque inicial desde el centro. Si el árbitro detiene el juego sin falta, se reanuda con un balón a tierra."],
+    ["Balón en juego o fuera","El balón sale cuando cruza por completo una línea de banda o de meta, o cuando el árbitro detiene el juego. Si pega en el árbitro y cambia la jugada, se reanuda con balón a tierra."],
+    ["Cómo se gana","Es gol cuando el balón cruza por completo la línea de meta entre los postes y bajo el travesaño. Gana quien anota más. En eliminatorias, el empate se define con prórroga (2 × 15 min) y/o penales, según la competición."],
+    ["El fuera de juego","Un atacante está en posición adelantada si, en el campo rival, está más cerca de la línea de meta que el balón y que el penúltimo defensor (normalmente, el último defensor más el arquero). Solo se sanciona si participa en la jugada. No hay fuera de juego en saques de banda, de meta ni de esquina."],
+    ["Faltas y tarjetas","Patadas, empujones, zancadillas o tocar el balón con la mano se castigan con tiro libre directo, o penal si ocurren dentro del área propia. La amarilla es una advertencia; dos amarillas o una roja directa significan expulsión, sin reemplazo."],
+    ["Los tiros libres","Directo (se puede marcar gol de inmediato) o indirecto (otro jugador debe tocar el balón antes del gol). Los rivales deben estar a 9,15 m. Si la barrera tiene 3 o más defensores, los atacantes deben quedar al menos a 1 m de ella."],
+    ["El penal","Se cobra desde el punto a 11 m. El arquero debe tener al menos parte de un pie sobre la línea al momento del remate. El resto de los jugadores queda fuera del área hasta que se patea."],
+    ["El saque de banda","Cuando el balón sale por un costado, lo saca con las manos el rival del último que lo tocó: de frente al campo, con parte de ambos pies en el suelo y el balón desde atrás de la cabeza. No vale gol directo."],
+    ["El saque de meta","Cuando el balón sale por la línea de meta tocado por un atacante, sin gol. Se patea desde el área chica y queda en juego apenas se mueve. Vale gol directo, pero solo en el arco rival."],
+    ["El saque de esquina","Cuando el balón sale por la línea de meta tocado por un defensor, sin gol. Se patea desde la esquina más cercana, con los rivales a 9,15 m. Vale gol directo."]
+  ];
+  function reglasHTML(g){
+    return '<div class="ss21-ley-intro"><b>Lo esencial:</b> dos equipos de 11 intentan meter el balón en el arco rival usando cualquier parte del cuerpo menos brazos y manos (salvo el arquero, dentro de su área). Gana quien anota más goles en 90 minutos. '
+      + (g === "F" ? 'El fútbol femenino se juega con <b>exactamente las mismas reglas</b>, con el mismo balón y la misma cancha.' : 'Las reglas las define la <b>IFAB</b> (International Football Association Board) desde 1886, y son las mismas para el fútbol femenino.')
+      + ' Estas son las <b>17 Reglas de Juego</b> oficiales, explicadas en simple:</div>'
+      + '<div class="ss21-leyes">' + LEYES.map(function(l, i){
+          return '<div class="ss21-ley"><h4><span>' + (i + 1) + '</span>' + l[0] + '</h4><p>' + l[1] + '</p></div>';
+        }).join("") + '</div>';
+  }
+  var HISTORIA = {
+    M: [
+      ["1863","En Londres se funda la Football Association y se escriben las primeras reglas: nace el f\u00fatbol moderno."],
+      ["1872","Escocia e Inglaterra juegan el primer partido entre selecciones (0-0, en Glasgow)."],
+      ["1886","Se crea la IFAB, el organismo que hasta hoy decide las Reglas de Juego."],
+      ["1888","Arranca la Football League inglesa, la primera liga profesional del mundo."],
+      ["1904","Siete pa\u00edses fundan la FIFA en Par\u00eds."],
+      ["1930","Uruguay organiza y gana el primer Mundial, venciendo 4-2 a Argentina en Montevideo."],
+      ["1950","El \u201cMaracanazo\u201d: Uruguay le gana la final a Brasil ante cerca de 200.000 personas en el Maracan\u00e1."],
+      ["1955","Nace la Copa de Europa (hoy Champions League); el Real Madrid gana las primeras cinco ediciones."],
+      ["1960","Se juega la primera Copa Libertadores; la gana Pe\u00f1arol."],
+      ["1970","En M\u00e9xico 70 debutan las tarjetas amarillas y rojas; Brasil de Pel\u00e9 gana su tercer Mundial."],
+      ["1992","Se proh\u00edbe al arquero tomar con las manos un pase con el pie de un compa\u00f1ero; la Copa de Europa pasa a llamarse Champions League."],
+      ["2018","El VAR se usa por primera vez en un Mundial (Rusia 2018)."],
+      ["2026","Estados Unidos, M\u00e9xico y Canad\u00e1 organizan el primer Mundial con 48 selecciones."]
+    ],
+    F: [
+      ["1881","Escocia e Inglaterra disputan uno de los primeros partidos femeninos documentados, en Edimburgo."],
+      ["1920","El Dick, Kerr Ladies re\u00fane a m\u00e1s de 50.000 personas en Goodison Park (Liverpool)."],
+      ["1921","La Federaci\u00f3n inglesa proh\u00edbe a las mujeres jugar en sus canchas; la prohibici\u00f3n dura 50 a\u00f1os."],
+      ["1971","Se levanta la prohibici\u00f3n en Inglaterra y M\u00e9xico organiza un mundial femenino no oficial con estadios llenos."],
+      ["1991","China organiza el primer Mundial Femenino de la FIFA; gana Estados Unidos."],
+      ["1996","El f\u00fatbol femenino debuta en los Juegos Ol\u00edmpicos (Atlanta)."],
+      ["2001","Nace la Copa de Europa femenina, hoy UEFA Women\u2019s Champions League."],
+      ["2019","El Mundial de Francia bate r\u00e9cords de audiencia; Estados Unidos gana su cuarto t\u00edtulo."],
+      ["2023","Espa\u00f1a se corona campeona del mundo en Australia y Nueva Zelanda, el primer Mundial Femenino con 32 selecciones."],
+      ["2027","Brasil ser\u00e1 el primer pa\u00eds de Sudam\u00e9rica en organizar el Mundial Femenino."]
+    ]
+  };
+  var RECORDS = {
+    M: [
+      ["5","T\u00edtulos mundiales de Brasil, el m\u00e1ximo ganador","1958, 1962, 1970, 1994 y 2002"],
+      ["17 a\u00f1os","Pel\u00e9, el campe\u00f3n del mundo m\u00e1s joven","Suecia 1958"],
+      ["3","Mundiales ganados por Pel\u00e9, \u00fanico jugador con tres","1958, 1962 y 1970"],
+      ["11 s","Gol m\u00e1s r\u00e1pido de la historia de los Mundiales","Hakan \u015e\u00fck\u00fcr (Turqu\u00eda) a Corea del Sur, 2002"],
+      ["31-0","Mayor goleada entre selecciones","Australia a Samoa Americana, 2001"],
+      ["13","Goles de Just Fontaine en un solo Mundial","Suecia 1958"],
+      ["~200.000","Mayor p\u00fablico en un partido","Final Uruguay-Brasil, Maracan\u00e1 1950"],
+      ["5","Copas de Europa seguidas del Real Madrid","1956 a 1960"]
+    ],
+    F: [
+      ["4","T\u00edtulos mundiales de Estados Unidos, la m\u00e1xima ganadora","1991, 1999, 2015 y 2019"],
+      ["17","Goles de Marta en Mundiales: r\u00e9cord absoluto, sumando hombres y mujeres","Brasil, 2003 a 2019"],
+      ["13-0","Mayor goleada en un Mundial Femenino","Estados Unidos a Tailandia, 2019"],
+      ["2","Selecciones campeonas del mundo de forma consecutiva: Alemania y Estados Unidos","2003-2007 y 2015-2019"],
+      ["91.648","Mayor p\u00fablico en un partido de clubes femenino","Barcelona-Wolfsburgo, Camp Nou 2022"],
+      ["1991","A\u00f1o del primer Mundial Femenino oficial","China"]
+    ]
+  };
+  function historiaHTML(g){
+    return '<div class="ss21-ley-intro">' + (g === "F"
+      ? 'El f\u00fatbol femenino se juega desde el siglo XIX, pero estuvo prohibido o ignorado durante d\u00e9cadas. Desde los a\u00f1os 90 vive un crecimiento enorme en p\u00fablico y profesionalizaci\u00f3n.'
+      : 'Los juegos de pelota con los pies existen hace siglos en muchas culturas, pero el f\u00fatbol tal como lo conocemos naci\u00f3 en Inglaterra en el siglo XIX. Estos son sus momentos clave.')
+      + '</div><div class="ss21-leyes">' + HISTORIA[g].map(function(h){
+        return '<div class="ss21-ley"><h4><span style="min-width:3.2rem;border-radius:8px">' + h[0] + '</span></h4><p>' + h[1] + '</p></div>';
+      }).join("") + '</div>';
+  }
+  function recordsHTML(g){
+    return '<div class="ss21-leyes">' + RECORDS[g].map(function(r){
+      return '<div class="ss21-ley"><div style="font-size:1.7rem;font-weight:900;color:#c8102e;line-height:1.1">' + r[0] + '</div><div style="font-weight:700;margin:.35rem 0 .2rem">' + r[1] + '</div><p>' + r[2] + '</p></div>';
+    }).join("") + '</div>';
+  }
+  function genero(){ return window._socG === "F" ? "F" : "M"; }
+  function barra(tab){
+    return '<div class="ss21-qef-tabs">' + PESTANAS.map(function(t){
+      return '<button class="inner-tab' + (t[0] === tab ? ' active' : '') + '" data-ss21-qef="' + t[0] + '">' + t[1] + '</button>';
+    }).join("") + '</div>';
+  }
+  function heroCorto(g){
+    return '<div class="md-hero"><h1>⚽ Fútbol ' + (g === "F" ? "Femenino" : "Masculino") + '</h1><div class="sub">¿Qué es el fútbol? Reglas, historia, récords y vocabulario.</div></div>';
+  }
+  function mostrar(tab){
+    var fm = document.getElementById("football-main"); if(!fm) return;
+    var g = genero(); tab = tab || "resumen";
+    var html;
+    if(tab === "resumen"){
+      var base = typeof window.renderQueEsContent === "function" ? window.renderQueEsContent(g) : "";
+      base = base.replace(/Futbol (Masculino|Femenino)/g, "Fútbol $1");
+      /* la barra va justo debajo del encabezado rojo */
+      html = base.replace('<div class="qf-grid">', barra(tab) + '<div class="qf-grid">');
+      if(html === base) html = barra(tab) + base;
+    } else if(tab === "reglas"){
+      html = heroCorto(g) + barra(tab) + reglasHTML(g);
+    } else if(tab === "historia"){
+      html = heroCorto(g) + barra(tab) + historiaHTML(g);
+    } else if(tab === "records"){
+      html = heroCorto(g) + barra(tab) + recordsHTML(g);
+    } else {
+      html = heroCorto(g) + barra(tab) + '<div id="futbol-tab-content"></div>';
+    }
+    fm.innerHTML = html;
+    fm.dataset.ss21qef = tab;
+    fm.dataset.qfRendered = "";
+    if(tab === "glosario" && typeof window.switchFutbolTab === "function"){
+      try{ window.switchFutbolTab(tab, null); }catch(_){ }
+      var ct = document.getElementById("futbol-tab-content");
+      if(ct) ct.innerHTML = ct.innerHTML.replace("acob\u00e1tico", "acrob\u00e1tico").replace("acobático", "acrobático");
+    }
+    document.querySelectorAll("#sidebar .league-btn.active, #sidebar .sub-btn.active").forEach(function(b){ b.classList.remove("active"); });
+    document.querySelectorAll("#sidebar .ss21-qef-list .sub-btn").forEach(function(b){ b.classList.toggle("ss21-activo", b.getAttribute("data-ss21-qef") === tab); });
+    var pb = document.getElementById("sgt-fbanner"); if(pb) pb.style.display = "none";
+  }
+  function transformar(){
+    var viejo = document.querySelector('#sidebar button[onclick^="showFutbolInfo"]');
+    if(!viejo) return;
+    var envoltura = viejo.parentElement;
+    var cont = document.createElement("div");
+    cont.innerHTML = '<div class="continent-header ss21-qef-head" onclick="toggleContinent(this)" data-cont="qef">\u{1F4D6} ¿Qué es el Fútbol? <span class="caret">▾</span></div>'
+      + '<div class="continent-leagues ss21-qef-list" data-v22-collapsed="1">'
+      + PESTANAS.map(function(t){ return '<button class="sub-btn" data-ss21-qef="' + t[0] + '">' + t[1] + '</button>'; }).join("")
+      + '</div>';
+    envoltura.replaceWith.apply(envoltura, Array.prototype.slice.call(cont.childNodes));
+    var cab = document.querySelector("#sidebar .ss21-qef-head");
+    if(cab){ cab.setAttribute("data-v22-collapsed", "1"); }
+  }
+  document.addEventListener("click", function(e){
+    var b = e.target && e.target.closest && e.target.closest("[data-ss21-qef]");
+    if(b){
+      e.preventDefault(); e.stopImmediatePropagation();
+      mostrar(b.getAttribute("data-ss21-qef"));
+      if(b.closest("#football-main")){ var fm = document.getElementById("football-main"); if(fm) fm.scrollIntoView({block:"start"}); window.scrollBy(0, -90); }
+      return;
+    }
+    /* al elegir una liga, se apaga la marca de "Que es el futbol" */
+    if(e.target && e.target.closest && e.target.closest("#sidebar .league-btn, #sidebar .sub-btn")){
+      var fm2 = document.getElementById("football-main"); if(fm2) delete fm2.dataset.ss21qef;
+      document.querySelectorAll("#sidebar .ss21-qef-list .sub-btn").forEach(function(x){ x.classList.remove("ss21-activo"); });
+    }
+  }, true);
+  /* la lista se vuelve a dibujar (p. ej. al cambiar M/F): se transforma de nuevo
+     y, si se estaba viendo "Que es el futbol", se redibuja para el otro genero */
+  function alCambiar(){
+    transformar();
+    var fm = document.getElementById("football-main");
+    if(fm && fm.dataset.ss21qef) setTimeout(function(){ mostrar(fm.dataset.ss21qef); }, 120);
+  }
+  function vigilar(){
+    var sb = document.getElementById("sidebar");
+    if(!sb){ setTimeout(vigilar, 500); return; }
+    transformar();
+    new MutationObserver(function(){ transformar(); }).observe(sb, {childList:true, subtree:true});
+  }
+  if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", vigilar); else vigilar();
+  window.addEventListener("click", function(e){
+    if(e.target && e.target.closest && e.target.closest(".sgt-btn")) setTimeout(alCambiar, 200);
+  }, true);
+  window.SS21queEs = mostrar;
+})();
+</script>
 <style id="ss21-mobile-header">
 /* SS21 MOBILE: la barra superior (buscador + idioma + login) iba en una sola
    fila sin wrap y media ~835px. El celular entonces "achicaba" TODA la pagina
