@@ -799,7 +799,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Inter','Segoe UI
       <p class="tagline" style="font-size:clamp(18px,2.4vw,26px);font-weight:600;margin-bottom:14px"><b>La red social de los deportes</b></p>
       <p class="tagline" style="font-size:clamp(14px,1.6vw,17px);opacity:0.88">Navega data, crea tu liga, arma tu perfil y conecta con jugadores de todo el mundo.</p>
       <div class="inicio-cta-row">
-        <button class="inicio-btn inicio-btn-primary" onclick="var b=document.querySelectorAll('.sport-btn')[1];if(b)b.click()">Empezar a explorar &rarr;</button>
+        <button class="inicio-btn inicio-btn-primary" onclick="if(typeof window.__showDeportes==='function'){window.__showDeportes()}else if(window.SS21NAV){SS21NAV.go('panel-v-deportes-shell')}">Empezar a explorar &rarr;</button>
         <button class="inicio-btn inicio-btn-secondary" onclick="if(typeof openLoginModal==='function')openLoginModal();else{var l=document.querySelector('.login-btn');if(l)l.click()}">Crear cuenta</button>
       </div>
   </div>
@@ -830,7 +830,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Inter','Segoe UI
       <div class="inicio-panel-icon">&#9917;</div>
       <h3>Explora deportes profesionales</h3>
       <p>Sum&eacute;rgete en NBA, NFL, MLB, NHL, F1, Champions League, La Liga, Premier y todas las grandes ligas del mundo. Tablas de posiciones, r&eacute;cords, leyendas, campeones hist&oacute;ricos y data en vivo.</p>
-      <button class="inicio-panel-btn" onclick="var b=document.querySelectorAll('.sport-btn')[1];if(b)b.click()">Empezar a explorar &rarr;</button>
+      <button class="inicio-panel-btn" onclick="if(typeof window.__showDeportes==='function'){window.__showDeportes()}else if(window.SS21NAV){SS21NAV.go('panel-v-deportes-shell')}">Empezar a explorar &rarr;</button>
     </article>
     <article class="inicio-panel">
       <div class="inicio-panel-icon">&#127971;</div>
@@ -17439,7 +17439,7 @@ function hideTodos(){
     }
   });
 }
-hideTodos(); setInterval(hideTodos,2000);
+/* SS21NAV: v103.hideTodos desactivado - hacia b.click() sobre Futbol cada 2s y secuestraba la navegacion. v104.hideTodosClean hace lo mismo sin el click. */
 function hideAllV87(){
   document.querySelectorAll('[id^="v87-page-"]').forEach(function(p){
     p.style.setProperty('display','none','important');
@@ -20089,7 +20089,35 @@ function walkAndTranslate(){
 document.addEventListener("click",function(e){if(!e.isTrusted)return;var la=e.target.closest && e.target.closest("#v30-lang");if(la)setTimeout(walkAndTranslate,400);},true);
 if(document.readyState!=="loading")walkAndTranslate();else document.addEventListener("DOMContentLoaded",walkAndTranslate);
 setTimeout(walkAndTranslate,1500);setTimeout(walkAndTranslate,3500);
-setInterval(walkAndTranslate,1500);
+/* ============================================================
+   SS21IDLE - los traductores de i18n recorrian TODO el DOM entre
+   3 y 6 veces por segundo, para siempre. Era casi la mitad del
+   trabajo del navegador estando quieto y hacia parpadear textos.
+   Con esto solo vuelven a recorrer cuando el DOM cambio de verdad.
+   ============================================================ */
+window.SS21IDLE=(function(){
+  var sucio=true, corriendo=false, mo=null;
+  function arrancar(){
+    if(mo||!document.body)return;
+    mo=new MutationObserver(function(){ if(!corriendo) sucio=true; });
+    mo.observe(document.body,{childList:true,subtree:true,characterData:true});
+  }
+  if(document.body)arrancar();
+  else document.addEventListener("DOMContentLoaded",arrancar);
+  document.addEventListener("click",function(){sucio=true;},true);
+  return {
+    marcar:function(){sucio=true;},
+    siCambio:function(fn){
+      return function(){
+        if(!sucio)return;
+        corriendo=true;
+        try{ return fn.apply(this,arguments); }
+        finally{ setTimeout(function(){ sucio=false; corriendo=false; },0); }
+      };
+    }
+  };
+})();
+setInterval(SS21IDLE.siCambio(walkAndTranslate),1500);
 })();
 </script>
 
@@ -20178,7 +20206,7 @@ function walkAndTranslate(){
 }
 window.__v387walk=walkAndTranslate;
 /* INTERVAL RAPIDO 400ms en vez de 1500 */
-setInterval(walkAndTranslate,400);
+setInterval(SS21IDLE.siCambio(walkAndTranslate),400);
 /* Click listener IMMEDIATE - no setTimeout */
 document.addEventListener("click",function(e){
   if(!e.isTrusted)return;
@@ -20248,7 +20276,7 @@ function walkAll(){
 document.addEventListener("click",function(e){if(!e.isTrusted)return;var la=e.target.closest && e.target.closest("#v30-lang");if(la){walkAll();setTimeout(walkAll,100);setTimeout(walkAll,300);setTimeout(walkAll,700);}},true);
 if(document.readyState!=="loading")walkAll();else document.addEventListener("DOMContentLoaded",walkAll);
 setTimeout(walkAll,1500);setTimeout(walkAll,3500);
-setInterval(walkAll,500);
+setInterval(SS21IDLE.siCambio(walkAll),500);
 var lastL=getLang();setInterval(function(){var c=getLang();if(c!==lastL){lastL=c;walkAll();setTimeout(walkAll,150);}},150);
 })();
 </script>
@@ -20286,7 +20314,7 @@ function walkAll(){
 document.addEventListener("click",function(e){if(!e.isTrusted)return;var la=e.target.closest && e.target.closest("#v30-lang");if(la){walkAll();setTimeout(walkAll,80);setTimeout(walkAll,250);setTimeout(walkAll,600);}},true);
 if(document.readyState!=="loading")walkAll();else document.addEventListener("DOMContentLoaded",walkAll);
 setTimeout(walkAll,1000);setTimeout(walkAll,2500);
-setInterval(walkAll,400);
+setInterval(SS21IDLE.siCambio(walkAll),400);
 var lastL=getLang();setInterval(function(){var c=getLang();if(c!==lastL){lastL=c;walkAll();setTimeout(walkAll,150);}},150);
 })();
 </script>
@@ -20340,7 +20368,7 @@ function updatePicker(){
 document.addEventListener("click",function(e){if(!e.isTrusted)return;var la=e.target.closest && e.target.closest("#v30-lang");if(la){updatePicker();setTimeout(updatePicker,80);setTimeout(updatePicker,250);setTimeout(updatePicker,600);}},true);
 if(document.readyState!=="loading")updatePicker();else document.addEventListener("DOMContentLoaded",updatePicker);
 setTimeout(updatePicker,800);setTimeout(updatePicker,2500);
-setInterval(updatePicker,500);
+setInterval(SS21IDLE.siCambio(updatePicker),500);
 var lastL=getLang();setInterval(function(){var c=getLang();if(c!==lastL){lastL=c;updatePicker();}},150);
 })();
 </script>
@@ -20362,7 +20390,7 @@ function walkDesc(){
 document.addEventListener("click",function(e){if(!e.isTrusted)return;var la=e.target.closest && e.target.closest("#v30-lang");if(la){walkDesc();setTimeout(walkDesc,100);setTimeout(walkDesc,300);setTimeout(walkDesc,700);}},true);
 if(document.readyState!=="loading")walkDesc();else document.addEventListener("DOMContentLoaded",walkDesc);
 setTimeout(walkDesc,1000);setTimeout(walkDesc,3000);
-setInterval(walkDesc,400);
+setInterval(SS21IDLE.siCambio(walkDesc),400);
 var lastL=getLang();setInterval(function(){var c=getLang();if(c!==lastL){lastL=c;walkDesc();setTimeout(walkDesc,150);}},150);
 })();
 </script>
@@ -20398,7 +20426,7 @@ function walkAll(){
 document.addEventListener("click",function(e){if(!e.isTrusted)return;var la=e.target.closest && e.target.closest("#v30-lang");if(la){walkAll();setTimeout(walkAll,80);setTimeout(walkAll,250);setTimeout(walkAll,600);}},true);
 if(document.readyState!=="loading")walkAll();else document.addEventListener("DOMContentLoaded",walkAll);
 setTimeout(walkAll,1000);setTimeout(walkAll,2500);setTimeout(walkAll,5000);
-setInterval(walkAll,300);
+setInterval(SS21IDLE.siCambio(walkAll),300);
 var lastL=getLang();setInterval(function(){var c=getLang();if(c!==lastL){lastL=c;walkAll();setTimeout(walkAll,150);}},150);
 })();
 </script>
@@ -20488,7 +20516,7 @@ function updateUI(){
 }
 if(document.readyState!=="loading")ensureUI();else document.addEventListener("DOMContentLoaded",ensureUI);
 setTimeout(ensureUI,500);setTimeout(ensureUI,1500);setTimeout(ensureUI,3500);
-setInterval(ensureUI,600);
+setInterval(SS21IDLE.siCambio(ensureUI),600);
 })();
 </script>
 
@@ -20517,7 +20545,7 @@ function walk(){
 document.addEventListener("click",function(e){if(!e.isTrusted)return;var la=e.target.closest && (e.target.closest("#v30-lang")||e.target.closest("#v398-picker"));if(la){walk();setTimeout(walk,80);setTimeout(walk,250);setTimeout(walk,600);}},true);
 if(document.readyState!=="loading")walk();else document.addEventListener("DOMContentLoaded",walk);
 setTimeout(walk,800);setTimeout(walk,2500);
-setInterval(walk,400);
+setInterval(SS21IDLE.siCambio(walk),400);
 var lastL=getLang();setInterval(function(){var c=getLang();if(c!==lastL){lastL=c;walk();setTimeout(walk,150);}},150);
 })();
 </script>
@@ -20615,7 +20643,7 @@ function ensureUI(){
 }
 if(document.readyState!=="loading")ensureUI();else document.addEventListener("DOMContentLoaded",ensureUI);
 setTimeout(ensureUI,500);setTimeout(ensureUI,1500);setTimeout(ensureUI,3500);
-setInterval(ensureUI,800);
+setInterval(SS21IDLE.siCambio(ensureUI),800);
 })();
 </script>
 
@@ -21528,7 +21556,7 @@ console.log("[v714] width fix definitivo");
 </script>
 
 <script>
-(function(){if(window.__v715)return;window.__v715=true;
+(function(){if(true)return;/* SS21NAV: v715 desactivado, lo reemplaza el router unico */window.__v715=true;
 /* v715 - Routing unificado: cuando v709/v710/v711/v712 hide() resetean panel-v708-blogs etc, mi watchdog 200ms lo re-asserta */
 var ROUTES={Noticias:"panel-v703-noticias",Blogs:"panel-v708-blogs",Podcast:"panel-v724-podcast",Articulos:"panel-v724-articulos",Articulos2:"panel-v724-articulos",Seguidos:"panel-v711-seguidos",Reclutar:"panel-v712-reclutar"};
 var ALL_SECTION_PANELS=["panel-v703-noticias","panel-v708-blogs","panel-v709-podcast","panel-v710-articulos","panel-v711-seguidos","panel-v712-reclutar","panel-v724-articulos","panel-v724-podcast"];
@@ -21675,7 +21703,7 @@ console.log("[v718] backfill 4 secciones restantes");
 </script>
 
 <script>
-(function(){if(window.__v719)return;window.__v719=true;
+(function(){if(true)return;/* SS21NAV: v719 desactivado, el router unico hace el scroll-top */window.__v719=true;
 /* v719 - fix mareo navegacion: scroll top en cualquier navegacion drawer + cleanup race conditions */
 var lastTarget=null;
 function trackNav(){
@@ -21712,7 +21740,7 @@ console.log("[v719] scroll top en navegacion drawer");
 
 <script>
 (function(){
-if(window.__v725)return;window.__v725=true;
+if(true)return;/* SS21NAV: v725 desactivado, lo reemplaza el router unico */window.__v725=true;
 // MASTER SECTION ROUTER: panel-inicio se oculta cuando CUALQUIER seccion dedicada esta visible
 var SECTION_IDS=[
   "panel-v703-noticias",
@@ -25629,7 +25657,14 @@ function reorganize(){
   if(envivoTop)envivoTop.remove();
   /* Fix v344-items empty gap */
   var v344=document.querySelector(".v344-items");
-  if(v344 && getComputedStyle(v344).flex!=="0 0 auto")v344.style.setProperty("flex","0 0 auto","important");
+  /* SS21NAV: antes forzaba flex:0 0 auto cada 700ms y por eso la lista del
+     menu no podia hacer scroll; los ultimos items quedaban fuera de la
+     pantalla. Ahora la lista crece y hace scroll dentro del drawer. */
+  if(v344){
+    v344.style.setProperty("flex","1 1 auto","important");
+    v344.style.setProperty("min-height","0","important");
+    v344.style.setProperty("overflow-y","auto","important");
+  }
   /* Rename "Estadisticas Deportes" to just "Deportes" */
   var deportesLi=Array.from(ul.querySelectorAll("li.v56-item")).filter(function(li){return /Estad[íi]sticas\s+Deportes/i.test((li.textContent||""))})[0];
   if(deportesLi){
@@ -27349,7 +27384,306 @@ setTimeout(function(){
 
 })();
 </script>
+<script>
+/* rescatado: este codigo estaba suelto DESPUES de </html>, sin etiqueta script,
+   por lo que el navegador lo descartaba y selectLLPriv quedaba undefined */
+window.selectLLPriv=function(el){document.querySelectorAll('.ll-priv-opt').forEach(function(o){o.classList.remove('ll-priv-active');o.style.border='2px solid var(--border)';o.style.background='transparent';});el.classList.add('ll-priv-active');el.style.border='2px solid var(--primary)';el.style.background='rgba(200,16,46,.06)';var inp=el.querySelector('input');if(inp)inp.checked=true;};
+</script>
+
+<script>
+/* ============================================================
+   SS21NAV - Router unico de navegacion (reemplaza v715/v719/v725)
+   Una sola autoridad decide que panel se ve. Sin setInterval,
+   sin MutationObserver, sin listas parciales por seccion.
+   ============================================================ */
+(function(){
+  if(window.SS21NAV) return;
+
+  /* El menu lateral no podia hacer scroll: con los dos grupos abiertos la
+     lista mide mas que la pantalla y los ultimos items (Datos Curiosos,
+     Mas Sobre SS 21) quedaban fuera y no se podian tocar. */
+  (function(){
+    var st = document.createElement("style");
+    st.id = "ss21nav-css";
+    st.textContent =
+      "html body .v36-side{overflow:hidden !important;}" +
+      "html body .v36-side > .v36-head,html body .v36-side > .v36-foot{flex:0 0 auto !important;}" +
+      "html body .v36-side > .v344-items,html body .v36-side > ul,html body .v36-side > nav,html body .v36-side > div:not(.v36-head):not(.v36-foot)" +
+      "{flex:1 1 auto !important;min-height:0 !important;overflow-y:auto !important;overflow-x:hidden !important;-webkit-overflow-scrolling:touch;}";
+    (document.head || document.documentElement).appendChild(st);
+  })();
+
+  /* Todos los paneles de primer nivel del sitio, en un solo lugar. */
+  var IDS = [
+    /* Inicio y deportes clasicos */
+    "panel-inicio","panel-eventos","panel-soccer","panel-nfl","panel-nba","panel-baseball",
+    "panel-hockey","panel-f1","panel-tennis","panel-nhl","panel-ufc","panel-golf","panel-rugby",
+    "panel-mlb","panel-acuaticos","panel-olympics","panel-padel","panel-volley","panel-cycling",
+    "panel-cricket","panel-athletics","panel-chess","panel-liga-local","panel-mas-deportes","panel-otros",
+    /* Secciones editoriales y de producto */
+    "panel-v703-noticias","panel-v708-blogs","panel-v709-podcast","panel-v710-articulos",
+    "panel-v711-seguidos","panel-v712-reclutar","panel-v723-centros",
+    "panel-v724-articulos","panel-v724-podcast","panel-v724-curiosos",
+    "panel-v-retos","panel-v-encuestas","panel-v-comparar","panel-v-favoritos-new",
+    "panel-v-deportes-shell","panel-v-envivo-rebuild","panel-masss21-rebuild",
+    "v326-panel-mercado","v324-panel-masss21","v87-page-masss21","v56-page-envivo",
+    "v500-shell","v700-shell"
+  ];
+
+  /* Paneles de deporte "clasico": con estos si se muestra la barra de deportes. */
+  var SPORT_PANELS = {};
+  ["panel-soccer","panel-nfl","panel-nba","panel-baseball","panel-hockey","panel-f1",
+   "panel-tennis","panel-nhl","panel-ufc","panel-golf","panel-rugby","panel-mlb",
+   "panel-acuaticos","panel-olympics","panel-padel","panel-volley","panel-cycling",
+   "panel-cricket","panel-athletics","panel-chess","panel-liga-local","panel-mas-deportes",
+   "panel-otros","panel-eventos"].forEach(function(id){ SPORT_PANELS[id]=true; });
+
+  /* Funcion que dibuja cada panel de deporte clasico. */
+  var RENDER = {
+    "panel-tennis":"renderTennis", "panel-f1":"renderF1", "panel-nba":"renderNBA",
+    "panel-ufc":"renderUFC", "panel-nfl":"renderNFL", "panel-rugby":"renderRugby",
+    "panel-golf":"renderGolf", "panel-padel":"renderPadel", "panel-acuaticos":"renderAcuaticos",
+    "panel-athletics":"renderAthletics", "panel-cycling":"renderCycling",
+    "panel-volley":"renderVolley", "panel-cricket":"renderCricket", "panel-chess":"renderChess",
+    "panel-mlb":"renderMLB", "panel-nhl":"renderNHL", "panel-olympics":"renderOlympics",
+    "panel-liga-local":"renderLigaLocal", "panel-mas-deportes":"renderMasDeportes"
+  };
+
+  var current = null;
+
+  function each(fn){
+    for(var i=0;i<IDS.length;i++){
+      var el = document.getElementById(IDS[i]);
+      if(el) fn(el, IDS[i]);
+    }
+  }
+
+  /* go(): deja visible exactamente un panel. Idempotente. */
+  function go(panelId, opts){
+    if(!panelId) return;
+    opts = opts || {};
+    var target = document.getElementById(panelId);
+    if(!target) return;
+
+    each(function(el, id){
+      if(id === panelId) return;
+      el.style.setProperty("display","none","important");
+      el.classList.remove("active");
+    });
+    target.style.setProperty("display","block","important");
+    target.style.setProperty("visibility","visible","important");
+    target.style.setProperty("opacity","1","important");
+    if(target.classList.contains("tab-panel")) target.classList.add("active");
+
+    /* Algunos paneles de deporte quedaban en blanco: switchSport solo
+       llama al render la primera vez y la bandera _init quedaba puesta
+       sin que el contenido se hubiera dibujado. Si el panel esta vacio,
+       se dibuja aqui. */
+    if(SPORT_PANELS[panelId]){
+      try{
+        var main = target.querySelector('[id$="-main"]') || target;
+        if((main.innerText || "").trim().length < 200){
+          if(main !== target) main._r = false;
+          if(panelId === "panel-baseball" && typeof window.switchBaseballLeague === "function"){
+            window.switchBaseballLeague("mlb", document.getElementById("bstab-mlb"));
+          } else if(panelId === "panel-hockey" && typeof window.switchHockeyLeague === "function"){
+            window.switchHockeyLeague("nhl", document.getElementById("hktab-nhl"));
+          } else {
+            var fn = RENDER[panelId];
+            if(fn && typeof window[fn] === "function") window[fn]();
+          }
+        }
+      }catch(_){ }
+    }
+
+    /* El sidebar de futbol solo aplica al panel de futbol. */
+    var sb = document.getElementById("sidebar");
+    if(sb) sb.style.display = (panelId === "panel-soccer") ? "" : "none";
+
+    /* panel-otros y panel-mas-deportes viven fuera de main.main. */
+    var lm = document.querySelector(".layout > main.main, .layout .main");
+    if(lm && lm.id !== panelId){
+      var fuera = (panelId === "panel-otros" || panelId === "panel-mas-deportes");
+      lm.style.display = fuera ? "none" : "";
+    }
+
+    /* La barra de deportes solo en vistas de deporte clasico. */
+    var bar = document.querySelector(".sport-nav-bar");
+    if(bar) bar.style.setProperty("display", SPORT_PANELS[panelId] ? "block" : "none", "important");
+
+    /* Cerrar el drawer si quedo abierto. */
+    var drawer = document.querySelector(".v36-side");
+    if(drawer) drawer.classList.remove("open","v36-open","v34-open");
+    var ov = document.querySelector(".v36-overlay");
+    if(ov) ov.classList.remove("open");
+
+    /* Un solo scroll-top, y solo cuando de verdad cambiamos de vista. */
+    if(current !== panelId && opts.scroll !== false){
+      try{ window.scrollTo({top:0,behavior:"instant"}); }catch(_){ window.scrollTo(0,0); }
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+    }
+    current = panelId;
+  }
+
+  window.SS21NAV = { go: go, ids: IDS, get current(){ return current; } };
+
+  /* --- Envolver las funciones de navegacion ya existentes ---------------
+     Se deja correr la funcion original (que renderiza y arma el contenido)
+     y despues el router impone la invariante "un solo panel visible".     */
+  function wrap(name, resolve){
+    var orig = window[name];
+    if(typeof orig !== "function" || orig.__ss21wrapped) return false;
+    var wrapped = function(){
+      var out;
+      try{ out = orig.apply(this, arguments); }catch(e){ }
+      try{ go(resolve.apply(null, arguments)); }catch(e){ }
+      return out;
+    };
+    wrapped.__ss21wrapped = true;
+    wrapped.__ss21orig = orig;
+    window[name] = wrapped;
+    return true;
+  }
+
+  function wrapAll(){
+    wrap("goInicio",        function(){ return "panel-inicio"; });
+    wrap("switchSport",     function(sport){ return "panel-" + sport; });
+    wrap("__goSection",     function(pid){ return pid; });
+    wrap("__showDeportes",  function(){ return "panel-v-deportes-shell"; });
+    wrap("__showComparar",  function(){ return "panel-v-comparar"; });
+    wrap("__showFavoritos", function(){ return "panel-v-favoritos-new"; });
+    wrap("__showEnvivo",    function(){ return "panel-v-envivo-rebuild"; });
+  }
+
+  /* Las capas tardias definen algunas de estas funciones despues; se
+     reintenta unas pocas veces y se deja de intentar (sin loop eterno). */
+  wrapAll();
+  var intentos = 0;
+  var iv = setInterval(function(){
+    intentos++;
+    wrapAll();
+    if(intentos >= 12) clearInterval(iv);
+  }, 250);
+
+  /* --- Red de seguridad para los items del drawer -----------------------
+     Algunos items del menu no pasan por ninguna de las funciones de
+     arriba. Se mapean aqui por etiqueta, en los idiomas del sitio.       */
+  var LABELS = [
+    ["panel-inicio",          /^(inicio|home|startseite|accueil|in[ií]zio|home page)$/i],
+    ["panel-v703-noticias",   /^(noticias|news|nachrichten|actualit[eé]s|notizie)$/i],
+    ["panel-v708-blogs",      /^(blogs?|blog)$/i],
+    ["panel-v724-podcast",    /^(podcasts?)$/i],
+    ["panel-v724-articulos",  /^(art[ií]culos|articles|artikel|articoli)$/i],
+    ["panel-v711-seguidos",   /^(seguidos|following|gefolgt|suivis|seguiti)$/i],
+    ["panel-v712-reclutar",   /^(reclutar|recruit|rekrutieren|recruter|reclutare)$/i],
+    ["panel-v723-centros",    /^(centros|centros deportivos|sports centers|sportzentren|centres sportifs|centri sportivi)$/i],
+    ["panel-v724-curiosos",   /^(datos curiosos|fun facts|kuriose daten|anecdotes|curiosit[aà])$/i],
+    ["panel-masss21-rebuild", /^(m[aá]s sobre ss ?21|about ss ?21|[uü]ber ss ?21)$/i],
+    ["v326-panel-mercado",    /^(mercado|market|markt|march[eé]|mercato)$/i],
+    ["panel-v-favoritos-new", /^(favoritos|favorites|favoriten|favoris|preferiti)$/i],
+    ["panel-v-comparar",      /^(comparar|compare|vergleichen|comparer|confronta|vergleich)$/i],
+    ["panel-v-deportes-shell",/^(profesionales|profis|professionnels|professionisti|professionals)$/i],
+    ["panel-v-envivo-rebuild",/^(en vivo|live|direct|dal vivo)$/i]
+  ];
+
+  function labelOf(el){
+    /* Se queda solo con letras, numeros y espacios: asi da igual el emoji,
+       la flecha del submenu o cualquier otro simbolo de la etiqueta. */
+    var t = el.textContent || "";
+    try{ t = t.replace(/[^\p{L}\p{N} ]+/gu, " "); }
+    catch(_){ t = t.replace(/[^A-Za-z0-9\u00C0-\u024F ]+/g, " "); }
+    return t.replace(/\s+/g, " ").trim();
+  }
+
+  /* Se escucha pointerdown y no click: varias capas viejas llaman
+     stopImmediatePropagation() sobre el click y el evento nunca llegaba
+     hasta aca. pointerdown ocurre antes y nadie lo corta. */
+  window.addEventListener("pointerdown", function(e){
+    if(!e.target || !e.target.closest) return;
+    var item = e.target.closest(
+      ".v36-side li, .v36-side button, [data-v56-key], .v56-item, .v56-sub-item, .drawer-menu li"
+    );
+    if(!item) return;
+
+    /* Los items que solo despliegan un submenu (llevan flecha o tienen una
+       lista hija) no navegan: si se tratan como navegacion el drawer se
+       cierra y el submenu nunca se alcanza a abrir. */
+    if(item.querySelector && item.querySelector(".v56-caret")) return;
+    var sig = item.nextElementSibling;
+    if(sig && sig.classList && sig.classList.contains("v56-sub-list")) return;
+
+    var txt = labelOf(item);
+    if(!txt || txt.length > 30) return;
+    for(var i=0;i<LABELS.length;i++){
+      if(LABELS[i][1].test(txt)){
+        /* No se corta el evento: las capas viejas siguen construyendo el
+           contenido. Solo se impone la visibilidad al final del turno. */
+        var pid = LABELS[i][0];
+        /* Se aplica despues del click para que las capas viejas
+           alcancen a construir el contenido de la seccion. */
+        setTimeout(function(){ go(pid); }, 60);
+        setTimeout(function(){ go(pid, {scroll:false}); }, 320);
+        setTimeout(function(){ go(pid, {scroll:false}); }, 800);
+        return;
+      }
+    }
+  }, true);
+
+  /* Boton "Empezar a explorar" de la portada: una capa vieja se quedaba con
+     el click y el boton no hacia nada. Igual que el menu, se escucha
+     pointerdown y se abre la seccion de Deportes (Profesionales). */
+  var EXPLORAR = /^(empezar a explorar|explorar deportes|start exploring|explore sports|erkunden starten|sport erkunden|commencer [aà] explorer|explorer les sports|inizia a esplorare|esplora gli sport|come[cç]ar a explorar|explorar esportes)$/i;
+  function abrirDeportes(scroll){
+    if(typeof window.__showDeportes === "function"){ try{ window.__showDeportes(); }catch(_){ } }
+    go("panel-v-deportes-shell", scroll === false ? {scroll:false} : {});
+  }
+  window.addEventListener("pointerdown", function(e){
+    if(!e.target || !e.target.closest) return;
+    var btn = e.target.closest("button, a");
+    if(!btn || btn.closest(".v36-side")) return;
+    if(!EXPLORAR.test(labelOf(btn))) return;
+    setTimeout(function(){ abrirDeportes(); }, 60);
+    setTimeout(function(){ abrirDeportes(false); }, 400);
+  }, true);
+
+  /* El overlay del drawer se quedaba abierto (position:fixed, inset:0) y
+     bloqueaba los clicks de toda la pagina. Si el drawer esta cerrado el
+     overlay tambien tiene que estarlo. */
+  function sanearOverlay(){
+    var d = document.querySelector(".v36-side");
+    var o = document.querySelector(".v36-overlay");
+    if(d && o && !d.classList.contains("open")) o.classList.remove("open");
+  }
+  window.addEventListener("click", function(){
+    /* El drawer se cierra despues del click, asi que se revisa un momento
+       mas tarde y no en el mismo turno. */
+    setTimeout(sanearOverlay, 350);
+    setTimeout(sanearOverlay, 900);
+  }, true);
+
+  /* Estado inicial coherente: una sola vista al cargar. */
+  function inicial(){
+    var h = (location.hash || "").replace(/^#/, "").toLowerCase();
+    var porHash = {
+      inicio:"panel-inicio", deportes:"panel-v-deportes-shell",
+      profesionales:"panel-v-deportes-shell", envivo:"panel-v-envivo-rebuild",
+      noticias:"panel-v703-noticias", blogs:"panel-v708-blogs",
+      podcast:"panel-v724-podcast", articulos:"panel-v724-articulos",
+      seguidos:"panel-v711-seguidos", reclutar:"panel-v712-reclutar",
+      centros:"panel-v723-centros", curiosos:"panel-v724-curiosos",
+      datos:"panel-v724-curiosos", mercado:"v326-panel-mercado",
+      masss21:"panel-masss21-rebuild", favoritos:"panel-v-favoritos-new",
+      comparar:"panel-v-comparar"
+    };
+    go(porHash[h] || "panel-inicio", {scroll:false});
+  }
+  if(document.readyState === "loading"){
+    document.addEventListener("DOMContentLoaded", function(){ setTimeout(inicial, 600); });
+  } else {
+    setTimeout(inicial, 600);
+  }
+})();
+</script>
 </body>
 </html>
-
-window.selectLLPriv=function(el){document.querySelectorAll('.ll-priv-opt').forEach(function(o){o.classList.remove('ll-priv-active');o.style.border='2px solid var(--border)';o.style.background='transparent';});el.classList.add('ll-priv-active');el.style.border='2px solid var(--primary)';el.style.background='rgba(200,16,46,.06)';var inp=el.querySelector('input');if(inp)inp.checked=true;};
