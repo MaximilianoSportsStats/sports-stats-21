@@ -18585,7 +18585,7 @@ html body.v326-mercado #v324-panel-masss21{display:none !important;}
 #v324-panel-masss21 .v330-faq summary{padding:16px 20px;font-weight:600;color:#1a1a1a;cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;font-size:15px;}
 #v324-panel-masss21 .v330-faq summary::-webkit-details-marker{display:none;}
 #v324-panel-masss21 .v330-faq summary::after{content:"+";color:#c0392b;font-size:22px;font-weight:300;}
-#v324-panel-masss21 .v330-faq details[open] summary::after{content:"\u2212";}
+#v324-panel-masss21 .v330-faq details[open] summary::after{content:"\2212";}
 #v324-panel-masss21 .v330-faq .v330-answer{padding:0 20px 18px;font-size:14px;line-height:1.6;color:#555;}
 #v324-panel-masss21 .v330-roadmap{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-top:24px;}
 #v324-panel-masss21 .v330-quarter{background:#fff;border:1px solid #e5e7eb;border-top:4px solid #c0392b;border-radius:10px;padding:20px;}
@@ -18948,7 +18948,7 @@ html body.v317-show-tennis #panel-tennis{display:flex !important;gap:0 !importan
 .v335-tenis-sidebar .v335-sub{display:none;padding-left:8px;}
 .v335-tenis-sidebar .v335-collapse.v335-open + .v335-sub{display:block;}
 .v335-tenis-sidebar .v335-collapse::after{content:"\25BE";margin-left:auto;font-size:10px;}
-.v335-tenis-sidebar .v335-collapse.v335-open::after{content:"\u25B4";}
+.v335-tenis-sidebar .v335-collapse.v335-open::after{content:"\25B4";}
 </style>
 <script>
 (function(){if(window.__v335)return;window.__v335=true;
@@ -19085,7 +19085,7 @@ html body.v317-show-soccer .v338-soccer-sb{display:block !important;}
 .v338-soccer-sb .v338-section{font-weight:700;color:#1a1a1a;margin-top:14px;font-size:11px;text-transform:uppercase;letter-spacing:.5px;cursor:default;padding:4px 10px;}
 .v338-soccer-sb .v338-section:hover{background:transparent;}
 .v338-soccer-sb .v338-collapse::after{content:"\25BE";float:right;font-size:10px;}
-.v338-soccer-sb .v338-collapse.v338-open::after{content:"\u25B4";}
+.v338-soccer-sb .v338-collapse.v338-open::after{content:"\25B4";}
 .v338-soccer-sb .v338-sub{display:none;padding-left:8px;}
 .v338-soccer-sb .v338-collapse.v338-open + .v338-sub{display:block;}
 .v338-slides{flex:1;padding:32px;}
@@ -27763,11 +27763,64 @@ window.selectLLPriv=function(el){document.querySelectorAll('.ll-priv-opt').forEa
   html body [id^="panel-"] > aside,html body .v338-soccer-sb,html body .v336-sb{width:100% !important;height:auto !important;position:static !important;border-right:0 !important;border-bottom:1px solid #e5e7eb !important;}
   /* Las listas laterales largas no empujan el contenido: alto limitado con scroll propio. */
   html body .layout > .sidebar,html body .v338-soccer-sb,html body .v336-sb{max-height:42vh !important;overflow-y:auto !important;-webkit-overflow-scrolling:touch;}
+  /* El sidebar de futbol era sticky: en celular se quedaba pegado arriba y
+     tapaba el contenido al hacer scroll. */
+  html body .layout > .sidebar{position:relative !important;top:auto !important;}
 
   /* Encabezado de liga (NBA, NFL, ...): los botones Favoritos/Seguir iban en
      position:absolute en la esquina y se montaban sobre el titulo. */
   html body .league-header{flex-wrap:wrap !important;}
   html body .league-header .v82-box{position:static !important;width:100% !important;order:10 !important;margin-top:12px !important;flex-wrap:wrap !important;gap:8px !important;justify-content:flex-start !important;}
+
+  /* Portada - 8 tarjetas (Estadisticas, Sigue en vivo, Recluta...): en vez de
+     4 columnas de 84px, una fila que se desliza con el dedo, una tarjeta a la
+     vez y la siguiente asomandose. */
+  html body .inicio-panels{display:flex !important;grid-template-columns:none !important;overflow-x:auto !important;overflow-y:hidden !important;scroll-snap-type:x mandatory !important;gap:12px !important;padding:4px 16px 14px !important;margin-left:0 !important;margin-right:0 !important;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+  html body .inicio-panels::-webkit-scrollbar{display:none;}
+  html body .inicio-panels > .inicio-panel{flex:0 0 82% !important;width:82% !important;max-width:82% !important;min-width:0 !important;scroll-snap-align:center !important;height:auto !important;}
+  html body .inicio-panels > .inicio-panel h3{font-size:17px !important;line-height:1.25 !important;}
+  html body .inicio-panels > .inicio-panel p{font-size:14px !important;line-height:1.5 !important;}
+
+  /* Noticias / Mercado / Blogs: la nota grande quedaba de 56px. Ahora la nota
+     principal a todo el ancho y las demas debajo. */
+  html body .v100-news-grid{grid-template-columns:1fr !important;height:auto !important;gap:12px !important;}
+  html body .v100-news-grid > .v100-news-big{width:100% !important;min-height:220px !important;height:auto !important;}
+  html body .v100-news-grid > .v100-news-mini-col{width:100% !important;min-width:0 !important;height:auto !important;}
+  /* :is(#...) sube la especificidad al nivel de id: hay reglas viejas con
+     #v100-noticias / #v164-mercado-wrap que si no pisan estas. */
+  html body :is(#v100-noticias,#v164-mercado,#v164-mercado-wrap,#v100-blogs,.v100-news-sec) .v100-news-grid > .v100-news-mini-col{height:auto !important;max-height:none !important;gap:10px !important;}
+  html body :is(#v100-noticias,#v164-mercado,#v164-mercado-wrap,#v100-blogs,.v100-news-sec) .v100-news-grid .v100-news-mini{width:100% !important;min-width:0 !important;flex:0 0 auto !important;height:auto !important;max-height:none !important;min-height:104px !important;}
+
+  /* Bloques de dos columnas con texto largo (Natacion, Ciclismo, Olimpicos...)
+     quedaban en columnas de ~150px: en celular van una debajo de la otra. */
+  html body .g2{grid-template-columns:1fr !important;}
+  html body [id^="panel-"] [style*="grid-template-columns:1fr 1fr"],html body [id^="panel-"] [style*="grid-template-columns: 1fr 1fr"]{grid-template-columns:1fr !important;}
+
+  /* Tablas mas anchas que la pantalla (medallero, rankings, ajedrez): en vez
+     de cortarse, se deslizan hacia el costado con el dedo. */
+  html body [id^="panel-"] :has(> table){overflow-x:auto !important;max-width:100% !important;min-width:0 !important;-webkit-overflow-scrolling:touch;}
+
+  /* Barra de deportes: era sticky con top fijo para una barra superior de una
+     fila; con dos filas quedaba medio tapada, y entre ambas ocupaban ~240px
+     fijos. En celular se queda arriba de la pagina sin seguir el scroll. */
+  html body .sport-nav-bar{position:relative !important;top:auto !important;}
+
+  /* Barra de seguidores (seguidores + Favoritos + Seguir): en una sola fila
+     no cabia y el boton Seguir quedaba cortado. Ahora baja a otra linea. */
+  html body .v17-followers-bar{flex-wrap:wrap !important;row-gap:10px !important;column-gap:10px !important;max-width:100% !important;min-width:0 !important;}
+  html body div:has(> div > .v17-followers-bar){flex-wrap:wrap !important;}
+  html body div:has(> .v17-followers-bar){min-width:0 !important;flex:1 1 100% !important;max-width:100% !important;}
+
+  /* Futbol: las 4 cifras (Reglas, Seguidores, Federaciones...) en 2x2. */
+  html body .v338-stats{grid-template-columns:repeat(2,minmax(0,1fr)) !important;}
+
+  /* Calendario de Retos/Encuestas: 7 columnas no caben con el texto de cada
+     reto; se mantiene legible y se desliza hacia el costado. */
+  html body .v-cal-wrap{overflow-x:auto !important;-webkit-overflow-scrolling:touch;}
+  html body .v-cal-grid{min-width:640px !important;grid-template-columns:repeat(7,minmax(0,1fr)) !important;}
+
+  /* Encuesta: el contador de votos (absolute) se montaba sobre la pregunta. */
+  html body .v-rebuild-enc .v-rb-votes{position:static !important;display:inline-block !important;margin-left:6px !important;}
 }
 </style>
 </body>
