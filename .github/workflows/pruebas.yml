@@ -1,0 +1,38 @@
+name: Pruebas del sitio
+
+# Cada vez que se suben cambios, se abre el sitio en un navegador real
+# (escritorio y celular) y se revisa que la navegacion y el diseno sigan bien.
+# Si algo se rompe, el commit aparece con una X roja en GitHub.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  pruebas:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Instalar Playwright
+        run: |
+          pip install playwright
+          python -m playwright install --with-deps chromium
+
+      - name: Servir el sitio
+        run: |
+          python -m http.server 8765 >/tmp/server.log 2>&1 &
+          sleep 2
+
+      - name: Correr el chequeo
+        run: python tests/check_site.py
