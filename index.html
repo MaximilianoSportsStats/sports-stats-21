@@ -19027,7 +19027,10 @@ function setup(){
   });
   /* Asegurar panel-X flex cuando se muestra */
   var style=document.createElement("style");
-  style.textContent='html body[class*="v317-show-"] [id^="panel-"]:not(#panel-inicio){display:flex !important;gap:0 !important;align-items:flex-start;}';
+  /* SS21NAV: antes este selector aplicaba a TODOS los panel-* (incluido el
+     overlay panel-v-match-detail, que tapaba la pagina). Ahora solo al panel
+     del deporte activo. */
+  style.textContent=["soccer","tennis","f1","nba","ufc","baseball","hockey","nfl","rugby","golf","padel","acuaticos","otros","athletics","cycling","volley","cricket","eventos"].map(function(k){return 'html body.v317-show-'+k+' #panel-'+k;}).join(',')+'{display:flex !important;gap:0 !important;align-items:flex-start;}';
   document.head.appendChild(style);
 }
 if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",setup);}else{setup();}
@@ -27475,6 +27478,30 @@ window.selectLLPriv=function(el){document.querySelectorAll('.ll-priv-opt').forEa
     target.style.setProperty("opacity","1","important");
     if(target.classList.contains("tab-panel")) target.classList.add("active");
 
+    /* Las capas v62/v63 deciden la barra de deportes segun la clase
+       v32-view-* del body y la reimponen con un MutationObserver. Si no se
+       les avisa, devuelven todo a "inicio" y la barra desaparece. */
+    var vista = SPORT_PANELS[panelId] ? "deportes" : (panelId === "panel-inicio" ? "inicio" : null);
+    if(vista){
+      window.__v63view = vista;
+      window.__v63page = null;
+      var bcl = document.body.classList;
+      Array.prototype.slice.call(bcl).forEach(function(c){
+        if(c.indexOf("v32-view-") === 0 && c !== "v32-view-" + vista) bcl.remove(c);
+      });
+      bcl.add("v32-view-" + vista);
+    }
+    document.body.classList.add("v304-clicked");
+
+    /* v317/v318 muestran el sidebar de cada deporte (ligas de futbol, etc.)
+       segun la clase v317-show-{deporte}, que antes solo se ponia con un
+       click real en la barra. El router la mantiene al dia siempre. */
+    var dep = panelId.replace(/^panel-/, "");
+    Array.prototype.slice.call(document.body.classList).forEach(function(c){
+      if(c.indexOf("v317-show-") === 0 && c !== "v317-show-" + dep) document.body.classList.remove(c);
+    });
+    if(SPORT_PANELS[panelId]) document.body.classList.add("v317-show-" + dep);
+
     /* Algunos paneles de deporte quedaban en blanco: switchSport solo
        llama al render la primera vez y la bandera _init quedaba puesta
        sin que el contenido se hubiera dibujado. Si el panel esta vacio,
@@ -27546,11 +27573,33 @@ window.selectLLPriv=function(el){document.querySelectorAll('.ll-priv-opt').forEa
     return true;
   }
 
+  /* Abre un deporte clasico como si se hubiera tocado su boton en la barra. */
+  function abrirDeporte(k){
+    var btns = document.querySelectorAll(".sport-btn"), btn = null;
+    for(var i=0;i<btns.length;i++){
+      if((btns[i].getAttribute("onclick")||"").indexOf("'"+k+"'") >= 0){ btn = btns[i]; break; }
+    }
+    if(typeof window.switchSport === "function"){
+      try{ window.switchSport(k, btn); }catch(_){ }
+    }
+    go("panel-" + k);
+  }
+  window.SS21abrirDeporte = abrirDeporte;
+
   function wrapAll(){
     wrap("goInicio",        function(){ return "panel-inicio"; });
     wrap("switchSport",     function(sport){ return "panel-" + sport; });
     wrap("__goSection",     function(pid){ return pid; });
-    wrap("__showDeportes",  function(){ return "panel-v-deportes-shell"; });
+    /* La seccion "Deportes" nueva (panel-v-deportes-shell) era un prototipo
+       con datos de futbol escritos a mano para todos los deportes. El
+       contenido real vive en los paneles clasicos (panel-soccer, panel-tennis,
+       ...), asi que "Deportes" abre esos, empezando por Futbol. */
+    if(!window.__showDeportes || !window.__showDeportes.__ss21deportes){
+      var nuevo = function(){ abrirDeporte("soccer"); };
+      nuevo.__ss21deportes = true;
+      nuevo.__ss21wrapped = true;
+      window.__showDeportes = nuevo;
+    }
     wrap("__showComparar",  function(){ return "panel-v-comparar"; });
     wrap("__showFavoritos", function(){ return "panel-v-favoritos-new"; });
     wrap("__showEnvivo",    function(){ return "panel-v-envivo-rebuild"; });
@@ -27583,7 +27632,7 @@ window.selectLLPriv=function(el){document.querySelectorAll('.ll-priv-opt').forEa
     ["v326-panel-mercado",    /^(mercado|market|markt|march[eé]|mercato)$/i],
     ["panel-v-favoritos-new", /^(favoritos|favorites|favoriten|favoris|preferiti)$/i],
     ["panel-v-comparar",      /^(comparar|compare|vergleichen|comparer|confronta|vergleich)$/i],
-    ["panel-v-deportes-shell",/^(profesionales|profis|professionnels|professionisti|professionals)$/i],
+    ["panel-soccer",          /^(profesionales|profis|professionnels|professionisti|professionals)$/i],
     ["panel-v-envivo-rebuild",/^(en vivo|live|direct|dal vivo)$/i]
   ];
 
@@ -27635,8 +27684,8 @@ window.selectLLPriv=function(el){document.querySelectorAll('.ll-priv-opt').forEa
      pointerdown y se abre la seccion de Deportes (Profesionales). */
   var EXPLORAR = /^(empezar a explorar|explorar deportes|start exploring|explore sports|erkunden starten|sport erkunden|commencer [aà] explorer|explorer les sports|inizia a esplorare|esplora gli sport|come[cç]ar a explorar|explorar esportes)$/i;
   function abrirDeportes(scroll){
-    if(typeof window.__showDeportes === "function"){ try{ window.__showDeportes(); }catch(_){ } }
-    go("panel-v-deportes-shell", scroll === false ? {scroll:false} : {});
+    if(scroll === false){ go("panel-soccer", {scroll:false}); return; }
+    abrirDeporte("soccer");
   }
   window.addEventListener("pointerdown", function(e){
     if(!e.target || !e.target.closest) return;
@@ -27666,8 +27715,8 @@ window.selectLLPriv=function(el){document.querySelectorAll('.ll-priv-opt').forEa
   function inicial(){
     var h = (location.hash || "").replace(/^#/, "").toLowerCase();
     var porHash = {
-      inicio:"panel-inicio", deportes:"panel-v-deportes-shell",
-      profesionales:"panel-v-deportes-shell", envivo:"panel-v-envivo-rebuild",
+      inicio:"panel-inicio", deportes:"panel-soccer",
+      profesionales:"panel-soccer", envivo:"panel-v-envivo-rebuild",
       noticias:"panel-v703-noticias", blogs:"panel-v708-blogs",
       podcast:"panel-v724-podcast", articulos:"panel-v724-articulos",
       seguidos:"panel-v711-seguidos", reclutar:"panel-v712-reclutar",
@@ -27676,7 +27725,9 @@ window.selectLLPriv=function(el){document.querySelectorAll('.ll-priv-opt').forEa
       masss21:"panel-masss21-rebuild", favoritos:"panel-v-favoritos-new",
       comparar:"panel-v-comparar"
     };
-    go(porHash[h] || "panel-inicio", {scroll:false});
+    var destino = porHash[h] || "panel-inicio";
+    if(destino === "panel-soccer"){ abrirDeporte("soccer"); return; }
+    go(destino, {scroll:false});
   }
   if(document.readyState === "loading"){
     document.addEventListener("DOMContentLoaded", function(){ setTimeout(inicial, 600); });
