@@ -127,7 +127,7 @@ def revisar_navegacion(browser, movil):
             continue
         btn[0].scroll_into_view_if_needed()
         tocar(pg, btn[0], movil)
-        pg.wait_for_timeout(1300)
+        pg.wait_for_timeout(1800)
         vis = pg.evaluate(JS_PANELES_VISIBLES)
         if len(vis) != 1:
             malos.append(f"{k}: se ven {vis}")
@@ -143,6 +143,19 @@ def revisar_navegacion(browser, movil):
         limite = 1000 if movil else 700
         if arriba > limite:
             malos.append(f"{k}: el contenido empieza muy abajo (y={arriba}px)")
+        # Estructura estandar: lista con M/F y la misma fila de 8 pestanas
+        est = pg.evaluate(f"""() => {{ const P = document.getElementById('{vis[0]}');
+          const lista = P.id === 'panel-soccer' ? document.querySelector('#sidebar .sgt-btn') : P.querySelector(':scope > aside.ss21-std .ss21-mf');
+          const r = P.id === 'panel-soccer' ? document.getElementById('football-main') : P;
+          const fila = r && r.querySelector('.ss21-tabs');
+          return {{ mf: !!lista, tabs: fila ? [...fila.querySelectorAll('.ss21-tab[data-std]')].map(t => t.getAttribute('data-std')).join(',') : '' }} }}""")
+        indice = k in ("otros", "eventos")   # indices de varios deportes, no un deporte
+        if indice:
+            pass
+        elif not est["mf"]:
+            malos.append(f"{k}: la lista lateral no tiene M/F")
+        if not indice and est["tabs"] != "resumen,calendario,posiciones,estadisticas,equipos,campeones,leyendas,noticias":
+            malos.append(f"{k}: fila de pestanas distinta a la estandar ({est['tabs'] or 'no hay'})")
         if movil:
             ancho = pg.evaluate("document.documentElement.scrollWidth")
             if ancho > 392:

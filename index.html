@@ -27537,6 +27537,7 @@ window.selectLLPriv=function(el){document.querySelectorAll('.ll-priv-opt').forEa
   function distribuir(target, panelId){
     if(SPORT_PANELS[panelId] && window.SS21std){ try{ window.SS21std.preparar(target); }catch(_){ } }
     if(SPORT_PANELS[panelId] && window.SS21sidebar){ try{ window.SS21sidebar.marcar(target); }catch(_){ } }
+    if(SPORT_PANELS[panelId] && window.SS21tabs){ try{ window.SS21tabs.programar(target); }catch(_){ } }
     var conLista = SPORT_PANELS[panelId] && target.querySelector(":scope > aside:not([style*='display: none'])");
     target.style.setProperty("display", conLista ? "grid" : "block", "important");
     if(conLista) target.setAttribute("data-ss21-lista", ""); else target.removeAttribute("data-ss21-lista");
@@ -28174,7 +28175,10 @@ window.selectLLPriv=function(el){document.querySelectorAll('.ll-priv-opt').forEa
    contenido para que todas las listas empiecen a la misma altura */
 @media (min-width:761px){ .layout > aside#sidebar{margin-top:24px !important;} }
 aside.ss21-std{background:#fff !important;padding:16px 10px !important;margin:0 !important;border-right:1px solid #e2e8f0 !important;font-family:inherit;}
-aside.ss21-std .ss21-std-label{font-size:9.92px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:1.2px;padding:8.8px 8px;margin:0 0 6.4px;border-bottom:1px solid #e2e8f0;}
+aside.ss21-std .ss21-std-label{font-size:9.92px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:1.2px;padding:8.8px 8px;margin:0 0 6.4px;border-bottom:1px solid #e2e8f0;display:flex;align-items:center;justify-content:space-between;gap:6px;}
+aside.ss21-std .ss21-mf{display:inline-flex;background:#f1f5f9;border:1px solid #e2e8f0;border-radius:999px;padding:2px;gap:2px;flex:0 0 auto;}
+aside.ss21-std .ss21-mf button{border:0;background:transparent;color:#94a3b8;font-size:10.5px;font-weight:800;padding:2px 10px;border-radius:999px;cursor:pointer;font-family:inherit;line-height:1.5;}
+aside.ss21-std .ss21-mf button.on{background:#c8102e;color:#fff;}
 aside.ss21-std .ss21-std-h{font-size:11.2px;font-weight:800;color:#94a3b8;text-transform:uppercase;letter-spacing:.9px;padding:7.2px 12px;margin:8px 0 2.4px;border-radius:6px;display:flex;align-items:center;gap:6px;cursor:pointer;user-select:none;}
 aside.ss21-std .ss21-std-h:hover{color:#64748b;}
 aside.ss21-std .ss21-std-h .caret{margin-left:auto;font-size:10.4px;transform:rotate(-90deg);transition:transform .15s;}
@@ -28217,19 +28221,19 @@ aside.ss21-std .ss21-std-i.pronto::after{content:"Pronto";margin-left:auto;font-
       c:[L("\u{1F451} Grand Slams","grand slams"),L("⭐ Masters 1000","masters 1000"),L("\u{1F3AF} ATP 500","atp 500"),L("\u{1F3BE} ATP 250","atp 250"),L("\u{1F3C6} Copa Davis","copa davis"),L("\u{1F94E} Challenger","challenger")],
       t:[L("\u{1F4C5} Calendario","calendario"),L("\u{1F4C8} Ranking ATP","ranking atp"),L("\u{1F4C8} Ranking WTA","ranking wta"),L("\u{1F451} Leyendas","leyendas")]},
     "panel-f1":       {n:"Automovilismo", art:"el", e:"\u{1F3CE}️",
-      c:[L("\u{1F3CE}️ Fórmula 1","f1"),L("\u{1F3C1} Fórmula 2","f2"),L("\u{1F3C1} Fórmula 3","f3"),L("⚡ Fórmula E","formula e"),L("\u{1F3C6} Resistencia (WEC)","wec"),L("\u{1F3CD}️ MotoGP","motogp"),L("\u{1F3CD}️ Superbike","superbike"),L("\u{1F697} NASCAR","nascar"),L("\u{1F699} Rally / WRC","rally"),L("\u{1F3C1} IndyCar","indycar")],
+      c:[L("\u{1F3CE}️ Fórmula 1","f1"),L("\u{1F3C1} Fórmula 2","f2"),L("\u{1F3C1} Fórmula 3","f3"),L("\u{1F3C1} Fórmula 4","f4"),L("⚡ Fórmula E","formula e"),L("\u{1F3C6} Resistencia (WEC)","wec"),L("\u{1F3CD}️ MotoGP","motogp"),L("\u{1F3CD}️ Superbike","superbike"),L("\u{1F697} NASCAR","nascar"),L("\u{1F699} Rally / WRC","rally"),L("\u{1F3C1} IndyCar","indycar")],
       t:[L("\u{1F4C5} Calendario","calendario"),L("\u{1F4CA} Clasificación","standings"),L("\u{1F451} Leyendas","leyendas")]},
     "panel-nba":      {n:"Basketball", art:"el", e:"\u{1F3C0}",
       c:[L("\u{1F3C0} NBA","nba"),L("\u{1F3C0} WNBA","wnba"),L("\u{1F539} G League","g league"),L("\u{1F393} NCAA","ncaa"),L("\u{1F30D} Internacional","internacional")],
       t:[L("\u{1F5D3}️ Temporada","temporada"),L("\u{1F4CA} Posiciones","standings"),L("\u{1F3C6} Playoffs","playoffs"),L("\u{1F393} Draft","draft"),L("\u{1F4C8} Estadísticas","estadisticas"),L("\u{1F451} Leyendas","leyendas")]},
     "panel-ufc":      {n:"Deportes de Combate", art:"los", e:"\u{1F94A}",
-      c:[L("\u{1F94A} UFC","ufc"),L("\u{1F94B} Boxeo","boxeo"),L("\u{1F4AA} WWE","wwe"),L("\u{1F94B} Judo","judo"),L("\u{1F9B5} Kickboxing","kickboxing"),L("\u{1F94A} MMA","mma"),L("\u{1F97E} Muay Thai","muay thai"),L("\u{1F94B} BJJ","bjj"),L("\u{1F3AD} Lucha Libre","lucha libre")],
+      c:[L("\u{1F94A} UFC","ufc"),L("\u{1F94B} Boxeo","boxeo"),L("\u{1F4AA} WWE","wwe"),L("\u{1F94B} Judo","judo"),L("\u{1F9B5} Kickboxing","kickboxing"),L("\u{1F94A} MMA","mma"),L("\u{1F97E} Muay Thai","muay thai"),L("\u{1F94B} BJJ","bjj"),L("\u{1F3AD} Lucha Libre","lucha libre"),L("\u{1F3C5} Wrestling ol\u00edmpico","wrestling")],
       t:[L("\u{1F5D3}️ Eventos","eventos"),L("\u{1F3C6} Campeones","campeones"),L("⭐ Pound for Pound","pound for pound"),L("\u{1F451} Leyendas","leyendas")]},
     "panel-baseball": {n:"Béisbol", art:"el", e:"⚾",
-      c:[L("⚾ MLB","mlb"),L("\u{1F1EF}\u{1F1F5} NPB (Japón)","npb"),L("\u{1F1F0}\u{1F1F7} KBO (Corea)","kbo"),L("\u{1F1E9}\u{1F1F4} LIDOM","lidom"),L("\u{1F1F2}\u{1F1FD} LMB","lmb"),L("\u{1F3C6} World Series","world series")],
+      c:[L("⚾ MLB","mlb"),L("\u{1F1EF}\u{1F1F5} NPB (Japón)","npb"),L("\u{1F1F0}\u{1F1F7} KBO (Corea)","kbo"),L("\u{1F1E9}\u{1F1F4} LIDOM","lidom"),L("\u{1F1F2}\u{1F1FD} LMB","lmb")],
       t:[L("\u{1F4CA} Posiciones","standings"),L("\u{1F4C8} Estadísticas","estadisticas"),L("\u{1F451} Leyendas","leyendas")]},
     "panel-hockey":   {n:"Hockey", art:"el", e:"\u{1F3D2}",
-      c:[L("\u{1F3D2} NHL","nhl"),L("\u{1F1FA}\u{1F1F8} AHL","ahl"),L("\u{1F1F7}\u{1F1FA} KHL","khl"),L("\u{1F3D1} Hockey césped","cesped"),L("\u{1F3C6} Stanley Cup","stanley cup")],
+      c:[L("\u{1F3D2} NHL","nhl"),L("\u{1F1FA}\u{1F1F8} AHL","ahl"),L("\u{1F1F7}\u{1F1FA} KHL","khl"),L("\u{1F3D1} Hockey césped","cesped")],
       t:[L("\u{1F5D3}️ Temporada","temporada"),L("\u{1F4CA} Posiciones","standings"),L("\u{1F3D2} Goleadores","anotadores"),L("\u{1F451} Leyendas","leyendas")]},
     "panel-nfl":      {n:"Fútbol Americano", art:"el", e:"\u{1F3C8}",
       c:[L("\u{1F3C8} NFL","nfl"),L("\u{1F393} NCAA","ncaa"),L("\u{1F341} CFL","cfl"),L("⚡ XFL","xfl")],
@@ -28286,19 +28290,72 @@ aside.ss21-std .ss21-std-i.pronto::after{content:"Pronto";margin-left:auto;font-
   function grupo(clave, titulo, items){
     return '<div class="ss21-std-g" data-g="' + clave + '"><div class="ss21-std-h">' + titulo + '<span class="caret">▾</span></div><div class="ss21-std-l">' + items + '</div></div>';
   }
+  /* Competiciones y temporada en version femenina (selector M/F). Si un deporte
+     no tiene lista propia, se usa la misma (competencias mixtas). */
+  var FEM = {
+    "panel-tennis":  {c:[L("\u{1F451} Grand Slams","grand slams"),L("⭐ WTA 1000","wta 1000"),L("\u{1F3AF} WTA 500","wta 500"),L("\u{1F3C6} Billie Jean King Cup","billie jean")],
+                      t:[L("\u{1F4C5} Calendario","calendario"),L("\u{1F4C8} Ranking WTA","ranking wta"),L("\u{1F451} Leyendas","leyendas")]},
+    "panel-f1":      {c:[L("\u{1F3CE}️ F1 Academy","f1 academy")], t:[L("\u{1F4C5} Calendario","calendario"),L("\u{1F451} Leyendas","leyendas")]},
+    "panel-nba":     {c:[L("\u{1F3C0} WNBA","wnba"),L("\u{1F393} NCAA femenino","ncaa femenino","ncaaw"),L("\u{1F30D} Internacional","internacional")],
+                      t:[L("\u{1F5D3}️ Temporada","temporada"),L("\u{1F4CA} Posiciones","standings"),L("\u{1F3C6} Playoffs","playoffs"),L("\u{1F4C8} Estadísticas","estadisticas"),L("\u{1F451} Leyendas","leyendas")]},
+    "panel-baseball":{c:[L("\u{1F94E} Softbol","softbol","softball")], t:[L("\u{1F451} Leyendas","leyendas")]},
+    "panel-hockey":  {c:[L("\u{1F3D2} PWHL","pwhl"),L("\u{1F3D1} Hockey césped","cesped")], t:[L("\u{1F4CA} Posiciones","standings"),L("\u{1F451} Leyendas","leyendas")]},
+    "panel-nfl":     {c:[L("\u{1F3C8} Flag football","flag")], t:[L("\u{1F451} Leyendas","leyendas")]},
+    "panel-rugby":   {c:[L("\u{1F3C6} Copa del Mundo femenina","copa del mundo femenina"),L("6️⃣ Seis Naciones femenino","seis naciones femenino"),L("\u{1F30D} WXV","wxv")],
+                      t:[L("\u{1F30D} Ranking mundial","ranking mundial"),L("\u{1F451} Leyendas","leyendas")]},
+    "panel-golf":    {c:[L("\u{1F3C6} Majors femeninos","majors femeninos"),L("⭐ LPGA","lpga"),L("\u{1F3C6} Solheim Cup","solheim")],
+                      t:[L("\u{1F4C8} Ranking mundial (Rolex)","rolex"),L("\u{1F451} Leyendas","leyendas")]},
+    "panel-cycling": {c:[L("\u{1F7E1} Tour de Francia Femmes","femmes"),L("\u{1F1EE}\u{1F1F9} Giro de Italia Women","giro women"),L("\u{1F1EA}\u{1F1F8} Vuelta femenina","vuelta femenina"),L("\u{1F30D} Mundial de ruta","mundial")],
+                      t:[L("\u{1F5D3}️ Calendario","calendario"),L("\u{1F451} Leyendas","leyendas")]},
+    "panel-cricket": {c:[L("\u{1F3C6} Copa del Mundo femenina ICC","women s world cup","copa del mundo femenina"),L("⭐ WPL","wpl")],
+                      t:[L("\u{1F5D3}️ Calendario","calendario"),L("\u{1F451} Leyendas","leyendas")]}
+  };
+  function genero(panel){
+    var a = panel && panel.querySelector(":scope > aside.ss21-std");
+    return a && a.getAttribute("data-mf") === "F" ? "F" : "M";
+  }
+  function listas(panel){
+    var cfg = D[panel.id], g = genero(panel), f = FEM[panel.id];
+    return { c: (g === "F" && f && f.c) ? f.c : cfg.c, t: (g === "F" && f && f.t) ? f.t : cfg.t };
+  }
+  function dest(lista){ return lista.map(function(it){ return '<button class="ss21-std-i" data-busca="' + it.slice(1).join("|") + '">' + it[0] + '</button>'; }).join(""); }
+  function pintarListas(panel){
+    var aside = panel.querySelector(":scope > aside.ss21-std"); if(!aside) return;
+    var l = listas(panel), g = genero(panel);
+    var gc = aside.querySelector('.ss21-std-g[data-g="c"] .ss21-std-l'), gt = aside.querySelector('.ss21-std-g[data-g="t"] .ss21-std-l');
+    if(gc) gc.innerHTML = dest(l.c);
+    if(gt) gt.innerHTML = dest(l.t);
+    var et = aside.querySelector(".ss21-std-nombre"); if(et) et.textContent = D[panel.id].n + (g === "F" ? " · Femenino" : "");
+    aside.querySelectorAll(".ss21-mf button").forEach(function(b){ b.classList.toggle("on", b.getAttribute("data-mf") === g); });
+  }
   function armar(panel){
     var cfg = D[panel.id]; if(!cfg) return;
     var aside = panel.querySelector(":scope > aside.v336-sb, :scope > aside.v335-tenis-sidebar, :scope > aside.ss21-std");
     if(!aside || aside.getAttribute("data-ss21-std") === "1") return;
     aside.setAttribute("data-ss21-std", "1");
+    aside.setAttribute("data-mf", "M");
     aside.classList.add("ss21-std");
     aside.style.removeProperty("display");
     var qeItems = QE.map(function(q){ return '<button class="ss21-std-i" data-qe="' + q[0] + '">' + q[1] + '</button>'; }).join("");
-    var dest = function(lista){ return lista.map(function(it){ return '<button class="ss21-std-i" data-busca="' + it.slice(1).join("|") + '">' + it[0] + '</button>'; }).join(""); };
-    aside.innerHTML = '<div class="ss21-std-label">' + cfg.n + '</div>'
+    aside.innerHTML = '<div class="ss21-std-label"><span class="ss21-std-nombre">' + cfg.n + '</span>'
+      + '<span class="ss21-mf"><button data-mf="M" class="on">M</button><button data-mf="F">F</button></span></div>'
       + grupo("qe", "\u{1F4D6} ¿Qué es " + cfg.art + " " + cfg.n + "?", qeItems)
-      + grupo("c", "\u{1F3C6} Competiciones", dest(cfg.c))
-      + grupo("t", "\u{1F4CA} Temporada y rankings", dest(cfg.t));
+      + grupo("c", "\u{1F3C6} Competiciones", "")
+      + grupo("t", "\u{1F4CA} Temporada y rankings", "");
+    pintarListas(panel);
+  }
+  /* Cambiar M/F: rehace las listas y abre la primera competicion con contenido */
+  function cambiarGenero(panel, g){
+    var aside = panel.querySelector(":scope > aside.ss21-std"); if(!aside) return;
+    if(aside.getAttribute("data-mf") === g) return;
+    aside.setAttribute("data-mf", g);
+    pintarListas(panel); marcar(panel);
+    var gc = aside.querySelector('.ss21-std-g[data-g="c"]'); if(gc) gc.classList.add("abierto");
+    var qeV = panel.querySelector(":scope > .ss21-qe-view");
+    if(qeV){ var act = aside.querySelector("[data-qe].activo"); abrirQe(panel, act ? act.getAttribute("data-qe") : "resumen"); return; }
+    var primero = aside.querySelector('.ss21-std-g[data-g="c"] [data-busca]:not(.pronto)');
+    if(primero) primero.click();
+    else if(window.SS21tabs) window.SS21tabs.aplicar(panel);
   }
   function marcar(panel){
     var aside = panel.querySelector(":scope > aside.ss21-std"); if(!aside) return;
@@ -28327,13 +28384,15 @@ aside.ss21-std .ss21-std-i.pronto::after{content:"Pronto";margin-left:auto;font-
       });
     }
     var barra = '<div class="ss21-qe-tabs">' + QE.map(function(q){ return '<button class="inner-tab' + (q[0] === tab ? ' active' : '') + '" data-qe="' + q[0] + '">' + q[1] + '</button>'; }).join("") + '</div>';
-    v.innerHTML = '<div class="ss21-qe-hero"><h1>' + cfg.e + ' ' + cfg.n + '</h1><div class="sub">¿Qué es ' + cfg.art + ' ' + cfg.n.toLowerCase() + '? Reglas, historia, récords y vocabulario.</div></div>'
+    v.innerHTML = '<div class="ss21-qe-hero"><h1>' + cfg.e + ' ' + cfg.n + '</h1><div class="sub">¿Qué es ' + cfg.art + ' ' + cfg.n.toLowerCase() + (genero(panel) === "F" ? ' femenino' : '') + '? Reglas, historia, récords y vocabulario.</div></div>'
       + barra
       + '<div class="ss21-qe-vacio"><div style="font-size:2rem">\u{1F4DD}</div><b>' + NOMBRE_QE[tab] + ' · ' + cfg.n + '</b>Esta sección está en preparación.<br>Aquí irá ' + ({resumen:"un resumen de qué es " + cfg.art + " " + cfg.n.toLowerCase() + ", sus cifras y dónde se juega", reglas:"una explicación simple de las reglas", historia:"una línea de tiempo con sus momentos clave", records:"los grandes récords y marcas históricas", glosario:"el vocabulario esencial"})[tab] + '.</div>';
     panel.querySelectorAll(":scope > aside.ss21-std .ss21-std-i").forEach(function(b){ b.classList.toggle("activo", b.getAttribute("data-qe") === tab); });
   }
   document.addEventListener("click", function(e){
     var t = e.target; if(!t || !t.closest) return;
+    var mf = t.closest("aside.ss21-std .ss21-mf button");
+    if(mf){ e.preventDefault(); e.stopImmediatePropagation(); cambiarGenero(mf.closest("[id^=panel-]"), mf.getAttribute("data-mf")); return; }
     var h = t.closest("aside.ss21-std .ss21-std-h");
     if(h){ e.preventDefault(); e.stopImmediatePropagation(); h.parentElement.classList.toggle("abierto"); return; }
     var qe = t.closest("[data-qe]");
@@ -28371,7 +28430,185 @@ aside.ss21-std .ss21-std-i.pronto::after{content:"Pronto";margin-left:auto;font-
   }
   function todos(){ Object.keys(D).forEach(function(id){ var p = document.getElementById(id); if(p) armar(p); }); }
   if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", function(){ setTimeout(todos, 2500); }); else setTimeout(todos, 2500);
-  window.SS21std = { preparar: preparar, cerrarQe: cerrarQe, abrirQe: abrirQe, config: D };
+  window.SS21std = { preparar: preparar, cerrarQe: cerrarQe, abrirQe: abrirQe, config: D, fem: FEM, genero: genero, norm: norm };
+})();
+</script>
+<style id="ss21-pestanas-css">
+/* SS21 PESTANAS ESTANDAR: la misma fila de secciones en todos los deportes */
+.ss21-fila-oculta{display:none !important;}
+.ss21-tabs{display:flex;flex-wrap:wrap;gap:.15rem;border-bottom:2px solid var(--border,#e5e7eb);margin:0 0 1rem;align-items:flex-end;}
+.ss21-tab{background:none;border:0;border-bottom:3px solid transparent;margin-bottom:-2px;padding:.62rem .85rem;font-weight:600;color:#64748b;cursor:pointer;font-size:.87rem;font-family:inherit;white-space:nowrap;}
+.ss21-tab:hover{color:#c8102e;}
+.ss21-tab.active{color:#c8102e;border-bottom-color:#c8102e;}
+.ss21-tab.pronto{opacity:.42;cursor:default;}
+.ss21-tab.pronto:hover{color:#64748b;}
+.ss21-tab.pronto::after{content:" \00B7 Pronto";font-size:.68rem;font-weight:700;}
+.ss21-tab-sep{align-self:center;width:1px;height:1.4rem;background:#e2e8f0;margin:0 .35rem;}
+.ss21-tab.extra{color:#94a3b8;}
+@media (max-width:760px){
+  .ss21-tabs{flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+  .ss21-tabs::-webkit-scrollbar{display:none;}
+}
+</style>
+<script id="ss21-pestanas">
+/* SS21 PESTANAS ESTANDAR.
+   Cada deporte tenia su propia fila de pestanas, mezclando competiciones (NBA,
+   G League, WNBA...) con secciones (Acerca, Standings, Playoffs...), con nombres
+   y orden distintos. Ahora:
+     - las competiciones se eligen desde la lista lateral (sus filas se ocultan);
+     - las secciones van en una sola fila igual para todos los deportes:
+       Resumen, Calendario y resultados, Posiciones, Estadisticas, Equipos,
+       Campeones, Leyendas, Noticias. Cada una abre la seccion real que le
+       corresponde; si el deporte no la tiene, queda "Pronto".
+     - las secciones propias de un deporte (Circuitos, Draft...) van al final. */
+(function(){
+  if(window.SS21tabs) return;
+  var STD = [
+    ["resumen",      "\u{1F4D6} Resumen",                 ["resumen","acerca","introduccion","general"]],
+    ["calendario",   "\u{1F5D3}️ Calendario y resultados", ["calendario","temporada","eventos","resultados"]],
+    ["posiciones",   "\u{1F4CA} Posiciones",              ["standings","posiciones","clasificacion","ranking","tabla","owgr"]],
+    ["estadisticas", "\u{1F4C8} Estadísticas",       ["estadisticas","anotadores","stats"]],
+    ["equipos",      "\u{1F465} Equipos",                 ["equipos","plantilla","plantillas"]],
+    ["campeones",    "\u{1F3C6} Campeones",               ["campeones","playoffs","world series","stanley cup","palmares"]],
+    ["leyendas",     "⭐ Leyendas",                   ["leyendas"]],
+    ["noticias",     "\u{1F4F0} Noticias",                ["noticias"]]
+  ];
+  function norm(t){
+    return (t||"").normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/[^\w\s\/.\-]/g," ").replace(/\s+/g," ").trim().toLowerCase();
+  }
+  function coincide(texto, termino){
+    var n = norm(texto), t = norm(termino);
+    return n === t || n.indexOf(t + " ") === 0 || n.indexOf(t) === 0 || (t.length >= 4 && n.indexOf(t) >= 0);
+  }
+  function terminosComp(panel){
+    var cfg = window.SS21std && window.SS21std.config[panel.id];
+    if(!cfg) return [];
+    var f = window.SS21std.fem[panel.id], out = [];
+    [cfg.c, f && f.c].forEach(function(l){ (l || []).forEach(function(it){ out = out.concat(it.slice(1)); }); });
+    return out;
+  }
+  function esComp(btn, comps){
+    var n = norm(btn.textContent);
+    return comps.some(function(t){ t = norm(t); return n === t || n.indexOf(t) === 0 || (t.length >= 4 && n.indexOf(t) >= 0); });
+  }
+  function raiz(panel){ return panel.id === "panel-soccer" ? document.getElementById("football-main") : panel; }
+  function filas(r){
+    var out = [];
+    r.querySelectorAll("*").forEach(function(c){
+      if(c.closest("aside") || c.closest(".ss21-qe-view") || c.closest(".ss21-qef-tabs") || c.closest(".ss21-tabs") || c.closest(".ss21-qe-tabs")) return;
+      var bs = Array.prototype.filter.call(c.children, function(k){
+        return k.tagName === "BUTTON" && (k.classList.contains("inner-tab") || k.classList.contains("acu-tab-btn")) && !k.classList.contains("cal-tab");
+      });
+      if(bs.length < 2) return;
+      /* cuenta si se ve, o si la oculte yo pero su contenedor sigue a la vista
+         (las filas de otras competiciones, con su contenedor escondido, no) */
+      var padre = c.parentElement;
+      var padreVisible = padre && (padre === r || padre.offsetParent !== null);
+      var visible = c.offsetParent !== null || (c.classList.contains("ss21-fila-oculta") && padreVisible);
+      if(visible) out.push({fila: c, botones: bs});
+    });
+    return out;
+  }
+  function aplicar(panel){
+    if(!panel) return;
+    /* solo deportes: "Otros deportes" y "Eventos globales" son indices, no llevan fila */
+    if(panel.id !== "panel-soccer" && !(window.SS21std && window.SS21std.config[panel.id])) return;
+    var r = raiz(panel); if(!r) return;
+    if(panel.querySelector(":scope > .ss21-qe-view")) return;
+    if(panel.id === "panel-soccer" && r.querySelector(".ss21-qef-tabs")) return;   /* pagina "Que es el futbol" */
+    var previa = r.querySelector(".ss21-tabs"); if(previa) previa.remove();
+    var fs = filas(r);
+    if(panel.id === "panel-soccer" && !fs.length) return;
+    var comps = terminosComp(panel);
+    var secciones = [];
+    fs.forEach(function(f){ f.botones.forEach(function(b){ if(!esComp(b, comps)) secciones.push(b); }); });
+    var g = window.SS21std && window.SS21std.genero ? window.SS21std.genero(panel) : "M";
+    var femRe = /wta|wnba|femen|women|lpga|pwhl/i;
+    var usados = [], mapa = {};
+    STD.forEach(function(st){
+      var cand = [];
+      st[2].some(function(t){
+        cand = secciones.filter(function(b){ return usados.indexOf(b) < 0 && coincide(b.textContent, t); });
+        return cand.length > 0;
+      });
+      if(cand.length > 1){
+        var pref = cand.filter(function(b){ return (g === "F") === femRe.test(b.textContent); });
+        if(pref.length) cand = pref.concat(cand.filter(function(b){ return pref.indexOf(b) < 0; }));
+      }
+      if(cand.length){ mapa[st[0]] = cand; usados = usados.concat(cand); }
+    });
+    var extras = secciones.filter(function(b){ return usados.indexOf(b) < 0; });
+    var activo = null;
+    Object.keys(mapa).forEach(function(k){ if(mapa[k].some(function(b){ return b.classList.contains("active"); })) activo = activo || k; });
+    var extraActivo = extras.filter(function(b){ return b.classList.contains("active"); })[0];
+    if(!activo && !extraActivo && !mapa.resumen) activo = "resumen";
+    var barra = document.createElement("div");
+    barra.className = "ss21-tabs";
+    STD.forEach(function(st){
+      var b = document.createElement("button");
+      b.className = "ss21-tab" + (activo === st[0] ? " active" : "");
+      b.setAttribute("data-std", st[0]);
+      b.textContent = st[1];
+      if(mapa[st[0]]) b.__orig = mapa[st[0]][0];
+      else if(!(st[0] === "resumen" && activo === "resumen")) b.classList.add("pronto");
+      barra.appendChild(b);
+    });
+    if(extras.length){
+      var sep = document.createElement("span"); sep.className = "ss21-tab-sep"; barra.appendChild(sep);
+      extras.forEach(function(o){
+        var b = document.createElement("button");
+        b.className = "ss21-tab extra" + (o === extraActivo ? " active" : "");
+        b.textContent = o.textContent.trim().replace(/\s+/g, " ");
+        b.__orig = o;
+        barra.appendChild(b);
+      });
+    }
+    /* la fila nueva va donde estaba la fila de secciones; si no habia, arriba del contenido */
+    var ancla = null;
+    fs.some(function(f){ if(f.botones.some(function(b){ return secciones.indexOf(b) >= 0; })){ ancla = f.fila; return true; } return false; });
+    if(!ancla && fs.length) ancla = fs[0].fila;
+    if(ancla) ancla.parentNode.insertBefore(barra, ancla);
+    else {
+      var primero = Array.prototype.filter.call(r.children, function(c){ return c.tagName !== "ASIDE" && !c.classList.contains("v17-followers-bar") && getComputedStyle(c).display !== "none"; })[0];
+      /* debajo del encabezado de la competicion (primer bloque del contenido) */
+      if(primero && primero.children.length >= 2) primero.insertBefore(barra, primero.children[1]);
+      else if(primero) r.insertBefore(barra, primero);
+      else r.appendChild(barra);
+    }
+    fs.forEach(function(f){ f.fila.classList.add("ss21-fila-oculta"); });
+    /* en celular la fila se desliza: se muestra la pestana activa */
+    var act = barra.querySelector(".ss21-tab.active");
+    if(act && barra.scrollWidth > barra.clientWidth) barra.scrollLeft = Math.max(0, act.offsetLeft - 16);
+  }
+  var programado = {};
+  function programar(panel){
+    if(!panel) return;
+    clearTimeout(programado[panel.id]);
+    programado[panel.id] = setTimeout(function(){ aplicar(panel); }, 90);
+    /* algunos deportes arman su contenido mas tarde: se revisa de nuevo si
+       todavia no se encontro ninguna fila de pestanas */
+    [500, 1500, 3000].forEach(function(ms){
+      setTimeout(function(){
+        var r = raiz(panel);
+        if(ms === 500 || (r && !r.querySelector(".ss21-fila-oculta"))) aplicar(panel);
+      }, ms);
+    });
+  }
+  document.addEventListener("click", function(e){
+    var t = e.target; if(!t || !t.closest) return;
+    var tab = t.closest(".ss21-tabs .ss21-tab");
+    if(tab){
+      e.preventDefault(); e.stopImmediatePropagation();
+      if(tab.classList.contains("pronto") || !tab.__orig) return;
+      var panel = tab.closest("[id^=panel-]");
+      tab.__orig.click();
+      programar(panel);
+      return;
+    }
+    var p = t.closest("[id^=panel-]") || (t.closest("#sidebar") ? document.getElementById("panel-soccer") : null);
+    if(p) programar(p);
+  }, true);
+  window.SS21tabs = { aplicar: aplicar, programar: programar, estandar: STD };
 })();
 </script>
 <style id="ss21-mobile-header">
