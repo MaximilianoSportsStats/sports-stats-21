@@ -297,6 +297,28 @@ def revisar_celular_todas_las_secciones(browser):
     pg.context.close()
 
 
+def revisar_secciones_tarde(browser):
+    """Un parche viejo (v34) apaga todos los temporizadores a los 25 s.
+    En Vivo dependia de uno y quedaba vacio; tambien se revisa que la barra
+    de deportes no aparezca en secciones que no son deportes."""
+    print("\n[escritorio] secciones despues de 25 segundos")
+    pg, _ = nueva_pagina(browser, False)
+    pg.wait_for_timeout(26500)
+    pg.goto(URL.rstrip("/") + "/#/en-vivo"); pg.wait_for_timeout(2500)
+    n = pg.evaluate("document.getElementById('v-envivo-week').children.length")
+    vis = pg.evaluate(JS_PANELES_VISIBLES)
+    if n == 0 or vis != ["panel-v-envivo-rebuild"]:
+        falla(f"En Vivo vacio o mezclado (dias={n}, visibles={vis})")
+    else:
+        ok("En Vivo se dibuja aunque hayan pasado 25 s")
+    pg.goto(URL.rstrip("/") + "/#/noticias"); pg.wait_for_timeout(2500)
+    if pg.evaluate("document.body.classList.contains('v32-view-deportes')"):
+        falla("Noticias muestra la barra de deportes")
+    else:
+        ok("las secciones que no son deportes no muestran la barra de deportes")
+    pg.context.close()
+
+
 def main():
     with sync_playwright() as p:
         kw = {"args": ["--no-sandbox"]}
@@ -306,6 +328,7 @@ def main():
         revisar_navegacion(browser, movil=False)
         revisar_menu_escritorio(browser)
         revisar_historial(browser)
+        revisar_secciones_tarde(browser)
         revisar_navegacion(browser, movil=True)
         revisar_celular_todas_las_secciones(browser)
         browser.close()

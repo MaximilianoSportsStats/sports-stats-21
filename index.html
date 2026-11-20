@@ -25542,13 +25542,16 @@ document.addEventListener("click",function(e){
 /* Panel activation - render on show */
 function ensureRendered(){
   var p=document.getElementById("panel-v-envivo-rebuild");
-  if(p&&getComputedStyle(p).display!=="none"&&!p.__vRendered){
+  var wk=document.getElementById("v-envivo-week");
+  if(p&&getComputedStyle(p).display!=="none"&&(!p.__vRendered||(wk&&!wk.children.length))){
     p.__vRendered=true;
-    renderAll();
+    try{renderAll();}catch(e){p.__vRendered=false;}
   }
 }
 setInterval(ensureRendered,600);
-setInterval(function(){var p=document.getElementById("panel-v-envivo-rebuild");if(!p)return;var h=(location.hash||"").replace(/^#/,"").toLowerCase();var isEnv=(h==="envivo"||h==="en_vivo"||h==="live");if(!isEnv){document.body.classList.remove("v-envivo-active");if(getComputedStyle(p).display!=="none")p.style.setProperty("display","none","important");return;}if(getComputedStyle(p).display==="none")document.body.classList.remove("v-envivo-active");else document.body.classList.add("v-envivo-active");},500);
+/* v34 apaga todos los setInterval a los 25 s: el router llama a esto directo */
+window.SS21envivoRender=ensureRendered;
+setInterval(function(){var p=document.getElementById("panel-v-envivo-rebuild");if(!p)return;var h=(location.hash||"").replace(/^#/,"").toLowerCase();var isEnv=(h==="envivo"||h==="en_vivo"||h==="live"||h==="/en-vivo"||(window.SS21NAV&&SS21NAV.current==="panel-v-envivo-rebuild"));if(!isEnv){document.body.classList.remove("v-envivo-active");if(getComputedStyle(p).display!=="none")p.style.setProperty("display","none","important");return;}if(getComputedStyle(p).display==="none")document.body.classList.remove("v-envivo-active");else document.body.classList.add("v-envivo-active");},500);
 setTimeout(ensureRendered,1200);
 
 /* Route #envivo/#en_vivo to this new panel */
@@ -27444,7 +27447,10 @@ window.selectLLPriv=function(el){document.querySelectorAll('.ll-priv-opt').forEa
     /* Las capas v62/v63 deciden la barra de deportes segun la clase
        v32-view-* del body y la reimponen con un MutationObserver. Si no se
        les avisa, devuelven todo a "inicio" y la barra desaparece. */
-    var vista = SPORT_PANELS[panelId] ? "deportes" : (panelId === "panel-inicio" ? "inicio" : null);
+    /* secciones que no son deportes (Noticias, Mercado, Retos...): "seccion",
+       asi las capas viejas esconden la barra de deportes (antes seguia
+       visible con el ultimo deporte marcado) */
+    var vista = SPORT_PANELS[panelId] ? "deportes" : (panelId === "panel-inicio" ? "inicio" : "seccion");
     if(vista){
       window.__v63view = vista;
       window.__v63page = null;
@@ -27538,6 +27544,10 @@ window.selectLLPriv=function(el){document.querySelectorAll('.ll-priv-opt').forEa
     if(SPORT_PANELS[panelId] && window.SS21std){ try{ window.SS21std.preparar(target); }catch(_){ } }
     if(SPORT_PANELS[panelId] && window.SS21sidebar){ try{ window.SS21sidebar.marcar(target); }catch(_){ } }
     if(SPORT_PANELS[panelId] && window.SS21tabs){ try{ window.SS21tabs.programar(target); }catch(_){ } }
+    if(panelId === "panel-v-envivo-rebuild" && window.SS21envivoRender){
+      document.body.classList.add("v-envivo-active");
+      [0, 300, 1200].forEach(function(ms){ setTimeout(function(){ try{ window.SS21envivoRender(); }catch(_){ } }, ms); });
+    } else document.body.classList.remove("v-envivo-active");
     var conLista = SPORT_PANELS[panelId] && target.querySelector(":scope > aside:not([style*='display: none'])");
     target.style.setProperty("display", conLista ? "grid" : "block", "important");
     if(conLista) target.setAttribute("data-ss21-lista", ""); else target.removeAttribute("data-ss21-lista");
@@ -28174,6 +28184,20 @@ window.selectLLPriv=function(el){document.querySelectorAll('.ll-priv-opt').forEa
 /* la lista de Futbol vive fuera del panel: se baja lo mismo que el relleno del
    contenido para que todas las listas empiecen a la misma altura */
 @media (min-width:761px){ .layout > aside#sidebar{margin-top:24px !important;} }
+/* Encabezados de color (Atletismo, Ciclismo, Voleibol, Padel, Cricket): el
+   texto heredaba el negro de la pagina y casi no se leia */
+.league-header[style*="gradient"] > div:not(.v82-box),
+.league-header[style*="gradient"] > div:not(.v82-box) *{color:#fff !important;}
+.league-header[style*="gradient"] .league-country{opacity:.9;}
+.league-header[style*="gradient"] .v82-box :not(button):not(button *){color:#fff !important;}
+/* titulo agregado a la barra de seguidores */
+.v17-followers-bar .ss21-head-tit{flex:1 1 100%;font-size:22px;font-weight:800;color:#fff;margin:0 0 10px;display:flex;align-items:center;gap:10px;letter-spacing:-.2px;}
+.v17-followers-bar .ss21-head-emoji{font-size:26px;}
+.v17-followers-bar:has(.ss21-head-tit){flex-wrap:wrap !important;}
+@media (max-width:760px){
+  /* en celular la lista va primero, despues el encabezado y el contenido */
+  [id^="panel-"][data-ss21-lista] > aside{order:-1;}
+}
 aside.ss21-std{background:#fff !important;padding:16px 10px !important;margin:0 !important;border-right:1px solid #e2e8f0 !important;font-family:inherit;}
 aside.ss21-std .ss21-std-label{font-size:9.92px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:1.2px;padding:8.8px 8px;margin:0 0 6.4px;border-bottom:1px solid #e2e8f0;display:flex;align-items:center;justify-content:space-between;gap:6px;}
 aside.ss21-std .ss21-mf{display:inline-flex;background:#f1f5f9;border:1px solid #e2e8f0;border-radius:999px;padding:2px;gap:2px;flex:0 0 auto;}
@@ -28339,7 +28363,7 @@ aside.ss21-std .ss21-std-i.pronto::after{content:"Pronto";margin-left:auto;font-
     var qeItems = QE.map(function(q){ return '<button class="ss21-std-i" data-qe="' + q[0] + '">' + q[1] + '</button>'; }).join("");
     aside.innerHTML = '<div class="ss21-std-label"><span class="ss21-std-nombre">' + cfg.n + '</span>'
       + '<span class="ss21-mf"><button data-mf="M" class="on">M</button><button data-mf="F">F</button></span></div>'
-      + grupo("qe", "\u{1F4D6} ¿Qué es " + cfg.art + " " + cfg.n + "?", qeItems)
+      + grupo("qe", "\u{1F4D6} ¿Qué " + (cfg.art === "los" ? "son" : "es") + " " + cfg.art + " " + cfg.n + "?", qeItems)
       + grupo("c", "\u{1F3C6} Competiciones", "")
       + grupo("t", "\u{1F4CA} Temporada y rankings", "");
     pintarListas(panel);
@@ -28384,7 +28408,7 @@ aside.ss21-std .ss21-std-i.pronto::after{content:"Pronto";margin-left:auto;font-
       });
     }
     var barra = '<div class="ss21-qe-tabs">' + QE.map(function(q){ return '<button class="inner-tab' + (q[0] === tab ? ' active' : '') + '" data-qe="' + q[0] + '">' + q[1] + '</button>'; }).join("") + '</div>';
-    v.innerHTML = '<div class="ss21-qe-hero"><h1>' + cfg.e + ' ' + cfg.n + '</h1><div class="sub">¿Qué es ' + cfg.art + ' ' + cfg.n.toLowerCase() + (genero(panel) === "F" ? ' femenino' : '') + '? Reglas, historia, récords y vocabulario.</div></div>'
+    v.innerHTML = '<div class="ss21-qe-hero"><h1>' + cfg.e + ' ' + cfg.n + '</h1><div class="sub">¿Qué ' + (cfg.art === "los" ? "son" : "es") + ' ' + cfg.art + ' ' + cfg.n.toLowerCase() + (genero(panel) === "F" ? ' femenino' : '') + '? Reglas, historia, récords y vocabulario.</div></div>'
       + barra
       + '<div class="ss21-qe-vacio"><div style="font-size:2rem">\u{1F4DD}</div><b>' + NOMBRE_QE[tab] + ' · ' + cfg.n + '</b>Esta sección está en preparación.<br>Aquí irá ' + ({resumen:"un resumen de qué es " + cfg.art + " " + cfg.n.toLowerCase() + ", sus cifras y dónde se juega", reglas:"una explicación simple de las reglas", historia:"una línea de tiempo con sus momentos clave", records:"los grandes récords y marcas históricas", glosario:"el vocabulario esencial"})[tab] + '.</div>';
     panel.querySelectorAll(":scope > aside.ss21-std .ss21-std-i").forEach(function(b){ b.classList.toggle("activo", b.getAttribute("data-qe") === tab); });
@@ -28424,9 +28448,23 @@ aside.ss21-std .ss21-std-i.pronto::after{content:"Pronto";margin-left:auto;font-
       Object.keys(D).forEach(function(id){ var p2 = document.getElementById(id); if(p2) cerrarQe(p2); });
     }
   }, true);
+  /* Tenis, Automovilismo y Rugby no tenian titulo: solo una barra negra con
+     los seguidores. Se le agrega el nombre del deporte para que todos los
+     deportes empiecen con su encabezado. */
+  function titulo(panel){
+    var cfg = D[panel.id];
+    var barra = panel.querySelector(":scope > .v17-followers-bar:not(.v82-hid)");
+    if(!barra || barra.querySelector(".ss21-head-tit")) return;
+    var hayCab = Array.prototype.some.call(panel.querySelectorAll(".league-header"), function(h){ return h.offsetParent !== null && !h.closest("aside"); });
+    if(hayCab) return;
+    var t = document.createElement("div");
+    t.className = "ss21-head-tit";
+    t.innerHTML = '<span class="ss21-head-emoji">' + cfg.e + '</span>' + cfg.n;
+    barra.insertBefore(t, barra.firstChild);
+  }
   function preparar(panel){
     if(!panel || !D[panel.id]) return;
-    armar(panel); marcar(panel);
+    armar(panel); marcar(panel); titulo(panel);
   }
   function todos(){ Object.keys(D).forEach(function(id){ var p = document.getElementById(id); if(p) armar(p); }); }
   if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", function(){ setTimeout(todos, 2500); }); else setTimeout(todos, 2500);
@@ -28436,13 +28474,14 @@ aside.ss21-std .ss21-std-i.pronto::after{content:"Pronto";margin-left:auto;font-
 <style id="ss21-pestanas-css">
 /* SS21 PESTANAS ESTANDAR: la misma fila de secciones en todos los deportes */
 .ss21-fila-oculta{display:none !important;}
-.ss21-tabs{display:flex;flex-wrap:wrap;gap:.15rem;border-bottom:2px solid var(--border,#e5e7eb);margin:0 0 1rem;align-items:flex-end;}
-.ss21-tab{background:none;border:0;border-bottom:3px solid transparent;margin-bottom:-2px;padding:.62rem .85rem;font-weight:600;color:#64748b;cursor:pointer;font-size:.87rem;font-family:inherit;white-space:nowrap;}
+.ss21-tabs{display:flex;flex-wrap:nowrap;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;gap:.1rem;border-bottom:2px solid var(--border,#e5e7eb);margin:0 0 1rem;align-items:flex-end;}
+.ss21-tabs::-webkit-scrollbar{display:none;}
+.ss21-tab{flex:0 0 auto;background:none;border:0;border-bottom:3px solid transparent;margin-bottom:-2px;padding:.62rem .7rem;font-weight:600;color:#64748b;cursor:pointer;font-size:.86rem;font-family:inherit;white-space:nowrap;}
 .ss21-tab:hover{color:#c8102e;}
 .ss21-tab.active{color:#c8102e;border-bottom-color:#c8102e;}
 .ss21-tab.pronto{opacity:.42;cursor:default;}
 .ss21-tab.pronto:hover{color:#64748b;}
-.ss21-tab.pronto::after{content:" \00B7 Pronto";font-size:.68rem;font-weight:700;}
+
 .ss21-tab-sep{align-self:center;width:1px;height:1.4rem;background:#e2e8f0;margin:0 .35rem;}
 .ss21-tab.extra{color:#94a3b8;}
 @media (max-width:760px){
@@ -28465,7 +28504,7 @@ aside.ss21-std .ss21-std-i.pronto::after{content:"Pronto";margin-left:auto;font-
   if(window.SS21tabs) return;
   var STD = [
     ["resumen",      "\u{1F4D6} Resumen",                 ["resumen","acerca","introduccion","general"]],
-    ["calendario",   "\u{1F5D3}️ Calendario y resultados", ["calendario","temporada","eventos","resultados"]],
+    ["calendario",   "\u{1F5D3}️ Calendario", ["calendario","temporada","eventos","resultados"]],
     ["posiciones",   "\u{1F4CA} Posiciones",              ["standings","posiciones","clasificacion","ranking","tabla","owgr"]],
     ["estadisticas", "\u{1F4C8} Estadísticas",       ["estadisticas","anotadores","stats"]],
     ["equipos",      "\u{1F465} Equipos",                 ["equipos","plantilla","plantillas"]],
@@ -28550,7 +28589,7 @@ aside.ss21-std .ss21-std-i.pronto::after{content:"Pronto";margin-left:auto;font-
       b.setAttribute("data-std", st[0]);
       b.textContent = st[1];
       if(mapa[st[0]]) b.__orig = mapa[st[0]][0];
-      else if(!(st[0] === "resumen" && activo === "resumen")) b.classList.add("pronto");
+      else if(!(st[0] === "resumen" && activo === "resumen")){ b.classList.add("pronto"); b.title = "Pr\u00f3ximamente"; }
       barra.appendChild(b);
     });
     if(extras.length){
@@ -28576,6 +28615,13 @@ aside.ss21-std .ss21-std-i.pronto::after{content:"Pronto";margin-left:auto;font-
       else r.appendChild(barra);
     }
     fs.forEach(function(f){ f.fila.classList.add("ss21-fila-oculta"); });
+    /* si el encabezado de la competicion quedo despues de la fila, la fila baja */
+    var cab = Array.prototype.filter.call(r.querySelectorAll(".league-header"), function(h){
+      return h.offsetParent !== null && !h.closest("aside");
+    })[0];
+    if(cab && (barra.compareDocumentPosition(cab) & Node.DOCUMENT_POSITION_FOLLOWING)){
+      cab.parentNode.insertBefore(barra, cab.nextSibling);
+    }
     /* en celular la fila se desliza: se muestra la pestana activa */
     var act = barra.querySelector(".ss21-tab.active");
     if(act && barra.scrollWidth > barra.clientWidth) barra.scrollLeft = Math.max(0, act.offsetLeft - 16);
